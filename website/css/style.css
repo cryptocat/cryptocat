@@ -107,7 +107,7 @@ div#top div.nav a.current {
 }
 
 div#main {
-	min-height: 510px;
+	min-height: 480px;
 }
 
 div#main div.mainLeft {
@@ -177,6 +177,7 @@ div#bottom {
 	border-radius: 5px;
 	padding: 5px;
 	height: 42px;
+	margin-top: 50px;
 }
 
 div#bottom div.bottomLeft {
