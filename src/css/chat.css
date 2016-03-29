@@ -153,7 +153,7 @@ img.chatMessageSticker {
 	user-select: none !important;
 	/* Disabled due to high CPU usage.
 	animation-name: chatMessageStickerSpin;
-    animation-duration: 1s;
+	animation-duration: 1s;
 	cursor: default;
 	animation-iteration-count: infinite; */
 }
