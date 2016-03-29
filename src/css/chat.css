@@ -148,15 +148,14 @@ img.chatMessageSticker {
 	height: 128px;
 	margin: -20px auto;
 	display: block;
-	transform: rotate(-14deg);
+	transform: rotate(14deg);
+	-webkit-user-select: none !important;
+	user-select: none !important;
+	/* Disabled due to high CPU usage.
 	animation-name: chatMessageStickerSpin;
     animation-duration: 1s;
 	cursor: default;
-	animation-iteration-count: infinite;
-}
-
-img.chatMessageSticker:hover {
-	transform: rotate(14deg);
+	animation-iteration-count: infinite; */
 }
 
 div#chatBottom {
