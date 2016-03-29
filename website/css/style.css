@@ -110,6 +110,13 @@ div#main {
 	min-height: 480px;
 }
 
+div#main:after {
+	content: " ";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
 div#main div.mainLeft {
 	float: left;
 }
