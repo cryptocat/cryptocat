@@ -87,7 +87,9 @@ var buildTrayMenu = function(settings) {
 		},
 		{
 			label: 'Help',
-			click: function() {}
+			click: function() {
+				electron.shell.openExternal('https://crypto.cat/help.html');
+			}
 		},
 		{
 			label: 'Quit',
