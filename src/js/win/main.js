@@ -374,7 +374,7 @@ window.addEventListener('load', function(e) {
 				submenu: [{
 					label: 'Getting Started',
 					click: function() {
-						electron.shell.openExternal(
+						Remote.shell.openExternal(
 							'https://crypto.cat/help.html'
 						)
 					}
@@ -383,7 +383,7 @@ window.addEventListener('load', function(e) {
 				{
 					label: 'Report a Bug',
 					click: function() {
-						electron.shell.openExternal(
+						Remote.shell.openExternal(
 							'https://github.com/cryptocat/cryptocat/issues/'
 						)
 					}
