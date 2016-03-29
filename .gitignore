@@ -1,3 +1,5 @@
 dist/Cryptocat*
 node_modules
 private
+*.swp
+*.swo

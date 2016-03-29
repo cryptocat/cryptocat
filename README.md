@@ -6,7 +6,7 @@ This is the build environment. The actual client source code is located in `src`
 
 Install dependencies:
 ```
-npm install -g electron-prebuilt grunt
+npm install -g electron-prebuilt grunt-cli
 npm install
 cd src
 npm install
