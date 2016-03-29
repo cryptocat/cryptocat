@@ -1,1 +1,1 @@
-Cryptocat.Version = '3.0.16';
+Cryptocat.Version = '3.0.17';

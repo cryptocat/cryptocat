@@ -1,4 +1,4 @@
-const VERSION = '3.0.16';
+const VERSION = '3.0.17';
 
 module.exports = function(grunt) {
 	grunt.initConfig({
