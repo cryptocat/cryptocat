@@ -1,0 +1,79 @@
+body {
+	background-color: #FFF;
+	font-family: 'Open Sans', sans-serif;
+	margin: 10px auto;
+	width: 1100px;
+	color: #222;
+	line-height: 28px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+div.main {
+	width: 500px;
+	margin: 50px auto 0 auto;
+}
+
+img.logo {
+	width: 64px;
+	height: auto;
+	image-rendering: optimizeSpeed;
+}
+
+input {
+	display: block;
+	margin: 10px 0;
+}
+
+p.notice {
+	background-color: #FAFAFA;
+	box-shadow: 2px 2px orange;
+	padding: 5px;
+	font-size: 12px;
+	margin-bottom: 50px;
+}
+
+div.g-recaptcha {
+	float: right;
+	position: relative;
+	bottom: 75px;
+}
+
+input[type=text], input[type=password] {
+	padding: 4px;
+	background: #FAFCFF;
+	border: 1px solid #96A5B2;
+	outline: none;
+}
+
+input[type=text]:active, input[type=password]:active {
+	outline: none;
+	background: #FFF;
+}
+
+button, input[type=button], input[type=submit] {
+	border: none;
+	outline: none;
+	display: block;
+	padding: 8px;
+	background: #FAFCFF;
+	box-shadow: 1px 1px #96A5B2;
+	font-style: italic;
+	-webkit-box-sizing: border-box;
+}
+
+button:hover, input[type=button]:hover, input[type=submit]:hover {
+	background: #FFF;
+}
+
+button:active, input[type=button]:active, input[type=submit]:active {
+	box-shadow: inset 1px 1px #96A5B2 !important;
+	outline: none !important;
+}
+
