@@ -1,0 +1,36 @@
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../woff/openSans.woff') format('woff');
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: bold;
+	font-weight: 700;
+	src: url('../woff/openSansBold.woff') format('woff');
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: url('../woff/openSansItalic.woff') format('woff');
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 700;
+	src: url('../woff/openSansBoldItalic.woff') format('woff');
+}
+@font-face {
+	font-family: 'Inconsolata';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../woff/inconsolata.woff') format('woff');
+}
+@font-face {
+	font-family: 'Octicons';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../woff/octicons.woff') format('woff');
+}

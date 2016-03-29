@@ -1,0 +1,67 @@
+div#addDeviceIconPicker {
+	background: #FFF;
+	width: 84px;
+	height: 250px;
+	padding: 9px 0 5px 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-right: 1px solid #96A5B2;
+}
+
+div.deviceIcon {
+	width: 64px;
+	height: 64px;
+	background-size: 48px;
+	background-position: center;
+	background-repeat: no-repeat;
+	margin: 0 10px 10px 10px;
+	border: 1px solid #FFF;
+}
+
+div.deviceIcon:hover {
+	box-shadow: 1px 1px #96A5B2;
+}
+
+div.deviceIcon:active {
+	box-shadow: inset 2px 2px #96A5B2;
+	background-color: #FFF;
+	border: 1px solid #DDD;
+}
+
+div.deviceIcon[data-selected=true] {
+	box-shadow: inset 1px 1px #96A5B2;
+	background-color: #FFF;
+	border: 1px solid #DDD;
+}
+
+div.deviceIcon[data-icon='0'] {
+	background-image: url('../img/devices/laptop.png');
+}
+
+div.deviceIcon[data-icon='1'] {
+	background-image: url('../img/devices/allInOne.png');
+}
+
+div.deviceIcon[data-icon='2'] {
+	background-image: url('../img/devices/desktop.png');
+}
+
+h2.addDeviceHeader {
+	margin: 20px 0 0 110px;
+}
+
+p.addDeviceDescription {
+	line-height: 19px;
+	margin: 15px 0 0 110px;
+}
+
+input[type=text] {
+	margin: 15px 0 5px 110px;
+}
+
+input[type=submit] {
+	margin: 5px 0 0 110px;
+}
+
+

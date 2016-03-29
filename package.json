@@ -1,0 +1,21 @@
+{
+  "name": "CryptocatBuilder",
+  "version": "1.0.0",
+  "description": "Builds Cryptocat.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptocat/cryptocat"
+  },
+  "author": "Nadim Kobeissi",
+  "license": "GPL-3.0",
+  "homepage": "https://crypto.cat",
+  "devDependencies": {
+    "electron-prebuilt": "latest",
+    "grunt": "latest",
+    "grunt-electron": "latest",
+    "grunt-electron-installer": "latest",
+    "grunt-exec": "latest",
+    "azure-storage": "latest",
+    "grunt-string-replace": "latest"
+  }
+}

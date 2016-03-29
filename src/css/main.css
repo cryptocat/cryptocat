@@ -1,0 +1,108 @@
+div#mainWindow {
+	margin: 5px;
+}
+
+form.mainLogin {
+	display: block;
+	margin: 80px auto 0 auto;
+}
+
+form.mainLogin img.logo {
+	image-rendering: optimizeSpeed;
+	width: 100px;
+	height: auto;
+	display: block;
+	margin: 0 auto 20px auto;
+}
+
+form.mainLogin input {
+	font-size: 1.1em;
+	display: block;
+	margin: 0 auto 10px auto;
+	width: 150px;
+}
+
+form.mainLogin input.create {
+	font-size: 10px;
+	font-weight: bold;
+	font-style: normal;
+	width: 120px;
+}
+
+form.mainLogin span.version {
+	opacity: 0.8;
+	font-size: 12px;
+	position: fixed;
+	left: 1px;
+	bottom: 1px;
+}
+
+div.mainRoster {
+}
+
+div.mainRosterIntro {
+	padding: 8px;
+	opacity: 0.8;
+}
+
+div.mainRosterIntro p {
+	line-height: 24px;
+	font-size: 14px;
+}
+
+div.mainRosterIntro[data-visible="false"] {
+	display: none;
+}
+
+div.mainRosterBuddy {
+	margin-top: 5px;
+	padding: 8px;
+	background: #FAFCFF;
+	box-shadow: 1px 1px #96A5B2;
+}
+
+div.mainRosterBuddy:hover {
+	background: #FFF;
+	opacity: 1;
+}
+
+div.mainRosterBuddy:active {
+	opacity: 1;
+	box-shadow: inset 1px 1px #96A5B2;
+}
+
+span.mainRosterBuddyStatus {
+	border-radius: 3px;
+	width: 10px;
+	height: 10px;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	display: inline-block;
+	box-sizing: border-box;
+	margin-right: 5px;
+	position: relative;
+	top: 1px;
+}
+
+div.mainRosterBuddy[data-status="0"] {
+	opacity: 0.7;
+}
+
+div.mainRosterBuddy[data-status="0"] span.mainRosterBuddyStatus {
+	background: #F1375A;
+}
+
+div.mainRosterBuddy[data-status="1"] {
+	opacity: 1;
+}
+
+div.mainRosterBuddy[data-status="1"] span.mainRosterBuddyStatus {
+	background: #F1A900;
+}
+
+div.mainRosterBuddy[data-status="2"] {
+	opacity: 1;
+}
+
+div.mainRosterBuddy[data-status="2"] span.mainRosterBuddyStatus {
+	background: #34B3C2;
+}

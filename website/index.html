@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8" />
+	<!--
+	<meta name="viewport" content="
+		user-scalable=no, initial-scale=0.6,
+		maximum-scale=0.6, minimum-scale=0.6,
+		width=device-width, height=device-height,
+		target-densitydpi=device-dpi"
+	/>
+	-->
+	<meta name="keywords" content="cryptocat, private chat, private im, secure im, secure chat,
+		encrypted chat, encrypted im, open source encrypted chat, crypto cat" />
+	<meta name="description" content="Chat easily and securely with your buddies using Cryptocat." />
+	<title>Cryptocat</title>
+	<link rel="stylesheet" href="css/fonts.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="icon" type="image/gif" href="img/favicon.gif" />
+	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/util.js"></script>
+	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			'use strict';
+			var dBL = document.getElementById('downloadButtonLink');
+			var dBT = document.getElementById('downloadButtonText');
+			var dL  = {
+				win32: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip',
+				linux: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip',
+				darwin: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip'
+			};
+			var dT  = {
+				win32: 'Download Cryptocat for Windows (Beta)',
+				linux: 'Download Cryptocat for Linux (Beta)',
+				darwin: 'Download Cryptocat for Mac (Beta)'
+			};
+			dBL.href = dL[getOS()];
+			dBT.innerText = dT[getOS()];
+		});
+	</script>
+</head>
+<body>
+	<div id="top">
+		<img class="logo" src="img/logo.png" alt="" draggable="false" />
+		<div class="nav">
+			<a href="#" class="current">Home</a>
+			<a href="news.html">News</a>
+			<a href="mission.html">Mission</a>
+			<a href="security.html">Security</a>
+			<a href="help.html">Help</a>
+			<a href="https://github.com/cryptocat/cryptocat">Code</a>
+		</div>
+	</div>
+	
+	<div id="main">
+		<div class="mainLeft">
+			<img src="img/chatWindow.png" alt="Chat with nadim" title="Cryptocat 3.0.14 on Microsoft Windows 10." draggable="false" />
+		</div>
+		<div class="mainRight">
+			<h1>Chat with your friends, privately.</h1>
+			<p>
+				Cryptocat is free software with a simple mission: <strong>everyone should be able to chat with their friends in privacy.</strong> 
+			</p>
+			<p>
+				<ul class="mainFeatureList">
+					<li>
+						<em>Open source.</em> All Cryptocat software is published transparently.
+					<li>
+						<em>Encrypted by default.</em> Every message is encrypted, always.
+					</li>
+					<li>
+						<em>Forward secure.</em> Chats can't be decrypted even if your keys are stolen.
+					</li>
+					<li>
+						<em>Multiple devices.</em> All devices linked to your account will receive forward secure messages, even when offline.
+					</li>
+					<li>
+						<em>File sharing.</em> Securely share files with friends <strong>(coming soon)</strong>.
+					</li>
+					<li>
+						<em>Group chat.</em> Chat with multiple buddies at once <strong>(coming soon)</strong>.
+					</li>
+				</ul>
+			</p>
+			<p>
+				<a id="downloadButtonLink" href="">
+					<button id="downloadButton">
+						<span class="octicon">&#xf03f;</span>
+						<span id="downloadButtonText"></span>
+					</button>
+				</a>
+				<span class="downloadLinks">
+					Available for <a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip">Windows</a>, 
+					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip">Linux</a> and 
+					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip">Mac</a>.
+				</span>
+			</p>
+		</div>
+	</div>
+
+	<div id="bottom">
+		<div class="bottomLeft">
+			<a href="https://twitter.com/cryptocatapp">Follow Cryptocat on Twitter</a><br />
+			<a href="ca.html">Veure aquest lloc al català</a><br />
+		</div>
+		<div class="bottomRight">
+			"Cryptocat" and the Cryptocat logo are registered trademarks.<br />
+			Copyright © 2016 Nadim Kobeissi, all rights reserved.
+		</div>
+	</div>
+</body>
+</html>

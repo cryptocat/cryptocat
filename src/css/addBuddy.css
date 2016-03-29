@@ -1,0 +1,21 @@
+form.addBuddy {
+	padding: 10px;
+	margin: 10px auto;
+	width: 280px;
+}
+
+form.addBuddy img.logo {
+	width: 64px;
+	height: auto;
+	float: left;
+	padding: 0 10px 10px 0;
+}
+
+form.addBuddy span {
+	padding: 10px 0;
+}
+
+form.addBuddy input {
+	display: block;
+	margin: 10px 0;
+}

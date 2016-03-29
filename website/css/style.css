@@ -1,0 +1,190 @@
+body {
+	background-color: #FFF;
+	font-family: 'Open Sans', sans-serif;
+	margin: 10px auto;
+	width: 1100px;
+	color: #222;
+	line-height: 28px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+code {
+	background: #F0F8FF;
+	padding: 5px;
+	margin: 10px auto 10px auto;
+	width: 800px;
+	font-family: 'Inconsolata', monospace;
+	display: block;
+}
+
+hr {
+	width: 40%;
+	border: 1px solid #96A5B2;
+	margin: 40px auto;
+}
+
+li {
+	margin-bottom: 10px;
+}
+
+span.octicon {
+	font-family: 'Octicons';
+}
+
+span.code {
+	font-family: 'Inconsolata', monospace;
+	background: #F0F8FF;
+	padding: 2px;
+}
+
+input[type=text], input[type=password] {
+	padding: 4px;
+	background: #FAFCFF;
+	border: 1px solid #96A5B2;
+	outline: none;
+}
+
+input[type=text]:active, input[type=password]:active {
+	outline: none;
+	background: #FFF;
+}
+
+button, input[type=button], input[type=submit] {
+	border: none;
+	outline: none;
+	display: block;
+	padding: 8px;
+	background: #FAFCFF;
+	box-shadow: 1px 1px #96A5B2;
+	font-style: italic;
+	-webkit-box-sizing: border-box;
+}
+
+button:hover, input[type=button]:hover, input[type=submit]:hover {
+	background: #FFF;
+}
+
+button:active, input[type=button]:active, input[type=submit]:active {
+	box-shadow: inset 1px 1px #96A5B2 !important;
+	outline: none !important;
+}
+
+div#top {
+
+}
+
+div#top img.logo {
+	image-rendering: optimizeSpeed;
+	width: 64px;
+	height: auto;
+}
+
+div#top div.nav {
+	background-color: #F0F8FF;
+	padding: 5px;
+	display: inline-block;
+	position: relative;
+	bottom: 16px;
+	width: 1000px;
+	border-left: 2px solid #96A5B2;
+	cursor: default;
+}
+
+div#top div.nav a {
+	color: #222;
+	margin-right: 30px;
+}
+
+div#top div.nav a.current {
+	font-weight: bold;
+}
+
+div#main {
+	min-height: 510px;
+}
+
+div#main div.mainLeft {
+	float: left;
+}
+
+div#main div.mainRight {
+	float: left;
+	width: 560px;
+	margin-left: 20px;
+}
+
+div#main div.mainRight ul.mainFeatureList {
+}
+
+div#main div.mainRight ul.mainFeatureList li {
+}
+
+div#main div.mainRight a#downloadButtonLink:hover {
+	text-decoration: none;
+	color: #222;
+}
+
+div#main div.mainRight button#downloadButton {
+	font-size: 18px;
+	font-style: normal;
+	font-family: 'Open Sans' !important;
+}
+
+div#main div.mainRight button#downloadButton span.octicon {
+	font-size: 22px;
+	opacity: 0.8;
+}
+
+div#main div.mainCenter {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+div#main div.newsEntry {
+	margin-bottom: 20px;
+}
+
+div#main div.newsEntry h2 {
+	margin-bottom: 5px;
+}
+
+div#main div.newsEntry span.newsDate {
+	font-style: italic;
+	font-size: 12px;
+}
+
+div#main ul#acknowledgments, div#main ul#shuffledAcknowledgments {
+	-moz-column-count: 3;
+	-moz-column-gap: 2.5em;
+	-webkit-column-count: 3;
+	-webkit-column-gap: 2.5em;
+	column-count: 3;
+	column-gap: 2.5em;
+}
+
+div#bottom {
+	font-size: 12px;
+	line-height: 20px;
+	background-color: #F5F5F5;
+	opacity: 0.7;
+	border-radius: 5px;
+	padding: 5px;
+	height: 42px;
+}
+
+div#bottom div.bottomLeft {
+	float: left;
+	text-align: left;
+}
+
+div#bottom div.bottomRight {
+	float: right;
+	text-align: right;
+}

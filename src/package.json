@@ -1,0 +1,28 @@
+{
+  "name": "Cryptocat",
+  "version": "3.0.16",
+  "description": "Easy and secure instant messaging.",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptocat/cryptocat"
+  },
+  "keywords": [
+    "encrypted",
+    "messaging"
+  ],
+  "author": "Nadim Kobeissi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cryptocat/cryptocat/issues"
+  },
+  "homepage": "https://crypto.cat",
+  "dependencies": {
+    "nedb": "latest",
+    "xml2js": "latest"
+  },
+  "devDependencies": {}
+}

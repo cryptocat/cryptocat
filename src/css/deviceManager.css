@@ -1,0 +1,78 @@
+div.deviceManager {
+
+}
+
+div#deviceManagerTop {
+	background-color: #EEE;
+	border-bottom: 1px solid #96A5B2;
+	padding: 2px;
+}
+
+div#deviceManagerTop h2 {
+	margin: 10px 25px;
+	font-size: 14px;
+}
+
+div#deviceManagerContents{
+
+}
+
+div.device {
+	background-color: #FFF;
+	height: 67px;
+	padding: 5px;
+	border-bottom: 1px solid #96A5B2;
+}
+
+div.device div.deviceIcon {
+	width: 64px;
+	height: 64px;
+	background-size: 48px;
+	background-position: center;
+	background-repeat: no-repeat;
+	margin: 0 10px 10px 10px;
+	border: 1px solid #FFF;
+	float: left;
+}
+
+div.device div.deviceIcon[data-icon='0'] {
+	background-image: url('../img/devices/laptop.png');
+}
+
+div.device div.deviceIcon[data-icon='1'] {
+	background-image: url('../img/devices/allInOne.png');
+}
+
+div.device div.deviceIcon[data-icon='2'] {
+	background-image: url('../img/devices/desktop.png');
+}
+
+div.device h2.deviceName {
+	margin: 13px 0 0 0;
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+div.device input.removeDevice {
+	float: right;
+	position: relative;
+	bottom: 28px;
+	right: 20px;
+}
+
+div.device input.removeDevice[data-visible='false'] {
+	visibility: hidden;
+}
+
+div.device p.deviceFingerprint {
+	font-family: monospace !important;
+	-webkit-user-select: text;
+	user-select: text;
+	cursor: text;
+	position: relative;
+	bottom: 10px;
+}
+
+div#deviceManagerBottom {
+
+}

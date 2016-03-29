@@ -1,0 +1,245 @@
+@keyframes chatMessageStickerSpin {
+	0% {
+		transform: rotate(-10deg)
+	}
+	50% {
+		transform: rotate(10deg)
+	}
+	100% {
+		transform: rotate(-10deg)
+	}
+}
+
+body {
+	background-color: #FFF;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+div#chatWindow {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+}
+
+div#chatTop {
+}
+
+div.chatTopStatus {
+	padding: 8px 0 6px 8px;
+	color: #FFF;
+	font-weight: bold;
+	height: 13px;
+}
+
+div.chatTopStatus[data-status='0'] {
+	background-color: #F1375A;
+}
+
+div.chatTopStatus[data-status='1'] {
+	background-color: #F1A900;
+}
+
+div.chatTopStatus[data-status='2'] {
+	background-color: #34B3C2;
+}
+
+div#chatContents {
+	font-size: 13px;
+	border-bottom: none;
+	background: #FFF;
+	height: 330px;
+	width: 100%;
+	margin: 0;
+	padding: 0 0 8px 0;
+	box-sizing: border-box;
+	overflow-y: auto;
+	overflow-x: auto;
+	line-height: 1.6em;
+}
+
+div.chatMessageLeft, div.chatMessageRight {
+	background: #F0F8FF;
+	padding: 0px 10px 5px 5px;
+	word-wrap: break-word;
+	word-break: break-word;
+	display: table;
+	min-width: 25%;
+	max-width: 70%;
+	margin: 5px 10px;
+}
+
+div.chatMessageLeft *, div.chatMessageRight * {
+	-webkit-user-select: text;
+	user-select: text;
+	cursor: text;
+}
+
+div.chatMessageLeft a, div.chatMessageRight a {
+	cursor: pointer !important;
+}
+
+div.chatMessageLeft {
+	float: left;
+	clear: both;
+	border-left: 1px solid #96A5B2;
+	border-bottom: 1px solid #96A5B2;
+	box-shadow: -1px 1px 3px rgba(150, 165, 178, 0.6);
+}
+
+div.chatMessageRight {
+	float: right;
+	clear: both;
+	border-right: 1px solid #96A5B2;
+	border-bottom: 1px solid #96A5B2;
+	box-shadow: 1px 1px 3px rgba(150, 165, 178, 0.6);
+}
+
+div.chatMessageError {
+	background-color: #FFD8D6;
+	font-style: italic;
+	border-color: #CFA8A6;
+}
+
+div.chatMessageOffline {
+	background-color: #FFD6B0;
+	border-color: #CFA8A6;
+}
+
+span.chatMessageInfo {
+	padding: 0 5px 0 10px;
+	margin: 0 0 8px -5px;
+	display: block;
+	width: 100%;
+	font-style: normal;
+	background: rgba(255, 255, 255, 0.8);
+	border-bottom: 1px solid rgba(150, 165, 178, 0.1);
+}
+
+span.chatMessageInfo span.chatMessageSender {
+	font-weight: bold;
+	font-size: 12px;
+	opacity: 0.7;
+	margin-left: -4px;
+}
+
+span.chatMessageInfo span.chatMessageTimestamp {
+	font-style: italic;
+	font-size: 11px;
+	float: right;
+	text-align: right;
+	opacity: 0.7;
+}
+
+div.chatMessageSticker {
+	padding-bottom: 0;
+	background: #FFF;
+	box-shadow: none;
+	border: none;
+}
+
+div.chatMessageSticker span.chatMessageInfo {
+	display: none;
+}
+
+img.chatMessageSticker {
+	width: 128px;
+	height: 128px;
+	margin: -20px auto;
+	display: block;
+	transform: rotate(-14deg);
+	animation-name: chatMessageStickerSpin;
+    animation-duration: 1s;
+	cursor: default;
+	animation-iteration-count: infinite;
+}
+
+img.chatMessageSticker:hover {
+	transform: rotate(14deg);
+}
+
+div#chatBottom {
+	width: 100%;
+}
+
+div.chatToolbar {
+	background-color: rgba(50, 150, 220, 0.2);
+	padding: 3px 0 3px 7px;
+	white-space: nowrap;
+	overflow: hidden;
+	border-bottom: 1px solid rgba(150, 165, 178, 0.5);
+}
+
+div.chatToolbar input[type=button] {
+	display: inline;
+	margin-right: 12px;
+	width: 32px;
+	height: 32px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 36px;
+	border-radius: 3px;
+	box-shadow: 1px 1px rgba(150, 165, 178, 0.5);
+}
+
+div.chatToolbar input[data-sticker="smiling"] {
+	background-image: url('../img/stickers/smiling.png');
+}
+
+div.chatToolbar input[data-sticker="grinning"] {
+	background-image: url('../img/stickers/grinning.png');
+}
+
+div.chatToolbar input[data-sticker="winking"] {
+	background-image: url('../img/stickers/winking.png');
+}
+
+div.chatToolbar input[data-sticker="inLove"] {
+	background-image: url('../img/stickers/inLove.png');
+}
+
+div.chatToolbar input[data-sticker="embarrassed"] {
+	background-image: url('../img/stickers/embarrassed.png');
+}
+
+div.chatToolbar input[data-sticker="nerdy"] {
+	background-image: url('../img/stickers/nerdy.png');
+}
+
+div.chatToolbar input[data-sticker="angry"] {
+	background-image: url('../img/stickers/angry.png');
+}
+
+div.chatToolbar input[data-sticker="challengeAccepted"] {
+	background-image: url('../img/stickers/challengeAccepted.png');
+}
+
+div.chatToolbar input[data-sticker="confused"] {
+	background-image: url('../img/stickers/confused.png');
+}
+
+div.chatToolbar input[data-sticker="crying"] {
+	background-image: url('../img/stickers/crying.png');
+}
+
+form#chatInput {
+	width: 100%;
+	display: block;
+}
+
+textarea#chatInputText {
+	width: 100%;
+	height: 65px;
+	resize: none;
+	box-sizing: border-box;
+	outline: none;
+	cursor: text;
+	font-size: 14px;
+	padding: 8px 5px 5px 8px;
+	border: none;
+}
+
+textarea#chatInputText[data-enabled='false'] {
+	cursor: not-allowed !important;
+}

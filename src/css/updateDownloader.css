@@ -1,0 +1,31 @@
+div.updateDownloader {
+	padding: 10px;
+	margin: 10px auto;
+	width: 290px;
+}
+
+div.updateDownloader img.logo {
+	width: 64px;
+	height: auto;
+	float: left;
+	padding: 0 10px 10px 0;
+}
+
+div.updateDownloader span {
+	margin: 3px 0 10px 10px;
+	display: block;
+}
+
+div.updateDownloader div.updateProgressBar {
+	border: 1px solid #96A5B2;
+	padding: 1px;
+	width: 200px;
+	margin: 0 0 0 73px;
+}
+
+div.updateDownloader div.updateProgressBarIndicator {
+	width: 0px;
+	height: 17px;
+	background-color: #96A5B2;
+}
+

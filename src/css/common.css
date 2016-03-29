@@ -1,0 +1,59 @@
+/*
+ * #F0F8FF: Background Blue
+ * #96A5B2: Darker     Blue
+ * #FFD8D6: Highlight  Rose
+ * #CACCAC: Sober      Beige
+ * #B1B29F: Darker     Beige
+ */
+
+* {
+	font-family: sans-serif !important;
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+body {
+	background-color: #F0F8FF;
+	color: #222;
+	font-size: 12px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+input[type=text], input[type=password] {
+	padding: 4px;
+	background: #FAFCFF;
+	border: 1px solid #96A5B2;
+	outline: none;
+}
+
+input[type=text]:active, input[type=password]:active {
+	outline: none;
+	background: #FFF;
+}
+
+input[type=button], input[type=submit] {
+	border: none;
+	outline: none;
+	display: block;
+	padding: 8px;
+	background: #FAFCFF;
+	box-shadow: 1px 1px #96A5B2;
+	font-style: italic;
+	-webkit-box-sizing: border-box;
+}
+
+input[type=button]:hover, input[type=submit]:hover {
+	background: #FFF;
+}
+
+input[type=button]:active, input[type=submit]:active {
+	box-shadow: inset 1px 1px #96A5B2 !important;
+	outline: none !important;
+}
+
+span.gray {
+	color: gray;
+}
