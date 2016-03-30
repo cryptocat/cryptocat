@@ -280,7 +280,6 @@ Cryptocat.XMPP = {};
 		client.use(Cryptocat.OMEMO.plugins.bundle);
 		client.use(Cryptocat.OMEMO.plugins.encrypted);
 		client.on('raw:incoming', function(raw) {
-			console.log(raw);
 			handler.raw(raw);
 		});
 		client.on('raw:outgoing', function(raw) {
