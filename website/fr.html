@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8" />
+	<!--
+	<meta name="viewport" content="
+		user-scalable=no, initial-scale=0.6,
+		maximum-scale=0.6, minimum-scale=0.6,
+		width=device-width, height=device-height,
+		target-densitydpi=device-dpi"
+	/>
+	-->
+	<meta name="keywords" content="cryptocat, private chat, private im, secure im, secure chat,
+		encrypted chat, encrypted im, open source encrypted chat, crypto cat" />
+	<meta name="description" content="Discutez facilement et de façon sécurisée avec vos amis grâce à Cryptocat." />
+	<title>Cryptocat</title>
+	<link rel="stylesheet" href="css/fonts.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="icon" type="image/gif" href="img/favicon.gif" />
+	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/util.js"></script>
+	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			'use strict';
+			var dBL = document.getElementById('downloadButtonLink');
+			var dBT = document.getElementById('downloadButtonText');
+			var dL  = {
+				win32: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip',
+				linux: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip',
+				darwin: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip'
+			};
+			var dT  = {
+				win32: 'Download Cryptocat for Windows (Beta)',
+				linux: 'Download Cryptocat for Linux (Beta)',
+				darwin: 'Download Cryptocat for Mac (Beta)'
+			};
+			dBL.href = dL[getOS()];
+			dBT.innerText = dT[getOS()];
+		});
+	</script>
+</head>
+<body>
+	<div id="top">
+		<img class="logo" src="img/logo.png" alt="" draggable="false" />
+		<div class="nav">
+			<a href="#" class="current">Accueil</a>
+			<a href="news.html">Nouvelles</a>
+			<a href="mission.html">Mission</a>
+			<a href="security.html">Sécurité</a>
+			<a href="help.html">Aide</a>
+			<a href="https://github.com/cryptocat/cryptocat">Code</a>
+		</div>
+	</div>
+	
+	<div id="main">
+		<div class="mainLeft">
+			<img src="img/chatWindow.png" alt="Discutez avec Nadim" title="Cryptocat 3.0.14 on Microsoft Windows 10." draggable="false" />
+		</div>
+		<div class="mainRight">
+			<h1>Discutez avec vos amis, en toute confidentialité.</h1>
+			<p>
+				Cryptocat est un logiciel libre dont la mission est très simple &nbsp;: <strong>permettre à chacun de discuter de façon vraiment privée avec ses amis.</strong> 
+			</p>
+			<p>
+				<ul class="mainFeatureList">
+					<li>
+						<em>Open source.</em> Le logiciel Cryptocat est public et son code est libre et ouvert.
+					<li>
+						<em>Chiffré par défaut.</em> Chaque message est chiffré. Toujours.
+					</li>
+					<li>
+						<em>Plus de sécurité.</em> Vos discussions ne peuvent être déchiffrées même si vos clés vous sont dérobées.
+					</li>
+					<li>
+						<em>Appareils multiples.</em> Tous les appareils liés à votre compte recevront les messages transférés de façon sécurisée, même si vous êtes hors-connexion.
+					</li>
+					<li>
+						<em>Partage de fichiers.</em> Partagez des fichiers avec vos amis en toute sécurité <strong>(à venir)</strong>.
+					</li>
+					<li>
+						<em>Chat de groupe.</em> Discutez avec tout un groupe d'amis à la fois <strong>(à venir)</strong>.
+					</li>
+				</ul>
+			</p>
+			<p>
+				<a id="downloadButtonLink" href="">
+					<button id="downloadButton">
+						<span class="octicon">&#xf03f;</span>
+						<span id="downloadButtonText"></span>
+					</button>
+				</a>
+				<span class="downloadLinks">
+					Disponible pour <a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip">Windows</a>, 
+					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip">Linux</a> et 
+					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip">Mac</a>.
+				</span>
+			</p>
+		</div>
+	</div>
+
+	<div id="bottom">
+		<div class="bottomLeft">
+			<a href="https://twitter.com/cryptocatapp">Suivez Cryptocat sur Twitter</a><br />
+			<!--<a href="fr.html">Afficher cette page en français</a><br /> -->
+		</div>
+		<div class="bottomRight">
+			"Cryptocat" et le logo Cryptocat logo sont des marques déposées.<br />
+			Copyright © 2016 Nadim Kobeissi, tous droits réservés.
+		</div>
+	</div>
+</body>
+</html>
