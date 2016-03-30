@@ -251,6 +251,14 @@ Cryptocat.XMPP = {};
 		);
 	};
 
+	handler.unsubscribed = function(data) {
+		var username = Cryptocat.OMEMO.jidHasUsername(data.from.bare);
+		if (username.valid) {
+			Cryptocat.Diag.message.buddyUnsubscribed(username.username);
+			Cryptocat.XMPP.removeBuddy(username.username);
+		}
+	};
+
 	Cryptocat.XMPP.login = function(username, password, callback) {
 		console.info('Cryptocat.XMPP', 'Connecting as ' + username);
 		client = XMPP.createClient({
@@ -272,6 +280,7 @@ Cryptocat.XMPP = {};
 		client.use(Cryptocat.OMEMO.plugins.bundle);
 		client.use(Cryptocat.OMEMO.plugins.encrypted);
 		client.on('raw:incoming', function(raw) {
+			console.log(raw);
 			handler.raw(raw);
 		});
 		client.on('raw:outgoing', function(raw) {
@@ -311,6 +320,9 @@ Cryptocat.XMPP = {};
 		});
 		client.on('subscribe', function(data) {
 			handler.subscribe(data);
+		});
+		client.on('unsubscribed', function(data) {
+			handler.unsubscribed(data);
 		});
 		client.on('stanza', function(stanza) {
 			if (

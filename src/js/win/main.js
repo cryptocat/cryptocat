@@ -546,8 +546,13 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('addBuddy.sendRequest', function(e, username) {
 		if (Cryptocat.Me.connected) {
-			Cryptocat.XMPP.sendBuddyRequest(username);
-			Cryptocat.Diag.message.addBuddySuccess();
+			if (username === Cryptocat.Me.username) {
+				Cryptocat.Diag.error.addBuddySelf();
+			}
+			else {
+				Cryptocat.XMPP.sendBuddyRequest(username);
+				Cryptocat.Diag.message.addBuddySuccess();
+			}
 		}
 		else {
 			Cryptocat.Diag.error.offline();

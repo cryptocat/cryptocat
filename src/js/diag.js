@@ -48,6 +48,13 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.error.addBuddySelf = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Cannot Add Yourself',
+			'You cannot add yourself to your own buddy list.'
+		);
+	};
+
 	Cryptocat.Diag.error.changePasswordValidation = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Invalid Password',
@@ -220,6 +227,17 @@ Cryptocat.Diag = {
 			title: 'Cryptocat: Buddy Request!',
 			message: '"' + username + '" would like to be your buddy. Accept their request?',
 		}, callback);
+	};
+
+	Cryptocat.Diag.message.buddyUnsubscribed = function(username) {
+		dialog.showMessageBox({
+			type: 'info',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['OK'],
+			defaultId: 0,
+			title: 'Cryptocat: ' + username + ' Removed You',
+			message: '"' + username + '" has removed you from their buddy list.'
+		});
 	};
 
 	Cryptocat.Diag.save.updateDownloader = function(browserWindow, callback) {
