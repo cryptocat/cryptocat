@@ -495,19 +495,15 @@ const HANDLE = {
 				Type_key.toBitstring(myIdentityKey.pub)
 			)
 		)
-		var myNextEphemeralKey = Type_keypair.clone(them.myNextEphemeralKey)
-		var myEphemeralKey     = Type_keypair.clone(them.myEphemeralKey)
 		if (dec.valid) {
-			myNextEphemeralKey = UTIL.newKeyPair('a1')
-			myEphemeralKey     = Type_keypair.clone(them.myNextEphemeralKey)		
 			return {
 				them: {
 					signedPreKey: them.signedPreKey,
 					signedPreKeySignature: them.signedPreKeySignature,
 					identityKey: them.identityKey,
 					identityDHKey: them.identityDHKey,
-					myEphemeralKey: myEphemeralKey,
-					myNextEphemeralKey: myNextEphemeralKey,
+					myEphemeralKey: them.myNextEphemeralKey,
+					myNextEphemeralKey: UTIL.newKeyPair('a1'),
 					ephemeralKey: msg.ephemeralKey,
 					myPreKey: them.myPreKey,
 					preKey: them.preKey,
@@ -556,8 +552,8 @@ const HANDLE = {
 					signedPreKeySignature: them.signedPreKeySignature,
 					identityKey: them.identityKey,
 					identityDHKey: them.identityDHKey,
-					myEphemeralKey: myEphemeralKey,
-					myNextEphemeralKey: myNextEphemeralKey,
+					myEphemeralKey: them.myEphemeralKey,
+					myNextEphemeralKey: them.myNextEphemeralKey,
 					ephemeralKey: msg.ephemeralKey,
 					myPreKey: them.myPreKey,
 					preKey: them.preKey,
