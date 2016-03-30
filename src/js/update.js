@@ -41,7 +41,7 @@ Cryptocat.Update = {
 		return false;
 	};
 
-	Cryptocat.Update.check = function() {
+	Cryptocat.Update.check = function(ifLatest) {
 		HTTPS.get(Cryptocat.Update.updateURIs[process.platform], function(res) {
 			var latest = '';
 			res.on('data', function(chunk) {
@@ -65,6 +65,7 @@ Cryptocat.Update = {
 						'Cryptocat.Update:',
 						'No updates available (' + latest + ').'
 					);
+					ifLatest();
 				}
 			});
 		}).on('error', function(err) {
@@ -73,6 +74,6 @@ Cryptocat.Update = {
 	};
 
 	// Run on application start
-	Cryptocat.Update.check();
-
+	Cryptocat.Update.check(function() {
+	});
 })();

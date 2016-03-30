@@ -194,6 +194,12 @@ var MainMenu = electron.Menu.buildFromTemplate([
 			}
 		},
 		{
+			label: 'Check for Updates',
+			click: function() {
+				Windows.main.webContents.send('main.checkForUpdates');
+			}
+		},
+		{
 			type: 'separator'
 		},
 		{

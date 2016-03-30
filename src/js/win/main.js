@@ -640,6 +640,14 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	IPCRenderer.on('main.checkForUpdates', function(e) {
+		Cryptocat.Update.check(function() {
+			Cryptocat.Diag.message.isLatest(
+				Cryptocat.Version
+			);
+		});
+	});
+
 	IPCRenderer.on('main.beforeQuit', function(e) {
 		Cryptocat.Win.main.beforeQuit();
 	});

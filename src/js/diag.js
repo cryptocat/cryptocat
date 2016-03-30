@@ -93,6 +93,18 @@ Cryptocat.Diag = {
 		)
 	};
 
+	Cryptocat.Diag.message.isLatest = function(version) {
+		dialog.showMessageBox({
+			type: 'info',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['OK'],
+			defaultId: 0,
+			title: 'Cryptocat: No Updates Available',
+			message: 'You are running the latest version of Cryptocat ' +
+				'(' + version + ').'
+		});
+	};
+
 	Cryptocat.Diag.message.deviceSetup = function(callback) {
 		dialog.showMessageBox({
 			type: 'info',
