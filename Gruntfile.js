@@ -38,6 +38,19 @@ module.exports = function(grunt) {
 				'app-version': VERSION,
 				'build-version': VERSION
 			} },
+			linux32: { options: {
+				name: 'Cryptocat',
+				dir: 'src',
+				out: 'dist',
+				platform: 'linux',
+				arch: 'ia32',
+				icon: 'src/img/logo/logo',
+				overwrite: true,
+				prune: true,
+				asar: true,
+				'app-version': VERSION,
+				'build-version': VERSION
+			} },
 			mac: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
@@ -87,14 +100,18 @@ module.exports = function(grunt) {
 			cleanDist: 'rm -rf dist/Cryptocat*',
 			winClean: 'echo "GPLv3" > dist/Cryptocat-win32-x64/LICENSE',
 			linuxLogo: 'cp src/img/logo/logo.png dist/Cryptocat-linux-x64/logo.png',
+			linux32Logo: 'cp src/img/logo/logo.png dist/Cryptocat-linux-ia32/logo.png',
 			linuxClean: 'rm -f dist/Cryptocat-linux-x64/LICENSE',
+			linux32Clean: 'rm -f dist/Cryptocat-linux-ia32/LICENSE',
 			macClean: 'rm -r dist/Cryptocat-darwin-x64',
 			winZip: 'zip -jqr9 dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer/Setup.exe',
 			linuxZip: 'cd dist && zip -qr9 Cryptocat-linux-x64.zip Cryptocat-linux-x64',
+			linux32Zip: 'cd dist && zip -qr9 Cryptocat-linux-ia32.zip Cryptocat-linux-ia32',
 			macMv: 'mv dist/Cryptocat-darwin-x64/Cryptocat.app dist/Cryptocat.app',
 			macZip: 'cd dist && zip -qr9 Cryptocat-darwin-x64.zip Cryptocat.app',
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
+			linux32RmDir: 'rm -r dist/Cryptocat-linux-ia32',
 			macRmDir: 'rm -r dist/Cryptocat.app',
 			winWriteVer: "awk -vORS= ' BEGIN { print \"" + VERSION + "\" } ' > dist/version.txt",
 			writeVer: 'echo ' + VERSION + ' > dist/version.txt'
@@ -120,6 +137,15 @@ module.exports = function(grunt) {
 		'exec:linuxClean',
 		'exec:linuxZip',
 		'exec:linuxRmDir',
+		'exec:writeVer'
+	]);
+	grunt.registerTask('linux32', [
+		'string-replace:dist',
+		'electron:linux32',
+		'exec:linux32Logo',
+		'exec:linux32Clean',
+		'exec:linux32Zip',
+		'exec:linux32RmDir',
 		'exec:writeVer'
 	]);
 	grunt.registerTask('mac', [
