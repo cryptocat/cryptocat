@@ -41,6 +41,14 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.error.messagesQueued = function(count) {
+		dialog.showErrorBox(
+			'Cryptocat: ' + count + ' Messages Queued',
+			'Cryptocat is still sending ' + count + ' messages. ' +
+			'Please try closing this chat window again in a few seconds.'
+		);
+	};
+
 	Cryptocat.Diag.error.addBuddyValidation = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Invalid Buddy Username',

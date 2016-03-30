@@ -299,7 +299,7 @@ window.addEventListener('load', function(e) {
 		sendQueue: {
 			messages: [],
 			monitor:  {},
-			rate: 500,
+			rate: 999,
 			isOn: false,
 			turnOn: function() {
 				thisChat.sendQueue.monitor = setInterval(function() {
@@ -371,6 +371,16 @@ window.addEventListener('load', function(e) {
 	window.addEventListener('resize', function(e) {
 		thisChat.contents().style.height = (window.innerHeight - 140) + 'px';
 	}); window.dispatchEvent(new Event('resize'));
+
+	window.addEventListener('beforeunload', function(e) {
+		if (thisChat.sendQueue.messages.length) {
+			Cryptocat.Diag.error.messagesQueued(
+				thisChat.sendQueue.messages.length
+			);
+			e.returnValue = 'false';
+			return false;
+		}
+	});
 
 });
 
