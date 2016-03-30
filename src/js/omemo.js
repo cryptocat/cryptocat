@@ -306,6 +306,24 @@ Cryptocat.OMEMO = {};
 	};
 
 	Cryptocat.OMEMO.setup = function(callback) {
+		var deviceSetup = function() {
+			Cryptocat.Diag.message.deviceSetup(function(response) {
+				if (response === 0) {
+					callbacks.setup.payload = callback;
+					callbacks.setup.armed   = true;
+					Cryptocat.Win.create.addDevice();
+				}
+				if (response === 1) {
+					Remote.shell.openExternal(
+						'https://crypto.cat/help.html#managingDevices'
+					);
+					deviceSetup();
+				}
+				if (response === 2) {
+					Cryptocat.Win.main.beforeQuit();
+				}
+			});
+		};
 		Cryptocat.Storage.getUser(Cryptocat.Me.username, function(err, doc) {
 			if (doc !== null) {
 				Cryptocat.Me.settings = doc;
@@ -321,22 +339,7 @@ Cryptocat.OMEMO = {};
 				}
 			}
 			else {
-				Cryptocat.Diag.message.deviceSetup(function(response) {
-					if (response === 0) {
-						callbacks.setup.payload = callback;
-						callbacks.setup.armed   = true;
-						Cryptocat.Win.create.addDevice();
-					}
-					if (response === 1) {
-						Remote.shell.openExternal(
-							'https://crypto.cat/help.html#managingDevices'
-						);
-						Cryptocat.Win.main.beforeQuit();
-					}
-					if (response === 2) {
-						Cryptocat.Win.main.beforeQuit();
-					}
-				});
+				deviceSetup();
 			}
 		});
 	};
