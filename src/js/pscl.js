@@ -1060,6 +1060,7 @@ ProScript.crypto = {
 			var axz = bI.create([0x00])
 			var fourxz = bI.create([0x00])
 			var outz = bI.create([0x00])
+			var saxz = bI.create([0x00])
 			// x₂ = (x² - z²)²
 			xx = bI.expMod(x, two, p25519)
 			zz = bI.expMod(z, two, p25519)
@@ -1075,9 +1076,9 @@ ProScript.crypto = {
 			bI.multiplyTo(x, z, xz)
 			xz = bI.mod(xz, p25519)
 			bI.multiplyTo(xz, a, axz)
-			bI.subTo(s, bI.negate(axz), s)
+			bI.subTo(s, bI.negate(axz), saxz)
 			bI.multiplyTo(xz, four, fourxz)
-			bI.multiplyTo(fourxz, s, outz)
+			bI.multiplyTo(fourxz, saxz, outz)
 			outz = bI.mod(outz, p25519)
 			return [outx, outz]
 		}
@@ -1085,23 +1086,15 @@ ProScript.crypto = {
 		 * We can use it in order to generate a public key value,
 		 * or to perform key agreement.
 		 *
-		 * In order to generate a public key:
-		 * priv = 256-bit random hexadecimal string
-		 * base = '09'
-		 * pub  = Curve25519.scalarMult(priv, base)
-		 *
-		 * In order to perform key agreement:
-		 * shared = scalarMult(myPriv, theirPub)
-		 *
 		 * @param   {byteArray} scalar - Private key, hexadecimal string
 		 * @param   {byteArray} base - Base point (or public key), hexadecimal string
 		 * @returns {byteArray} Public key or shared secret, hexadecimal string
 		 */
 		return function(scalar, base) {
-			var x1 = bI.create([0x00])
+			var x1 = bI.create([0x01])
 			var z1 = bI.create([0x00])
-			var x2 = bI.create([0x00])
-			var z2 = bI.create([0x00])
+			var x2 = bI.create(base)
+			var z2 = bI.create([0x01])
 			var point = [
 				bI.create([0x00]),
 				bI.create([0x00])
@@ -1109,23 +1102,17 @@ ProScript.crypto = {
 			var i = 253
 			var zlinv = bI.create([0x00])
 			var x = bI.create([0x00])
-			scalar = bI.create(scalar)
-			base = bI.create(base)
-			x1 = bI.create([0x01])
-			z1 = bI.create([0x00])
-			x2 = base
-			z2 = bI.create([0x01])
-			// Highest bit is one
-			point = groupAdd(base, x1, z1, x2, z2)
+			var s = bI.create(scalar)
+			var b = bI.create(base)
+			point = groupAdd(b, x1, z1, x2, z2)
 			x1 = point[0]
 			z1 = point[1]
 			point = groupDouble(x2, z2)
 			x2 = point[0]
 			z2 = point[1]
-
 			for (i = 253; i >= 3; i--) {
-				if (bI.getBit(scalar, i) === 1) {
-					point = groupAdd(base, x1, z1, x2, z2)
+				if (bI.getBit(s, i) === 1) {
+					point = groupAdd(b, x1, z1, x2, z2)
 					x1 = point[0]
 					z1 = point[1]
 					point = groupDouble(x2, z2)
@@ -1133,7 +1120,7 @@ ProScript.crypto = {
 					z2 = point[1]
 				}
 				else {
-					point = groupAdd(base, x1, z1, x2, z2)
+					point = groupAdd(b, x1, z1, x2, z2)
 					x2 = point[0]
 					z2 = point[1]
 					point = groupDouble(x1, z1)
