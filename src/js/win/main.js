@@ -242,23 +242,27 @@ window.addEventListener('load', function(e) {
 			delete Cryptocat.Me.settings.userBundles[username];
 		},
 		render: function() {
-			var buddiesArray = []
+			var buddiesArrays = [[], [], []];
 			for (var p in this.state.buddies) {
 				if (hasProperty(this.state.buddies, p)) {
-					var buddy = this.state.buddies[p];
-					buddiesArray.push(buddy);
+					var b = this.state.buddies[p];
+					buddiesArrays[
+						Math.abs(b.props.status - 2)
+					].push(b);
 				}
 			}
-			buddiesArray.sort(function(a, b) {
-				if (a.props.username < b.props.username) {
-					return -1
-				} else { return +1 }; return 0
-			})
-			buddiesArray.sort(function(a, b) {
-				if (a.props.status > b.props.status) {
-					return -1
-				} else { return +1 }; return 0
-			});
+			for (var i = 0; i < 3; i++) {
+				buddiesArrays[i].sort(function(a, b) {
+					if (a.props.username < b.props.username) {
+						return -1
+					} else { return +1 }; return 0
+				});
+			}
+			buddiesArrays = buddiesArrays[0].concat(
+				buddiesArrays[1].concat(
+					buddiesArrays[2]
+				)
+			);
 			return React.createElement('div', {
 				key: 0,
 				className: 'mainRoster',
@@ -266,7 +270,7 @@ window.addEventListener('load', function(e) {
 			}, [React.createElement('div', {
 				key: 1,
 				className: 'mainRosterIntro',
-				'data-visible': !buddiesArray.length
+				'data-visible': !buddiesArrays.length
 			}, React.createElement('h2', {
 				key: 2
 			},
@@ -274,7 +278,7 @@ window.addEventListener('load', function(e) {
 				key: 3
 			},
 			'Your buddy list is empty. Add your first buddy by pressing Alt+A.'
-			))].concat(buddiesArray));
+			))].concat(buddiesArrays));
 		}
 	});
 
