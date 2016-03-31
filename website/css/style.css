@@ -140,6 +140,7 @@ div#main div.mainRight a#downloadButtonLink:hover {
 
 div#main div.mainRight button#downloadButton {
 	font-size: 18px;
+	padding: 20px;
 	font-style: normal;
 	font-family: 'Open Sans' !important;
 }
