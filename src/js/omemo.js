@@ -542,7 +542,10 @@ Cryptocat.OMEMO = {};
 		res.payload.ciphertext = messageEnc.ciphertext;
 		res.payload.tag        = messageEnc.tag;
 		for (var deviceId in bundles) { if (hasProperty(bundles, deviceId)) {
-			if (!hasProperty(bundles[deviceId], 'axolotl')) {
+			if (
+				!hasProperty(bundles[deviceId], 'axolotl') ||
+				!hasProperty(bundles[deviceId].axolotl, 'myEphemeralKeyP2')
+			) {
 				var preKeyId = Cryptocat.OMEMO.selectPreKey(username, deviceId);
 				var iK       = bundles[deviceId].identityKey.substr(0,   64);
 				var iDHK     = bundles[deviceId].identityKey.substr(64, 128);
@@ -585,6 +588,7 @@ Cryptocat.OMEMO = {};
 		if (
 			!hasProperty(bundle, 'axolotl') ||
 			!bundle.axolotl.established ||
+			!hasProperty(bundle.axolotl, 'myEphemeralKeyP2') ||
 			!(/^0+$/).test(encrypted.key.initEphemeralKey)
 		) {
 			var iK   = bundle.identityKey.substr(0,   64);
