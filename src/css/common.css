@@ -24,7 +24,7 @@ body {
 
 input[type=text], input[type=password] {
 	padding: 4px;
-	background: #FAFCFF;
+	background-color: #FAFCFF;
 	border: 1px solid #96A5B2;
 	outline: none;
 }
@@ -39,14 +39,14 @@ input[type=button], input[type=submit] {
 	outline: none;
 	display: block;
 	padding: 8px;
-	background: #FAFCFF;
+	background-color: #FAFCFF;
 	box-shadow: 1px 1px #96A5B2;
 	font-style: italic;
 	-webkit-box-sizing: border-box;
 }
 
 input[type=button]:hover, input[type=submit]:hover {
-	background: #FFF;
+	background-color: #FFF;
 }
 
 input[type=button]:active, input[type=submit]:active {
