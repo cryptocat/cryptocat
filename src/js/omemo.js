@@ -481,7 +481,11 @@ Cryptocat.OMEMO = {};
 		thisBundle.signedPreKeyId        = userBundle.signedPreKeyId;
 		thisBundle.signedPreKeySignature = userBundle.signedPreKeySignature;
 		thisBundle.preKeys               = userBundle.preKeys;
-		if (!isNewUser && isNewBundle) {
+		Cryptocat.Win.updateDeviceManager(username);
+		if (
+			!hasProperty(Cryptocat.Win.deviceManager, username) &&
+			(!isNewUser && isNewBundle)
+		) {
 			Cryptocat.Diag.message.newDevice(username, function(response) {
 				if (response === 0) {
 					Cryptocat.Win.create.deviceManager(username);

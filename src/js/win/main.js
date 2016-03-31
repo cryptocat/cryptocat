@@ -1,7 +1,8 @@
 Cryptocat.Win = {
-	main:   {},
-	chat:   {},
-	create: {}
+	main:          {},
+	chat:          {},
+	deviceManager: {},
+	create:        {}
 };
 
 window.addEventListener('load', function(e) {	
@@ -491,8 +492,11 @@ window.addEventListener('load', function(e) {
 	};
 
 	Cryptocat.Win.create.deviceManager = function(username) {
-		Cryptocat.XMPP.getDeviceList(username);
-		var deviceManagerWindow = new Remote.BrowserWindow({
+		if (hasProperty(Cryptocat.Win.deviceManager, username)) {
+			Cryptocat.Win.deviceManager[username].focus();
+			return false;
+		}
+		Cryptocat.Win.deviceManager[username] = new Remote.BrowserWindow({
 			width: 470,
 			height: 250,
 			title: 'Manage Devices',
@@ -501,6 +505,20 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false
 		});
+		Cryptocat.Win.deviceManager[username].webContents.on('dom-ready', function() {
+			Cryptocat.XMPP.getDeviceList(username);
+		});
+		Cryptocat.Win.deviceManager[username].on('closed', function() {
+			delete Cryptocat.Win.deviceManager[username];
+		});
+		Cryptocat.Win.deviceManager[username].setMenu(null);
+		Cryptocat.Win.deviceManager[username].loadURL('file://' + __dirname + '/deviceManager.html');
+	};
+
+	Cryptocat.Win.updateDeviceManager = function(username) {
+		if (!hasProperty(Cryptocat.Win.deviceManager, username)) {
+			return false;
+		}
 		var devices = [];
 		var userBundles = Cryptocat.Me.settings.userBundles[username];
 		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
@@ -516,15 +534,11 @@ window.addEventListener('load', function(e) {
 				)
 			});
 		}};
-		deviceManagerWindow.webContents.on('dom-ready', function() {
-			deviceManagerWindow.webContents.send('deviceManager.init', {
-				username: username,
-				devices: devices,
-				mine: (username === Cryptocat.Me.username)
-			});
+		Cryptocat.Win.deviceManager[username].webContents.send('deviceManager.update', {
+			username: username,
+			devices: devices,
+			mine: (username === Cryptocat.Me.username)
 		});
-		deviceManagerWindow.setMenu(null);
-		deviceManagerWindow.loadURL('file://' + __dirname + '/deviceManager.html');
 	};
 
 	Cryptocat.Win.main.login = ReactDOM.render(

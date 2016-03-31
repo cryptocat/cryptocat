@@ -14,7 +14,6 @@ window.addEventListener('load', function(e) {
 				'deviceManager.removeDevice',
 				this.props.deviceId
 			);
-			Remote.getCurrentWindow().close();
 		},
 		render: function() {
 			return React.createElement('div', {
@@ -86,7 +85,7 @@ window.addEventListener('load', function(e) {
 		)
 	};
 
-	IPCRenderer.once('deviceManager.init', function(e, data) {
+	IPCRenderer.on('deviceManager.update', function(e, data) {
 		var devices = [];
 		data.devices.forEach(function(d) {
 			devices.push(React.createElement(device, {
