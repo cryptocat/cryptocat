@@ -20,7 +20,9 @@ window.addEventListener('load', function(e) {
 				IPCRenderer.sendSync(
 					'changePassword.changePassword', this.state.password
 				);
-				Remote.getCurrentWindow().close();
+				setInterval(function() {
+					Remote.getCurrentWindow().close();
+				}, 250);
 			}
 			else {
 				Cryptocat.Diag.error.changePasswordValidation();

@@ -24,7 +24,9 @@ window.addEventListener('load', function(e) {
 					this.state.name,
 					this.state.icon
 				);
-				Remote.getCurrentWindow().close();
+				setInterval(function() {
+					Remote.getCurrentWindow().close();
+				}, 250);
 			}
 			else {
 				Cryptocat.Diag.error.addDeviceValidation();

@@ -22,7 +22,9 @@ window.addEventListener('load', function(e) {
 				IPCRenderer.sendSync(
 					'addBuddy.sendRequest', this.state.username
 				);
-				Remote.getCurrentWindow().close();
+				setInterval(function() {
+					Remote.getCurrentWindow().close();
+				}, 250);
 			}
 			else {
 				Cryptocat.Diag.error.addBuddyValidation();

@@ -74,13 +74,17 @@ window.addEventListener('load', function(e) {
 		}).on('error', function(err) {
 			Cryptocat.Diag.error.updateDownloader();
 			FS.unlink(path);
-			Remote.getCurrentWindow().close();
+			setInterval(function() {
+				Remote.getCurrentWindow().close();
+			}, 250);
 		});
 	}
 
 	Cryptocat.Diag.save.updateDownloader(Remote.getCurrentWindow(), function(path) {
 		if (!path) {
-			Remote.getCurrentWindow().close();
+			setInterval(function() {
+				Remote.getCurrentWindow().close();
+			}, 250);
 			return false;
 		}
 		var file = FS.createWriteStream(path);
@@ -103,20 +107,26 @@ window.addEventListener('load', function(e) {
 					if (valid) {
 						Cryptocat.Diag.message.updateDownloaded(function() {
 							IPCRenderer.sendSync('main.beforeQuit');
-							Remote.getCurrentWindow().close();
+							setInterval(function() {
+								Remote.getCurrentWindow().close();
+							}, 250);
 						});
 					}
 					else {
 						Cryptocat.Diag.error.updateDownloader();
 						FS.unlink(path);
-						Remote.getCurrentWindow().close();
+						setInterval(function() {
+							Remote.getCurrentWindow().close();
+						}, 250);
 					}
 				});
 			});
 		}).on('error', function(err) {
 			Cryptocat.Diag.error.updateDownloader();
 			FS.unlink(path);
-			Remote.getCurrentWindow().close();
+			setInterval(function() {
+				Remote.getCurrentWindow().close();
+			}, 250);
 		});
 	});
 
