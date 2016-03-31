@@ -2,6 +2,7 @@ const electron = require('electron');
 const BrowserWindow = require('browser-window');
 var Windows  = { main: null, last: null };
 var TrayIcon = {};
+var IntentToQuit = false;
 
 var HandleStartupEvent = function() {
 	if (process.platform !== 'win32') {
@@ -95,6 +96,7 @@ var buildTrayMenu = function(settings) {
 			label: 'Quit',
 			role: 'quit',
 			click: function() {
+				IntentToQuit = true;
 				Windows.main.webContents.send('main.beforeQuit');
 			}
 		}
@@ -139,6 +141,7 @@ var MainMenu = electron.Menu.buildFromTemplate([
 				label: 'Quit',
 				accelerator: 'CmdOrCtrl+Q',
 				click: function() {
+					IntentToQuit = true;
 					Windows.main.webContents.send('main.beforeQuit');
 				}
 			}
@@ -249,16 +252,17 @@ electron.app.on('ready', function() {
 	});
 	Windows.main.loadURL('file://' + __dirname + '/win/main.html');
 	Windows.main.on('close', function(e) {
-		e.preventDefault();
-		Windows.main.hide();
-		if (process.platform === 'darwin') {
-			return false;
+		if (!IntentToQuit) {
+			e.preventDefault();
+			Windows.main.hide();
+			if (process.platform !== 'darwin') {
+				TrayIcon.displayBalloon({
+					icon: __dirname + '/img/logo/logo.png',
+					title: 'Cryptocat is still running',
+					content: 'Click here to resume using Cryptocat.'
+				});
+			}
 		}
-		TrayIcon.displayBalloon({
-			icon: __dirname + '/img/logo/logo.png',
-			title: 'Cryptocat is still running',
-			content: 'Click here to resume using Cryptocat.'
-		});
 	});
 	if (process.platform === 'darwin') {
 		electron.app.dock.setMenu(buildTrayMenu({
