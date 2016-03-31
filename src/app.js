@@ -353,3 +353,7 @@ electron.app.on('before-quit', function(e) {
 	}
 	Windows.main.webContents.send('main.beforeQuit');
 });
+
+process.on('uncaughtException', function(err) {
+	return false;
+});
