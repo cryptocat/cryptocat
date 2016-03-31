@@ -290,26 +290,32 @@ electron.app.on('ready', function() {
 
 electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	Windows.main.webContents.send('chat.sendMessage', to, message);
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
 	Windows.main.webContents.send('addBuddy.sendRequest', username);
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('changePassword.changePassword', function(e, password) {
 	Windows.main.webContents.send('changePassword.changePassword', password);
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 	Windows.main.webContents.send('addDevice.addDevice', name, icon);
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {
 	Windows.main.webContents.send('deviceManager.removeDevice', deviceId);
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('main.beforeQuit', function(e) {
 	Windows.main.webContents.send('main.beforeQuit');
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
@@ -319,11 +325,13 @@ electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
 	else {
 		TrayIcon.setContextMenu(buildTrayMenu(settings));
 	}
+	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('app.quit', function(e) {
 	Windows.main.destroy();
 	electron.app.quit();
+	e.returnValue = 'true';
 });
 
 electron.app.on('browser-window-created', function(e, w) {
