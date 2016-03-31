@@ -189,8 +189,7 @@ Cryptocat.Diag = {
 			buttons: ['Remove buddy', 'Cancel'],
 			defaultId: 1,
 			title: 'Cryptocat: Remove Buddy?',
-			message: 'You will appear as offline to this buddy and they ' +
-				'will be unable to confirm that you have removed them.'
+			message: 'Are you sure you would like to remove this buddy?'
 		}, callback);
 	};
 
