@@ -307,7 +307,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					IPCRenderer.send(
+					IPCRenderer.sendSync(
 						'chat.sendMessage',
 						thisChat.to,
 						thisChat.sendQueue.messages[0]

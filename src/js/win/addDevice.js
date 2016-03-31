@@ -19,12 +19,12 @@ window.addEventListener('load', function(e) {
 		},
 		onSubmit: function(e) {
 			if (this.validInputs()) {
-				IPCRenderer.send(
+				IPCRenderer.sendSync(
 					'addDevice.addDevice',
 					this.state.name,
 					this.state.icon
 				);
-				window.close();
+				Remote.getCurrentWindow().close();
 			}
 			else {
 				Cryptocat.Diag.error.addDeviceValidation();

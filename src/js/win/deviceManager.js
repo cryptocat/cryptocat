@@ -10,11 +10,11 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		onRemoveDevice: function() {
-			IPCRenderer.send(
+			IPCRenderer.sendSync(
 				'deviceManager.removeDevice',
 				this.props.deviceId
 			);
-			window.close();
+			Remote.getCurrentWindow().close();
 		},
 		render: function() {
 			return React.createElement('div', {

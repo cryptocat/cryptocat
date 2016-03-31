@@ -19,10 +19,10 @@ window.addEventListener('load', function(e) {
 			var _t = this;
 			this.setState({disabled: true});
 			if (this.validInputs()) {
-				IPCRenderer.send(
+				IPCRenderer.sendSync(
 					'addBuddy.sendRequest', this.state.username
 				);
-				window.close();
+				Remote.getCurrentWindow().close();
 			}
 			else {
 				Cryptocat.Diag.error.addBuddyValidation();

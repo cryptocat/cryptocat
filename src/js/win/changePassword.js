@@ -17,10 +17,10 @@ window.addEventListener('load', function(e) {
 		onSubmit: function(e) {
 			var _t = this;
 			if (this.validInputs()) {
-				IPCRenderer.send(
+				IPCRenderer.sendSync(
 					'changePassword.changePassword', this.state.password
 				);
-				window.close();
+				Remote.getCurrentWindow().close();
 			}
 			else {
 				Cryptocat.Diag.error.changePasswordValidation();

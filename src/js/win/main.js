@@ -56,7 +56,7 @@ window.addEventListener('load', function(e) {
 				document.getElementById('mainWindow')
 			);
 			Cryptocat.Notify.playSound('loggedIn');
-			IPCRenderer.send('app.updateTraySettings', {
+			IPCRenderer.sendSync('app.updateTraySettings', {
 				notify: Cryptocat.Me.settings.notify,
 				sounds:  Cryptocat.Me.settings.sounds
 			});
@@ -252,10 +252,11 @@ window.addEventListener('load', function(e) {
 			var newBuddies = _t.state.buddies;
 			if (hasProperty(newBuddies, username)) {
 				delete newBuddies[username];
-				delete _t.buddies[username];
-				this.setState({buddies: newBuddies});
+				this.setState({buddies: newBuddies}, function() {
+					delete _t.buddies[username];
+					delete Cryptocat.Me.settings.userBundles[username];
+				});
 			}
-			delete Cryptocat.Me.settings.userBundles[username];
 		},
 		onChangeFilter: function(e) {
 			var _t = this;
@@ -544,13 +545,13 @@ window.addEventListener('load', function(e) {
 				Cryptocat.Me.settings,
 				function() {
 					Cryptocat.XMPP.disconnect(function() {
-						IPCRenderer.send('app.quit');
+						IPCRenderer.sendSync('app.quit');
 					});
 				}
 			);
 		}
 		else {
-			IPCRenderer.send('app.quit');
+			IPCRenderer.sendSync('app.quit');
 		}
 	};
 
