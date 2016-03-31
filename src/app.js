@@ -250,12 +250,7 @@ electron.app.on('ready', function() {
 	Windows.main.loadURL('file://' + __dirname + '/win/main.html');
 	Windows.main.on('close', function(e) {
 		e.preventDefault();
-		if (!Windows.main.isVisible()) {
-			Windows.main.webContents.send('main.beforeQuit');
-		}
-		else {
-			Windows.main.hide();
-		}
+		Windows.main.hide();
 		if (process.platform === 'darwin') {
 			return false;
 		}
