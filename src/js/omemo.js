@@ -17,7 +17,7 @@ Cryptocat.OMEMO = {};
 			if (
 				(Cryptocat.Patterns.username.test(username)) && (
 					(username === Cryptocat.Me.username) ||
-					(hasProperty(Cryptocat.Win.main.roster.state.buddies, username))
+					(hasProperty(Cryptocat.Win.main.roster.buddies, username))
 				)
 			) {
 				valid = true;

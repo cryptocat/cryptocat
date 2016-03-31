@@ -231,7 +231,7 @@ Cryptocat.XMPP = {};
 		if (!Cryptocat.Patterns.username.test(data.from.local)) {
 			return false;
 		}
-		if (hasProperty(Cryptocat.Win.main.roster.state.buddies, data.from.local)) {
+		if (hasProperty(Cryptocat.Win.main.roster.buddies, data.from.local)) {
 			client.acceptSubscription(data.from.bare);
 			return false;
 		}

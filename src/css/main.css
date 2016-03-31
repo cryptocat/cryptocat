@@ -54,9 +54,21 @@ div.mainRosterIntro[data-visible="false"] {
 	display: none;
 }
 
+input.mainRosterFilter {
+	margin: 0 auto;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	padding-left: 30px;
+	background-image: url('../img/icons/search.png');
+	background-position: 5px center;
+	background-size: 16px;
+	background-repeat: no-repeat;
+}
+
 div.mainRosterBuddy {
-	margin-top: 5px;
-	padding: 8px;
+	margin-top: 6px;
+	padding: 7px;
 	background: #FAFCFF;
 	box-shadow: 1px 1px #96A5B2;
 }
@@ -81,6 +93,10 @@ span.mainRosterBuddyStatus {
 	margin-right: 5px;
 	position: relative;
 	top: 1px;
+}
+
+div.mainRosterBuddy[data-visible="false"] {
+	display: none;
 }
 
 div.mainRosterBuddy[data-status="0"] {

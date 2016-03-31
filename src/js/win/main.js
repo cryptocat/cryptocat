@@ -121,7 +121,9 @@ window.addEventListener('load', function(e) {
 	var mainRosterBuddy = React.createClass({
 		displayName: 'mainRosterBuddy',
 		getInitialState: function() {
-			return {}
+			return {
+				visible: true
+			};
 		},
 		componentDidMount: function() {
 			return true;
@@ -163,6 +165,7 @@ window.addEventListener('load', function(e) {
 				key: 0,
 				className: 'mainRosterBuddy',
 				'data-status': this.props.status,
+				'data-visible': this.state.visible,
 				title: 'Right click for buddy options',
 				onClick: this.onClick,
 				onContextMenu: this.onContextMenu
@@ -180,26 +183,33 @@ window.addEventListener('load', function(e) {
 		displayName: 'mainRoster',
 		getInitialState: function() {
 			return {
-				buddies: {}
+				buddies: {},
+				filter: ''
 			};
 		},
 		componentDidMount: function() {
 			return true;
 		},
 		buildRoster: function(rosterItems) {
-			var newBuddies = {}
+			var newBuddies = {};
+			var userBundles = Cryptocat.Me.settings.userBundles;
+			var _t = this;
 			rosterItems.forEach(function(item) {
+				var status = 0;
+				if (
+					hasProperty(userBundles, item.jid.local) &&
+					Object.keys(userBundles[item.jid.local]).length
+				) {
+					status = 1;
+				}
 				var buddy = React.createElement(mainRosterBuddy, {
 					key:          item.jid.local,
 					username:     item.jid.local,
 					subscription: item.subscription,
-					status:       (function() {
-						var userBundles = Cryptocat.Me.settings.userBundles;
-						if (
-							hasProperty(userBundles, item.jid.local) &&
-							Object.keys(userBundles[item.jid.local]).length
-						) { return 1; } return 0;
-					})()
+					status:       status,
+					ref:          function(b) {
+						_t.buddies[item.jid.local] = b;
+					}
 				}, null);
 				newBuddies[item.jid.local] = buddy;
 			})
@@ -207,11 +217,15 @@ window.addEventListener('load', function(e) {
 		},
 		updateBuddyStatus: function(username, status, notify) {
 			var newBuddies = this.state.buddies;
+			var _t = this;
 			newBuddies[username] = React.createElement(mainRosterBuddy, {
 				key:          username,
 				username:     username,
 				subscription: '',
-				status:       status
+				status:       status,
+				ref:          function(b) {
+					_t.buddies[username] = b;
+				}
 			}, null);
 			this.setState({buddies: newBuddies});
 			if (notify && (status === 2)) {
@@ -231,16 +245,34 @@ window.addEventListener('load', function(e) {
 			}
 		},
 		getBuddyStatus: function(username) {
-			return this.state.buddies[username].props.status;
+			return this.buddies[username].props.status;
 		},
 		removeBuddy: function(username) {
-			var newBuddies = this.state.buddies;
+			var _t = this;
+			var newBuddies = _t.state.buddies;
 			if (hasProperty(newBuddies, username)) {
 				delete newBuddies[username];
+				delete _t.buddies[username];
 				this.setState({buddies: newBuddies});
 			}
 			delete Cryptocat.Me.settings.userBundles[username];
 		},
+		onChangeFilter: function(e) {
+			var _t = this;
+			var f  = e.target.value.toLowerCase();
+			_t.setState({filter: f}, function() {
+				for (var b in _t.buddies) {
+					if (hasProperty(_t.buddies, b)) {
+						_t.buddies[b].setState({
+							visible: (_t.buddies[b].props
+								.username.indexOf(f) == 0
+							)
+						});
+					}
+				}
+			});
+		},
+		buddies: {},
 		render: function() {
 			var buddiesArrays = [[], [], []];
 			for (var p in this.state.buddies) {
@@ -267,18 +299,26 @@ window.addEventListener('load', function(e) {
 				key: 0,
 				className: 'mainRoster',
 				onSubmit: this.onSubmit
-			}, [React.createElement('div', {
-				key: 1,
-				className: 'mainRosterIntro',
-				'data-visible': !buddiesArrays.length
-			}, React.createElement('h2', {
-				key: 2
-			},
-			'Welcome.'), React.createElement('p', {
-				key: 3
-			},
-			'Your buddy list is empty. Add your first buddy by pressing Alt+A.'
-			))].concat(buddiesArrays));
+			}, [
+				React.createElement('input', {
+					key: 1,
+					type: 'text',
+					className: 'mainRosterFilter',
+					placeholder: 'Filter...',
+					value: this.state.filter,
+					onChange: this.onChangeFilter
+				}),
+				React.createElement('div', {
+					key: 2,
+					className: 'mainRosterIntro',
+					'data-visible': !buddiesArrays.length
+				}, React.createElement('h2', {
+					key: 3
+				}, 'Welcome.'),
+				React.createElement('p', {
+					key: 4
+				}, 'Your buddy list is empty. Add your first buddy by pressing Alt+A.'))
+			].concat(buddiesArrays));
 		}
 	});
 
