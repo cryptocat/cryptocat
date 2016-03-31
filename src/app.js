@@ -31,7 +31,7 @@ var HandleStartupEvent = function() {
 }; if (HandleStartupEvent()) { return false };
 
 var buildTrayMenu = function(settings) {
-	return electron.Menu.buildFromTemplate([
+	var menu = electron.Menu.buildFromTemplate([
 		{
 			label: 'Buddy List',
 			click: function() {
@@ -91,16 +91,18 @@ var buildTrayMenu = function(settings) {
 			click: function() {
 				electron.shell.openExternal('https://crypto.cat/help.html');
 			}
-		},
-		{
+		}
+	]);
+	if (process.platform !== 'darwin') {
+		menu.append(new electron.MenuItem({
 			label: 'Quit',
 			role: 'quit',
 			click: function() {
-				IntentToQuit = true;
 				Windows.main.webContents.send('main.beforeQuit');
 			}
-		}
-	]);
+		}));
+	}
+	return menu;
 };
 
 var MainMenu = electron.Menu.buildFromTemplate([
@@ -141,7 +143,6 @@ var MainMenu = electron.Menu.buildFromTemplate([
 				label: 'Quit',
 				accelerator: 'CmdOrCtrl+Q',
 				click: function() {
-					IntentToQuit = true;
 					Windows.main.webContents.send('main.beforeQuit');
 				}
 			}
@@ -328,6 +329,7 @@ electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
 });
 
 electron.ipcMain.on('app.quit', function(e) {
+	IntentToQuit = true;
 	Windows.main.destroy();
 	electron.app.quit();
 	e.returnValue = 'true';
@@ -341,10 +343,13 @@ electron.app.on('browser-window-focus', function(e, w) {
 	Windows.last = w;
 });
 
-electron.app.on('activate', function() {
+electron.app.on('activate', function(e) {
 	Windows.last.show();
 });
 
-electron.app.on('window-all-closed', function() {
-	electron.app.quit();
+electron.app.on('before-quit', function(e) {
+	if (!IntentToQuit) {
+		e.preventDefault();
+	}
+	Windows.main.webContents.send('main.beforeQuit');
 });
