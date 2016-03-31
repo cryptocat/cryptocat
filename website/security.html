@@ -78,8 +78,8 @@
 					<li><em>Secrecy</em>: A message sent between buddies can only be decrypted between these buddies.</li>
 					<li><em>Authenticity</em>: If Alice receive an apparently valid message from Bob, then Bob must have sent this message to Alice.</li>
 					<li><em>Indistinguishability</em>: If Alice randomly chooses between two messages of the same size and sends only one to Bob, an attacker cannot determine which message was sent.</li>
-					<li><em>Forward secrecy</em>: If Alice sends a message to Bob and both Alice and Bob's <span class="code">identityKeyPair</span>s are susbsequently compromised, this message retains its Secrecy property.</li>
-					<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her keys for the first message are compromised.</li>
+					<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is susbsequently compromised, all previous messages retain their Secrecy property.</li>
+					<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
 				</ul>
 			</p>
 			<h2 id="misc">Miscellaneous Security Features</h2>
