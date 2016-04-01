@@ -435,6 +435,14 @@ window.addEventListener('load', function(e) {
 					}
 				},
 				{
+					label: 'Check for Updates',
+					click: function() {
+						Remote.getCurrentWindow().webContents.send(
+							'main.checkForUpdates'
+						);
+					}
+				},
+				{
 					type: 'separator'
 				},
 				{
