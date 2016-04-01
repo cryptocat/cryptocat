@@ -308,12 +308,10 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if (
-						(
-							Math.floor(Date.now() / 1000) -
-							thisChat.sendQueue.lastRecv
-						) <= 2
-					) {
+					if ((
+						Math.floor(Date.now() / 1000) -
+						thisChat.sendQueue.lastRecv
+					) <= 2) {
 						return false;
 					}
 					IPCRenderer.sendSync(
