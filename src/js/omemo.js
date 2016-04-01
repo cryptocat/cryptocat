@@ -620,6 +620,9 @@ Cryptocat.OMEMO = {};
 			}
 		);
 		if (next.output.valid) {
+			Cryptocat.Me.settings.userBundles[
+				encrypted.from][encrypted.sid
+			].axolotl = next.them;
 			var message = ProScript.crypto.AESGCMDecrypt(
 				ProScript.encoding.hexStringTo32ByteArray(next.plaintext),
 				ProScript.encoding.hexStringTo12ByteArray(encrypted.iv),
@@ -629,9 +632,6 @@ Cryptocat.OMEMO = {};
 				},
 			'')
 			if (message.valid) {
-				Cryptocat.Me.settings.userBundles[
-					encrypted.from][encrypted.sid
-				].axolotl = next.them;
 				while (
 					message.plaintext.length &&
 					(message.plaintext.charCodeAt(message.plaintext.length - 1) === 0)

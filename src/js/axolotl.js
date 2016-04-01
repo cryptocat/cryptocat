@@ -173,7 +173,6 @@ const Type_them = {
 			myPreKey: Type_keypair.construct(),
 			preKey: Type_key.construct(),
 			preKeyId: 0,
-			kENC: Type_key.construct(),
 			recvKeys: [
 				Type_key.construct(),
 				Type_key.construct()
@@ -198,7 +197,6 @@ const Type_them = {
 		a.myPreKey              = Type_keypair.assert(a.myPreKey)
 		a.preKey                = Type_key.assert(a.preKey)
 		a.preKeyId              + 1
-		a.kENC                  = Type_key.assert(a.kENC)
 		a.recvKeys[0]           = Type_key.assert(a.recvKeys[0])
 		a.recvKeys[1]           = Type_key.assert(a.recvKeys[1])
 		a.sendKeys[0]           = Type_key.assert(a.sendKeys[0])
@@ -422,7 +420,6 @@ const HANDLE = {
 			myPreKey: them.myPreKey,
 			preKey: them.preKey,
 			preKeyId: them.preKeyId,
-			kENC: them.kENC,
 			recvKeys: recvKeys,
 			sendKeys: them.sendKeys,
 			shared: shared,
@@ -450,7 +447,6 @@ const HANDLE = {
 			myPreKey: them.myPreKey,
 			preKey: them.preKey,
 			preKeyId: msg.preKeyId,
-			kENC: them.kENC,
 			recvKeys: them.recvKeys,
 			sendKeys: sendKeys,
 			shared: shared,
@@ -486,7 +482,6 @@ const HANDLE = {
 				myPreKey: them.myPreKey,
 				preKey: them.preKey,
 				preKeyId: them.preKeyId,
-				kENC: keys.kENC,
 				recvKeys: [keys.recvKeys[0], keys.recvKeys[1]],
 				sendKeys: [keys.sendKeys[0], keys.sendKeys[1]],
 				shared: them.shared,
@@ -523,7 +518,6 @@ const HANDLE = {
 					myPreKey: them.myPreKey,
 					preKey: them.preKey,
 					preKeyId: msg.preKeyId,
-					kENC: dec.keys.kENC,
 					recvKeys: dec.keys.recvKeys,
 					sendKeys: dec.keys.sendKeys,
 					shared: them.shared,
@@ -559,7 +553,6 @@ const HANDLE = {
 						myPreKey: them.myPreKey,
 						preKey: them.preKey,
 						preKeyId: msg.preKeyId,
-						kENC: dec.keys.kENC,
 						recvKeys: dec.keys.recvKeys,
 						sendKeys: dec.keys.sendKeys,
 						shared: them.shared,
@@ -594,7 +587,6 @@ const HANDLE = {
 						myPreKey: them.myPreKey,
 						preKey: them.preKey,
 						preKeyId: msg.preKeyId,
-						kENC: dec.keys.kENC,
 						recvKeys: dec.keys.recvKeys,
 						sendKeys: dec.keys.sendKeys,
 						shared: them.shared,
@@ -633,7 +625,6 @@ const Axolotl = {
 			myPreKey:              Type_keypair.assert(myPreKey),
 			preKey:                Type_key.fromBitstring(theirPreKeyPub),
 			preKeyId:              preKeyId + 0,
-			kENC:                  Type_key.construct(),
 			recvKeys:              [Type_key.construct(), Type_key.construct()],
 			sendKeys:              [Type_key.construct(), Type_key.construct()],
 			shared:                Type_key.construct(),

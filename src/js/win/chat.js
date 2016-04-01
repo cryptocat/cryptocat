@@ -299,12 +299,21 @@ window.addEventListener('load', function(e) {
 		sendQueue: {
 			messages: [],
 			monitor:  {},
-			rate: 999,
+			rate: 1000,
 			isOn: false,
+			lastRecv: 0,
 			turnOn: function() {
 				thisChat.sendQueue.monitor = setInterval(function() {
 					if (!thisChat.sendQueue.messages.length) {
 						thisChat.sendQueue.turnOff();
+						return false;
+					}
+					if (
+						(
+							Math.floor(Date.now() / 1000) -
+							thisChat.sendQueue.lastRecv
+						) <= 2
+					) {
 						return false;
 					}
 					IPCRenderer.sendSync(
@@ -336,6 +345,9 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(thisChat.to, info);
+		thisChat.sendQueue.lastRecv = Math.floor(
+			(new Date(info.stamp)).getTime() / 1000
+		);
 		if (!thisChat.focused && (process.platform === 'darwin')) {
 			thisChat.unread++;
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
