@@ -24,7 +24,8 @@ Cryptocat.Storage = {};
 		autoload: true
 	});
 
-	Cryptocat.Storage.updateUser = function(username, settings, callback) {
+	Cryptocat.Storage.updateUser = function(username, loadedSettings, callback) {
+		var settings = Object.assign({}, loadedSettings);
 		var newSettings = {
 			identityKey: {priv: [], pub: []},
 			identityDHKey: [],
@@ -108,7 +109,8 @@ Cryptocat.Storage = {};
 					// updateObj.identityDHKey = settings.identityDHKey;
 				}
 				if (hasProperty(settings, 'deviceId')) {
-					updateObj.deviceId = settings.deviceId;
+					// Resetting deviceId disabled (no use-case)
+					// updateObj.deviceId = settings.deviceId;
 				}
 				if (hasProperty(settings, 'deviceName')) {
 					// Resetting identity disabled (no use-case)
