@@ -299,7 +299,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if ((Date.now() - thisChat.sendQueue.lastRecv) < 3000) {
+					if ((Date.now() - thisChat.sendQueue.lastRecv) < 5000) {
 						return false;
 					}
 					IPCRenderer.sendSync(
