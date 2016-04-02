@@ -346,7 +346,6 @@ const RATCHET = {
 		)
 		return {
 			sendKeys: sendKeys,
-			recvKeys: them.recvKeys,
 			kENC:     kKeys[0]
 		}
 	},
@@ -363,7 +362,6 @@ const RATCHET = {
 			'WhisperMessageKeys'
 		)
 		return {
-			sendKeys: them.sendKeys,
 			recvKeys: recvKeys,
 			kENC: kKeys[0]
 		}
@@ -482,7 +480,7 @@ const HANDLE = {
 				myPreKey: them.myPreKey,
 				preKey: them.preKey,
 				preKeyId: them.preKeyId,
-				recvKeys: [keys.recvKeys[0], keys.recvKeys[1]],
+				recvKeys: them.recvKeys,
 				sendKeys: [keys.sendKeys[0], keys.sendKeys[1]],
 				shared: them.shared,
 				established: them.established
@@ -519,7 +517,7 @@ const HANDLE = {
 					preKey: them.preKey,
 					preKeyId: msg.preKeyId,
 					recvKeys: dec.keys.recvKeys,
-					sendKeys: dec.keys.sendKeys,
+					sendKeys: them.sendKeys,
 					shared: them.shared,
 					established: them.established
 				},
@@ -554,7 +552,7 @@ const HANDLE = {
 						preKey: them.preKey,
 						preKeyId: msg.preKeyId,
 						recvKeys: dec.keys.recvKeys,
-						sendKeys: dec.keys.sendKeys,
+						sendKeys: them.sendKeys,
 						shared: them.shared,
 						established: them.established
 					},
@@ -588,7 +586,7 @@ const HANDLE = {
 						preKey: them.preKey,
 						preKeyId: msg.preKeyId,
 						recvKeys: dec.keys.recvKeys,
-						sendKeys: dec.keys.sendKeys,
+						sendKeys: them.sendKeys,
 						shared: them.shared,
 						established: them.established
 					},

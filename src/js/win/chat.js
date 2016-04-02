@@ -29,11 +29,11 @@ window.addEventListener('load', function(e) {
 	var checkIfSticker = function(message) {
 		if (Cryptocat.Patterns.sticker.test(message)) {
 			var stickers = [
-				'angry', 'blushing', 'challengeAccepted',
-				'confused', 'crying', 'embarrassed',
-				'grinning', 'hurt', 'inLove', 'nerdy',
-				'sarcastic', 'sick', 'sleepy', 'smiling',
-				'winking'
+				'angry',    'blushing',  'challengeAccepted',
+				'confused', 'crying',    'embarrassed',
+				'grinning', 'hurt',      'inLove',
+				'nerdy',    'sarcastic', 'sick',
+				'sleepy',   'smiling',   'winking'
 			];
 			var sticker = message.substr(17);
 			if (stickers.indexOf(sticker) >= 0) {
@@ -61,14 +61,6 @@ window.addEventListener('load', function(e) {
 		},
 		componentDidMount: function() {
 			return true;
-		},
-		onClick: function(e) {
-			e.preventDefault();
-			if (e.target.tagName === 'A') {
-				Remote.shell.openExternal(
-					e.target.getAttribute('href')
-				);
-			}
 		},
 		render: function() {
 			var className = this.props.alignment;
@@ -107,7 +99,7 @@ window.addEventListener('load', function(e) {
 				chatInputText: '',
 				conversation: [],
 				key: 0,
-				status: 0
+				status: -1
 			};
 		},
 		componentDidMount: function() {
@@ -272,7 +264,7 @@ window.addEventListener('load', function(e) {
 					key: 15
 				})
 				), React.createElement('textarea', {
-					key: 12,
+					key: 16,
 					id: 'chatInputText',
 					autoFocus: true,
 					form: 'chatInput',
@@ -299,7 +291,6 @@ window.addEventListener('load', function(e) {
 		sendQueue: {
 			messages: [],
 			monitor:  {},
-			rate: 1000,
 			isOn: false,
 			lastRecv: 0,
 			turnOn: function() {
@@ -308,10 +299,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if ((
-						Math.floor(Date.now() / 1000) -
-						thisChat.sendQueue.lastRecv
-					) <= 2) {
+					if ((Date.now() - thisChat.sendQueue.lastRecv) < 3000) {
 						return false;
 					}
 					IPCRenderer.sendSync(
@@ -320,7 +308,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.messages[0]
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
-				}, thisChat.sendQueue.rate);
+				}, 1000);
 				thisChat.sendQueue.isOn = true;
 			},
 			turnOff: function() {
@@ -343,9 +331,7 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(thisChat.to, info);
-		thisChat.sendQueue.lastRecv = Math.floor(
-			(new Date(info.stamp)).getTime() / 1000
-		);
+		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
 		if (!thisChat.focused && (process.platform === 'darwin')) {
 			thisChat.unread++;
 			var badgeCount = parseInt(Remote.app.dock.getBadge());

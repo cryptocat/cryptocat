@@ -33,6 +33,10 @@ div.chatTopStatus {
 	height: 13px;
 }
 
+div.chatTopStatus[data-status='-1'] {
+	visibility: hidden;
+}
+
 div.chatTopStatus[data-status='0'] {
 	background-color: #F1375A;
 }

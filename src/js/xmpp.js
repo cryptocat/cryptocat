@@ -106,21 +106,22 @@ Cryptocat.XMPP = {};
 				}
 				else if (Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).valid) {
 					deviceId = Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).deviceId;
-					if (Cryptocat.OMEMO.isProperBundle(data)) {
-						data = data.item[0].bundle[0];
-						preKeys = Cryptocat.OMEMO.extractPreKeys(
-							data.prekeys[0].preKeyPublic
-						);
-						Cryptocat.OMEMO.onGetBundle(fromUser, deviceId, {
-							identityKey:           data.identityKey[0]._,
-							deviceName:            data.identityKey[0].$.deviceName,
-							deviceIcon:            data.identityKey[0].$.deviceIcon,
-							signedPreKey:          data.signedPreKeyPublic[0]._,
-							signedPreKeyId:        data.signedPreKeyPublic[0].$.signedPreKeyId,
-							signedPreKeySignature: data.signedPreKeySignature[0],
-							preKeys:               preKeys
-						});
+					if (!Cryptocat.OMEMO.isProperBundle(data)) {
+						return false;
 					}
+					data = data.item[0].bundle[0];
+					preKeys = Cryptocat.OMEMO.extractPreKeys(
+						data.prekeys[0].preKeyPublic
+					);
+					Cryptocat.OMEMO.onGetBundle(fromUser, deviceId, {
+						identityKey:           data.identityKey[0]._,
+						deviceName:            data.identityKey[0].$.deviceName,
+						deviceIcon:            data.identityKey[0].$.deviceIcon,
+						signedPreKey:          data.signedPreKeyPublic[0]._,
+						signedPreKeyId:        data.signedPreKeyPublic[0].$.signedPreKeyId,
+						signedPreKeySignature: data.signedPreKeySignature[0],
+						preKeys:               preKeys
+					});
 				}
 			}
 		});

@@ -105,6 +105,9 @@ Cryptocat.OMEMO = {};
 			var bundleGetSet = {
 				get: function() {},
 				set: function(items) {
+					var cE = stanza.utils.createElement;
+					var sA = stanza.utils.setAttribute;
+					var sT = stanza.utils.setText;
 					var identityKey    = items.identityKey;
 					var identityDHKey  = items.identityDHKey;
 					var signedPreKey   = items.signedPreKey;
@@ -112,20 +115,20 @@ Cryptocat.OMEMO = {};
 					var sPKSignature   = items.signedPreKeySignature;
 					var preKeys        = items.preKeys;
 					var bATHS          = ProScript.encoding.byteArrayToHexString;
-					var iKElement      = stanza.utils.createElement('', 'identityKey', '');
-					var sPKElement     = stanza.utils.createElement('', 'signedPreKeyPublic', '');
-					var sPKSElement    = stanza.utils.createElement('', 'signedPreKeySignature', '');
-					var pKsElement     = stanza.utils.createElement('', 'prekeys', '');
-					stanza.utils.setText(iKElement,   bATHS(identityKey) + bATHS(identityDHKey));
-					stanza.utils.setAttribute(iKElement, 'deviceName', items.deviceName);
-					stanza.utils.setAttribute(iKElement, 'deviceIcon', items.deviceIcon + '');
-					stanza.utils.setText(sPKElement,  bATHS(signedPreKey));
-					stanza.utils.setAttribute(sPKElement, 'signedPreKeyId', signedPreKeyId + '');
-					stanza.utils.setText(sPKSElement, sPKSignature);
+					var iKElement      = cE('', 'identityKey', '');
+					var sPKElement     = cE('', 'signedPreKeyPublic', '');
+					var sPKSElement    = cE('', 'signedPreKeySignature', '');
+					var pKsElement     = cE('', 'prekeys', '');
+					sT(iKElement,   bATHS(identityKey) + bATHS(identityDHKey));
+					sA(iKElement, 'deviceName', items.deviceName);
+					sA(iKElement, 'deviceIcon', items.deviceIcon + '');
+					sT(sPKElement,  bATHS(signedPreKey));
+					sA(sPKElement, 'signedPreKeyId', signedPreKeyId + '');
+					sT(sPKSElement, sPKSignature);
 					preKeys.forEach(function(preKey, preKeyId) {
-						var pKElement = stanza.utils.createElement('', 'preKeyPublic', '');
-						stanza.utils.setAttribute(pKElement, 'preKeyId', preKeyId + '');
-						stanza.utils.setText(pKElement, bATHS(preKey.pub));
+						var pKElement = cE('', 'preKeyPublic', '');
+						sA(pKElement, 'preKeyId', preKeyId + '');
+						sT(pKElement, bATHS(preKey.pub));
 						pKsElement.appendChild(pKElement);
 					});
 					this.xml.appendChild(iKElement);
@@ -219,35 +222,38 @@ Cryptocat.OMEMO = {};
 					});
 				},
 				set: function(items) {
+					var cE = stanza.utils.createElement;
+					var sA = stanza.utils.setAttribute;
+					var sT = stanza.utils.setText;
 					var devices  = items.devices;
 					var payload  = items.payload;
 					var sid      = items.sid;
 					var bATHS    = ProScript.encoding.byteArrayToHexString;
-					var hElement = stanza.utils.createElement('', 'header', '');
-					var iElement = stanza.utils.createElement('', 'iv', '');
-					var tElement = stanza.utils.createElement('', 'tag', '');
-					var pElement = stanza.utils.createElement('', 'payload', '');
-					stanza.utils.setAttribute(hElement, 'sid', sid);
-					stanza.utils.setText(iElement, payload.iv);
-					stanza.utils.setText(tElement, payload.tag);
-					stanza.utils.setText(pElement, payload.ciphertext);
+					var hElement = cE('', 'header', '');
+					var iElement = cE('', 'iv', '');
+					var tElement = cE('', 'tag', '');
+					var pElement = cE('', 'payload', '');
+					sA(hElement, 'sid', sid);
+					sT(iElement, payload.iv);
+					sT(tElement, payload.tag);
+					sT(pElement, payload.ciphertext);
 					hElement.appendChild(iElement);
 					hElement.appendChild(tElement);
 					for (var deviceId in devices) { if (hasProperty(devices, deviceId)) {
-						var kElement    = stanza.utils.createElement('', 'key', '');
-						var _cElement   = stanza.utils.createElement('', 'ciphertext', '');
-						var _eKElement  = stanza.utils.createElement('', 'ephemeralKey', '');
-						var _iEKElement = stanza.utils.createElement('', 'initEphemeralKey', '');
-						var _iElement   = stanza.utils.createElement('', 'iv', '');
-						var _tElement   = stanza.utils.createElement('', 'tag', '');
-						var _pKIElement = stanza.utils.createElement('', 'preKeyId', '');
-						stanza.utils.setAttribute(kElement, 'rid', deviceId);
-						stanza.utils.setText(_cElement,   devices[deviceId].ciphertext);
-						stanza.utils.setText(_eKElement,  bATHS(devices[deviceId].ephemeralKey));
-						stanza.utils.setText(_iEKElement, bATHS(devices[deviceId].initEphemeralKey));
-						stanza.utils.setText(_iElement,   bATHS(devices[deviceId].iv));
-						stanza.utils.setText(_tElement,   devices[deviceId].tag);
-						stanza.utils.setText(_pKIElement, devices[deviceId].preKeyId);
+						var kElement    = cE('', 'key', '');
+						var _cElement   = cE('', 'ciphertext', '');
+						var _eKElement  = cE('', 'ephemeralKey', '');
+						var _iEKElement = cE('', 'initEphemeralKey', '');
+						var _iElement   = cE('', 'iv', '');
+						var _tElement   = cE('', 'tag', '');
+						var _pKIElement = cE('', 'preKeyId', '');
+						sA(kElement, 'rid', deviceId);
+						sT(_cElement,   devices[deviceId].ciphertext);
+						sT(_eKElement,  bATHS(devices[deviceId].ephemeralKey));
+						sT(_iEKElement, bATHS(devices[deviceId].initEphemeralKey));
+						sT(_iElement,   bATHS(devices[deviceId].iv));
+						sT(_tElement,   devices[deviceId].tag);
+						sT(_pKIElement, devices[deviceId].preKeyId);
 						kElement.appendChild(_cElement);
 						kElement.appendChild(_eKElement);
 						kElement.appendChild(_iEKElement);
@@ -275,34 +281,42 @@ Cryptocat.OMEMO = {};
 	};
 
 	Cryptocat.OMEMO.isProperBundle = function(data) {
+		var bundle = {};
+		if (
+			hasProperty(data, 'item')             &&
+			hasProperty(data.item, '0')           &&
+			hasProperty(data.item[0], 'bundle')   &&
+			hasProperty(data.item[0].bundle, '0')
+		) {
+			bundle = data.item[0].bundle[0];
+		}
+		else {
+			return false;
+		}
 		return (
-			hasProperty(data,                                                     'item')          &&
-			hasProperty(data.item,                                                   '0')          &&
-			hasProperty(data.item[0],                                           'bundle')          &&
-			hasProperty(data.item[0].bundle,                                         '0')          &&
-			Array.isArray(data.item[0].bundle[0].identityKey)                                      &&
-			hasProperty(data.item[0].bundle[0].identityKey,                          '0')          &&
-			hasProperty(data.item[0].bundle[0].identityKey[0],                       '$')          &&
-			hasProperty(data.item[0].bundle[0].identityKey[0],                       '_')          &&
-			hasProperty(data.item[0].bundle[0].identityKey[0].$,               'deviceName')       &&
-			hasProperty(data.item[0].bundle[0].identityKey[0].$,               'deviceIcon')       &&
-			Cryptocat.Patterns.deviceName.test(data.item[0].bundle[0].identityKey[0].$.deviceName) &&
-			Cryptocat.Patterns.deviceIcon.test(data.item[0].bundle[0].identityKey[0].$.deviceIcon) &&
-			Array.isArray(data.item[0].bundle[0].signedPreKeyPublic)                               &&
-			hasProperty(data.item[0].bundle[0].signedPreKeyPublic,                   '0')          &&
-			hasProperty(data.item[0].bundle[0].signedPreKeyPublic[0],                '$')          &&
-			hasProperty(data.item[0].bundle[0].signedPreKeyPublic[0],                '_')          &&
-			hasProperty(data.item[0].bundle[0].signedPreKeyPublic[0].$, 'signedPreKeyId')          &&
-			Array.isArray(data.item[0].bundle[0].signedPreKeySignature)                            &&
-			hasProperty(data.item[0].bundle[0].signedPreKeySignature,                '0')          &&
-			Array.isArray(data.item[0].bundle[0].prekeys)                                          &&
-			hasProperty(data.item[0].bundle[0].prekeys,                              '0')          &&
-			Array.isArray(data.item[0].bundle[0].prekeys[0].preKeyPublic)                          &&
-			(data.item[0].bundle[0].prekeys[0].preKeyPublic.length === 100)                        &&
-			Cryptocat.Patterns.hex64.test(data.item[0].bundle[0].identityKey[0]._)                 &&
-			Cryptocat.Patterns.hex32.test(data.item[0].bundle[0].signedPreKeyPublic[0]._)          &&
-			Cryptocat.Patterns.hex64.test(data.item[0].bundle[0].signedPreKeySignature[0])
-		)
+			Array.isArray(bundle.identityKey)                                      &&
+			hasProperty(bundle.identityKey, '0')                                   &&
+			hasProperty(bundle.identityKey[0], '$')                                &&
+			hasProperty(bundle.identityKey[0], '_')                                &&
+			hasProperty(bundle.identityKey[0].$, 'deviceName')                     &&
+			hasProperty(bundle.identityKey[0].$, 'deviceIcon')                     &&
+			Cryptocat.Patterns.deviceName.test(bundle.identityKey[0].$.deviceName) &&
+			Cryptocat.Patterns.deviceIcon.test(bundle.identityKey[0].$.deviceIcon) &&
+			Array.isArray(bundle.signedPreKeyPublic)                               &&
+			hasProperty(bundle.signedPreKeyPublic, '0')                            &&
+			hasProperty(bundle.signedPreKeyPublic[0], '$')                         &&
+			hasProperty(bundle.signedPreKeyPublic[0], '_')                         &&
+			hasProperty(bundle.signedPreKeyPublic[0].$, 'signedPreKeyId')          &&
+			Array.isArray(bundle.signedPreKeySignature)                            &&
+			hasProperty(bundle.signedPreKeySignature, '0')                         &&
+			Array.isArray(bundle.prekeys)                                          &&
+			hasProperty(bundle.prekeys, '0')                                       &&
+			Array.isArray(bundle.prekeys[0].preKeyPublic)                          &&
+			(bundle.prekeys[0].preKeyPublic.length === 100)                        &&
+			Cryptocat.Patterns.hex64.test(bundle.identityKey[0]._)                 &&
+			Cryptocat.Patterns.hex32.test(bundle.signedPreKeyPublic[0]._)          &&
+			Cryptocat.Patterns.hex64.test(bundle.signedPreKeySignature[0])
+		);
 	};
 
 	Cryptocat.OMEMO.setup = function(callback) {
@@ -549,10 +563,14 @@ Cryptocat.OMEMO = {};
 				var preKeyId = Cryptocat.OMEMO.selectPreKey(username, deviceId);
 				var iK       = bundles[deviceId].identityKey.substr(0,   64);
 				var iDHK     = bundles[deviceId].identityKey.substr(64, 128);
-				console.info('Cryptocat.OMEMO', 'Setting up new Axolotl session with ' + username);
+				console.info(
+					'Cryptocat.OMEMO',
+					'Setting up new Axolotl session with ' + username
+				);
 				bundles[deviceId].axolotl = Cryptocat.Axolotl.newSession(
 					Cryptocat.Axolotl.newKeyPair(), iK, iDHK,
-					bundles[deviceId].signedPreKey, bundles[deviceId].signedPreKeySignature,
+					bundles[deviceId].signedPreKey,
+					bundles[deviceId].signedPreKeySignature,
 					bundles[deviceId].preKeys[preKeyId], preKeyId
 				);
 			}
@@ -563,9 +581,7 @@ Cryptocat.OMEMO = {};
 			);
 			if (next.output.valid) {
 				res.devices[deviceId] = next.output;
-				Cryptocat.Me.settings.userBundles[
-					username][deviceId
-				].axolotl = next.them;
+				bundles[deviceId].axolotl = next.them;
 			}
 		}};
 		Cryptocat.XMPP.sendMessage(username, res);
@@ -593,7 +609,10 @@ Cryptocat.OMEMO = {};
 		) {
 			var iK   = bundle.identityKey.substr(0,   64);
 			var iDHK = bundle.identityKey.substr(64, 128);
-			console.info('Cryptocat.OMEMO', 'Setting up new Axolotl session with ' + encrypted.from);
+			console.info(
+				'Cryptocat.OMEMO',
+				'Setting up new Axolotl session with ' + encrypted.from
+			);
 			bundle.axolotl = Cryptocat.Axolotl.newSession(
 				Cryptocat.Me.settings.preKeys[encrypted.key.preKeyId],
 				iK, iDHK, bundle.signedPreKey, bundle.signedPreKeySignature,
@@ -620,9 +639,7 @@ Cryptocat.OMEMO = {};
 			}
 		);
 		if (next.output.valid) {
-			Cryptocat.Me.settings.userBundles[
-				encrypted.from][encrypted.sid
-			].axolotl = next.them;
+			bundle.axolotl = next.them;
 			var message = ProScript.crypto.AESGCMDecrypt(
 				ProScript.encoding.hexStringTo32ByteArray(next.plaintext),
 				ProScript.encoding.hexStringTo12ByteArray(encrypted.iv),
