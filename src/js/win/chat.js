@@ -308,7 +308,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.messages[0]
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
-				}, 1000);
+				}, 2000);
 				thisChat.sendQueue.isOn = true;
 			},
 			turnOff: function() {
