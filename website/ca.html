@@ -12,13 +12,14 @@
 	<title>Cryptocat</title>
 	<link rel="stylesheet" href="css/fonts.css" type="text/css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="stylesheet" href="css/octicons.css" type="text/css" />
 	<link rel="icon" type="image/gif" href="img/favicon.gif" />
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
 	<script type="application/javascript" src="js/util.js"></script>
 	<script type="application/javascript">
 		window.addEventListener('load', function() {
 			'use strict';
-			var dBL = document.getElementById('downloadButtonLink');
+			var dBF = document.getElementById('downloadButtonForm');
 			var dBT = document.getElementById('downloadButtonText');
 			var dL  = {
 				win32: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip',
@@ -30,7 +31,7 @@
 				linux: 'Descarregar Cryptocat per a Linux (Beta)',
 				darwin: 'Descarregar Cryptocat per a Mac (Beta)'
 			};
-			dBL.href = dL[getOS()];
+			dBF.action    = dL[getOS()];
 			dBT.innerText = dT[getOS()];
 		});
 	</script>
@@ -56,35 +57,31 @@
 			<p>
 				Cryptocat és programari lliure amb una simple missió: <strong>tothom hauria de ser capaç de xerrar amb els seus amics en la intimitat.</strong> 
 			</p>
-			<p>
-				<ul class="mainFeatureList">
-					<li>
-						<em>Xifrat per defecte.</em> Cada missatge té un xifrat, sempre.
-					</li>
-					<li>
-						<em>Endavant segur.</em> Xats no es pot desxifrar fins i tot si les claus són robats.
-					</li>
-					<li>
-						<em>Intercanvi d'arxius.</em> Compartir arxius de forma segura amb amics <strong>(pròximament)</strong>.
-					</li>
-					<li>
-						<em>Xat de grup.</em> Xatejar amb diversos amics alhora <strong>(pròximament)</strong>.
-					</li>
-				</ul>
-			</p>
-			<p>
-				<a id="downloadButtonLink" href="">
-					<button id="downloadButton">
-						<span class="octicon">&#xf03f;</span>
-						<span id="downloadButtonText"></span>
-					</button>
-				</a>
-				<span class="downloadLinks">
-					Available for <a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip">Windows</a>, 
-					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip">Linux</a> and 
-					<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip">Mac</a>.
-				</span>
-			</p>
+			<ul class="mainFeatureList">
+				<li>
+					<em>Xifrat per defecte.</em> Cada missatge té un xifrat, sempre.
+				</li>
+				<li>
+					<em>Endavant segur.</em> Xats no es pot desxifrar fins i tot si les claus són robats.
+				</li>
+				<li>
+					<em>Intercanvi d'arxius.</em> Compartir arxius de forma segura amb amics <strong>(pròximament)</strong>.
+				</li>
+				<li>
+					<em>Xat de grup.</em> Xatejar amb diversos amics alhora <strong>(pròximament)</strong>.
+				</li>
+			</ul>
+			<form id="downloadButtonForm" action="https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip">
+				<button id="downloadButton">
+					<span class="mega-octicon octicon-cloud-download"></span>
+					<span id="downloadButtonText">Descarregar Cryptocat per a Windows (Beta)</span>
+				</button>
+			</form>
+			<span class="downloadLinks">
+				Available for <a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip">Windows</a>, 
+				<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip">Linux</a> and 
+				<a href="https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip">Mac</a>.
+			</span>
 		</div>
 	</div>
 

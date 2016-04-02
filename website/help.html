@@ -77,11 +77,11 @@
 			</p>
 			<p>
 				Once you add a new device, you will not be able to change its name and icon in the future. To view your devices at any time, simply open the <em>Account</em> menu and click on <em>Manage Devices</em>, or press <span class="code">Alt+D</span>. In the Device Manager, you will also be able to remove devices attached to your Cryptocat account. There are two things that can happen when you remove a device:
-				<ul>
-					<li><em>If you remove the device you are currently logged in from</em>: You will be logged out and your sensitive device information will be deleted on this device.</li>
-					<li><em>If you remove another device from the one you are currently using</em>: The device will be unlinked from your account, but sensitive identity information will remain on it. If you like, you can remove this data by <a href="#managingDevices">manually deleting</a> it on the device.</li>
-				</ul>
 			</p>
+			<ul>
+				<li><em>If you remove the device you are currently logged in from</em>: You will be logged out and your sensitive device information will be deleted on this device.</li>
+				<li><em>If you remove another device from the one you are currently using</em>: The device will be unlinked from your account, but sensitive identity information will remain on it. If you like, you can remove this data by <a href="#managingDevices">manually deleting</a> it on the device.</li>
+			</ul>
 			<h2 id="fingerprints">Verifying your Buddy's Fingerprints</h2>
 			<p>
 				In order to obtain increased confidence in the authenticity of your buddy's devices, you can verify their <em>fingerprints</em>. A fingerprint is a special value that identifies a particular device. It looks something like this: <span class="code">99:37:8c:a1:32:05:c5:97:ac:f9:32:d4:18:1e:3e:df</span>.
@@ -96,53 +96,55 @@
 			<p>
 				When you link a new device to your Cryptocat account, Cryptocat will generate sensitive encryption keys and store them on your new device. It is important to note that this sensitive information is not protected in any additional way and that a thief with enough access over your device could obtain this information.
 			</p>
+			Aside from non-sensitive information such as your notification settings, your device information contains the following sensitive details:
+			<ul>
+				<li><em>Your identity keys</em>: A thief with access to those keys could impersonate this device in the future, but will <em>not</em> be able to decrypt your past Cryptocat conversations, thanks to Cryptocat's forward secrecy feature.</li>
+				<li><em>Your username</em>: A thief will be able to learn your Cryptocat username.</li>
+				<li><em>Your buddy list</em>: A thief will be able to learn the contents of your Cryptocat buddy list.</li>
+			</ul>
+			Your device information is stored in:
+			<ul>
+				<li><em>Windows</em>: <span class="code">C:\Users\(Your Username)\AppData\Roaming\Cryptocat\users.db</span></li>
+				<li><em>Linux</em>: <span class="code">~/.config/Cryptocat/users.db</span></li>
+				<li><em>Mac</em>: <span class="code">~/.config/Cryptocat/users.db</span></li>
+			</ul>
+			<h3>Why isn't device information encrypted?</h3>
 			<p>
-				Aside from non-sensitive information such as your notification settings, your device information contains the following sensitive details:
-				<ul>
-					<li><em>Your identity keys</em>: A thief with access to those keys could impersonate this device in the future, but will <em>not</em> be able to decrypt your past Cryptocat conversations, thanks to Cryptocat's forward secrecy feature.</li>
-					<li><em>Your username</em>: A thief will be able to learn your Cryptocat username.</li>
-					<li><em>Your buddy list</em>: A thief will be able to learn the contents of your Cryptocat buddy list.</li>
-				</ul>
+				It is unclear what solid benefits would be given if the Cryptocat client itself encrypted your device information, and having users set a different, per-device password in addition to that of their Cryptocat account can quickly become infeasible in terms of usability for the vast majority of users. Encrypting device information might provide more security, but we deem this extra security to be superficial: all an adversary with code execution capability has to do is wait for you to log into Cryptocat and load your decrypted device information into memory before striking. As such, we do not believe this to be a genuine solution that is worth the price of making regular users remember many passwords for a single account.
 			</p>
 			<p>
-				Your device information is stored in:
-				<ul>
-					<li><em>Windows</em>: <span class="code">C:\Users\(Your Username)\AppData\Roaming\Cryptocat\users.db</li>
-					<li><em>Linux</em>: <span class="code">~/.config/Cryptocat/users.db</li>
-					<li><em>Mac</em>: <span class="code">~/.config/Cryptocat/users.db</li>
-				</ul>
-				<h3>Why isn't device information encrypted?</h3>
-				It is unclear what solid benefits would be given if the Cryptocat client itself encrypted your device information, and having users set a different, per-device password in addition to that of their Cryptocat account can quickly become infeasible in terms of usability for the vast majority of users. Encrypting device information might provide more security, but we deem this extra security to be superficial: all an adversary with code execution capability has to do is wait for you to log into Cryptocat and load your decrypted device information into memory before striking. As such, we do not believe this to be a genuine solution that is worth the price of making regular users remember many passwords for a single account.<br />
 				Essentially, if you can't trust your device, there's nothing substantial that Cryptocat can do to help you in the first place.
-				<h3>What can I do to increase protection of my device information?</h3>
+			</p>
+			<h3>What can I do to increase protection of my device information?</h3>
+			<p>
 				Use full-disk encryption. Under Windows, you can enable <a href="http://windows.microsoft.com/en-us/windows-10/turn-on-device-encryption" target="_blank">device encryption</a>. On Linux, you can use <a href="https://wiki.archlinux.org/index.php/disk_encryption">LUKS, dm-crypt or eCryptfs</a>. On Mac, you can use <a href="https://support.apple.com/en-us/HT204837">FileVault</a>. This would ensure that all files on your computer are more protected. Your Cryptocat device information will be more difficult to recover so long as your device is turned off when stolen.
 			</p>
 			<h2 id="notify">Enabling or Disabling Sounds and Notifications</h2>
 			<p>
 				By default, desktop notifications and notification sounds are enabled in Cryptocat, in order to minimize the chance of you missing an important message. Some users may find these settings bothersome and wish to disable them. Here is how you may do so:
-				<ul>
-					<li><em>Windows and Linux</em>: Right click on the Cryptocat icon in your system notification area. A menu will pop up allowing you to check or uncheck Sound and Notification settings.</li>
-					<li><em>Mac</em>: Right click on the Cryptocat icon in your dock. A context menu will pop up allowing you to check or uncheck Sound and Notification settings.</li>
-				</ul>
 			</p>
+			<ul>
+				<li><em>Windows and Linux</em>: Right click on the Cryptocat icon in your system notification area. A menu will pop up allowing you to check or uncheck Sound and Notification settings.</li>
+				<li><em>Mac</em>: Right click on the Cryptocat icon in your dock. A context menu will pop up allowing you to check or uncheck Sound and Notification settings.</li>
+			</ul>
 			<h2 id="signatures">Verifying Cryptocat Downloads</h2>
 			<p>
 				All Cryptocat clients are <em>signed</em> so that you can verify their authenticity. 
 				This means that when you download a Cryptocat client, you can check if it indeed came 
 				came from Cryptocat's developer. This helps prevent bad guys from tricking you into downloading 
 				a counterfeit client.
-				<br />
-				<em>Note regarding updates:</em> If you download a Cryptocat update using the client's built-in update downloader, a signature check 
-				will be performed automatically. You may however perform additional checks with the steps described below.
+			<p>
+			<p>
+				<em>Note regarding updates:</em> If you download a Cryptocat update using the client's built-in update downloader, a signature check will be performed automatically. You may however perform additional checks with the steps described below.
 			</p>
 			<h3>Verifying Cryptocat for Windows</h3>
 			<p>
 				Right click on <span class="code">Setup.exe</span> and select <em>Properties</em>. In the properties window, click on <em>Digital Signatures</em>. There should be a signature whose details should match the following:
-				<ul>
-					<li><em>Name</em>: Open Source Developer, Nadim Kobeissi</li>
-					<li><em>Thumbprint</em>: <span class="code">17 2b 46 56 59 d0 d2 a2 45 c8 d0 fb 70 ce e3 81 76 2e 21 a5</span></li>
-				</ul>
 			</p>
+			<ul>
+				<li><em>Name</em>: Open Source Developer, Nadim Kobeissi</li>
+				<li><em>Thumbprint</em>: <span class="code">17 2b 46 56 59 d0 d2 a2 45 c8 d0 fb 70 ce e3 81 76 2e 21 a5</span></li>
+			</ul>
 			<h3>Verifying Cryptocat for Linux</h3>
 			<p>
 				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg2</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg2 --import</span>):
@@ -168,38 +170,39 @@
 					gpg: Signature made Sat 10 Apr 2016 12:34:56 PM CET using EDDSA key ID 5D93C3CB<br />
 					gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) &lt;nadim@nadim.computer&gt;"
 				</code>
+			</p>
 			<h3>Verifying Cryptocat for Mac</h3>
 			<p>
 				After opening <span class="code">Cryptocat.pkg</span>, look for the padlock icon at the top right of the installer window. A certificate should be display that matches the following:
-				<ul>
-					<li><em>Name</em>: Developer ID Installer: Nadim Kobeissi (HC689Z8JM4)</li>
-					<li><em>Fingerprint (SHA1)</em>: <span class="code">DE 35 C1 E8 0E 36 09 C5 DB E3 CF F9 01 88 BF 9B EB F2 47 1D</span></li>
-				</ul>
-				You may also verify the installer without first opening it by using this command: <span class="code">pkgutil --check-signature Cryptocat.pkg</span>.
 			</p>
+			<ul>
+				<li><em>Name</em>: Developer ID Installer: Nadim Kobeissi (HC689Z8JM4)</li>
+				<li><em>Fingerprint (SHA1)</em>: <span class="code">DE 35 C1 E8 0E 36 09 C5 DB E3 CF F9 01 88 BF 9B EB F2 47 1D</span></li>
+			</ul>
+				You may also verify the installer without first opening it by using this command: <span class="code">pkgutil --check-signature Cryptocat.pkg</span>.
 			<h2 id="credits">Credits</h2>
 			<p>
-				Since 2011, Cryptocat software has been written by <a href="https://nadim.computer" target="_blank">Nadim Kobeissi</a>. I would also like to express sincere acknowledgments to the following individuals, listed in random order: 
-				<ul id="acknowledgments">
-					<li>Dr. Karthikeyan Bhargavan.</li>
-					<li>Dr. Philippe Baumard.</li>
-					<li>Dr. Antoine Delignat-Lavaud.</li>
-					<li>Dr. Graham Steel.</li>
-					<li>Dr. Harry Halpin.</li>
-					<li>Dr. Jeremy Clark.</li>
-					<li>Dr. Matthew D. Green.</li>
-					<li>Frederic Jacobs.</li>
-					<li>Dr. Jean-Philippe Aumasson.</li>
-					<li>Arlo Breault.</li>
-					<li>Dr. Mario Heiderich.</li>
-					<li>Steve Thomas.</li>
-					<li>Nate Cardozo.</li>
-					<li>Dan Meredith.</li>
-					<li>James Vasile.</li>
-				</ul>
-				<ul id="shuffledAcknowledgments">
-				</u>
+				Since 2011, Cryptocat software has been written by <a href="https://nadim.computer" target="_blank">Nadim Kobeissi</a>. I would also like to express sincere acknowledgments to the following individuals, listed in random order:
 			</p>
+			<ul id="acknowledgments">
+				<li>Dr. Karthikeyan Bhargavan.</li>
+				<li>Dr. Philippe Baumard.</li>
+				<li>Dr. Antoine Delignat-Lavaud.</li>
+				<li>Dr. Graham Steel.</li>
+				<li>Dr. Harry Halpin.</li>
+				<li>Dr. Jeremy Clark.</li>
+				<li>Dr. Matthew D. Green.</li>
+				<li>Frederic Jacobs.</li>
+				<li>Dr. Jean-Philippe Aumasson.</li>
+				<li>Arlo Breault.</li>
+				<li>Dr. Mario Heiderich.</li>
+				<li>Steve Thomas.</li>
+				<li>Nate Cardozo.</li>
+				<li>Dan Meredith.</li>
+				<li>James Vasile.</li>
+			</ul>
+			<ul id="shuffledAcknowledgments">
+			</ul>
 		</div>
 	</div>
 

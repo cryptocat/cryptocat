@@ -133,11 +133,6 @@ div#main div.mainRight ul.mainFeatureList {
 div#main div.mainRight ul.mainFeatureList li {
 }
 
-div#main div.mainRight a#downloadButtonLink:hover {
-	text-decoration: none;
-	color: #222;
-}
-
 div#main div.mainRight button#downloadButton {
 	font-size: 18px;
 	padding: 20px;
@@ -163,9 +158,10 @@ div#main div.newsEntry h2 {
 	margin-bottom: 5px;
 }
 
-div#main div.newsEntry span.newsDate {
+div#main div.newsEntry p.newsDate {
 	font-style: italic;
 	font-size: 12px;
+	margin-top: 0;
 }
 
 div#main ul#acknowledgments, div#main ul#shuffledAcknowledgments {

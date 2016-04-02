@@ -55,43 +55,35 @@
 				Between messages, Cryptocat maintains a forward-secure ratcheting chain that derives new ephemeral key pairs that keep their chain of authenticity by mixing in with the authenticated key exchanged via a Hash-Based Key Derivation Function (HKDF).
 			</p>
 			<h3>Primitives</h3>
-			<p>
-				<ul>
-					<li><em>AES</em> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
-					<li><em>X25519</em> is used for all Elliptic-Curve Diffie-Hellman (ECDH) operations. A four-way ECDH handshake is used for the initial authenticated key exchange and further ECDH operations are routinely performed for <span class="code">preKey</span> generation and message ratcheting.</li>
-					<li><em>ED25519</em> is used for generating <span class="code">identityKeyPair</span> and for signing and verifying the <span class="code">signedPreKey</span>, but is otherwise unused throughout the protocol.</li>
-					<li><em>SHA256</em> is used as the standard hashing function and as the underlying hash function for the HKDF.</li>
-				</ul>
-			</p>
+			<ul>
+				<li><em>AES</em> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
+				<li><em>X25519</em> is used for all Elliptic-Curve Diffie-Hellman (ECDH) operations. A four-way ECDH handshake is used for the initial authenticated key exchange and further ECDH operations are routinely performed for <span class="code">preKey</span> generation and message ratcheting.</li>
+				<li><em>ED25519</em> is used for generating <span class="code">identityKeyPair</span> and for signing and verifying the <span class="code">signedPreKey</span>, but is otherwise unused throughout the protocol.</li>
+				<li><em>SHA256</em> is used as the standard hashing function and as the underlying hash function for the HKDF.</li>
+			</ul>
 			<h3>Threat Model</h3>
-			<p>
-				Cryptocat makes the following assumptions:
-				<ul>
-					<li><em>Untrusted network</em>: We assume that an attacker controls the network and so can intercept, tamper with and inject network messages.</li>
-					<li><em>Long-term key compromise</em>: We assume that an attacker may at some point compromise the long-term <span class="code">identityKeyPair</span> of a participant.</li>
-				</ul>
-			</p>
+			Cryptocat makes the following assumptions:
+			<ul>
+				<li><em>Untrusted network</em>: We assume that an attacker controls the network and so can intercept, tamper with and inject network messages.</li>
+				<li><em>Long-term key compromise</em>: We assume that an attacker may at some point compromise the long-term <span class="code">identityKeyPair</span> of a participant.</li>
+			</ul>
 			<h3>Security Goals</h3>
-			<p>
-				Given our threat model, Cryptocat aims to accomplish the following security goals:
-				<ul>
-					<li><em>Secrecy</em>: A message sent between buddies can only be decrypted between these buddies.</li>
-					<li><em>Authenticity</em>: If Alice receive an apparently valid message from Bob, then Bob must have sent this message to Alice.</li>
-					<li><em>Indistinguishability</em>: If Alice randomly chooses between two messages of the same size and sends only one to Bob, an attacker cannot determine which message was sent.</li>
-					<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is susbsequently compromised, all previous messages retain their Secrecy property.</li>
-					<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
-				</ul>
-			</p>
+			Given our threat model, Cryptocat aims to accomplish the following security goals:
+			<ul>
+				<li><em>Secrecy</em>: A message sent between buddies can only be decrypted between these buddies.</li>
+				<li><em>Authenticity</em>: If Alice receive an apparently valid message from Bob, then Bob must have sent this message to Alice.</li>
+				<li><em>Indistinguishability</em>: If Alice randomly chooses between two messages of the same size and sends only one to Bob, an attacker cannot determine which message was sent.</li>
+				<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is susbsequently compromised, all previous messages retain their Secrecy property.</li>
+				<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
+			</ul>
 			<h2 id="misc">Miscellaneous Security Features</h2>
-			<p>
-				Aside of the message encryption protocol, Cryptocat adopts the following security features in order to provide a generally more robust experience across the client:
-				<ul>
-					<li><em>Authenticated installers</em>: Cryptocat client installation packages are authenticated using Authenticode on Windows, <span class="code">gpg2</span> on Linux and Apple code signing on Mac.</li>
-					<li><em>Signed updates</em>: In addition to installer authentication, Cryptocat's built-in update downloader will run an independent signature verification on all downloads.</li>
-					<li><em>Certificate pinning</em>: Cryptocat will check for a "known-good" TLS certificate before initiating a connection to the Cryptocat XMPP server.</li>
-					<li><em>Device management</em>: Users are given the option of independently verifying their buddies' device lists and are notified when a buddy's device list is modified.</li>
-				</ul>
-			</p>
+			Aside of the message encryption protocol, Cryptocat adopts the following security features in order to provide a generally more robust experience across the client:
+			<ul>
+				<li><em>Authenticated installers</em>: Cryptocat client installation packages are authenticated using Authenticode on Windows, <span class="code">gpg2</span> on Linux and Apple code signing on Mac.</li>
+				<li><em>Signed updates</em>: In addition to installer authentication, Cryptocat's built-in update downloader will run an independent signature verification on all downloads.</li>
+				<li><em>Certificate pinning</em>: Cryptocat will check for a "known-good" TLS certificate before initiating a connection to the Cryptocat XMPP server.</li>
+				<li><em>Device management</em>: Users are given the option of independently verifying their buddies' device lists and are notified when a buddy's device list is modified.</li>
+			</ul>
 		</div>
 	</div>
 
