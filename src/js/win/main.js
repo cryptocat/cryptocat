@@ -514,6 +514,7 @@ window.addEventListener('load', function(e) {
 			fullscreenable: false
 		});
 		Cryptocat.Win.deviceManager[username].webContents.on('dom-ready', function() {
+			Cryptocat.Win.updateDeviceManager(username);
 			Cryptocat.XMPP.getDeviceList(username);
 		});
 		Cryptocat.Win.deviceManager[username].on('closed', function() {
