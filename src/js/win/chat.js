@@ -99,7 +99,11 @@ window.addEventListener('load', function(e) {
 				chatInputText: '',
 				conversation: [],
 				key: 0,
-				status: -1
+				status: -1,
+				myChatState: 'paused',
+				theirChatState: 'paused',
+				to: '',
+				unread: 0
 			};
 		},
 		componentDidMount: function() {
@@ -118,7 +122,7 @@ window.addEventListener('load', function(e) {
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
 			}
-			this.updateConversation(Cryptocat.Me.username, {
+			this.updateConversation(true, {
 				plaintext: message,
 				valid: true,
 				stamp: (new Date()).toString(),
@@ -126,9 +130,11 @@ window.addEventListener('load', function(e) {
 			});
 			return false;
 		},
-		updateConversation: function(sender, info) {
+		updateConversation: function(fromMe, info) {
+			var sender    = this.state.to;
 			var alignment = 'chatMessageLeft';
-			if (sender === Cryptocat.Me.username) {
+			if (fromMe) {
+				sender    = Cryptocat.Me.username;
 				alignment = 'chatMessageRight';
 			}
 			var message = checkIfSticker(info.plaintext);
@@ -156,7 +162,7 @@ window.addEventListener('load', function(e) {
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
 			}
-			this.updateConversation(Cryptocat.Me.username, {
+			this.updateConversation(true, {
 				plaintext: sticker,
 				valid: true,
 				stamp: (new Date()).toString(),
@@ -164,11 +170,12 @@ window.addEventListener('load', function(e) {
 			});
 		},
 		statusMessages: [
-			'You are currently unable to send offline messages to this buddy.',
-			'Your buddy is offline but can receive messages.',
-			'Your buddy is online.'
+			' is offline and cannot receive messages.',
+			' is offline and can receive messages.',
+			' is online.'
 		],
 		render: function() {
+			var _t = this;
 			return React.createElement('div', {}, [
 				React.createElement('div', {
 					key: 0,
@@ -176,8 +183,14 @@ window.addEventListener('load', function(e) {
 				}, React.createElement('div', {
 					key: 1,
 					className: 'chatTopStatus',
-					'data-status': this.state.status
-				}, this.statusMessages[this.state.status])),
+					'data-status': this.state.status,
+					'data-theirchatstate': this.state.theirChatState
+				}, (function() {
+					if (_t.state.theirChatState === 'composing') {
+						return _t.state.to + ' is typing...';
+					}
+					return _t.state.to + _t.statusMessages[_t.state.status];
+				})())),
 				React.createElement('div', {
 					key: 2,
 					id: 'chatContents'
@@ -287,7 +300,8 @@ window.addEventListener('load', function(e) {
 			return document.getElementById('chatContents');
 		},
 		focused: true,
-		unread: 0,
+		theirComposingTimer: {},
+		myComposingTimer: {},
 		sendQueue: {
 			messages: [],
 			monitor:  {},
@@ -299,12 +313,12 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if ((Date.now() - thisChat.sendQueue.lastRecv) < 5000) {
+					if ((Date.now() - thisChat.sendQueue.lastRecv) < 4000) {
 						return false;
 					}
 					IPCRenderer.sendSync(
 						'chat.sendMessage',
-						thisChat.to,
+						thisChat.window.state.to,
 						thisChat.sendQueue.messages[0]
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
@@ -320,8 +334,10 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.once('chat.init', function(e, data) {
 		Cryptocat.Me.username = data.myUsername;
-		thisChat.to           = data.theirUsername;
-		thisChat.window.setState({status: data.status});
+		thisChat.window.setState({
+			status: data.status,
+			to: data.theirUsername
+		});
 		document.getElementById('chatInputText').focus();
 	});
 
@@ -329,11 +345,23 @@ window.addEventListener('load', function(e) {
 		thisChat.window.setState({status: status});
 	});
 
+	IPCRenderer.on('chat.theirChatState', function(e, chatState) {
+		thisChat.window.setState({theirChatState: chatState});
+		clearTimeout(thisChat.theirComposingTimer);
+		if (chatState === 'composing') {
+			thisChat.theirComposingTimer = setTimeout(function() {
+				thisChat.window.setState({theirChatState: 'paused'});
+			}, 30000);
+		}
+	});
+
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
-		thisChat.window.updateConversation(thisChat.to, info);
+		thisChat.window.updateConversation(false, info);
 		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
 		if (!thisChat.focused && (process.platform === 'darwin')) {
-			thisChat.unread++;
+			thisChat.window.setState({
+				unread: thisChat.window.state.unread + 1
+			});
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
 			if (isNaN(badgeCount)) { badgeCount = 0; }
 			Remote.app.dock.setBadge((badgeCount + 1).toString());
@@ -341,9 +369,38 @@ window.addEventListener('load', function(e) {
 		}
 	});
 	
-	Mousetrap(document.getElementById('chatInputText')).bind('enter', function(e, combo) {
+	Mousetrap(
+		document.getElementById('chatInputText')
+	).bind('enter', function(e, combo) {
 		e.preventDefault();
 		thisChat.window.onSubmit();
+	});
+
+	('1234567890qwertyuiopasdfghjklzxcvbnm'.split('')).forEach(function(k) {
+		Mousetrap(
+			document.getElementById('chatInputText')
+		).bind(k, function(e, combo) {
+			if (thisChat.window.state.myChatState === 'paused') {
+				thisChat.window.setState(
+					{myChatState: 'composing'}, function() {
+						IPCRenderer.send(
+							'chat.myChatState',
+							thisChat.window.state.to,
+							'composing'
+						);
+					}
+				);
+			}
+			clearTimeout(thisChat.myComposingTimer);
+			thisChat.myComposingTimer = setTimeout(function() {
+			thisChat.window.setState({myChatState: 'paused'});
+				IPCRenderer.send(
+					'chat.myChatState',
+					thisChat.window.state.to,
+					'paused'
+				);
+			}, 3000);
+		});
 	});
 
 	window.addEventListener('focus', function(e) {
@@ -353,10 +410,10 @@ window.addEventListener('load', function(e) {
 		}
 		var badgeCount = parseInt(Remote.app.dock.getBadge());
 		if (isNaN(badgeCount)) { badgeCount = 0; }
-		badgeCount = badgeCount - thisChat.unread;
+		badgeCount = badgeCount - thisChat.window.state.unread;
 		if (badgeCount <= 0) { badgeCount = ''; }
 		Remote.app.dock.setBadge(badgeCount.toString());
-		thisChat.unread  = 0;
+		thisChat.window.state.unread  = 0;
 		thisChat.focused = true;
 	});
 

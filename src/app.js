@@ -84,6 +84,17 @@ var buildTrayMenu = function(settings) {
 			}
 		},
 		{
+			label: 'Send Typing Indicator',
+			type: 'checkbox',
+			checked: settings.typing,
+			click: function(e) {
+				Windows.main.webContents.send(
+					'main.updateTypingSetting',
+					e.checked
+				);
+			}
+		},
+		{
 			type: 'separator'
 		},
 		{
@@ -105,136 +116,174 @@ var buildTrayMenu = function(settings) {
 	return menu;
 };
 
-var MainMenu = electron.Menu.buildFromTemplate([
-	{
-		label: 'Account',
-		submenu: [
-			{
-				label: 'Add Buddy',
-				accelerator: 'Alt+A',
+var buildMainMenu = function(settings) {
+	var menu = electron.Menu.buildFromTemplate([
+		{
+			label: 'Account',
+			submenu: [
+				{
+					label: 'Add Buddy',
+					accelerator: 'Alt+A',
+					click: function() {
+						Windows.main.webContents.send('addBuddy.create');
+					}
+				},
+				{
+					label: 'Manage Devices',
+					accelerator: 'Alt+D',
+					click: function() {
+						Windows.main.webContents.send('deviceManager.create');
+					}
+				},
+				{
+					label: 'Change Password',
+					click: function() {
+						Windows.main.webContents.send('changePassword.create');
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Notifications',
+					type: 'checkbox',
+					checked: settings.notify,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateNotifySetting',
+							e.checked
+						);
+					}
+				},
+				{
+					label: 'Sounds',
+					type: 'checkbox',
+					checked: settings.sounds,
+					click: function(e) {
+							Windows.main.webContents.send(
+							'main.updateSoundsSetting',
+							e.checked
+						);
+					}
+				},
+				{
+					label: 'Send Typing Indicator',
+					type: 'checkbox',
+					checked: settings.typing,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateTypingSetting',
+							e.checked
+						);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Close',
+					accelerator: 'CmdOrCtrl+W',
+					click: function(item, focusedWindow) {
+						if (focusedWindow) { focusedWindow.close(); }
+					}
+				},
+				{
+					label: 'Quit',
+					accelerator: 'CmdOrCtrl+Q',
+					click: function() {
+						Windows.main.webContents.send('main.beforeQuit');
+					}
+				}
+			]
+		},
+		{
+			label: 'Edit',
+			submenu: [{
+				label: 'Undo',
+				accelerator: 'CmdOrCtrl+Z',
+				role: 'undo'
+			}, {
+				label: 'Redo',
+				accelerator: 'Shift+CmdOrCtrl+Z',
+				role: 'redo'
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Cut',
+				accelerator: 'CmdOrCtrl+X',
+				role: 'cut'
+			}, {
+				label: 'Copy',
+				accelerator: 'CmdOrCtrl+C',
+				role: 'copy'
+			}, {
+				label: 'Paste',
+				accelerator: 'CmdOrCtrl+V',
+				role: 'paste'
+			}, {
+				label: 'Select All',
+				accelerator: 'CmdOrCtrl+A',
+				role: 'selectall'
+			}]
+		},
+		{
+			label: 'Help',
+			role: 'help',
+			submenu: [{
+				label: 'Getting Started',
 				click: function() {
-					Windows.main.webContents.send('addBuddy.create');
+					electron.shell.openExternal(
+						'https://crypto.cat/help.html'
+					)
 				}
 			},
 			{
-				label: 'Manage Devices',
-				accelerator: 'Alt+D',
+				label: 'Report a Bug',
 				click: function() {
-					Windows.main.webContents.send('deviceManager.create');
+					electron.shell.openExternal(
+						'https://github.com/cryptocat/cryptocat/issues/'
+					)
 				}
 			},
 			{
-				label: 'Change Password',
+				label: 'Check for Updates',
 				click: function() {
-					Windows.main.webContents.send('changePassword.create');
+					Windows.main.webContents.send('main.checkForUpdates');
 				}
 			},
 			{
 				type: 'separator'
 			},
 			{
-				label: 'Close',
-				accelerator: 'CmdOrCtrl+W',
+				label: 'About Cryptocat',
+				click: function() {
+					Windows.main.webContents.send('aboutBox.create');
+				}
+			}]
+		}
+	]);
+	if (false) {
+		MainMenu.append(new electron.MenuItem({
+			label: 'Developer',
+			submenu: [{
+				label: 'Reload',
+				accelerator: 'CmdOrCtrl+R',
 				click: function(item, focusedWindow) {
-					if (focusedWindow) { focusedWindow.close(); }
+					if (focusedWindow) focusedWindow.reload();
 				}
 			},
 			{
-				label: 'Quit',
-				accelerator: 'CmdOrCtrl+Q',
-				click: function() {
-					Windows.main.webContents.send('main.beforeQuit');
+				label: 'Developer Tools',
+				accelerator: 'Shift+CmdOrCtrl+I',
+				click: function(item, focusedWindow) {
+					if (focusedWindow) focusedWindow.toggleDevTools();
 				}
-			}
-		]
-	},
-	{
-		label: 'Edit',
-		submenu: [{
-			label: 'Undo',
-			accelerator: 'CmdOrCtrl+Z',
-			role: 'undo'
-		}, {
-			label: 'Redo',
-			accelerator: 'Shift+CmdOrCtrl+Z',
-			role: 'redo'
-		}, {
-			type: 'separator'
-		}, {
-			label: 'Cut',
-			accelerator: 'CmdOrCtrl+X',
-			role: 'cut'
-		}, {
-			label: 'Copy',
-			accelerator: 'CmdOrCtrl+C',
-			role: 'copy'
-		}, {
-			label: 'Paste',
-			accelerator: 'CmdOrCtrl+V',
-			role: 'paste'
-		}, {
-			label: 'Select All',
-			accelerator: 'CmdOrCtrl+A',
-			role: 'selectall'
-		}]
-	},
-	{
-		label: 'Help',
-		role: 'help',
-		submenu: [{
-			label: 'Getting Started',
-			click: function() {
-				electron.shell.openExternal(
-					'https://crypto.cat/help.html'
-				)
-			}
-		},
-		{
-			label: 'Report a Bug',
-			click: function() {
-				electron.shell.openExternal(
-					'https://github.com/cryptocat/cryptocat/issues/'
-				)
-			}
-		},
-		{
-			label: 'Check for Updates',
-			click: function() {
-				Windows.main.webContents.send('main.checkForUpdates');
-			}
-		},
-		{
-			type: 'separator'
-		},
-		{
-			label: 'About Cryptocat',
-			click: function() {
-				Windows.main.webContents.send('aboutBox.create');
-			}
-		}]
+			}]
+		}));
 	}
-]);
-
-if (false) {
-	MainMenu.append(new electron.MenuItem({
-		label: 'Developer',
-		submenu: [{
-			label: 'Reload',
-			accelerator: 'CmdOrCtrl+R',
-			click: function(item, focusedWindow) {
-				if (focusedWindow) focusedWindow.reload();
-			}
-		},
-		{
-			label: 'Developer Tools',
-			accelerator: 'Shift+CmdOrCtrl+I',
-			click: function(item, focusedWindow) {
-				if (focusedWindow) focusedWindow.toggleDevTools();
-			}
-		}]
-	}));
-}
-
+	return menu;
+};
+	
 electron.app.on('ready', function() {
 	if (process.platform !== 'darwin') {
 		TrayIcon = new electron.Tray(
@@ -267,30 +316,42 @@ electron.app.on('ready', function() {
 	});
 	if (process.platform === 'darwin') {
 		electron.app.dock.setMenu(buildTrayMenu({
-			notify: true,
-			sounds: true
+			notify: false,
+			sounds: false,
+			typing: false,
+		}));
+		electron.Menu.setApplicationMenu(buildMainMenu({
+			notify: false,
+			sounds: false,
+			typing: false
 		}));
 	}
 	else {
 		TrayIcon.setToolTip('Cryptocat');
 		TrayIcon.setContextMenu(buildTrayMenu({
-			notify: true,
-			sounds: true
+			notify: false,
+			sounds: false,
+			typing: false
 		}));
 		TrayIcon.on('click', function() {
 			Windows.main.show();
 		});
 	}
-	Windows.main.setMenu(MainMenu);
-	if (process.platform === 'darwin') {
-		electron.Menu.setApplicationMenu(MainMenu);
-	}
+	Windows.main.setMenu(buildMainMenu({
+		notify: false,
+		sounds: false,
+		typing: false
+	}));
 });
 
 
 electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	Windows.main.webContents.send('chat.sendMessage', to, message);
 	e.returnValue = 'true';
+});
+
+electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
+	Windows.main.webContents.send('chat.myChatState', to, chatState);
 });
 
 electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
@@ -320,12 +381,13 @@ electron.ipcMain.on('main.beforeQuit', function(e) {
 
 electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
 	if (process.platform === 'darwin') {
+		electron.Menu.setApplicationMenu(buildMainMenu(settings));
 		electron.app.dock.setMenu(buildTrayMenu(settings));
 	}
 	else {
+		Windows.main.setMenu(buildMainMenu(settings));
 		TrayIcon.setContextMenu(buildTrayMenu(settings));
 	}
-	e.returnValue = 'true';
 });
 
 electron.ipcMain.on('app.quit', function(e) {

@@ -186,6 +186,19 @@ Cryptocat.XMPP = {};
 		});
 	};
 
+	handler.chatState = function(message) {
+		var username = Cryptocat.OMEMO.jidHasUsername(message.from.bare);
+		if (
+			(/^(composing)|(paused)$/).test(message.chatState) &&
+			username.valid &&
+			hasProperty(Cryptocat.Win.chat, username.username)
+		) {
+			Cryptocat.Win.chat[username.username].webContents.send(
+				'chat.theirChatState', message.chatState
+			);
+		}
+	};
+
 	handler.availability = function(data) {	
 		var local = Cryptocat.OMEMO.jidHasUsername(data.from.bare);
 		if (
@@ -307,6 +320,9 @@ Cryptocat.XMPP = {};
 		client.on('message', function(message) {
 			// handler.message(message);
 		});
+		client.on('chat:state', function(message) {
+			handler.chatState(message);
+		});
 		client.on('encrypted', function(encrypted) {
 			handler.encrypted(encrypted);
 		});
@@ -337,9 +353,18 @@ Cryptocat.XMPP = {};
 
 	Cryptocat.XMPP.sendMessage = function(to, items) {
 		client.sendMessage({
+			type: 'chat',
 			to: to + '@crypto.cat',
 			encrypted: { encryptedItems: items },
 			body: ''
+		});
+	};
+
+	Cryptocat.XMPP.sendChatState = function(to, chatState) {
+		client.sendMessage({
+			type: 'chat',
+			to: to + '@crypto.cat',
+			chatState: chatState
 		});
 	};
 

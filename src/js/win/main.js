@@ -57,9 +57,10 @@ window.addEventListener('load', function(e) {
 				document.getElementById('mainWindow')
 			);
 			Cryptocat.Notify.playSound('loggedIn');
-			IPCRenderer.sendSync('app.updateTraySettings', {
+			IPCRenderer.send('app.updateTraySettings', {
 				notify: Cryptocat.Me.settings.notify,
-				sounds:  Cryptocat.Me.settings.sounds
+				sounds: Cryptocat.Me.settings.sounds,
+				typing: Cryptocat.Me.settings.typing
 			});
 		},
 		onError: function() {
@@ -582,6 +583,12 @@ window.addEventListener('load', function(e) {
 		Cryptocat.OMEMO.sendMessage(to, message)
 	});
 
+	IPCRenderer.on('chat.myChatState', function(e, to, chatState) {
+		if (Cryptocat.Me.settings.typing) {
+			Cryptocat.XMPP.sendChatState(to, chatState);
+		}
+	});
+
 	IPCRenderer.on('addBuddy.create', function(e) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Win.create.addBuddy();
@@ -693,6 +700,11 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.updateNotifySetting', function(e, notify) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.notify = notify;
+			IPCRenderer.send('app.updateTraySettings', {
+				notify: Cryptocat.Me.settings.notify,
+				sounds: Cryptocat.Me.settings.sounds,
+				typing: Cryptocat.Me.settings.typing
+			});
 		}
 		else {
 			Cryptocat.Diag.error.offline();
@@ -702,6 +714,25 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.updateSoundsSetting', function(e, sounds) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.sounds = sounds;
+			IPCRenderer.send('app.updateTraySettings', {
+				notify: Cryptocat.Me.settings.notify,
+				sounds: Cryptocat.Me.settings.sounds,
+				typing: Cryptocat.Me.settings.typing
+			});
+		}
+		else {
+			Cryptocat.Diag.error.offline();
+		}
+	});
+
+	IPCRenderer.on('main.updateTypingSetting', function(e, typing) {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.Me.settings.typing = typing;
+			IPCRenderer.send('app.updateTraySettings', {
+				notify: Cryptocat.Me.settings.notify,
+				sounds: Cryptocat.Me.settings.sounds,
+				typing: Cryptocat.Me.settings.typing
+			});
 		}
 		else {
 			Cryptocat.Diag.error.offline();

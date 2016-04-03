@@ -26,6 +26,7 @@ const Cryptocat = {
 			userBundles: {},
 			sounds: true,
 			notify: true,
+			typing: true,
 			status: 0,
 			refresh: 0
 		}

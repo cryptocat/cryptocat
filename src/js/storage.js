@@ -40,6 +40,7 @@ Cryptocat.Storage = {};
 			userBundles: {},
 			sounds: true,
 			notify: true,
+			typing: true,
 			status: 2,
 			refresh: 0
 		};
@@ -84,6 +85,9 @@ Cryptocat.Storage = {};
 				}
 				if (hasProperty(settings, 'notify')) {
 					newSettings.notify = settings.notify;
+				}
+				if (hasProperty(settings, 'typing')) {
+					newSettings.typing = settings.typing;
 				}
 				if (hasProperty(settings, 'status')) {
 					newSettings.status = settings.status;
@@ -143,6 +147,9 @@ Cryptocat.Storage = {};
 				}
 				if (hasProperty(settings, 'notify')) {
 					updateObj.notify = settings.notify;
+				}
+				if (hasProperty(settings, 'typing')) {
+					updateObj.typing = settings.typing;
 				}
 				if (hasProperty(settings, 'status')) {
 					updateObj.status = settings.status;

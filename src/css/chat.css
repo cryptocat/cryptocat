@@ -10,6 +10,11 @@
 	}
 }
 
+@keyframes color_change {
+	from { background-color: #34B3C2; }
+	to   { background-color: #54D3E2; }
+}
+
 body {
 	background-color: #FFF;
 	width: 100%;
@@ -47,6 +52,10 @@ div.chatTopStatus[data-status='1'] {
 
 div.chatTopStatus[data-status='2'] {
 	background-color: #34B3C2;
+}
+
+div.chatTopStatus[data-theirchatstate='composing'] {
+	animation: color_change 1s infinite alternate;
 }
 
 div#chatContents {
