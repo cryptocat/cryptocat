@@ -67,15 +67,15 @@ input.mainRosterFilter {
 }
 
 div.mainRosterBuddy {
-	margin-top: 6px;
-	padding: 7px;
-	background: #FAFCFF;
-	box-shadow: 1px 1px #96A5B2;
+	margin: 5px 2px 0 2px;
+	padding: 11px 10px;
+	font-size: 14px;
+	border-bottom: 1px solid #EEE;
+	background-color: #FFF;
 }
 
 div.mainRosterBuddy:hover {
-	background: #FFF;
-	opacity: 1;
+	background: #F0F8FF;
 }
 
 div.mainRosterBuddy:active {
