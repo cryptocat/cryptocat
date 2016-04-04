@@ -393,12 +393,12 @@ window.addEventListener('load', function(e) {
 			}
 			clearTimeout(thisChat.myComposingTimer);
 			thisChat.myComposingTimer = setTimeout(function() {
-			thisChat.window.setState({myChatState: 'paused'});
-				IPCRenderer.send(
-					'chat.myChatState',
-					thisChat.window.state.to,
-					'paused'
-				);
+				thisChat.window.setState({myChatState: 'paused'});
+					IPCRenderer.send(
+						'chat.myChatState',
+						thisChat.window.state.to,
+						'paused'
+					);
 			}, 3000);
 		});
 	});
