@@ -263,7 +263,7 @@ var buildMainMenu = function(settings) {
 		}
 	]);
 	if (false) {
-		MainMenu.append(new electron.MenuItem({
+		menu.append(new electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
 				label: 'Reload',
