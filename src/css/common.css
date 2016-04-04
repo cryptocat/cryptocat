@@ -31,7 +31,7 @@ input[type=text], input[type=password] {
 
 input[type=text]:active, input[type=password]:active {
 	outline: none;
-	background: #FFF;
+	background-color: #FFF;
 }
 
 input[type=button], input[type=submit] {
@@ -57,3 +57,4 @@ input[type=button]:active, input[type=submit]:active {
 span.gray {
 	color: gray;
 }
+

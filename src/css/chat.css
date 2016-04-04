@@ -36,6 +36,7 @@ div.chatTopStatus {
 	color: #FFF;
 	font-weight: bold;
 	height: 13px;
+	transition: background-color 0.5s;
 }
 
 div.chatTopStatus[data-status='-1'] {

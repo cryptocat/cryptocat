@@ -57,13 +57,15 @@ div.mainRosterIntro[data-visible="false"] {
 input.mainRosterFilter {
 	margin: 0 auto;
 	display: block;
-	width: 100%;
+	width: 98%;
 	box-sizing: border-box;
 	padding-left: 30px;
 	background-image: url('../img/icons/search.png');
 	background-position: 5px center;
-	background-size: 16px;
+	background-size: 20px;
 	background-repeat: no-repeat;
+	font-size: 14px;
+	height: 30px;
 }
 
 div.mainRosterBuddy {
@@ -72,12 +74,14 @@ div.mainRosterBuddy {
 	font-size: 14px;
 	border-bottom: 1px solid #EEE;
 	background-color: #FFF;
-	transition: background-color 0.2s, color 0.2s;
+	transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
 div.mainRosterBuddy:active {
 	opacity: 1;
 	box-shadow: inset 1px 1px #96A5B2;
+	background-color: #FFF !important;
+	color: #333 !important;
 }
 
 span.mainRosterBuddyStatus {
@@ -134,3 +138,4 @@ div.mainRosterBuddy[data-status="2"]:hover {
 	background-color: #34B3C2;
 	color: #FFF;
 }
+
