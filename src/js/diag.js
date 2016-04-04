@@ -197,7 +197,7 @@ Cryptocat.Diag = {
 		dialog.showMessageBox({
 			type: 'info',
 			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
-			buttons: ['OK', 'Learn more'],
+			buttons: ['OK', 'Learn more', 'License'],
 			defaultId: 0,
 			title: 'About Cryptocat',
 			message: 'Cryptocat ' + Cryptocat.Version + ', Beta release.\n' +
@@ -206,7 +206,12 @@ Cryptocat.Diag = {
 				'N. L.'
 		}, function(response) {
 			if (response === 1) {
-				Remote.shell.openExternal('https://crypto.cat')
+				Remote.shell.openExternal('https://crypto.cat');
+			}
+			if (response === 2) {
+				Remote.shell.openExternal(
+					'http://www.gnu.org/licenses/quick-guide-gplv3.en.html'
+				);
 			}
 		});
 	};
