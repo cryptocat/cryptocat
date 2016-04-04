@@ -72,10 +72,7 @@ div.mainRosterBuddy {
 	font-size: 14px;
 	border-bottom: 1px solid #EEE;
 	background-color: #FFF;
-}
-
-div.mainRosterBuddy:hover {
-	background: #F0F8FF;
+	transition: background-color 0.2s, color 0.2s;
 }
 
 div.mainRosterBuddy:active {
@@ -100,7 +97,7 @@ div.mainRosterBuddy[data-visible="false"] {
 }
 
 div.mainRosterBuddy[data-status="0"] {
-	opacity: 0.7;
+	opacity: 0.8;
 }
 
 div.mainRosterBuddy[data-status="0"] span.mainRosterBuddyStatus {
@@ -121,4 +118,19 @@ div.mainRosterBuddy[data-status="2"] {
 
 div.mainRosterBuddy[data-status="2"] span.mainRosterBuddyStatus {
 	background: #34B3C2;
+}
+
+div.mainRosterBuddy[data-status="0"]:hover {
+	background-color: #F1375A;
+	color: #FFF;
+}
+
+div.mainRosterBuddy[data-status="1"]:hover {
+	background-color: #F1A900;
+	color: #FFF;
+}
+
+div.mainRosterBuddy[data-status="2"]:hover {
+	background-color: #34B3C2;
+	color: #FFF;
 }
