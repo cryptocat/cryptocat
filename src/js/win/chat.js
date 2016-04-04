@@ -158,6 +158,8 @@ window.addEventListener('load', function(e) {
 		},
 		sendSticker: function(e) {
 			var sticker = 'CryptocatSticker:' + e.target.getAttribute('data-sticker');
+			e.target.blur();
+			document.getElementById('chatInputText').focus();
 			thisChat.sendQueue.messages.push(sticker);
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
