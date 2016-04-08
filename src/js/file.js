@@ -274,7 +274,7 @@ Cryptocat.File = {};
 		put.flushHeaders();
 		put.on('error', function(err) {
 		});
-		put.setTimeout(10000, function() {
+		put.setTimeout(5000, function() {
 			put.abort();
 			putFile(
 				name, sas, file, key, iv, encrypted,
