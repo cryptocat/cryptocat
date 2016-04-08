@@ -446,8 +446,15 @@ Cryptocat.XMPP = {};
 			)
 			Cryptocat.Notify.playSound('message');
 			if (!Cryptocat.Win.chat[username].isFocused()) {
+				var notifText = info.plaintext;
+				if (Cryptocat.Patterns.sticker.match(notifText)) {
+					notifText = username + ' sent you a cat sticker!';
+				}
+				if (Cryptocat.Patterns.file.match(notifText)) {
+					notifText = username + ' sent you a file.';
+				}
 				Cryptocat.Notify.showNotification(
-					username, info.plaintext, function() {
+					username, notifText, function() {
 						Cryptocat.Win.chat[username].focus();
 					}
 				);

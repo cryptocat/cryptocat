@@ -39,7 +39,8 @@ const Cryptocat = {
 	Update: {},
 	Patterns: {},
 	Pinning: {},
-	Notify: {}
+	Notify: {},
+	File: {}
 };
 
 const hasProperty = function(o, p) {

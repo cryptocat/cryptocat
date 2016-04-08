@@ -212,7 +212,7 @@ window.addEventListener('load', function(e) {
 					ref:          function(b) {
 						_t.buddies[item.jid.local] = b;
 					}
-				}, null);
+				});
 				newBuddies[item.jid.local] = buddy;
 			})
 			this.setState({buddies: newBuddies})
@@ -371,6 +371,13 @@ window.addEventListener('load', function(e) {
 						label: 'View Devices',
 						click: function() {
 							Cryptocat.Win.create.deviceManager(username);
+						}
+					},
+					{
+						label: 'Send File',
+						accelerator: 'alt+F',
+						click: function() {
+							Cryptocat.File.send(username);
 						}
 					},
 					{

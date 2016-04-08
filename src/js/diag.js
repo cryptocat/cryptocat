@@ -1,7 +1,8 @@
 Cryptocat.Diag = {
 	error: {},
 	message: {},
-	save: {}
+	save: {},
+	open: {}
 };
 
 (function() {
@@ -81,6 +82,37 @@ Cryptocat.Diag = {
 		dialog.showErrorBox(
 			'Cryptocat: Disconnected',
 			'You have been disconnected. Try logging in again.'
+		);
+	};
+
+	Cryptocat.Diag.error.fileSave = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Cannot Save File',
+			'Your file could not be saved.'
+		);
+	};
+
+	Cryptocat.Diag.error.fileGeneral = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Cannot Send File',
+			'This file could not be sent. It could be unsupported, or ' +
+			'there could be a network error.'
+		);
+	};
+
+	Cryptocat.Diag.error.fileExt = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Cannot Send File',
+			'This file type is not supported. You can still ' +
+			'send this file by first adding it to a Zip archive.'
+		);
+	};
+
+	Cryptocat.Diag.error.fileMaxSize = function() {
+		dialog.showErrorBox(
+			'Cryptocat: File Too Large',
+			'Cryptocat offers file sharing as a free service. ' +
+			'Please do not send files that are over 25 Megabytes.'
 		);
 	};
 
@@ -265,9 +297,93 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.save.updateDownloader = function(browserWindow, callback) {
+		var defaultPath = process.env.HOME + '/';
+		if (process.platform === 'win32') {
+			defaultPath = process.env.USERPROFILE + '\\';
+		}
+		defaultPath += 'Cryptocat-' + process.platform + '-x64.zip';
 		dialog.showSaveDialog(browserWindow, {
-			title: 'Save Cryptocat Update Installer',
-			defaultPath: 'Cryptocat-' + process.platform + '-x64.zip'
+			title: 'Cryptocat: Save Update Installer',
+			defaultPath: defaultPath,
+			filters: [
+				{
+					name: 'Archives',
+					extensions: ['zip']
+				}
+			]
+		}, callback);
+	};
+
+	Cryptocat.Diag.save.sendFile = function(browserWindow, name, callback) {
+		var defaultPath = process.env.HOME + '/';
+		if (process.platform === 'win32') {
+			defaultPath = process.env.USERPROFILE + '\\';
+		}
+		defaultPath += name;
+		dialog.showSaveDialog(browserWindow, {
+			title: 'Cryptocat: Save File',
+			defaultPath: defaultPath,
+		}, callback);
+	};
+
+	Cryptocat.Diag.open.sendFile = function(browserWindow, callback) {
+		var defaultPath = process.env.HOME;
+		if (process.platform === 'win32') {
+			defaultPath = process.env.USERPROFILE;
+		}
+		dialog.showOpenDialog(browserWindow, {
+			title: 'Cryptocat: Select File to Send',
+			defaultPath: defaultPath,
+			properties: ['openFile'],
+			filters: [
+				{
+					name: 'All Files',
+					extensions: ['*']
+				},
+				{
+					name: 'Images',
+					extensions: [
+						'ai', 'bmp',  'eps',
+						'gif', 'jpg', 'jpeg',
+						'png', 'psd', 'svg',
+					]
+				},
+				{
+					name: 'Audio',
+					extensions: [
+						'aac', 'mp3', 'wma'
+					]
+				},
+				{
+					name: 'Videos',
+					extensions: [
+						'avi', 'flv', 'mkv',
+						'mov', 'mp4', 'mpeg',
+						'mpg'
+					]
+				},
+				{
+					name: 'Documents',
+					extensions: [
+						'aut', 'cad',  'csv',
+						'doc', 'docx', 'pdf',
+						'ppt', 'ps',   'rtf',
+						'txt', 'xls',  'xlsx'
+
+					]
+				},
+				{
+					name: 'Code',
+					extensions: ['java']
+				},
+				{
+					name: 'Archives',
+					extensions: [
+						'bin', 'db',  'iso',
+						'rar', 'sql', 'zip'
+					]
+				}
+			]
 		}, callback);
 	};
 

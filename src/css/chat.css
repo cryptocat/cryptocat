@@ -73,7 +73,7 @@ div#chatContents {
 	line-height: 1.6em;
 }
 
-div.chatMessageLeft, div.chatMessageRight {
+div.chatMessage, div.chatSticker, div.chatFile {
 	background: #F0F8FF;
 	padding: 0px 10px 5px 5px;
 	word-wrap: break-word;
@@ -84,27 +84,35 @@ div.chatMessageLeft, div.chatMessageRight {
 	margin: 5px 10px;
 }
 
-div.chatMessageLeft *, div.chatMessageRight * {
+div.chatMessage * {
 	-webkit-user-select: text;
 	user-select: text;
 	cursor: text;
 }
 
-div.chatMessageLeft a, div.chatMessageRight a {
-	cursor: pointer !important;
-}
-
-div.chatMessageLeft {
+div.chatMessage[data-alignment='left'],
+div.chatSticker[data-alignment='left'],
+div.chatFile[data-alignment='left'] {
 	float: left;
 	clear: both;
+}
+
+div.chatMessage[data-alignment='left'],
+div.chatFile[data-alignment='left'] {
 	border-left: 1px solid #96A5B2;
 	border-bottom: 1px solid #96A5B2;
 	box-shadow: -1px 1px 3px rgba(150, 165, 178, 0.6);
 }
 
-div.chatMessageRight {
+div.chatMessage[data-alignment='right'],
+div.chatSticker[data-alignment='right'],
+div.chatFile[data-alignment='right'] {
 	float: right;
 	clear: both;
+}
+
+div.chatMessage[data-alignment='right'],
+div.chatFile[data-alignment='right'] {
 	border-right: 1px solid #96A5B2;
 	border-bottom: 1px solid #96A5B2;
 	box-shadow: 1px 1px 3px rgba(150, 165, 178, 0.6);
@@ -146,23 +154,16 @@ span.chatMessageInfo span.chatMessageTimestamp {
 	opacity: 0.7;
 }
 
-div.chatMessageSticker {
+div.chatSticker {
 	padding-bottom: 0;
 	background: #FFF;
-	box-shadow: none;
-	border: none;
 }
 
-div.chatMessageSticker span.chatMessageInfo {
-	display: none;
-}
-
-img.chatMessageSticker {
+div.chatSticker img {
 	width: 128px;
 	height: 128px;
 	margin: -20px auto;
 	display: block;
-	transform: rotate(14deg);
 	-webkit-user-select: none !important;
 	user-select: none !important;
 	/* Disabled due to high CPU usage.
@@ -170,6 +171,44 @@ img.chatMessageSticker {
 	animation-duration: 1s;
 	cursor: default;
 	animation-iteration-count: infinite; */
+}
+
+div.chatSticker[data-alignment='left'] img {
+	transform: rotate(-14deg);
+}
+
+div.chatSticker[data-alignment='right'] img {
+	transform: rotate(14deg);
+}
+
+div.chatFile {
+	background-color: #FFF;
+	width: 200px;
+}
+
+div.chatFile img.chatFileIcon {
+	width: 64px;
+	height: auto;
+	float: left;
+	cursor: pointer;
+}
+
+div.chatFile div.chatFileProgressBar {
+	border: 1px solid #96A5B2;
+	float: left;
+	width: 120px;
+	height: 18px;
+	margin: 23px 0 0 8px;
+	padding: 1px;
+}
+
+div.chatFile div.chatFileProgressBarIndicator {
+	background-color: #96A5B2;
+	height: 18px;
+}
+
+div.chatFileProgressBarIndicator[data-valid="false"] {
+	background-color: #FFD8D6 !important;
 }
 
 div#chatBottom {
@@ -234,6 +273,12 @@ div.chatToolbar input[data-sticker="confused"] {
 
 div.chatToolbar input[data-sticker="crying"] {
 	background-image: url('../img/stickers/crying.png');
+}
+
+div.chatToolbar input.sendFileButton {
+	margin-left: 45px;
+	background-image: url('../img/icons/file.png');
+	background-size: 24px;
 }
 
 form#chatInput {

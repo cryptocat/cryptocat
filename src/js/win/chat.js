@@ -37,22 +37,106 @@ window.addEventListener('load', function(e) {
 			];
 			var sticker = message.substr(17);
 			if (stickers.indexOf(sticker) >= 0) {
-				sticker = React.createElement('img', {
-					className: 'chatMessageSticker',
-					alt: '',
-					src: '../img/stickers/' + sticker + '.png'
-				});
 				return {
-					message: sticker,
+					sticker:   sticker,
 					isSticker: true
 				}
 			}
 		}
 		return {
-			message: message,
+			sticker:   '',
 			isSticker: false
 		}
 	};
+
+	var checkIfFile = function(message) {
+		if (Cryptocat.Patterns.file.test(message)) {
+			var info = Cryptocat.File.parseInfo(message);
+			if (info.valid) {
+				return {
+					file:   info,
+					isFile: true
+				}
+			}
+		}
+		return {
+			file:   {},
+			isFile: false
+		}
+	};
+
+	var chatSticker = React.createClass({
+		displayName: 'chatSticker',
+		getInitialState: function() {
+			return {};
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		render: function() {
+			return React.createElement('div', {
+				className: 'chatSticker',
+				'data-alignment': this.props.alignment,
+				key: 0
+			}, React.createElement('img', {
+				src: '../img/stickers/' + this.props.sticker + '.png',
+				key: 1
+			}));
+		}
+	});
+
+	var chatFile = React.createClass({
+		displayName: 'chatFile',
+		getInitialState: function() {
+			return {
+				progress: 0,
+				valid: true,
+				binary: new Buffer([]),
+			}
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		onClick: function() {
+			if (
+				(this.state.progress < 100) ||
+				(this.state.binary.length < 1)
+			) {
+				return false;
+			}
+			var _t = this;
+			Cryptocat.Diag.save.sendFile(
+				Remote.getCurrentWindow(),
+				_t.props.file.name,
+				function(path) {
+					if (!path) { return false; }
+					FS.writeFile(path, _t.state.binary);
+				}
+			);
+		},
+		render: function() {
+			return React.createElement('div', {
+				className: 'chatFile',
+				'data-alignment': this.props.alignment,
+				key: 0
+			}, React.createElement('img', {
+				className: 'chatFileIcon',
+				src: '../img/files/' + this.props.file.type + '.png',
+				onClick: this.onClick,
+				key: 1
+			}), React.createElement('div', {
+				className: 'chatFileProgressBar',
+				key: 2
+			}, React.createElement('div', {
+				className: 'chatFileProgressBarIndicator',
+				'data-valid': this.state.valid,
+				style: {
+					width: this.state.progress + '%'
+				},
+				key: 3
+			})));
+		}
+	});
 
 	var chatMessage = React.createClass({
 		displayName: 'chatMessage',
@@ -63,11 +147,8 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		render: function() {
-			var className = this.props.alignment;
-			if (this.props.isSticker) {
-				className += ' chatMessageSticker';
-			}
-			else if (!this.props.valid) {
+			var className = 'chatMessage';
+			if (!this.props.valid) {
 				className += ' chatMessageError';
 			}
 			else if (this.props.offline) {
@@ -75,8 +156,8 @@ window.addEventListener('load', function(e) {
 			}
 			return React.createElement('div', {
 				className: className,
-				onClick: this.onClick,
-				key: 0,
+				'data-alignment': this.props.alignment,
+				key: 0
 			}, React.createElement('span', {
 				className: 'chatMessageInfo',
 				key: 1
@@ -130,34 +211,63 @@ window.addEventListener('load', function(e) {
 			});
 			return false;
 		},
+		files: {},
 		updateConversation: function(fromMe, info) {
+			var _t        = this;
 			var sender    = this.state.to;
-			var alignment = 'chatMessageLeft';
+			var alignment = 'left';
 			if (fromMe) {
 				sender    = Cryptocat.Me.username;
-				alignment = 'chatMessageRight';
+				alignment = 'right';
 			}
-			var message = checkIfSticker(info.plaintext);
+			var sticker = checkIfSticker(info.plaintext);
+			var file    = checkIfFile(info.plaintext);
+			if (sticker.isSticker) {
+				var res = React.createElement(chatSticker, {
+					key: this.state.key,
+					alignment: alignment,
+					sticker: sticker.sticker,
+				});
+			}
+			else if (file.isFile) {
+				var res = React.createElement(chatFile, {
+					key: this.state.key,
+					sender: sender,
+					alignment: alignment,
+					timestamp: getTimestamp(info.stamp),
+					file: file.file,
+					ref: function(f) {
+						_t.files[file.file.url] = f;
+						if (!fromMe) {
+							_t.receiveFile(file.file);
+						}
+					}
+				});
+			}
+			else {
+				var res = React.createElement(chatMessage, {
+					key: this.state.key,
+					sender: sender,
+					alignment: alignment,
+					message: info.plaintext,
+					timestamp: getTimestamp(info.stamp),
+					valid: info.valid,
+					offline: info.offline
+				});
+			}
 			this.setState({
 				conversation: this.state.conversation.concat([
-					React.createElement(chatMessage, {
-						key:       this.state.key,
-						sender:    sender,
-						alignment: alignment,
-						isSticker: message.isSticker,
-						message:   message.message,
-						timestamp: getTimestamp(info.stamp),
-						valid:     info.valid,
-						offline:   info.offline
-					})
+					res
 				]),
 				key: this.state.key + 1
 			}, function() {
-				thisChat.contents().scrollTop = thisChat.contents().scrollHeight;
+				thisChat.contents().scrollTop = 
+					thisChat.contents().scrollHeight;
 			})
 		},
 		sendSticker: function(e) {
-			var sticker = 'CryptocatSticker:' + e.target.getAttribute('data-sticker');
+			var sticker = 'CryptocatSticker:' + 
+				e.target.getAttribute('data-sticker');
 			e.target.blur();
 			document.getElementById('chatInputText').focus();
 			thisChat.sendQueue.messages.push(sticker);
@@ -169,6 +279,66 @@ window.addEventListener('load', function(e) {
 				valid: true,
 				stamp: (new Date()).toString(),
 				offline: (this.state.status !== 2)
+			});
+		},
+		sendFile: function(e) {
+			var _t = this;
+			var sendFile = function(path) {
+				Cryptocat.File.send(path[0], function(info) {
+					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+					if (!info.valid) {
+						return false;
+					}
+					_t.updateConversation(true, {
+						plaintext: sendInfo,
+						valid: true,
+						stamp: (new Date()).toString(),
+						offline: (_t.state.status !== 2)
+					});
+				}, function(url, p) {
+					_t.files[url].setState({progress: p});
+				}, function(info, file) {
+					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+					if (info.valid) {
+						thisChat.sendQueue.messages.push(sendInfo);
+						if (!thisChat.sendQueue.isOn) {
+							thisChat.sendQueue.turnOn();
+						}
+					}
+					else {
+						Cryptocat.Diag.error.fileGeneral();
+					}
+					_t.files[info.url].setState({
+						progress: 100,
+						valid: info.valid,
+						binary: file
+					});
+				});
+			};
+			e.target.blur();
+			document.getElementById('chatInputText').focus();
+			Cryptocat.Diag.open.sendFile(
+				Remote.getCurrentWindow(), function(path) {
+					if (!path) {
+						return false;
+					}
+					sendFile(path);
+				}
+			);
+		},
+		receiveFile: function(file) {
+			var _t = this;
+			Cryptocat.File.receive(file, function(url, p) {
+				_t.files[url].setState({progress: p});
+			}, function(url, plaintext, valid) {
+				if (!valid) {
+					Cryptocat.Diag.error.fileSave();
+				}
+				_t.files[url].setState({
+					binary: plaintext,
+					progress: 100,
+					valid: valid
+				});
 			});
 		},
 		statusMessages: [
@@ -265,21 +435,13 @@ window.addEventListener('load', function(e) {
 					key: 13
 				}), React.createElement('input', {
 					type: 'button',
-					className: 'chatToolbarButton',
-					'data-sticker': 'confused',
-					onClick: this.sendSticker,
-					title: 'Confused',
+					className: 'sendFileButton',
+					onClick: this.sendFile,
+					title: 'Send File',
 					key: 14
-				}), React.createElement('input', {
-					type: 'button',
-					className: 'chatToolbarButton',
-					'data-sticker': 'crying',
-					onClick: this.sendSticker,
-					title: 'Crying',
-					key: 15
 				})
 				), React.createElement('textarea', {
-					key: 16,
+					key: 15,
 					id: 'chatInputText',
 					autoFocus: true,
 					form: 'chatInput',
