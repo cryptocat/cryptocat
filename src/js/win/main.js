@@ -377,7 +377,7 @@ window.addEventListener('load', function(e) {
 						label: 'Send File',
 						accelerator: 'alt+F',
 						click: function() {
-							Cryptocat.File.send(username);
+							Cryptocat.Win.chat[username].webContents.send('chat.sendFile');
 						}
 					},
 					{

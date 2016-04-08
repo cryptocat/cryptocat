@@ -315,7 +315,6 @@ window.addEventListener('load', function(e) {
 					});
 				});
 			};
-			e.target.blur();
 			document.getElementById('chatInputText').focus();
 			Cryptocat.Diag.open.sendFile(
 				Remote.getCurrentWindow(), function(path) {
@@ -531,6 +530,10 @@ window.addEventListener('load', function(e) {
 			Remote.app.dock.setBadge((badgeCount + 1).toString());
 			Remote.app.dock.bounce();
 		}
+	});
+
+	IPCRenderer.on('chat.sendFile', function(e) {
+		thisChat.window.sendFile();
 	});
 	
 	Mousetrap(
