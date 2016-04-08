@@ -261,8 +261,10 @@ window.addEventListener('load', function(e) {
 				]),
 				key: this.state.key + 1
 			}, function() {
-				thisChat.contents().scrollTop = 
-					thisChat.contents().scrollHeight;
+				setTimeout(function() {
+					thisChat.contents().scrollTop = 
+						thisChat.contents().scrollHeight;
+				}, 100);
 			})
 		},
 		sendSticker: function(e) {
