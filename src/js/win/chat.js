@@ -302,7 +302,7 @@ window.addEventListener('load', function(e) {
 					});
 				}, function(url, p) {
 					_t.files[url].setState({progress: p});
-					window.setProgressBar(p / 100);
+					Remote.getCurrentWindow().setProgressBar(p / 100);
 				}, function(info, file) {
 					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
 					if (info.valid) {
@@ -319,7 +319,7 @@ window.addEventListener('load', function(e) {
 						valid: info.valid,
 						binary: file
 					});
-					window.setProgressBar(0);
+					Remote.getCurrentWindow().setProgressBar(0);
 				});
 			};
 			document.getElementById('chatInputText').focus();
@@ -336,7 +336,7 @@ window.addEventListener('load', function(e) {
 			var _t = this;
 			Cryptocat.File.receive(file, function(url, p) {
 				_t.files[url].setState({progress: p});
-				window.setProgressBar(p / 100);
+				Remote.getCurrentWindow().setProgressBar(p / 100);
 			}, function(url, plaintext, valid) {
 				if (!valid) {
 					Cryptocat.Diag.error.fileSave();
@@ -346,7 +346,7 @@ window.addEventListener('load', function(e) {
 					progress: 100,
 					valid: valid
 				});
-				window.setProgressBar(0);
+				Remote.getCurrentWindow().setProgressBar(0);
 			});
 		},
 		statusMessages: [
@@ -614,6 +614,7 @@ window.addEventListener('load', function(e) {
 						Remote.getCurrentWindow().destroy();
 					}
 				});
+				break;
 			}
 			else if (
 				hasProperty(thisChat.window.files, file) &&
@@ -626,6 +627,7 @@ window.addEventListener('load', function(e) {
 						Remote.getCurrentWindow().destroy();
 					}
 				});
+				break;
 			}
 		}
 		if (thisChat.sendQueue.messages.length) {
