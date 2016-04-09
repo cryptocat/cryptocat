@@ -92,6 +92,7 @@ window.addEventListener('load', function(e) {
 				progress: 0,
 				valid: true,
 				binary: new Buffer([]),
+				saved: false
 			}
 		},
 		componentDidMount: function() {
@@ -110,7 +111,9 @@ window.addEventListener('load', function(e) {
 				_t.props.file.name,
 				function(path) {
 					if (!path) { return false; }
-					FS.writeFile(path, _t.state.binary);
+					FS.writeFile(path, _t.state.binary, function() {
+						_t.setState({saved: true});
+					})
 				}
 			);
 		},
@@ -595,12 +598,37 @@ window.addEventListener('load', function(e) {
 	}); window.dispatchEvent(new Event('resize'));
 
 	window.addEventListener('beforeunload', function(e) {
+		for (var file in thisChat.window.files) {
+			if (
+				hasProperty(thisChat.window.files, file) &&
+				(thisChat.window.files[file].props.sender !== Cryptocat.Me.username) &&
+				!thisChat.window.files[file].state.saved
+			) {
+				e.returnValue = 'false';
+				Cryptocat.Diag.message.unsavedFiles(function(response) {
+					if (response === 1) {
+						Remote.getCurrentWindow().destroy();
+					}
+				});
+			}
+			else if (
+				hasProperty(thisChat.window.files, file) &&
+				(thisChat.window.files[file].props.sender === Cryptocat.Me.username) &&
+				(thisChat.window.files[file].state.progress < 100)
+			) {
+				e.returnValue = 'false';
+				Cryptocat.Diag.message.unsentFiles(function(response) {
+					if (response === 1) {
+						Remote.getCurrentWindow().destroy();
+					}
+				});
+			}
+		}
 		if (thisChat.sendQueue.messages.length) {
 			Cryptocat.Diag.error.messagesQueued(
 				thisChat.sendQueue.messages.length
 			);
 			e.returnValue = 'false';
-			return false;
 		}
 	});
 

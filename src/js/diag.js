@@ -296,6 +296,30 @@ Cryptocat.Diag = {
 		});
 	};
 
+	Cryptocat.Diag.message.unsavedFiles = function(callback) {
+		dialog.showMessageBox({
+			type: 'question',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['Return to Chat', 'Close Anyway'],
+			defaultId: 0,
+			title: 'Cryptocat: Unsaved Files',
+			message: 'You have received files in this chat that you have not ' +
+				' yet saved. Are you sure you want to discard them?'
+		}, callback);
+	};
+
+	Cryptocat.Diag.message.unsentFiles = function(callback) {
+		dialog.showMessageBox({
+			type: 'question',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['Return to Chat', 'Close Anyway'],
+			defaultId: 0,
+			title: 'Cryptocat: Unsent Files',
+			message: 'You have files in this conversation that are still ' +
+				' being sent. Are you sure you want to discard them?'
+		}, callback);
+	};
+
 	Cryptocat.Diag.save.updateDownloader = function(browserWindow, callback) {
 		var defaultPath = process.env.HOME + '/';
 		if (process.platform === 'win32') {
