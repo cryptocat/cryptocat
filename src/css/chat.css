@@ -81,7 +81,7 @@ div.chatMessage, div.chatSticker, div.chatFile {
 	display: table;
 	min-width: 25%;
 	max-width: 70%;
-	margin: 5px 10px;
+	margin: 4px 10px;
 }
 
 div.chatMessage * {
@@ -289,7 +289,7 @@ form#chatInput {
 
 textarea#chatInputText {
 	width: 100%;
-	height: 65px;
+	height: 60px;
 	resize: none;
 	box-sizing: border-box;
 	outline: none;

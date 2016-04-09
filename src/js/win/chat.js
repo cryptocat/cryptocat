@@ -598,7 +598,7 @@ window.addEventListener('load', function(e) {
 	});
 
 	window.addEventListener('resize', function(e) {
-		thisChat.contents().style.height = (window.innerHeight - 140) + 'px';
+		thisChat.contents().style.height = (window.innerHeight - 135) + 'px';
 	}); window.dispatchEvent(new Event('resize'));
 
 	window.addEventListener('beforeunload', function(e) {

@@ -349,7 +349,7 @@ window.addEventListener('load', function(e) {
 			width: 450,
 			height: 450,
 			minWidth: 450,
-			minHeight: 450,
+			minHeight: 150,
 			title: 'Chat with ' + username,
 		});
 		Cryptocat.Win.chat[username].on('closed', function() {
