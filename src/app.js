@@ -62,37 +62,42 @@ var buildTrayMenu = function(settings) {
 			type: 'separator'
 		},
 		{
-			label: 'Notifications',
-			type: 'checkbox',
-			checked: settings.notify,
-			click: function(e) {
-				Windows.main.webContents.send(
-					'main.updateNotifySetting',
-					e.checked
-				);
-			}
-		},
-		{
-			label: 'Sounds',
-			type: 'checkbox',
-			checked: settings.sounds,
-			click: function(e) {
-				Windows.main.webContents.send(
-					'main.updateSoundsSetting',
-					e.checked
-				);
-			}
-		},
-		{
-			label: 'Send Typing Indicator',
-			type: 'checkbox',
-			checked: settings.typing,
-			click: function(e) {
-				Windows.main.webContents.send(
-					'main.updateTypingSetting',
-					e.checked
-				);
-			}
+			label: 'Settings',
+			submenu: [
+				{
+					label: 'Notifications',
+					type: 'checkbox',
+					checked: settings.notify,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateNotifySetting',
+							e.checked
+						);
+					}
+				},
+				{
+					label: 'Sounds',
+					type: 'checkbox',
+					checked: settings.sounds,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateSoundsSetting',
+							e.checked
+						);
+					}
+				},
+				{
+					label: 'Send Typing Indicator',
+					type: 'checkbox',
+					checked: settings.typing,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateTypingSetting',
+							e.checked
+						);
+					}
+				}
+			]
 		},
 		{
 			type: 'separator'
@@ -145,37 +150,42 @@ var buildMainMenu = function(settings) {
 					type: 'separator'
 				},
 				{
-					label: 'Notifications',
-					type: 'checkbox',
-					checked: settings.notify,
-					click: function(e) {
-						Windows.main.webContents.send(
-							'main.updateNotifySetting',
-							e.checked
-						);
-					}
-				},
-				{
-					label: 'Sounds',
-					type: 'checkbox',
-					checked: settings.sounds,
-					click: function(e) {
-							Windows.main.webContents.send(
-							'main.updateSoundsSetting',
-							e.checked
-						);
-					}
-				},
-				{
-					label: 'Send Typing Indicator',
-					type: 'checkbox',
-					checked: settings.typing,
-					click: function(e) {
-						Windows.main.webContents.send(
-							'main.updateTypingSetting',
-							e.checked
-						);
-					}
+					label: 'Settings',
+					submenu: [
+						{
+							label: 'Notifications',
+							type: 'checkbox',
+							checked: settings.notify,
+							click: function(e) {
+								Windows.main.webContents.send(
+									'main.updateNotifySetting',
+									e.checked
+								);
+							}
+						},
+						{
+							label: 'Sounds',
+							type: 'checkbox',
+							checked: settings.sounds,
+							click: function(e) {
+									Windows.main.webContents.send(
+									'main.updateSoundsSetting',
+									e.checked
+								);
+							}
+						},
+						{
+							label: 'Send Typing Indicator',
+							type: 'checkbox',
+							checked: settings.typing,
+							click: function(e) {
+								Windows.main.webContents.send(
+									'main.updateTypingSetting',
+									e.checked
+								);
+							}
+						}
+					]
 				},
 				{
 					type: 'separator'
