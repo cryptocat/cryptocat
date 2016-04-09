@@ -304,7 +304,7 @@ Cryptocat.Diag = {
 			defaultId: 0,
 			title: 'Cryptocat: Unsaved Files',
 			message: 'You have received files in this chat that you have not ' +
-				' yet saved. Are you sure you want to discard them?'
+				'yet saved. Are you sure you want to discard them?'
 		}, callback);
 	};
 
@@ -316,7 +316,7 @@ Cryptocat.Diag = {
 			defaultId: 0,
 			title: 'Cryptocat: Unsent Files',
 			message: 'You have files in this conversation that are still ' +
-				' being sent. Are you sure you want to discard them?'
+				'being sent. Are you sure you want to discard them?'
 		}, callback);
 	};
 
