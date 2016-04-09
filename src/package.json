@@ -1,6 +1,6 @@
 {
   "name": "Cryptocat",
-  "version": "3.0.24",
+  "version": "3.0.25",
   "description": "Easy and secure instant messaging.",
   "main": "app.js",
   "scripts": {
