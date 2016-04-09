@@ -451,10 +451,10 @@ Cryptocat.XMPP = {};
 			Cryptocat.Notify.playSound('message');
 			if (!Cryptocat.Win.chat[username].isFocused()) {
 				var notifText = info.plaintext;
-				if (Cryptocat.Patterns.sticker.match(notifText)) {
+				if (Cryptocat.Patterns.sticker.test(notifText)) {
 					notifText = username + ' sent you a cat sticker!';
 				}
-				if (Cryptocat.Patterns.file.match(notifText)) {
+				if (Cryptocat.Patterns.file.test(notifText)) {
 					notifText = username + ' sent you a file.';
 				}
 				Cryptocat.Notify.showNotification(
