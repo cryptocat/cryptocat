@@ -1,6 +1,6 @@
 window.addEventListener('load', function(e) {	
 	'use strict';
-	Remote.getCurrentWindow().toggleDevTools();
+
 	var updateDownloader = React.createClass({
 		displayName: 'updateDownloader',
 		getInitialState: function() {
