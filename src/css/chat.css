@@ -276,7 +276,8 @@ div.chatToolbar input[data-sticker="crying"] {
 }
 
 div.chatToolbar input.sendFileButton {
-	margin-left: 45px;
+	position: fixed;
+	right: 2px;
 	background-image: url('../img/icons/file.png');
 	background-size: 24px;
 }
