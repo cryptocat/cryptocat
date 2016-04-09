@@ -1,6 +1,6 @@
 window.addEventListener('load', function(e) {	
 	'use strict';
-
+	Remote.getCurrentWindow().toggleDevTools();
 	var updateDownloader = React.createClass({
 		displayName: 'updateDownloader',
 		getInitialState: function() {
@@ -89,7 +89,7 @@ window.addEventListener('load', function(e) {
 		}
 		var file = FS.createWriteStream(path);
 		var cur  = 0;
-		var hash = ProScript.nodeCrypto.createHash('sha256');
+		var hash = NodeCrypto.createHash('sha256');
 		HTTPS.get(Cryptocat.Update.downloadURIs[process.platform], function(res) {
 			var len = parseInt(res.headers['content-length'], 10);
 			res.pipe(file);
