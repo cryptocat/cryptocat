@@ -147,11 +147,14 @@ Cryptocat.XMPP = {};
 		});
 	};
 
-	handler.disconnected = function() {
+	handler.disconnected = function(callback) {
 		Cryptocat.Me.connected = false;
 		if (callbacks.disconnected.armed) {
 			callbacks.disconnected.armed = false;
 			callbacks.disconnected.payload();
+		}
+		else {
+			callback();
 		}
 	};
 	
@@ -287,6 +290,7 @@ Cryptocat.XMPP = {};
 				realm: 'crypto.cat'
 			},
 			transport: 'websocket',
+			timeout: 10000,
 			wsURL: 'wss://crypto.cat:443/socket',
 			useStreamManagement: true
 		});
@@ -314,8 +318,11 @@ Cryptocat.XMPP = {};
 		client.on('session:started', function(data) {
 			handler.connected(username, data, callback);	
 		});
+		client.on('session:end', function(data) {
+			handler.error(error, username, password, callback)
+		});
 		client.on('disconnected', function() {
-			handler.disconnected();
+			handler.disconnected(callback);
 		});
 		client.on('message', function(message) {
 			// handler.message(message);
