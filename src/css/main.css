@@ -74,7 +74,7 @@ div.mainRosterBuddy {
 	font-size: 14px;
 	border-bottom: 1px solid #EEE;
 	background-color: #FFF;
-	transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+	transition: background-color 0.1s, color 0.1s, box-shadow 0.1s;
 }
 
 div.mainRosterBuddy:active {
