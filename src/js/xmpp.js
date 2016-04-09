@@ -318,9 +318,6 @@ Cryptocat.XMPP = {};
 		client.on('session:started', function(data) {
 			handler.connected(username, data, callback);	
 		});
-		client.on('session:end', function(data) {
-			handler.error(error, username, password, callback)
-		});
 		client.on('disconnected', function() {
 			handler.disconnected(callback);
 		});
