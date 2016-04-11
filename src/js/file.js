@@ -12,14 +12,14 @@ Cryptocat.File = {};
 		'cad',  'csv',  'db',
 		'doc',  'docx', 'eps',
 		'flv',  'gif',  'iso',
-		'java', 'jpg',  'mkv',
-		'mov',  'mp3',  'mp4',
-		'mpeg', 'mpg',  'pdf',
-		'png',  'ppt',  'psd',
-		'ps',   'rar',  'rtf',
-		'sql',  'svg',  'txt',
-		'wma',  'xls',  'xlsx',
-		'zip'
+		'java', 'jpg',  'jpeg',
+		'mkv',  'mov',  'mp3',
+		'mp4',  'mpeg', 'mpg',
+		'pdf',  'png',  'ppt',
+		'psd',  'ps',   'rar',
+		'rtf',  'sql',  'svg',
+		'txt',  'wma',  'xls',
+		'xlsx', 'zip'
 	];
 
 	var fileCrypto = {
