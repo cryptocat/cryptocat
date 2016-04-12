@@ -135,6 +135,12 @@ var buildTrayMenu = function(settings) {
 			]
 		},
 		{
+			label: 'Log Out',
+			click: function(e) {
+				Windows.main.webContents.send('main.logOut');
+			}
+		},
+		{
 			type: 'separator'
 		},
 		{
@@ -223,6 +229,12 @@ var buildMainMenu = function(settings) {
 					]
 				},
 				{
+					label: 'Log Out',
+					click: function(e) {
+						Windows.main.webContents.send('main.logOut');
+					}
+				},
+				{
 					type: 'separator'
 				},
 				{
@@ -307,7 +319,7 @@ var buildMainMenu = function(settings) {
 			}]
 		}
 	]);
-	if (false) {
+	if (true) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{

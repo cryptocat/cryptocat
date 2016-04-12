@@ -28,9 +28,15 @@ Cryptocat.Diag = {
 
 	Cryptocat.Diag.error.loginError = function() {
 		dialog.showErrorBox(
+			'Cryptocat: Connection Error',
+			'Could not connect to Cryptocat. Please try again.'
+		);
+	};
+
+	Cryptocat.Diag.error.loginInvalid = function() {
+		dialog.showErrorBox(
 			'Cryptocat: Login Error',
-			'We could not log you in at this time. ' +
-			'Please check your password and try again.'
+			'Please check that you have entered a valid username and password.'
 		);
 	};
 
@@ -75,13 +81,6 @@ Cryptocat.Diag = {
 		dialog.showErrorBox(
 			'Cryptocat: Invalid Device Name',
 			'Please check that your device name contains only numbers and letters.'
-		);
-	};
-
-	Cryptocat.Diag.error.unexpectedDisconnect = function() {
-		dialog.showErrorBox(
-			'Cryptocat: Disconnected',
-			'You have been disconnected. Try logging in again.'
 		);
 	};
 

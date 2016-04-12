@@ -11,8 +11,10 @@ window.addEventListener('load', function(e) {
 		displayName: 'mainLogin',
 		getInitialState: function() {
 			return {
-				username: '', password: '',
-				disabled: false
+				username: '',
+				password: '',
+				disabled: false,
+				display: 'block'
 			};
 		},
 		componentDidMount: function() {
@@ -26,15 +28,15 @@ window.addEventListener('load', function(e) {
 		},
 		onSubmit: function(e) {
 			var _t = this;
-			this.setState({disabled: true});
 			if (this.validInputs()) {
+				this.setState({disabled: true});
 				Cryptocat.XMPP.login(
 					this.state.username, this.state.password,
-					function(s) { (s? _t.onSuccess() : _t.onError()) }
+					function(s) { (s? _t.onConnect() : _t.onDisconnect()) }
 				);
 			}
 			else {
-				_t.onError();
+				Cryptocat.Diag.error.loginInvalid();
 			}
 			e.preventDefault();
 			return false;
@@ -48,13 +50,14 @@ window.addEventListener('load', function(e) {
 			}
 			return false
 		},
-		onSuccess: function() {
-			ReactDOM.unmountComponentAtNode(
-				document.getElementById('mainWindow')
-			);
+		onConnect: function() {
+			this.setState({
+				password: '',
+				display: 'none'
+			});
 			Cryptocat.Win.main.roster = ReactDOM.render(
 				React.createElement(mainRoster, null),
-				document.getElementById('mainWindow')
+				document.getElementById('mainRoster')
 			);
 			Cryptocat.Notify.playSound('loggedIn');
 			IPCRenderer.send('app.updateTraySettings', {
@@ -63,14 +66,26 @@ window.addEventListener('load', function(e) {
 				typing: Cryptocat.Me.settings.typing
 			});
 		},
-		onError: function() {
-			Cryptocat.Diag.error.loginError()
-			this.setState({disabled: false});
+		onDisconnect: function(skipError) {
+			if (!skipError) {
+				Cryptocat.Diag.error.loginError();
+			}
+			Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
+			this.setState({
+				disabled: false,
+				display: 'block'
+			});
+			ReactDOM.unmountComponentAtNode(
+				document.getElementById('mainRoster')
+			);
 		},
 		render: function() {
 			return React.createElement('form', {
 				className: 'mainLogin',
-				onSubmit: this.onSubmit
+				onSubmit: this.onSubmit,
+				style: {
+					display: this.state.display
+				}
 			}, [
 				React.createElement('img', {
 					key: 0,
@@ -560,7 +575,7 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.main.login = ReactDOM.render(
 		React.createElement(mainLogin, null),
-		document.getElementById('mainWindow')
+		document.getElementById('mainLogin')
 	);
 
 	Cryptocat.Win.main.beforeQuit = function() {
@@ -739,6 +754,17 @@ window.addEventListener('load', function(e) {
 				notify: Cryptocat.Me.settings.notify,
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing
+			});
+		}
+		else {
+			Cryptocat.Diag.error.offline();
+		}
+	});
+
+	IPCRenderer.on('main.logOut', function(e) {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.XMPP.disconnect(function() {
+				Cryptocat.Win.main.login.onDisconnect(true);
 			});
 		}
 		else {
