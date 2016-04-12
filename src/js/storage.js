@@ -3,26 +3,37 @@ Cryptocat.Storage = {};
 (function() {
 	'use strict';
 	const NeDB = require('nedb');
+	var db = {};
 	
-	const AppDataPath = (function() {
+	(function() {
+		var path = '';
 		if (process.platform === 'win32') {
-			return process.env.APPDATA + '\\Cryptocat\\';
+			path = process.env.APPDATA + '\\Cryptocat\\';
+			db = new NeDB({
+				filename: path + 'users.db',
+				autoload: true
+			});
 		}
 		else {
-			var fs = require('fs');
 			var path = process.env.HOME + '/.config';
-			try { fs.mkdirSync(path) } catch(e) {};
-			path += '/Cryptocat';
-			try { fs.mkdirSync(path) } catch(e) {};
-			path += '/';
-			return path;
+			FS.stat(path, function(err, stats) {
+				if (!stats.isDirectory()) {
+					FS.mkdirSync(path);
+				}
+				path += '/Cryptocat';
+				FS.stat(path, function(err, stats) {
+					if (!stats.isDirectory()) {
+						FS.mkdirSync(path);
+					}
+					path += '/';
+					db = new NeDB({
+						filename: path + 'users.db',
+						autoload: true
+					});
+				});
+			});
 		}
 	})();
-
-	var db = new NeDB({
-		filename: AppDataPath + 'users.db',
-		autoload: true
-	});
 
 	Cryptocat.Storage.updateUser = function(username, loadedSettings, callback) {
 		var settings = Object.assign({}, loadedSettings);

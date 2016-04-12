@@ -1,11 +1,43 @@
-const electron = require('electron');
+const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
+const FS            = require('fs');
 var Windows  = { main: null, last: null };
 var TrayIcon = {};
 var IntentToQuit = false;
 
-var HandleStartupEvent = function() {
-	if (process.platform !== 'win32') {
+var handleStartupEvent = function() {
+	if (process.platform === 'linux') {
+		var shortcut = '[Desktop Entry]\n';
+		var path      = process.env.HOME + '/.local';
+		shortcut    += 'Name=Cryptocat\n';
+		shortcut    += 'Exec=' + process.cwd() + '/Cryptocat\n';
+		shortcut    += 'Icon=' + process.cwd() + '/logo.png\n';
+		shortcut    += 'Terminal=false\n';
+		shortcut    += 'Type=Application\n';
+		shortcut    += 'Categories=Utility;Application;';
+		FS.stat(path, function(err, stats) {
+			if (!stats.isDirectory()) {
+				FS.mkdirSync(path, '0o700');
+			}
+			path += '/share';
+			FS.stat(path, function(err, stats) {
+				if (!stats.isDirectory()) {
+					FS.mkdirSync(path, '0o700');
+				}
+				path += '/applications';
+				FS.stat(path, function(err, stats) {
+					if (!stats.isDirectory()) {
+						FS.mkdirSync(path, '0o700');
+					}
+					path += '/Cryptocat.desktop';
+					FS.writeFile(path, shortcut, function(err) {
+					});
+				});
+			});
+		});
+		return false;
+	}
+	else if (process.platform === 'darwin') {
 		return false;
 	}
 	const childProc = require('child_process');
@@ -14,24 +46,24 @@ var HandleStartupEvent = function() {
 		childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
 			cwd: AppDataDir, timeout: 10000
 		});
-		electron.app.quit();
+		Electron.app.quit();
 	}
 	if (process.argv[1] === '--squirrel-updated') {
 		childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
 			cwd: AppDataDir, timeout: 10000
 		});
-		electron.app.quit();
+		Electron.app.quit();
 	}
 	if (process.argv[1] === '--squirrel-obsolete') {
-		electron.app.quit();
+		Electron.app.quit();
 	}
 	if (process.argv[1] === '--squirrel-uninstall') {
-		electron.app.quit();
+		Electron.app.quit();
 	}
-}; if (HandleStartupEvent()) { return false };
+}; if (handleStartupEvent()) { return false };
 
 var buildTrayMenu = function(settings) {
-	var menu = electron.Menu.buildFromTemplate([
+	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Buddy List',
 			click: function() {
@@ -105,12 +137,12 @@ var buildTrayMenu = function(settings) {
 		{
 			label: 'Help',
 			click: function() {
-				electron.shell.openExternal('https://crypto.cat/help.html');
+				Electron.shell.openExternal('https://crypto.cat/help.html');
 			}
 		}
 	]);
 	if (process.platform !== 'darwin') {
-		menu.append(new electron.MenuItem({
+		menu.append(new Electron.MenuItem({
 			label: 'Quit',
 			role: 'quit',
 			click: function() {
@@ -122,7 +154,7 @@ var buildTrayMenu = function(settings) {
 };
 
 var buildMainMenu = function(settings) {
-	var menu = electron.Menu.buildFromTemplate([
+	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
 			submenu: [
@@ -242,7 +274,7 @@ var buildMainMenu = function(settings) {
 			submenu: [{
 				label: 'Getting Started',
 				click: function() {
-					electron.shell.openExternal(
+					Electron.shell.openExternal(
 						'https://crypto.cat/help.html'
 					)
 				}
@@ -250,7 +282,7 @@ var buildMainMenu = function(settings) {
 			{
 				label: 'Report a Bug',
 				click: function() {
-					electron.shell.openExternal(
+					Electron.shell.openExternal(
 						'https://github.com/cryptocat/cryptocat/issues/'
 					)
 				}
@@ -273,7 +305,7 @@ var buildMainMenu = function(settings) {
 		}
 	]);
 	if (false) {
-		menu.append(new electron.MenuItem({
+		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
 				label: 'Reload',
@@ -294,9 +326,9 @@ var buildMainMenu = function(settings) {
 	return menu;
 };
 	
-electron.app.on('ready', function() {
+Electron.app.on('ready', function() {
 	if (process.platform !== 'darwin') {
-		TrayIcon = new electron.Tray(
+		TrayIcon = new Electron.Tray(
 			__dirname + '/img/logo/logo.png'
 		);
 	}
@@ -325,12 +357,12 @@ electron.app.on('ready', function() {
 		}
 	});
 	if (process.platform === 'darwin') {
-		electron.app.dock.setMenu(buildTrayMenu({
+		Electron.app.dock.setMenu(buildTrayMenu({
 			notify: false,
 			sounds: false,
 			typing: false,
 		}));
-		electron.Menu.setApplicationMenu(buildMainMenu({
+		Electron.Menu.setApplicationMenu(buildMainMenu({
 			notify: false,
 			sounds: false,
 			typing: false
@@ -355,44 +387,44 @@ electron.app.on('ready', function() {
 });
 
 
-electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
+Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	Windows.main.webContents.send('chat.sendMessage', to, message);
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
+Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
 	Windows.main.webContents.send('chat.myChatState', to, chatState);
 });
 
-electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
+Electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
 	Windows.main.webContents.send('addBuddy.sendRequest', username);
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('changePassword.changePassword', function(e, password) {
+Electron.ipcMain.on('changePassword.changePassword', function(e, password) {
 	Windows.main.webContents.send('changePassword.changePassword', password);
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
+Electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 	Windows.main.webContents.send('addDevice.addDevice', name, icon);
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {
+Electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {
 	Windows.main.webContents.send('deviceManager.removeDevice', deviceId);
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('main.beforeQuit', function(e) {
+Electron.ipcMain.on('main.beforeQuit', function(e) {
 	Windows.main.webContents.send('main.beforeQuit');
 	e.returnValue = 'true';
 });
 
-electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
+Electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
 	if (process.platform === 'darwin') {
-		electron.Menu.setApplicationMenu(buildMainMenu(settings));
-		electron.app.dock.setMenu(buildTrayMenu(settings));
+		Electron.Menu.setApplicationMenu(buildMainMenu(settings));
+		Electron.app.dock.setMenu(buildTrayMenu(settings));
 	}
 	else {
 		Windows.main.setMenu(buildMainMenu(settings));
@@ -400,26 +432,26 @@ electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
 	}
 });
 
-electron.ipcMain.on('app.quit', function(e) {
+Electron.ipcMain.on('app.quit', function(e) {
 	IntentToQuit = true;
 	Windows.main.destroy();
-	electron.app.quit();
+	Electron.app.quit();
 	e.returnValue = 'true';
 });
 
-electron.app.on('browser-window-created', function(e, w) {
+Electron.app.on('browser-window-created', function(e, w) {
 	Windows.last = w;
 });
 
-electron.app.on('browser-window-focus', function(e, w) {
+Electron.app.on('browser-window-focus', function(e, w) {
 	Windows.last = w;
 });
 
-electron.app.on('activate', function(e) {
+Electron.app.on('activate', function(e) {
 	Windows.last.show();
 });
 
-electron.app.on('before-quit', function(e) {
+Electron.app.on('before-quit', function(e) {
 	if (!IntentToQuit) {
 		e.preventDefault();
 	}
