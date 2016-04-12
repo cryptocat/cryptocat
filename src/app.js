@@ -8,10 +8,12 @@ var IntentToQuit = false;
 var handleStartupEvent = function() {
 	if (process.platform === 'linux') {
 		var shortcut = '[Desktop Entry]\n';
-		var path      = process.env.HOME + '/.local';
+		var path     = process.env.HOME + '/.local';
+		var exePath  = Electron.app.getPath('exe');
+		var icoPath  = exePath.slice(0, -9) + 'logo.png';
 		shortcut    += 'Name=Cryptocat\n';
-		shortcut    += 'Exec=' + Electron.app.getPath('exe') + '/Cryptocat\n';
-		shortcut    += 'Icon=' + Electron.app.getPath('exe') + '/logo.png\n';
+		shortcut    += 'Exec=' + exePath + '\n';
+		shortcut    += 'Icon=' + icoPath + '\n';
 		shortcut    += 'Terminal=false\n';
 		shortcut    += 'Type=Application\n';
 		shortcut    += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
