@@ -10,11 +10,12 @@ var handleStartupEvent = function() {
 		var shortcut = '[Desktop Entry]\n';
 		var path      = process.env.HOME + '/.local';
 		shortcut    += 'Name=Cryptocat\n';
-		shortcut    += 'Exec=' + process.cwd() + '/Cryptocat\n';
-		shortcut    += 'Icon=' + process.cwd() + '/logo.png\n';
+		shortcut    += 'Exec=' + Electron.app.getPath('exe') + '/Cryptocat\n';
+		shortcut    += 'Icon=' + Electron.app.getPath('exe') + '/logo.png\n';
 		shortcut    += 'Terminal=false\n';
 		shortcut    += 'Type=Application\n';
-		shortcut    += 'Categories=Utility;Application;';
+		shortcut    += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
+		shortcut    += 'Comment=Easy, secure chat for your computer.'
 		FS.stat(path, function(err, stats) {
 			if (!stats.isDirectory()) {
 				FS.mkdirSync(path, '0o700');
