@@ -292,51 +292,52 @@ window.addEventListener('load', function(e) {
 				offline: (this.state.status !== 2)
 			});
 		},
-		sendFile: function(e) {
+		sendFileDialog: function(e) {
 			var _t = this;
-			var sendFile = function(path) {
-				Cryptocat.File.send(path[0], function(info) {
-					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
-					if (!info.valid) {
-						return false;
-					}
-					_t.updateConversation(true, {
-						plaintext: sendInfo,
-						valid: true,
-						stamp: (new Date()).toString(),
-						offline: (_t.state.status !== 2)
-					});
-				}, function(url, p) {
-					_t.files[url].setState({progress: p});
-					Remote.getCurrentWindow().setProgressBar(p / 100);
-				}, function(info, file) {
-					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
-					if (info.valid) {
-						thisChat.sendQueue.messages.push(sendInfo);
-						if (!thisChat.sendQueue.isOn) {
-							thisChat.sendQueue.turnOn();
-						}
-					}
-					else {
-						Cryptocat.Diag.error.fileGeneral();
-					}
-					_t.files[info.url].setState({
-						progress: 100,
-						valid: info.valid,
-						binary: file
-					});
-					Remote.getCurrentWindow().setProgressBar(0);
-				});
-			};
 			document.getElementById('chatInputText').focus();
 			Cryptocat.Diag.open.sendFile(
 				Remote.getCurrentWindow(), function(path) {
 					if (!path) {
 						return false;
 					}
-					sendFile(path);
+					_t.sendFile(path[0]);
 				}
 			);
+		},
+		sendFile: function(path) {
+			var _t = this;
+			Cryptocat.File.send(path, function(info) {
+				var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+				if (!info.valid) {
+					return false;
+				}
+				_t.updateConversation(true, {
+					plaintext: sendInfo,
+					valid: true,
+					stamp: (new Date()).toString(),
+					offline: (_t.state.status !== 2)
+				});
+			}, function(url, p) {
+				_t.files[url].setState({progress: p});
+				Remote.getCurrentWindow().setProgressBar(p / 100);
+			}, function(info, file) {
+				var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+				if (info.valid) {
+					thisChat.sendQueue.messages.push(sendInfo);
+					if (!thisChat.sendQueue.isOn) {
+						thisChat.sendQueue.turnOn();
+					}
+				}
+				else {
+					Cryptocat.Diag.error.fileGeneral();
+				}
+				_t.files[info.url].setState({
+					progress: 100,
+					valid: info.valid,
+					binary: file
+				});
+				Remote.getCurrentWindow().setProgressBar(0);
+			});
 		},
 		receiveFile: function(file) {
 			var _t = this;
@@ -450,7 +451,7 @@ window.addEventListener('load', function(e) {
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'sendFileButton',
-					onClick: this.sendFile,
+					onClick: this.sendFileDialog,
 					title: 'Send File',
 					key: 14
 				})
@@ -548,7 +549,7 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('chat.sendFile', function(e) {
-		thisChat.window.sendFile();
+		thisChat.window.sendFileDialog();
 	});
 	
 	Mousetrap(
@@ -644,15 +645,37 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	var dragCounter = 0;
+	document.addEventListener('dragenter', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		document.getElementById('chatFileDragOverlay').dataset.visible = true;
+		dragCounter++;
+		return false;
+	}, false);
+	document.addEventListener('dragover', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	}, false);
+	document.addEventListener('dragleave', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		dragCounter--;
+		if (!dragCounter) {
+			document.getElementById('chatFileDragOverlay').dataset.visible = false;
+		}
+	}, false);
+	document.addEventListener('drop', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		dragCounter = 0;
+		document.getElementById('chatFileDragOverlay').dataset.visible = false;	
+		if (e.isTrusted) {
+			thisChat.window.sendFile(e.dataTransfer.files[0].path);
+		}
+		return false;
+	}, false);
+
 });
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
 
