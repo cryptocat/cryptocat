@@ -129,10 +129,14 @@ window.addEventListener('load', function(e) {
 				key: 1
 			}), React.createElement('div', {
 				className: 'chatFileProgressBar',
-				key: 2
+				key: 2,
+				'data-valid': this.state.valid,
+				'data-complete': (
+					(this.state.progress === 100) &&
+					this.state.valid
+				)
 			}, React.createElement('div', {
 				className: 'chatFileProgressBarIndicator',
-				'data-valid': this.state.valid,
 				style: {
 					width: this.state.progress + '%'
 				},

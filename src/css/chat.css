@@ -200,15 +200,29 @@ div.chatFile div.chatFileProgressBar {
 	height: 18px;
 	margin: 23px 0 0 8px;
 	padding: 1px;
+	transition: border-color 0.5s;
 }
 
 div.chatFile div.chatFileProgressBarIndicator {
 	background-color: #96A5B2;
 	height: 18px;
+	transition: background-color 0.5s;
 }
 
-div.chatFileProgressBarIndicator[data-valid="false"] {
+div.chatFileProgressBar[data-valid="false"] {
+	border-color: #FFD8D6 !important;
+}
+
+div.chatFileProgressBar[data-complete="true"] {
+	border-color: #CACCAC !important;
+}
+
+div.chatFileProgressBar[data-valid="false"] div.chatFileProgressBarIndicator {
 	background-color: #FFD8D6 !important;
+}
+
+div.chatFileProgressBar[data-complete="true"] div.chatFileProgressBarIndicator {
+	background-color: #CACCAC !important;
 }
 
 div#chatBottom {
