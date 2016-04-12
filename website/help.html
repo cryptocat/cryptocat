@@ -18,18 +18,6 @@
 	<link rel="icon" type="image/gif" href="img/favicon.gif" />
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
 	<script type="application/javascript" src="js/util.js"></script>
-	<script type="application/javascript">
-		window.addEventListener('load', function() {
-			var a = document.getElementById('acknowledgments');
-			var s = document.getElementById('shuffledAcknowledgments');
-			while (a.children.length) {
-				s.appendChild(a.children[
-					Math.floor(Math.random() * a.children.length)
-				]);
-			}
-			a.parentNode.removeChild(a);
-		});
-	</script>
 </head>
 <body>
 	<div id="top">
@@ -56,8 +44,8 @@
 					<li><a href="#managingDevices">Managing Devices Safely</a></li>
 					<li><a href="#notify">Enabling or Disabling Sounds and Notifications</a></li>
 					<li><a href="#typing">Let Buddies See When You Are Typing</a></li>
+					<li><a href="#files">Sending a File</a></li>
 					<li><a href="#signatures">Verifying Cryptocat Downloads</a></li>
-					<li><a href="#credits">Credits</a></li>
 				</ul>
 			</div>
 			<h2 id="beta">Understanding Beta Releases</h2>
@@ -67,11 +55,13 @@
 			<p>
 				If you have discovered an issue with your Cryptocat client and wish to report it, please do so using our <a href="https://github.com/cryptocat/cryptocat/issues" target="_blank">GitHub issue tracker</a>.
 			</p>
+			<hr />
 			<h2 id="creatingAccount">Creating an Account</h2>
 			<p>
 				Creating an account can be accomplished from the Cryptocat client's login screen, by clicking the <em>Create Account</em> button.<br />
 				You can also change your account password by clicking on <em>Account</em> &gt; <em>Change Password</em> in the Cryptocat menu bar.
 			</p>
+			<hr />
 			<h2 id="addDevice">Adding and Removing Devices</h2>
 			<p>
 				When you first log into your Cryptocat account from a new device, you will be required to set up this device and link it to your account. Note that doing so will generate and store sensitive encryption keys on your device; see <a href="#managingDevices">Managing Devices Safely</a> for more information on managing this sensitive data.
@@ -83,6 +73,7 @@
 				<li><em>If you remove the device you are currently logged in from</em>: You will be logged out and your sensitive device information will be deleted on this device.</li>
 				<li><em>If you remove another device from the one you are currently using</em>: The device will be unlinked from your account, but sensitive identity information will remain on it. If you like, you can remove this data by <a href="#managingDevices">manually deleting</a> it on the device.</li>
 			</ul>
+			<hr />
 			<h2 id="fingerprints">Verifying your Buddy's Fingerprints</h2>
 			<p>
 				In order to obtain increased confidence in the authenticity of your buddy's devices, you can verify their <em>fingerprints</em>. A fingerprint is a special value that identifies a particular device. It looks something like this: <span class="code">99:37:8c:a1:32:05:c5:97:ac:f9:32:d4:18:1e:3e:df</span>.
@@ -93,6 +84,7 @@
 			<p>
 				When any of your buddies adds a new device, Cryptocat will inform you of this. You are encouraged to verify devices with your buddies. It's something you will only need to do once per device and it helps protect your chats against impersonation.
 			</p>
+			<hr />
 			<h2 id="managingDevices">Managing Devices Safely</h2>
 			<p>
 				When you link a new device to your Cryptocat account, Cryptocat will generate sensitive encryption keys and store them on your new device. It is important to note that this sensitive information is not protected in any additional way and that a thief with enough access over your device could obtain this information.
@@ -120,6 +112,7 @@
 			<p>
 				Use full-disk encryption. Under Windows, you can enable <a href="http://windows.microsoft.com/en-us/windows-10/turn-on-device-encryption" target="_blank">device encryption</a>. On Linux, you can use <a href="https://wiki.archlinux.org/index.php/disk_encryption">LUKS, dm-crypt or eCryptfs</a>. On Mac, you can use <a href="https://support.apple.com/en-us/HT204837">FileVault</a>. This would ensure that all files on your computer are more protected. Your Cryptocat device information will be more difficult to recover so long as your device is turned off when stolen.
 			</p>
+			<hr />
 			<h2 id="notify">Enabling or Disabling Sounds and Notifications</h2>
 			<p>
 				By default, desktop notifications and notification sounds are enabled in Cryptocat, in order to minimize the chance of you missing an important message. Some users may find these settings bothersome and wish to disable them. Here is how you may do so:
@@ -128,6 +121,7 @@
 				<li><em>Windows and Linux</em>: Right click on the Cryptocat icon in your system notification area and open the <em>Settings</em> sub-menu. You may then uncheck the <em>Sounds</em> and <em>Notifications</em> settings.</li>
 				<li><em>Mac</em>: Right click on the Cryptocat icon in your dock and open the <em>Settings</em> sub-menu. You may then uncheck the <em>Sounds</em> and <em>Notifications</em> settings.</li>
 			</ul>
+			<hr />
 			<h2 id="typing">Let Buddies See When You Are Typing</h2>
 			<p>
 				By default, Cryptocat will allow your buddies to see when you are typing a message to them by showing an indicator in the chat window. We recommend you leave this option enabled as it leads to a more fluid chatting experience. However, if you are concerned for your privacy, you may disallow your client from notifying your chat buddy when you are typing a message:
@@ -136,6 +130,18 @@
 				<li><em>Windows and Linux</em>: Right click on the Cryptocat icon in your system notification area and open the <em>Settings</em> sub-menu. You may then check or uncheck the <em>Send Typing Indicator</em> setting.</li>
 				<li><em>Mac</em>: Right click on the Cryptocat icon in your dock and open the <em>Settings</em> sub-menu. You may then check or uncheck the <em>Send Typing Indicator</em> setting.</li>
 			</ul>
+			<hr />
+			<h2 id="files">Sending a File</h2>
+			<p>
+				Sending a file to a buddy over Cryptocat is easy, and only you and your buddy will be able to access any files sent, thanks to Cryptocat's strong encryption. Simply open a chat with your desired buddy. Then either click the blue floppy disk icon at the right of your chat window, or press <span class="code">Alt+F</span>. You may then select the file you wish to send.
+			</p>
+			<p>
+				If you get an error saying that your file type is unsupported, that's okay: simply add your file to a <span class="code">.zip</span> archive first and try again. If your buddy is offline, that's okay too: so long as they log back in within the next seven days, they will still be able to receive and download your file.
+			</p>
+			<p>
+				Please note that Cryptocat currently imposes a file size limit of 25MB per file.
+			</p>
+			<hr />
 			<h2 id="signatures">Verifying Cryptocat Downloads</h2>
 			<p>
 				All Cryptocat clients are <em>signed</em> so that you can verify their authenticity. 
@@ -189,29 +195,7 @@
 				<li><em>Fingerprint (SHA1)</em>: <span class="code">DE 35 C1 E8 0E 36 09 C5 DB E3 CF F9 01 88 BF 9B EB F2 47 1D</span></li>
 			</ul>
 				You may also verify the installer without first opening it by using this command: <span class="code">pkgutil --check-signature Cryptocat.pkg</span>.
-			<h2 id="credits">Credits</h2>
-			<p>
-				Since 2011, Cryptocat software has been written by <a href="https://nadim.computer" target="_blank">Nadim Kobeissi</a>. I would also like to express sincere acknowledgments to the following individuals, listed in random order:
-			</p>
-			<ul id="acknowledgments">
-				<li>Dr. Karthikeyan Bhargavan.</li>
-				<li>Dr. Philippe Baumard.</li>
-				<li>Dr. Antoine Delignat-Lavaud.</li>
-				<li>Dr. Graham Steel.</li>
-				<li>Dr. Harry Halpin.</li>
-				<li>Dr. Jeremy Clark.</li>
-				<li>Dr. Matthew D. Green.</li>
-				<li>Frederic Jacobs.</li>
-				<li>Dr. Jean-Philippe Aumasson.</li>
-				<li>Arlo Breault.</li>
-				<li>Dr. Mario Heiderich.</li>
-				<li>Steve Thomas.</li>
-				<li>Nate Cardozo.</li>
-				<li>Dan Meredith.</li>
-				<li>James Vasile.</li>
-			</ul>
-			<ul id="shuffledAcknowledgments">
-			</ul>
+			<hr />
 		</div>
 	</div>
 

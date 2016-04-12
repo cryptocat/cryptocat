@@ -77,7 +77,6 @@ button:active, input[type=button]:active, input[type=submit]:active {
 }
 
 div#top {
-
 }
 
 div#top img.logo {
@@ -146,7 +145,7 @@ div#main div.mainRight button#downloadButton span.octicon {
 }
 
 div#main div.mainCenter {
-	width: 1000px;
+	width: 1045px;
 	margin: 0 auto;
 }
 
@@ -173,6 +172,22 @@ div#main ul#acknowledgments, div#main ul#shuffledAcknowledgments {
 	column-gap: 2.5em;
 }
 
+div#main div.tableOfContents {
+	margin: 0 auto 40px auto;
+	box-shadow: 2px 2px #F0F8FF;
+	padding-bottom: 5px;
+	border: 1px solid #F0F8FF;
+}
+
+div#main div.tableOfContents ul {
+	-moz-column-count: 2;
+	-moz-column-gap: 3em;
+	-webkit-column-count: 2;
+	-webkit-column-gap: 3em;
+	column-count: 2;
+	column-gap: 3em;
+}
+
 div#bottom {
 	font-size: 12px;
 	line-height: 20px;
@@ -181,7 +196,7 @@ div#bottom {
 	border-radius: 5px;
 	padding: 5px;
 	height: 42px;
-	margin-top: 50px;
+	margin: 50px auto 30px auto;
 }
 
 div#bottom div.bottomLeft {

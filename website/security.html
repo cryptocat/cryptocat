@@ -37,16 +37,22 @@
 	<div id="main">
 		<div class="mainCenter">
 			<h1>Security</h1>
-			<p><em>Note: Cryptocat is currently Beta software.<br />The Security page is currently incomplete and will be elaborated once the software is considered stable.</em></p>
 			<div class="tableOfContents">
 				<ul>
+					<li><a href="#beta">Beta Software Notice</a></li>
 					<li><a href="#overview">Encryption Overview</a></li>
 					<li><a href="#misc">Miscellaneous Security Features</a></li>
+					<li><a href="#fulldisclosure">Reporting Security Issues</a></li>
 				</ul>
 			</div>
+			<h2 id="beta">Beta Software Notice</h2>
+			<p>
+				Cryptocat is currently Beta software. The Security page is currently incomplete and will be elaborated once the software is considered stable. For more information on the Beta software process, please review <a href="help.html#beta">this section</a> of the Help page.
+			</p>
+			<hr />
 			<h2 id="overview">Encryption Overview</h2>
 			<p>
-				Cryptocat uses a TextSecure-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging.
+				Cryptocat uses a TextSecure-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging. In terms of the transport layer, Cryptocat uses XMPP over a long-standing, TLS-encrypted WebSockets connection.
 			</p>
 			<p>
 				Every Cryptocat device owns a long-term <span class="code">identityKeyPair</span> which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
@@ -68,7 +74,7 @@
 				<li><em>Long-term key compromise</em>: We assume that an attacker may at some point compromise the long-term <span class="code">identityKeyPair</span> of a participant.</li>
 			</ul>
 			<h3>Security Goals</h3>
-			Given our threat model, Cryptocat aims to accomplish the following security goals:
+			<p>Given our threat model, Cryptocat aims to accomplish the following security goals:</p>
 			<ul>
 				<li><em>Secrecy</em>: A message sent between buddies can only be decrypted between these buddies.</li>
 				<li><em>Authenticity</em>: If Alice receive an apparently valid message from Bob, then Bob must have sent this message to Alice.</li>
@@ -76,14 +82,27 @@
 				<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is susbsequently compromised, all previous messages retain their Secrecy property.</li>
 				<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
 			</ul>
+			<hr />
 			<h2 id="misc">Miscellaneous Security Features</h2>
-			Aside of the message encryption protocol, Cryptocat adopts the following security features in order to provide a generally more robust experience across the client:
+			<p>Aside of the message encryption protocol, Cryptocat adopts the following security features in order to provide a generally more robust experience across the client:</p>
 			<ul>
 				<li><em>Authenticated installers</em>: Cryptocat client installation packages are authenticated using Authenticode on Windows, <span class="code">gpg2</span> on Linux and Apple code signing on Mac.</li>
 				<li><em>Signed updates</em>: In addition to installer authentication, Cryptocat's built-in update downloader will run an independent signature verification on all downloads.</li>
 				<li><em>Certificate pinning</em>: Cryptocat will check for a "known-good" TLS certificate before initiating a connection to the Cryptocat XMPP server.</li>
 				<li><em>Device management</em>: Users are given the option of independently verifying their buddies' device lists and are notified when a buddy's device list is modified.</li>
 			</ul>
+			<hr />
+			<h2 id="fulldisclosure">Reporting Security Issues</h2>
+			<p>
+				Cryptocat is written with security in mind and uses state-of-the-art cryptography engineering to protect your privacy. However, in the event that a security vulnerability is discovered, the project operates under the principle of full disclosure. If you discover a critical security issue with Cryptocat software, <strong>report it</strong>. You will be helping safeguard the privacy of thousands of people. Depending on the severity of the issue, here is how we recommend you report your findings:
+			</p>
+			<ul>
+				<li><em>Critical or High Severity</em>: Send an <a href="mailto:nadim@nadim.computer">e-mail</a> to Cryptocat's author at least one week before publishing your findings. You retain full right (and our explicit support) to publish your findings, but we ask for a window to push a fix to our users beforehand.</li>
+				<li><em>Medium or Low Severity</em>: Open a ticket on the <a href="https://github.com/cryptocat/cryptocat">GitHub issue tracker</a> documenting the issue.</li>
+			</ul>
+			<p>
+				While Cryptocat is unable to provide a "bug bounty" or any sort of reward for disclosing vulnerabilities, we strongly encourage you to follow the spirit of open research: it helps improve the software, it helps make digital privacy stronger for our users, and it might net you something to write about.
+			</p>
 		</div>
 	</div>
 

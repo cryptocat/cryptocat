@@ -19,6 +19,16 @@
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
 	<script type="application/javascript" src="js/util.js"></script>
 	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			var a = document.getElementById('acknowledgments');
+			var s = document.getElementById('shuffledAcknowledgments');
+			while (a.children.length) {
+				s.appendChild(a.children[
+					Math.floor(Math.random() * a.children.length)
+				]);
+			}
+			a.parentNode.removeChild(a);
+		});
 	</script>
 </head>
 <body>
@@ -37,11 +47,16 @@
 	<div id="main">
 		<div class="mainCenter">
 			<h1>Mission</h1>
-			<p><em>Note: Cryptocat is currently Beta software.</em></p>
+			<div class="tableOfContents">
+				<ul>
+					<li><a href="#statement">Commitments to the Cryptocat User</a></li>
+					<li><a href="#about">About Cryptocat</a></li>
+				</ul>
+			</div>
+			<h2 id="statement">Commitments to the Cryptocat User</h2>
 			<p>
 				Thank you for considering Cryptocat. Since 2011, the project's goal has been to provide easy, fun and private chat to anyone in the world who cares to ask for it, regardless of any technical background. In March 2016, Cryptocat was rewritten and re-released. It is now presented along with this special commitment to you, the Cryptocat user.
 			</p>
-			<h2>Commitments to the Cryptocat user</h2>
 			<h4>Free software, forever</h4>
 			<p>
 				Cryptocat will always be free software, released under the GNU General Public License. This means that anyone will always be able to fully review the source code underlying the Cryptocat client. Furthermore, there will never be any commercial offshoot of this software, and it will always exist <em>for its own sake</em>. As such, there will be no incentive or motive for the software to grow, to acquire more users, or to in any way compete with other software. Its only goal is to exist as good software for those who ask for it.
@@ -57,9 +72,35 @@
 			<p>
 				Cryptocat will not accept any financial donations or labor contributions (such as pull requests) into the Cryptocat software. Of course, this does not mean that you are discouraged from examining Cryptocat source code and suggesting improvements or fixes.
 			</p>
-			<hr />
 			<p>
 				By using Cryptocat, you are entrusting the software with your private information. We take this trust seriously.
+			</p>
+			<hr />
+			<h2 id="about">About Cryptocat</h2>
+			<p>
+				Since 2011, Cryptocat software has been written by <a href="https://nadim.computer" target="_blank">Nadim Kobeissi</a>. I would also like to express sincere acknowledgments to the following individuals, listed in random order:
+			</p>
+			<ul id="acknowledgments">
+				<li>Karthikeyan Bhargavan.</li>
+				<li>Philippe Baumard.</li>
+				<li>Antoine Delignat-Lavaud.</li>
+				<li>Graham Steel.</li>
+				<li>Harry Halpin.</li>
+				<li>Jeremy Clark.</li>
+				<li>Matthew D. Green.</li>
+				<li>Frederic Jacobs.</li>
+				<li>Jean-Philippe Aumasson.</li>
+				<li>Arlo Breault.</li>
+				<li>Mario Heiderich.</li>
+				<li>Steve Thomas.</li>
+				<li>Nate Cardozo.</li>
+				<li>Dan Meredith.</li>
+				<li>James Vasile.</li>
+			</ul>
+			<ul id="shuffledAcknowledgments">
+			</ul>
+			<p>
+				Cryptocat is also powered by <a href="http://electron.atom.io/">Electron</a>, <a href="http://prosody.im">Prosody</a>, <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux</a>, <a href="https://getfedora.org/">Fedora</a>, <a href="https://azure.microsoft.com/en-us/">Microsoft Azure</a> and <a href="https://nodejs.org/en/">Node.js</a>.
 			</p>
 		</div>
 	</div>
