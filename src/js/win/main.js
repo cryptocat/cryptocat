@@ -772,6 +772,28 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	IPCRenderer.on('main.deleteAccount', function(e) {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.Diag.message.deleteAccount(
+				Cryptocat.Me.username, function(response) {
+					if (response === 1) {
+						Remote.shell.openExternal(
+							'https://crypto.cat/help.html#deleteAccount'
+						);
+					}
+					if (response === 2) {
+						Cryptocat.XMPP.deleteAccount(
+							Cryptocat.Me.username
+						);
+					}
+				}
+			);
+		}
+		else {
+			Cryptocat.Diag.error.offline();
+		}
+	});
+
 	IPCRenderer.on('main.checkForUpdates', function(e) {
 		Cryptocat.Update.check(function() {
 			Cryptocat.Diag.message.isLatest(

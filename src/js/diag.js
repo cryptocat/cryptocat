@@ -215,13 +215,47 @@ Cryptocat.Diag = {
 
 	Cryptocat.Diag.message.removeBuddyConfirm = function(callback) {
 		dialog.showMessageBox({
-			type: 'info',
+			type: 'question',
 			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
 			buttons: ['Remove buddy', 'Cancel'],
 			defaultId: 1,
 			title: 'Cryptocat: Remove Buddy?',
 			message: 'Are you sure you would like to remove this buddy?'
 		}, callback);
+	};
+
+	Cryptocat.Diag.message.deleteAccount = function(username, callback) {
+		dialog.showMessageBox({
+			type: 'question',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['Cancel', 'Learn more', 'Delete account'],
+			defaultId: 0,
+			title: 'Cryptocat: Delete Account?',
+			message: 'Are you sure you want to permanently delete ' +
+				'this account (' + username + ')?\n\n' +
+				'* Your data will be permanently lost.\n' +
+				'* Others will be able to register your username.\n' +
+				'* Your device keys will not be automatically deleted.'
+		}, function(response) {
+			if (response === 1) {
+				Remote.shell.openExternal(
+					'https://crypto.cat/help.html#deleteAccount'
+				);
+			}
+			if (response === 2) {
+				dialog.showMessageBox({
+					type: 'question',
+					icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+					buttons: ['Cancel', 'Learn more', 'Delete account'],
+					defaultId: 0,
+					title: 'Cryptocat: Delete Account, Final Warning',
+					message: 'You are about to delete: ' + username + '.\n\n' +
+						'* Your data will be permanently lost.\n' +
+						'* Others will be able to register your username.\n' +
+						'* Your device keys will not be automatically deleted.'
+				}, callback);
+			}
+		});
 	};
 
 	Cryptocat.Diag.message.about = function() {

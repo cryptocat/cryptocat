@@ -403,6 +403,11 @@ Cryptocat.XMPP = {};
 		});
 	};
 
+	Cryptocat.XMPP.deleteAccount = function(username) {
+		client.deleteAccount(username + '@crypto.cat', function() {
+		});
+	};
+
 	Cryptocat.XMPP.sendBundle = function() {
 		client.publish(
 			Cryptocat.Me.username + '@crypto.cat',
