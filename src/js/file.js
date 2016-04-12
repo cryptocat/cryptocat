@@ -7,19 +7,17 @@ Cryptocat.File = {};
 	Cryptocat.File.chunkSize = 25000;
 
 	Cryptocat.File.allowed = [
-		'aac',  'ai',   'aut',
-		'avi',  'bin',  'bmp',
-		'cad',  'csv',  'db',
-		'doc',  'docx', 'eps',
-		'flv',  'gif',  'iso',
-		'java', 'jpg',  'jpeg',
-		'mkv',  'mov',  'mp3',
-		'mp4',  'mpeg', 'mpg',
-		'pdf',  'png',  'ppt',
-		'psd',  'ps',   'rar',
-		'rtf',  'sql',  'svg',
-		'txt',  'wma',  'xls',
-		'xlsx', 'zip'
+		'7z',   'aac',  'ai',  'aut',
+		'avi',  'bin',  'bmp', 'bz2',
+		'cad',  'csv',  'db',  'doc',
+		'docx', 'eps',  'flv', 'gif',
+		'iso',  'java', 'jpg', 'jpeg',
+		'mkv',  'mov',  'mp3', 'mp4', 
+		'mpeg', 'mpg',  'pdf', 'png',
+		'ppt',  'psd',  'ps',  'rar',
+		'rtf',  'sql',  'svg', 'tar',
+		'txt',  'wma',  'xls', 'xlsx',
+		'zip'
 	];
 
 	var fileCrypto = {

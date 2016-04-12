@@ -393,7 +393,6 @@ Cryptocat.Diag = {
 						'doc', 'docx', 'pdf',
 						'ppt', 'ps',   'rtf',
 						'txt', 'xls',  'xlsx'
-
 					]
 				},
 				{
@@ -403,8 +402,9 @@ Cryptocat.Diag = {
 				{
 					name: 'Archives',
 					extensions: [
-						'bin', 'db',  'iso',
-						'rar', 'sql', 'zip'
+						'7z',  'bin', 'bz2',
+						'db',  'iso', 'rar',
+						'sql', 'tar', 'zip'
 					]
 				}
 			]
