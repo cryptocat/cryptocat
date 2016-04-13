@@ -558,7 +558,7 @@ Cryptocat.OMEMO = {};
 		for (var deviceId in bundles) { if (hasProperty(bundles, deviceId)) {
 			if (
 				!hasProperty(bundles[deviceId], 'axolotl') ||
-				!hasProperty(bundles[deviceId].axolotl, 'myEphemeralKeyP2')
+				!hasProperty(bundles[deviceId].axolotl, 'myEphemeralKeyP4')
 			) {
 				var preKeyId = Cryptocat.OMEMO.selectPreKey(username, deviceId);
 				var iK       = bundles[deviceId].identityKey.substr(0,   64);
@@ -568,6 +568,7 @@ Cryptocat.OMEMO = {};
 					'Setting up new Axolotl session with ' + username
 				);
 				bundles[deviceId].axolotl = Cryptocat.Axolotl.newSession(
+					Cryptocat.Me.settings.signedPreKey,
 					Cryptocat.Axolotl.newKeyPair(), iK, iDHK,
 					bundles[deviceId].signedPreKey,
 					bundles[deviceId].signedPreKeySignature,
@@ -604,7 +605,7 @@ Cryptocat.OMEMO = {};
 		if (
 			!hasProperty(bundle, 'axolotl') ||
 			!bundle.axolotl.established ||
-			!hasProperty(bundle.axolotl, 'myEphemeralKeyP2') ||
+			!hasProperty(bundle.axolotl, 'myEphemeralKeyP4') ||
 			!(/^0+$/).test(encrypted.key.initEphemeralKey)
 		) {
 			var iK   = bundle.identityKey.substr(0,   64);
@@ -614,6 +615,7 @@ Cryptocat.OMEMO = {};
 				'Setting up new Axolotl session with ' + encrypted.from
 			);
 			bundle.axolotl = Cryptocat.Axolotl.newSession(
+				Cryptocat.Me.settings.signedPreKey,
 				Cryptocat.Me.settings.preKeys[encrypted.key.preKeyId],
 				iK, iDHK, bundle.signedPreKey, bundle.signedPreKeySignature,
 				ProScript.crypto.random32Bytes('o4'), parseInt(encrypted.key.preKeyId)
