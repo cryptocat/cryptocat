@@ -136,6 +136,7 @@ Cryptocat.XMPP = {};
 	handler.connected = function(username, data, callback) {
 		console.info('Cryptocat.XMPP CONNECTED', data.local);
 		Cryptocat.Me.username = username;
+		client.enableKeepAlive();
 		Cryptocat.OMEMO.setup(function() {
 			Cryptocat.Me.connected = true;
 			Cryptocat.XMPP.getDeviceList(username);
@@ -158,7 +159,7 @@ Cryptocat.XMPP = {};
 					callbacks.disconnected.payload();
 				}
 				else {
-					callback();
+					callback(false);
 				}
 			}
 		);
