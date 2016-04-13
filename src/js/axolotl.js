@@ -169,6 +169,8 @@ const Type_them = {
 			myEphemeralKeyP0: Type_keypair.construct(),
 			myEphemeralKeyP1: Type_keypair.construct(),
 			myEphemeralKeyP2: Type_keypair.construct(),
+			myEphemeralKeyP3: Type_keypair.construct(),
+			myEphemeralKeyP4: Type_keypair.construct(),
 			ephemeralKey: Type_key.construct(),
 			myPreKey: Type_keypair.construct(),
 			preKey: Type_key.construct(),
@@ -193,6 +195,8 @@ const Type_them = {
 		a.myEphemeralKeyP0      = Type_keypair.assert(a.myEphemeralKeyP0)
 		a.myEphemeralKeyP1      = Type_keypair.assert(a.myEphemeralKeyP1)
 		a.myEphemeralKeyP2      = Type_keypair.assert(a.myEphemeralKeyP2)
+		a.myEphemeralKeyP3      = Type_keypair.assert(a.myEphemeralKeyP3)
+		a.myEphemeralKeyP4      = Type_keypair.assert(a.myEphemeralKeyP4)
 		a.ephemeralKey          = Type_key.assert(a.ephemeralKey)
 		a.myPreKey              = Type_keypair.assert(a.myPreKey)
 		a.preKey                = Type_key.assert(a.preKey)
@@ -288,17 +292,6 @@ const UTIL = {
 			))
 		))
 	},
-	getShare: function(a, b) {
-		if (
-			Type_key.toBitstring(a) ===
-			'0000000000000000000000000000000000000000000000000000000000000000'
-		) {
-			return b
-		}
-		else {
-			return a
-		}
-	},
 	newIdentityKey: function(id) {
 		const identityKeyPriv = ProScript.crypto.random32Bytes('aID' + id)
 		return Type_keypair.assert({
@@ -330,11 +323,8 @@ const UTIL = {
 
 const RATCHET = {
 	deriveSendKeys: function(them, myEphemeralKeyPriv) {
-		const theirShare = UTIL.getShare(
-			them.ephemeralKey, them.signedPreKey
-		)
 		const kShared = ProScript.crypto.DH25519(
-			myEphemeralKeyPriv, theirShare
+			myEphemeralKeyPriv, them.ephemeralKey
 		)
 		const sendKeys = UTIL.HKDF(
 			kShared, them.recvKeys[0], 'WhisperRatchet'
@@ -366,10 +356,9 @@ const RATCHET = {
 			kENC: kKeys[0]
 		}
 	},
-	attemptDecrypt: function(myIdentityKey, mySignedPreKey, myEphemeralKey, them, msg) {
+	attemptDecrypt: function(myIdentityKey, myEphemeralKey, them, msg) {
 		var keys = RATCHET.deriveRecvKeys(
-			UTIL.getShare(myEphemeralKey.priv, mySignedPreKey.priv),
-			them, msg.ephemeralKey
+			myEphemeralKey.priv, them, msg.ephemeralKey
 		)
 		var hENC = Type_key.fromBitstring(ProScript.crypto.SHA256(
 			Type_key.toBitstring(keys.kENC) + Type_iv.toBitstring(msg.iv)
@@ -414,6 +403,8 @@ const HANDLE = {
 			myEphemeralKeyP0: them.myEphemeralKeyP0,
 			myEphemeralKeyP1: them.myEphemeralKeyP1,
 			myEphemeralKeyP2: them.myEphemeralKeyP2,
+			myEphemeralKeyP3: them.myEphemeralKeyP3,
+			myEphemeralKeyP4: them.myEphemeralKeyP4,
 			ephemeralKey: them.ephemeralKey,
 			myPreKey: them.myPreKey,
 			preKey: them.preKey,
@@ -441,6 +432,8 @@ const HANDLE = {
 			myEphemeralKeyP0: them.myEphemeralKeyP0,
 			myEphemeralKeyP1: them.myEphemeralKeyP1,
 			myEphemeralKeyP2: them.myEphemeralKeyP2,
+			myEphemeralKeyP3: them.myEphemeralKeyP3,
+			myEphemeralKeyP4: them.myEphemeralKeyP4,
 			ephemeralKey: them.ephemeralKey,
 			myPreKey: them.myPreKey,
 			preKey: them.preKey,
@@ -452,18 +445,18 @@ const HANDLE = {
 		}
 	},
 
-	sending: function(myIdentityKey, them, initEphemeralKeyPub, myEphemeralKeyP2, plaintext) {
-		const keys = RATCHET.deriveSendKeys(them, myEphemeralKeyP2.priv)
+	sending: function(myIdentityKey, them, initEphemeralKeyPub, plaintext) {
+		const keys = RATCHET.deriveSendKeys(them, them.myEphemeralKeyP4.priv)
 		const iv   = Type_iv.assert(ProScript.crypto.random12Bytes('a1'))
 		const hENC = Type_key.fromBitstring(ProScript.crypto.SHA256(
 			Type_key.toBitstring(keys.kENC) + Type_iv.toBitstring(iv)
 		))
 		const enc  = ProScript.crypto.AESGCMEncrypt(
 			hENC, iv, plaintext, (
-				Type_key.toBitstring(initEphemeralKeyPub)  +
-				Type_key.toBitstring(myEphemeralKeyP2.pub) +
-				Type_key.toBitstring(them.ephemeralKey)    + 
-				Type_key.toBitstring(myIdentityKey.pub)    +
+				Type_key.toBitstring(initEphemeralKeyPub)       +
+				Type_key.toBitstring(them.myEphemeralKeyP4.pub) +
+				Type_key.toBitstring(them.ephemeralKey)         + 
+				Type_key.toBitstring(myIdentityKey.pub)         +
 				Type_key.toBitstring(them.identityKey)
 			)
 		)
@@ -475,19 +468,21 @@ const HANDLE = {
 				identityDHKey: them.identityDHKey,
 				myEphemeralKeyP0: them.myEphemeralKeyP0,
 				myEphemeralKeyP1: them.myEphemeralKeyP1,
-				myEphemeralKeyP2: myEphemeralKeyP2,
+				myEphemeralKeyP2: them.myEphemeralKeyP2,
+				myEphemeralKeyP3: them.myEphemeralKeyP3,
+				myEphemeralKeyP4: them.myEphemeralKeyP4,
 				ephemeralKey: them.ephemeralKey,
 				myPreKey: them.myPreKey,
 				preKey: them.preKey,
 				preKeyId: them.preKeyId,
 				recvKeys: them.recvKeys,
-				sendKeys: [keys.sendKeys[0], keys.sendKeys[1]],
+				sendKeys: them.sendKeys,
 				shared: them.shared,
 				established: them.established
 			},
 			output: {
 				valid: true && them.established,
-				ephemeralKey: myEphemeralKeyP2.pub,
+				ephemeralKey: them.myEphemeralKeyP4.pub,
 				initEphemeralKey: initEphemeralKeyPub,
 				ciphertext: enc.ciphertext,
 				iv: iv,
@@ -497,10 +492,10 @@ const HANDLE = {
 		}
 	},
 
-	receiving: function(myIdentityKey, mySignedPreKey, them, msg) {
+	receiving: function(myIdentityKey, them, msg) {
 		var them = Type_them.assert(them)
 		var dec  = RATCHET.attemptDecrypt(
-			myIdentityKey, mySignedPreKey, them.myEphemeralKeyP2, them, msg
+			myIdentityKey, them.myEphemeralKeyP4, them, msg
 		)
 		if (dec.aes.valid) {
 			return {
@@ -511,12 +506,14 @@ const HANDLE = {
 					identityDHKey: them.identityDHKey,
 					myEphemeralKeyP0: them.myEphemeralKeyP1,
 					myEphemeralKeyP1: them.myEphemeralKeyP2,
-					myEphemeralKeyP2: UTIL.newKeyPair('a2'),
+					myEphemeralKeyP2: them.myEphemeralKeyP3,
+					myEphemeralKeyP3: them.myEphemeralKeyP4,
+					myEphemeralKeyP4: UTIL.newKeyPair('a2'),
 					ephemeralKey: msg.ephemeralKey,
 					myPreKey: them.myPreKey,
 					preKey: them.preKey,
 					preKeyId: msg.preKeyId,
-					recvKeys: dec.keys.recvKeys,
+					recvKeys: them.recvKeys,
 					sendKeys: them.sendKeys,
 					shared: them.shared,
 					established: them.established
@@ -535,7 +532,7 @@ const HANDLE = {
 		}
 		else {
 			dec = RATCHET.attemptDecrypt(
-				myIdentityKey, mySignedPreKey, them.myEphemeralKeyP1, them, msg
+				myIdentityKey, them.myEphemeralKeyP3, them, msg
 			)
 			if (dec.aes.valid) {
 				return {
@@ -547,11 +544,13 @@ const HANDLE = {
 						myEphemeralKeyP0: them.myEphemeralKeyP0,
 						myEphemeralKeyP1: them.myEphemeralKeyP1,
 						myEphemeralKeyP2: them.myEphemeralKeyP2,
+						myEphemeralKeyP3: them.myEphemeralKeyP3,
+						myEphemeralKeyP4: them.myEphemeralKeyP4,
 						ephemeralKey: msg.ephemeralKey,
 						myPreKey: them.myPreKey,
 						preKey: them.preKey,
 						preKeyId: msg.preKeyId,
-						recvKeys: dec.keys.recvKeys,
+						recvKeys: them.recvKeys,
 						sendKeys: them.sendKeys,
 						shared: them.shared,
 						established: them.established
@@ -570,36 +569,114 @@ const HANDLE = {
 			}
 			else {
 				dec = RATCHET.attemptDecrypt(
-					myIdentityKey, mySignedPreKey, them.myEphemeralKeyP0, them, msg
+					myIdentityKey, them.myEphemeralKeyP2, them, msg
 				)
-				return {
-					them: {
-						signedPreKey: them.signedPreKey,
-						signedPreKeySignature: them.signedPreKeySignature,
-						identityKey: them.identityKey,
-						identityDHKey: them.identityDHKey,
-						myEphemeralKeyP0: them.myEphemeralKeyP0,
-						myEphemeralKeyP1: them.myEphemeralKeyP1,
-						myEphemeralKeyP2: them.myEphemeralKeyP2,
-						ephemeralKey: msg.ephemeralKey,
-						myPreKey: them.myPreKey,
-						preKey: them.preKey,
-						preKeyId: msg.preKeyId,
-						recvKeys: dec.keys.recvKeys,
-						sendKeys: them.sendKeys,
-						shared: them.shared,
-						established: them.established
-					},
-					output: {
-						valid: dec.aes.valid && them.established,
-						ephemeralKey: Type_key.construct(),
-						initEphemeralKey: Type_key.construct(),
-						ciphertext: '',
-						iv: Type_iv.construct(),
-						tag: '',
-						preKeyId: msg.preKeyId
-					},
-					plaintext: dec.aes.plaintext
+				if (dec.aes.valid) {
+					return {
+						them: {
+							signedPreKey: them.signedPreKey,
+							signedPreKeySignature: them.signedPreKeySignature,
+							identityKey: them.identityKey,
+							identityDHKey: them.identityDHKey,
+							myEphemeralKeyP0: them.myEphemeralKeyP0,
+							myEphemeralKeyP1: them.myEphemeralKeyP1,
+							myEphemeralKeyP2: them.myEphemeralKeyP2,
+							myEphemeralKeyP3: them.myEphemeralKeyP3,
+							myEphemeralKeyP4: them.myEphemeralKeyP4,
+							ephemeralKey: msg.ephemeralKey,
+							myPreKey: them.myPreKey,
+							preKey: them.preKey,
+							preKeyId: msg.preKeyId,
+							recvKeys: them.recvKeys,
+							sendKeys: them.sendKeys,
+							shared: them.shared,
+							established: them.established
+						},
+						output: {
+							valid: dec.aes.valid && them.established,
+							ephemeralKey: Type_key.construct(),
+							initEphemeralKey: Type_key.construct(),
+							ciphertext: '',
+							iv: Type_iv.construct(),
+							tag: '',
+							preKeyId: msg.preKeyId
+						},
+						plaintext: dec.aes.plaintext
+					}
+				}
+				else {
+					dec = RATCHET.attemptDecrypt(
+						myIdentityKey, them.myEphemeralKeyP1, them, msg
+					)
+					if (dec.aes.valid) {
+						return {
+							them: {
+								signedPreKey: them.signedPreKey,
+								signedPreKeySignature: them.signedPreKeySignature,
+								identityKey: them.identityKey,
+								identityDHKey: them.identityDHKey,
+								myEphemeralKeyP0: them.myEphemeralKeyP0,
+								myEphemeralKeyP1: them.myEphemeralKeyP1,
+								myEphemeralKeyP2: them.myEphemeralKeyP2,
+								myEphemeralKeyP3: them.myEphemeralKeyP3,
+								myEphemeralKeyP4: them.myEphemeralKeyP4,
+								ephemeralKey: msg.ephemeralKey,
+								myPreKey: them.myPreKey,
+								preKey: them.preKey,
+								preKeyId: msg.preKeyId,
+								recvKeys: them.recvKeys,
+								sendKeys: them.sendKeys,
+								shared: them.shared,
+								established: them.established
+							},
+							output: {
+								valid: dec.aes.valid && them.established,
+								ephemeralKey: Type_key.construct(),
+								initEphemeralKey: Type_key.construct(),
+								ciphertext: '',
+								iv: Type_iv.construct(),
+								tag: '',
+								preKeyId: msg.preKeyId
+							},
+							plaintext: dec.aes.plaintext
+						}
+					}
+					else {
+						dec = RATCHET.attemptDecrypt(
+							myIdentityKey, them.myEphemeralKeyP0, them, msg
+						)
+						return {
+							them: {
+								signedPreKey: them.signedPreKey,
+								signedPreKeySignature: them.signedPreKeySignature,
+								identityKey: them.identityKey,
+								identityDHKey: them.identityDHKey,
+								myEphemeralKeyP0: them.myEphemeralKeyP0,
+								myEphemeralKeyP1: them.myEphemeralKeyP1,
+								myEphemeralKeyP2: them.myEphemeralKeyP2,
+								myEphemeralKeyP3: them.myEphemeralKeyP3,
+								myEphemeralKeyP4: them.myEphemeralKeyP4,
+								ephemeralKey: msg.ephemeralKey,
+								myPreKey: them.myPreKey,
+								preKey: them.preKey,
+								preKeyId: msg.preKeyId,
+								recvKeys: them.recvKeys,
+								sendKeys: them.sendKeys,
+								shared: them.shared,
+								established: them.established
+							},
+							output: {
+								valid: dec.aes.valid && them.established,
+								ephemeralKey: Type_key.construct(),
+								initEphemeralKey: Type_key.construct(),
+								ciphertext: '',
+								iv: Type_iv.construct(),
+								tag: '',
+								preKeyId: msg.preKeyId
+							},
+							plaintext: dec.aes.plaintext
+						}
+					}
 				}
 			}
 		}
@@ -608,7 +685,8 @@ const HANDLE = {
 
 const Axolotl = {	
 	newSession: function(
-		myPreKey, theirIdentityKeyPub, theirIdentityDHKeyPub, theirSignedPreKeyPub,
+		mySignedPreKey, myPreKey, theirIdentityKeyPub,
+		theirIdentityDHKeyPub, theirSignedPreKeyPub,
 		theirSignedPreKeySignature, theirPreKeyPub, preKeyId
 	) {
 		return {
@@ -616,10 +694,12 @@ const Axolotl = {
 			signedPreKeySignature: theirSignedPreKeySignature,
 			identityKey:           Type_key.fromBitstring(theirIdentityKeyPub),
 			identityDHKey:         Type_key.fromBitstring(theirIdentityDHKeyPub),
-			myEphemeralKeyP0:      Type_keypair.construct(),
-			myEphemeralKeyP1:      Type_keypair.construct(),
-			myEphemeralKeyP2:      Type_keypair.construct(),
-			ephemeralKey:          Type_key.construct(),
+			myEphemeralKeyP0:      mySignedPreKey,
+			myEphemeralKeyP1:      mySignedPreKey,
+			myEphemeralKeyP2:      mySignedPreKey,
+			myEphemeralKeyP3:      mySignedPreKey,
+			myEphemeralKeyP4:      UTIL.newKeyPair('a3'),
+			ephemeralKey:          Type_key.fromBitstring(theirSignedPreKeyPub),
 			myPreKey:              Type_keypair.assert(myPreKey),
 			preKey:                Type_key.fromBitstring(theirPreKeyPub),
 			preKeyId:              preKeyId + 0,
@@ -640,7 +720,6 @@ const Axolotl = {
 				myIdentityKey,
 				HANDLE.AKENeeded(myIdentityKey, initEphemeralKey, them),
 				initEphemeralKey.pub,
-				UTIL.newKeyPair('a5'),
 				plaintext
 			)
 		}
@@ -649,7 +728,6 @@ const Axolotl = {
 				myIdentityKey,
 				them,
 				Type_key.construct(),
-				them.myEphemeralKeyP2,
 				plaintext
 			)
 		}
@@ -663,7 +741,6 @@ const Axolotl = {
 		if (them.established === false) {
 			return HANDLE.receiving(
 				myIdentityKey,
-				mySignedPreKey,
 				HANDLE.AKEInit(myIdentityKey, mySignedPreKey, them, msg),
 				msg
 			)
@@ -671,7 +748,6 @@ const Axolotl = {
 		else {
 			return HANDLE.receiving(
 				myIdentityKey,
-				mySignedPreKey,
 				them,
 				msg
 			)
