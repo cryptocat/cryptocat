@@ -492,7 +492,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if ((Date.now() - thisChat.sendQueue.lastRecv) < 4000) {
+					if ((Date.now() - thisChat.sendQueue.lastRecv) < 500) {
 						return false;
 					}
 					IPCRenderer.sendSync(
@@ -501,7 +501,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.messages[0]
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
-				}, 2000);
+				}, 500);
 				thisChat.sendQueue.isOn = true;
 			},
 			turnOff: function() {
@@ -559,7 +559,7 @@ window.addEventListener('load', function(e) {
 		thisChat.window.onSubmit();
 	});
 
-	('1234567890qwertyuiopasdfghjklzxcvbnm'.split('')).forEach(function(k) {
+	('1234567890qwertyuiopasdfghjklzxcvbnm.'.split('')).forEach(function(k) {
 		Mousetrap(
 			document.getElementById('chatInputText')
 		).bind(k, function(e, combo) {
