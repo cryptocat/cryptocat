@@ -17,5 +17,12 @@
     "grunt-exec": "latest",
     "azure-storage": "latest",
     "grunt-string-replace": "latest"
+  },
+  "scripts": {
+    "setup": "npm install; cd src; npm install",
+    "dev": "electron src/app.js",
+    "win": "grunt win",
+    "mac": "grunt mac",
+    "linux": "grunt linux"
   }
 }
