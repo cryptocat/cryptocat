@@ -153,7 +153,6 @@ Cryptocat.XMPP = {};
 			Cryptocat.Me.username,
 			Cryptocat.Me.settings,
 			function() {
-				Cryptocat.Me.username  = '';
 				if (callbacks.disconnected.armed) {
 					callbacks.disconnected.armed = false;
 					callbacks.disconnected.payload();

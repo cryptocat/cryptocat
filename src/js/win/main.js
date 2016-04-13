@@ -1,12 +1,26 @@
 Cryptocat.Win = {
 	main:          {},
 	chat:          {},
+	chatRetainer:  [],
 	deviceManager: {},
 	create:        {}
 };
 
 window.addEventListener('load', function(e) {	
 	'use strict';
+
+	while (Cryptocat.Win.chatRetainer.length < 2) {
+		var chatRetainer = new Remote.BrowserWindow({
+			width: 450,
+			height: 450,
+			minWidth: 450,
+			minHeight: 150,
+			show: false
+		});
+		Cryptocat.Win.chatRetainer.push(chatRetainer);
+		chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+	};
+
 	var mainLogin = React.createClass({
 		displayName: 'mainLogin',
 		getInitialState: function() {
@@ -348,9 +362,13 @@ window.addEventListener('load', function(e) {
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
-			fullscreenable: false
+			fullscreenable: false,
+			show: false
 		});
 		updateDownloader.setMenu(null);
+		updateDownloader.webContents.on('did-finish-load', function() {
+			updateDownloader.show();
+		});
 		updateDownloader.loadURL('file://' + __dirname + '/updateDownloader.html');
 	};
 
@@ -359,25 +377,30 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Win.chat[username].focus();
 			return false;
 		}
+		if (!Cryptocat.Win.chatRetainer.length) {
+			var chatRetainer = new Remote.BrowserWindow({
+				width: 450,
+				height: 450,
+				minWidth: 450,
+				minHeight: 150,
+				show: false
+			});
+			Cryptocat.Win.chatRetainer.push(chatRetainer);
+			chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+		}
 		Cryptocat.XMPP.getDeviceList(username);
-		Cryptocat.Win.chat[username] = new Remote.BrowserWindow({
-			width: 450,
-			height: 450,
-			minWidth: 450,
-			minHeight: 150,
-			title: 'Chat with ' + username,
-		});
+		Cryptocat.Win.chat[username] = Cryptocat.Win.chatRetainer[0];
+		Cryptocat.Win.chatRetainer.splice(0, 1);
 		Cryptocat.Win.chat[username].on('closed', function() {
 			delete Cryptocat.Win.chat[username];
 		});
-		Cryptocat.Win.chat[username].webContents.on('dom-ready', function() {
-			Cryptocat.Win.chat[username].webContents.send('chat.init', {
-				myUsername: Cryptocat.Me.username,
-				theirUsername: username,
-				status: Cryptocat.Win.main.roster.getBuddyStatus(username)
-			});
-			if (typeof(callback) === 'function') { callback() }
+		Cryptocat.Win.chat[username].webContents.send('chat.init', {
+			myUsername: Cryptocat.Me.username,
+			theirUsername: username,
+			status: Cryptocat.Win.main.roster.getBuddyStatus(username)
 		});
+		Cryptocat.Win.chat[username].setTitle('Chat with ' + username);
+		if (typeof(callback) === 'function') { callback() }
 		Cryptocat.Win.chat[username].setMenu(Remote.Menu.buildFromTemplate([
 			{
 				label: 'Buddy',
@@ -476,8 +499,19 @@ window.addEventListener('load', function(e) {
 				}
 				]
 			}
-		]));
-		Cryptocat.Win.chat[username].loadURL('file://' + __dirname + '/chat.html');
+		]));	
+		Cryptocat.Win.chat[username].show();
+		if (Cryptocat.Win.chatRetainer.length < 2) {
+			var chatRetainer = new Remote.BrowserWindow({
+				width: 450,
+				height: 450,
+				minWidth: 450,
+				minHeight: 150,
+				show: false
+			});
+			Cryptocat.Win.chatRetainer.push(chatRetainer);
+			chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+		}
 	};
 
 	Cryptocat.Win.create.addBuddy = function() {
@@ -488,9 +522,13 @@ window.addEventListener('load', function(e) {
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
-			fullscreenable: false
+			fullscreenable: false,
+			show: false
 		});
 		addBuddyWindow.setMenu(null);
+		addBuddyWindow.webContents.on('did-finish-load', function() {
+			addBuddyWindow.show();
+		});
 		addBuddyWindow.loadURL('file://' + __dirname + '/addBuddy.html');
 	};
 
@@ -502,9 +540,13 @@ window.addEventListener('load', function(e) {
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
-			fullscreenable: false
+			fullscreenable: false,
+			show: false
 		});
 		changePasswordWindow.setMenu(null);
+		changePasswordWindow.webContents.on('did-finish-load', function() {
+			changePasswordWindow.show();
+		});
 		changePasswordWindow.loadURL('file://' + __dirname + '/changePassword.html');
 	}
 
@@ -516,9 +558,13 @@ window.addEventListener('load', function(e) {
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
-			fullscreenable: false
+			fullscreenable: false,
+			show: false
 		});
 		addDeviceWindow.setMenu(null);
+		addDeviceWindow.webContents.on('did-finish-load', function() {
+			addDeviceWindow.show();
+		});
 		addDeviceWindow.loadURL('file://' + __dirname + '/addDevice.html');
 	};
 
@@ -534,11 +580,13 @@ window.addEventListener('load', function(e) {
 			resizable: false,
 			minimizable: true,
 			maximizable: false,
-			fullscreenable: false
+			fullscreenable: false,
+			show: false
 		});
-		Cryptocat.Win.deviceManager[username].webContents.on('dom-ready', function() {
+		Cryptocat.Win.deviceManager[username].webContents.on('did-finish-load', function() {
 			Cryptocat.Win.updateDeviceManager(username);
 			Cryptocat.XMPP.getDeviceList(username);
+			Cryptocat.Win.deviceManager[username].show();
 		});
 		Cryptocat.Win.deviceManager[username].on('closed', function() {
 			delete Cryptocat.Win.deviceManager[username];
@@ -586,15 +634,9 @@ window.addEventListener('load', function(e) {
 			}
 		}
 		if (Cryptocat.Me.connected) {
-			Cryptocat.Storage.updateUser(
-				Cryptocat.Me.username,
-				Cryptocat.Me.settings,
-				function() {
-					Cryptocat.XMPP.disconnect(function() {
-						IPCRenderer.sendSync('app.quit');
-					});
-				}
-			);
+			Cryptocat.XMPP.disconnect(function() {
+				IPCRenderer.sendSync('app.quit');
+			});
 		}
 		else {
 			IPCRenderer.sendSync('app.quit');
@@ -681,14 +723,14 @@ window.addEventListener('load', function(e) {
 					Cryptocat.XMPP.sendDeviceList(
 						Cryptocat.Me.settings.deviceIds
 					);
-					Cryptocat.Storage.deleteUser(
-						Cryptocat.Me.username,
-						function() {
-							Cryptocat.XMPP.disconnect(function() {
+					Cryptocat.XMPP.disconnect(function() {
+						Cryptocat.Storage.deleteUser(
+							Cryptocat.Me.username,
+							function() {
 								Cryptocat.Win.main.beforeQuit();
-							});
-						}
-					);
+							}
+						);
+					});
 				}
 			});
 		}

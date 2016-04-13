@@ -373,9 +373,12 @@ Electron.app.on('ready', function() {
 		minHeight: 260,
 		maximizable: false,
 		fullscreenable: false,
+		show: false,
 		title: 'Cryptocat'
 	});
-	Windows.main.loadURL('file://' + __dirname + '/win/main.html');
+	Windows.main.webContents.on('did-finish-load', function() {
+		Windows.main.show();
+	});
 	Windows.main.on('close', function(e) {
 		if (!IntentToQuit) {
 			e.preventDefault();
@@ -389,6 +392,7 @@ Electron.app.on('ready', function() {
 			}
 		}
 	});
+	Windows.main.loadURL('file://' + __dirname + '/win/main.html');
 	if (process.platform === 'darwin') {
 		Electron.app.dock.setMenu(buildTrayMenu({
 			notify: false,
