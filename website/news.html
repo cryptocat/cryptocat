@@ -39,6 +39,7 @@
 			<h1>News</h1>
 			<div class="tableOfContents">
 				<ul>
+					<li><a href="#3.0.31">Cryptocat 3.0.31 Release Notes</a>   &mdash; <em>April 14, 2016</em></li>
 					<li><a href="#3.0.30">Cryptocat 3.0.30 Release Notes</a>   &mdash; <em>April 13, 2016</em></li>
 					<li><a href="#3.0.29">Cryptocat 3.0.29 Release Notes</a>   &mdash; <em>April 12, 2016</em></li>
 					<li><a href="#3.0.28">Cryptocat 3.0.28 Release Notes</a>   &mdash; <em>April 12, 2016</em></li>
@@ -54,6 +55,18 @@
 					<li><a href="#3.0.16">Cryptocat: Beta Release</a>          &mdash; <em>March 29, 2016</em></li>
 				</ul>
 			</div>
+			<div class="newsEntry" id="3.0.31">
+				<h2>Cryptocat 3.0.31 Release Notes</h2>
+				<p class="newsDate">April 14, 2016</p>
+				Cryptocat 3.0.31 is now available and brings the following improvements:
+				<ul>
+					<li>Great news! Files transferred over Cryptocat now have a maximum allowed size of 50MB instead of 25MB. In case your buddy is offline, files you share will also be kept, encrypted, for thirty days (instead of the previous seven days) until your buddy can go online and receive them.</li>
+					<li>Fixed a bug that could prevent logging in for Cryptocat for Mac users.</li>
+					<li>Added a button to the <em>Update Available</em> dialog that allows users to view what's new in an update.</li>
+				</ul>
+				In order to obtain the update, open the <em>Help</em> menu and click on <em>Check for Updates</em>.
+			</div>
+			<hr />
 			<div class="newsEntry" id="3.0.30">
 				<h2>Cryptocat 3.0.30 Release Notes</h2>
 				<p class="newsDate">April 13, 2016</p>
@@ -124,10 +137,10 @@
 				</p>
 				<img src="img/3.0.25.png" style="width:auto;height:auto;float:left;margin-right:20px;" alt="" />
 				<p>
-					This is wonderful news. File sharing was Cryptocat's most-requested feature, with group chat coming in second. Update 3.0.25 allows you to share files of all kinds and up to 25MB in size. Technically, the file sharing scheme is simple: it piggy-backs on top of the existing authenticated secure messaging session. The file is simply encrypted and authenticated using AES in Galois Counter Mode with a random key, and a pointer to the encrypted blob is sent along with that key as a regular chat message, which gets parsed appropriately by the client as an encrypted file being shared.
+					This is wonderful news. File sharing was Cryptocat's most-requested feature, with group chat coming in second. Update 3.0.25 allows you to share files of all kinds and up to <strike>25MB</strike> <a href="#3.0.31">50MB</a> in size. Technically, the file sharing scheme is simple: it piggy-backs on top of the existing authenticated secure messaging session. The file is simply encrypted and authenticated using AES in Galois Counter Mode with a random key, and a pointer to the encrypted blob is sent along with that key as a regular chat message, which gets parsed appropriately by the client as an encrypted file being shared.
 				</p>
 				<p>
-					Cryptocat is using Microsoft Azure to transmit encrypted files. Azure will be able to determine the size of transmitted files, but neither Azure nor Cryptocat will be able to determine anything else about the files, be it their content, name, whom you're sending them to, and so on. Files remain available for seven days, and a limit of 25MB per file is imposed in order to save costs: remember that Cryptocat is a non-profit project! I am footing the Azure bill out of my own pocket; but it's a small price to pay for the satisfaction of writing good software that does something meaningful.
+					Cryptocat is using Microsoft Azure to transmit encrypted files. Azure will be able to determine the size of transmitted files, but neither Azure nor Cryptocat will be able to determine anything else about the files, be it their content, name, whom you're sending them to, and so on. Files remain available for <strike>seven</strike> <a href="3.0.31">thirty</a> days, and a limit of <strike>25MB</strike> <a href="3.0.31">50MB</a> per file is imposed in order to save costs: remember that Cryptocat is a non-profit project! I am footing the Azure bill out of my own pocket; but it's a small price to pay for the satisfaction of writing good software that does something meaningful.
 				</p>
 				<p>
 					To send a file, simply update to Cryptocat 3.0.25. Then, opening a chat window will show a small blue floppy disk button (pictured.) You may also press <span class="code">Alt+F</span> within the chat window to launch the Send File dialog.
