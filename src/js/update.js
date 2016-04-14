@@ -41,6 +41,18 @@ Cryptocat.Update = {
 		return false;
 	};
 
+	Cryptocat.Update.updateAvailable = function(latest) {
+		Cryptocat.Diag.message.updateAvailable(function(response) {
+			if (response === 0) {
+				Cryptocat.Win.create.updateDownloader();
+			}
+			if (response === 1) {
+				Remote.shell.openExternal('https://crypto.cat/news.html#' + latest);
+				Cryptocat.Update.updateAvailable(latest);
+			}
+		});
+	};
+
 	Cryptocat.Update.check = function(ifLatest) {
 		HTTPS.get(Cryptocat.Update.updateURIs[process.platform], function(res) {
 			var latest = '';
@@ -54,11 +66,7 @@ Cryptocat.Update = {
 					return false;
 				}
 				if (compareVersionStrings(Cryptocat.Version, latest)) {
-					Cryptocat.Diag.message.updateAvailable(function(response) {
-						if (response === 0) {
-							Cryptocat.Win.create.updateDownloader();
-						}
-					})
+					Cryptocat.Update.updateAvailable(latest);
 				}
 				else {
 					console.info(
