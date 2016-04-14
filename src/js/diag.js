@@ -111,7 +111,7 @@ Cryptocat.Diag = {
 		dialog.showErrorBox(
 			'Cryptocat: File Too Large',
 			'Cryptocat offers file sharing as a free service. ' +
-			'Please do not send files that are over 25 Megabytes.'
+			'Your file is too large to be sent over Cryptocat.'
 		);
 	};
 
@@ -181,7 +181,7 @@ Cryptocat.Diag = {
 		dialog.showMessageBox({
 			type: 'info',
 			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
-			buttons: ['Download now', 'Remind me later'],
+			buttons: ['Download now', 'What\'s new', 'Remind me later'],
 			defaultId: 0,
 			title: 'Cryptocat: Update Available!',
 			message: 'An update is available for Cryptocat. ' +
