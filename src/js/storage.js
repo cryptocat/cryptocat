@@ -17,12 +17,12 @@ Cryptocat.Storage = {};
 		else {
 			var path = process.env.HOME + '/.config';
 			FS.stat(path, function(err, stats) {
-				if (!stats.isDirectory()) {
+				if (err || !stats.isDirectory()) {
 					FS.mkdirSync(path);
 				}
 				path += '/Cryptocat';
 				FS.stat(path, function(err, stats) {
-					if (!stats.isDirectory()) {
+					if (err || !stats.isDirectory()) {
 						FS.mkdirSync(path);
 					}
 					path += '/';

@@ -114,14 +114,16 @@ window.addEventListener('load', function(e) {
 					placeholder: 'Username',
 					value: this.state.username,
 					onChange: this.onChangeUsername,
-					autoFocus: true
+					autoFocus: true,
+					disabled: this.state.disabled
 				}),
 				React.createElement('input', {
 					key: 2,
 					type: 'password',
 					placeholder: 'Password',
 					value: this.state.password,
-					onChange: this.onChangePassword
+					onChange: this.onChangePassword,
+					disabled: this.state.disabled
 				}),
 				React.createElement('input', {
 					key: 3,
