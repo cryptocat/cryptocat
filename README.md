@@ -6,18 +6,19 @@ This is the build environment. The actual client source code is located in `src`
 
 Install dependencies:
 ```
-npm install -g electron-prebuilt grunt-cli
-npm install
-cd src
-npm install
-cd ..
+npm run setup
+```
+
+Run:
+```
+npm run dev
 ```
 
 Build for your platform (builds are in `dist`):
 ```
-grunt win
-grunt linux
-grunt mac
+npm run win
+npm run linux
+npm run  mac
 ```
 
 ## Documentation
