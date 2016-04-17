@@ -421,6 +421,13 @@ window.addEventListener('load', function(e) {
 						}
 					},
 					{
+						label: 'Record Audio/Video',
+						accelerator: 'alt+R',
+						click: function() {
+							Cryptocat.Win.chat[username].webContents.send('chat.record');
+						}
+					},
+					{
 						type: 'separator'
 					},
 					{

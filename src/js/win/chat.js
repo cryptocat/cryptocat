@@ -813,6 +813,10 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('chat.sendFile', function(e) {
 		thisChat.window.sendFileDialog();
 	});
+
+	IPCRenderer.on('chat.record', function(e) {
+		thisChat.window.record();
+	});
 	
 	Mousetrap(
 		document.getElementById('chatInputText')
