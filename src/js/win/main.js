@@ -639,6 +639,16 @@ window.addEventListener('load', function(e) {
 			Cryptocat.XMPP.disconnect(function() {
 				IPCRenderer.sendSync('app.quit');
 			});
+			setTimeout(function() {
+				Cryptocat.Me.connected = false;
+				Cryptocat.Storage.updateUser(
+					Cryptocat.Me.username,
+					Cryptocat.Me.settings,
+					function() {
+						IPCRenderer.sendSync('app.quit');
+					}
+				);
+			}, 5000);
 		}
 		else {
 			IPCRenderer.sendSync('app.quit');
