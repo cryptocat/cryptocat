@@ -10,6 +10,12 @@
 	}
 }
 
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+
 @keyframes color_change {
 	from { background-color: #34B3C2; }
 	to   { background-color: #54D3E2; }
@@ -160,13 +166,15 @@ div.chatRecording[data-alignment='right'] {
 	box-shadow: 1px 1px 3px rgba(150, 165, 178, 0.6);
 }
 
-div.chatMessageError {
+div.chatMessage[data-valid="false"] {
 	background-color: #FFD8D6;
 	font-style: italic;
 	border-color: #CFA8A6;
 }
 
-div.chatMessageOffline {
+div.chatMessage[data-offline="true"],
+div.chatFile[data-offline="true"],
+div.chatRecording[data-offline="true"] {
 	background-color: #FFD6B0;
 	border-color: #CFA8A6;
 }
@@ -368,7 +376,7 @@ div.chatToolbar div.recordModal:before {
 
 div.chatToolbar div.recordModal {
 	position: fixed;
-	right: 20px;
+	right: 24px;
 	bottom: 80px;
 	padding: 15px;
 	margin: 1em 0 3em;
@@ -400,22 +408,25 @@ div.chatToolbar div.recordModal:after {
 
 div.chatToolbar div.recordModalCountdown {
 	position: absolute;
-	top: 20px;
-	left: 36px;
+	top: 14px;
+	left: 33px;
 	z-index: 2;
 	color: #FFF;
 	font-weight: bold;
-	padding: 30px;
-	font-size: 30px;
+	padding: 25px 30px 30px 30px;
+	font-size: 46px;
 	text-align: center;
 	border-radius: 100px;
 	width: 30px;
-	height: 30px;
-	background-color: rgba(0, 0, 0, 0.8);
+	height: 35px;
+	background-color: rgba(0, 0, 0, 0.7);
+	opacity: 1;
+	transition: opacity 0.2s;
+	border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 div.chatToolbar div.recordModalCountdown[data-visible="false"] {
-	display: none;
+	opacity: 0;
 }
 
 div.chatToolbar video.recordModalVideo {
@@ -465,6 +476,10 @@ div.chatToolbar div.recordModalDurationIndicator {
 	background-color: #ED655F;
 	height: 4px;
 	max-width: 100%;
+}
+
+div.chatToolbar div.recordModalDurationIndicator[data-blinking="true"] {
+	animation: blink 0.5s step-start 0s infinite;
 }
 
 div.chatToolbar input.sendFileButton {

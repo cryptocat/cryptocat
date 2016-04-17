@@ -140,6 +140,7 @@ window.addEventListener('load', function(e) {
 			return React.createElement('div', {
 				className: 'chatFile',
 				'data-alignment': this.props.alignment,
+				'data-offline': this.props.offline,
 				key: 0
 			}, React.createElement('img', {
 				className: 'chatFileIcon',
@@ -174,15 +175,11 @@ window.addEventListener('load', function(e) {
 		},
 		render: function() {
 			var className = 'chatMessage';
-			if (!this.props.valid) {
-				className += ' chatMessageError';
-			}
-			else if (this.props.offline) {
-				className += ' chatMessageOffline';
-			}
 			return React.createElement('div', {
-				className: className,
+				className: 'chatMessage',
 				'data-alignment': this.props.alignment,
+				'data-offline': this.props.offline,
+				'data-valid': this.props.valid,
 				key: 0
 			}, React.createElement('span', {
 				className: 'chatMessageInfo',
@@ -215,12 +212,10 @@ window.addEventListener('load', function(e) {
 		},
 		render: function() {
 			var className = 'chatRecording';
-			if (this.props.offline) {
-				className += ' chatRecordingOffline';
-			}
 			return React.createElement('div', {
-				className: className,
+				className: 'chatRecording',
 				'data-alignment': this.props.alignment,
+				'data-offline': this.props.offline,
 				key: 0
 			}, React.createElement('span', {
 				className: 'chatRecordingInfo',
@@ -316,6 +311,7 @@ window.addEventListener('load', function(e) {
 					alignment: alignment,
 					timestamp: getTimestamp(info.stamp),
 					file: file.file,
+					offline: info.offline,
 					ref: function(f) {
 						_t.files[file.file.url] = f;
 						if (!fromMe) {
@@ -330,11 +326,10 @@ window.addEventListener('load', function(e) {
 					sender: sender,
 					alignment: alignment,
 					timestamp: getTimestamp(info.stamp),
+					offline: info.offline,
 					ref: function(r) {
 						_t.recordings[recording.recording.url] = r;
-						if (fromMe) {
-						}
-						else {
+						if (!fromMe) {
 							_t.receiveRecording(recording.recording);
 						}
 					}
@@ -394,12 +389,12 @@ window.addEventListener('load', function(e) {
 						thisChat.window.setState({
 							recordCountdown: 2
 						});
-					}, 1500);
+					}, 2000);
 					setTimeout(function() {
 						thisChat.window.setState({
 							recordCountdown: 1
 						});
-					}, 2500);
+					}, 3000);
 					setTimeout(function() {
 						thisChat.window.setState({
 							recordCountdown: 0
@@ -412,7 +407,7 @@ window.addEventListener('load', function(e) {
 								});
 							}, 1000)
 						});
-					}, 3500);
+					}, 4000);
 				});
 			}
 			else {
@@ -704,6 +699,7 @@ window.addEventListener('load', function(e) {
 					key: 19
 				}, React.createElement('div', {
 					className: 'recordModalDurationIndicator',
+					'data-blinking': (this.state.recordTime >= 50),
 					style: {
 						width: ((this.state.recordTime * 100) / 60) + '%'
 					},
