@@ -40,7 +40,8 @@ const Cryptocat = {
 	Patterns: {},
 	Pinning: {},
 	Notify: {},
-	File: {}
+	File: {},
+	Recording: {}
 };
 
 Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);

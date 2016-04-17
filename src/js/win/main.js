@@ -58,7 +58,7 @@ window.addEventListener('load', function(e) {
 		validInputs: function() {
 			if (
 				Cryptocat.Patterns.username.test(this.state.username) &&
-				(this.state.password.length >= 2) 
+				Cryptocat.Patterns.password.test(this.state.password)
 			) {
 				return true	
 			}

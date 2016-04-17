@@ -16,8 +16,8 @@ Cryptocat.File = {};
 		'mpeg', 'mpg',  'pdf', 'png',
 		'ppt',  'psd',  'ps',  'rar',
 		'rtf',  'sql',  'svg', 'tar',
-		'txt',  'wma',  'xls', 'xlsx',
-		'zip'
+		'txt',  'webm', 'wma',  'xls',
+		'xlsx', 'zip'
 	];
 
 	var fileCrypto = {
@@ -154,75 +154,60 @@ Cryptocat.File = {};
 	};
 
 	Cryptocat.File.send = function(
-		path, onBegin, onProgress, onEnd
+		name, file, onBegin, onProgress, onEnd
 	) {
-		var name = (require('path')).basename(path);
 		if (!Cryptocat.File.isAllowed(name)) {
 			Cryptocat.Diag.error.fileExt();
 			return false;
 		}
-		FS.readFile(path, function(err, file) {
-			if (err) {
-				Cryptocat.Diag.error.fileGeneral();
-				onBegin({
-					name:  name,
-					url:   '',
-					key:   '',
-					iv:    '',
-					tag:   '',
-					valid: false
-				});
-				return false;
-			}
-			if (file.length > Cryptocat.File.maxSize) {
-				Cryptocat.Diag.error.fileMaxSize();
-				onBegin({
-					name:  name,
-					url:   '',
-					key:   '',
-					iv:    '',
-					tag:   '',
-					valid: false
-				});
-				return false;
-			}
-			HTTPS.get('https://crypto.cat/sas', function(res) {
-				var sas = '';
-				res.on('data', function(chunk) {
-					sas += chunk;
-				});
-				res.on('end', function() {
-					if (!Cryptocat.Patterns.fileSas.test(sas)) {
-						Cryptocat.Diag.error.fileGeneral();
-						onBegin({
-							name:  name,
-							url:   '',
-							key:   '',
-							iv:    '',
-							tag:   '',
-							valid: false
-						});
-						return false;
-					}
-					var key = new Uint8Array(32);
-					var iv  = new Uint8Array(12);
-					window.crypto.getRandomValues(key);
-					window.crypto.getRandomValues(iv);
-					var encrypted = fileCrypto.encrypt(
-						key, iv, file
-					);
-					putFile(
-						name, sas, file, key, iv, encrypted,
-						onProgress, onEnd
-					);
+		if (file.length > Cryptocat.File.maxSize) {
+			Cryptocat.Diag.error.fileMaxSize();
+			onBegin({
+				name:  name,
+				url:   '',
+				key:   '',
+				iv:    '',
+				tag:   '',
+				valid: false
+			});
+			return false;
+		}
+		HTTPS.get('https://crypto.cat/sas', function(res) {
+			var sas = '';
+			res.on('data', function(chunk) {
+				sas += chunk;
+			});
+			res.on('end', function() {
+				if (!Cryptocat.Patterns.fileSas.test(sas)) {
+					Cryptocat.Diag.error.fileGeneral();
 					onBegin({
 						name:  name,
-						url:   sas.substring(0, 128),
-						key:   (new Buffer(key)).toString('hex'),
-						iv:    (new Buffer(iv)).toString('hex'),
-						tag:   encrypted.tag,
-						valid: true
+						url:   '',
+						key:   '',
+						iv:    '',
+						tag:   '',
+						valid: false
 					});
+					return false;
+				}
+				var key = new Uint8Array(32);
+				var iv  = new Uint8Array(12);
+				window.crypto.getRandomValues(key);
+				window.crypto.getRandomValues(iv);
+				var encrypted = fileCrypto.encrypt(
+					key, iv, file
+				);
+				putFile(
+					name, sas, file, key, iv, encrypted,
+					onProgress, onEnd
+				);
+				onBegin({
+					name:  name,
+					url:   sas.substring(0, 128),
+					key:   (new Buffer(key)).toString('hex'),
+					iv:    (new Buffer(iv)).toString('hex'),
+					tag:   encrypted.tag,
+					valid: true
 				});
 			});
 		});

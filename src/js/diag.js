@@ -121,7 +121,23 @@ Cryptocat.Diag = {
 			'Cryptocat cannot securely validate the identity of the Cryptocat ' +
 			'server. In order to protect your account, the client will now quit. ' +
 			'It is possible that your network connection is being tampered with.'
-		)
+		);
+	};
+
+	Cryptocat.Diag.error.recordingGeneral = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Recording Error',
+			'Your recording could not be sent. Please try again later.'
+		);
+	};
+
+	Cryptocat.Diag.error.recordTime = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Recording Too Long',
+			'Sorry, the recording you have created exceeds the allowed time limit ' +
+			'of 60 seconds. It cannot be sent. The small red bar indicates how much time ' +
+			'you have left for your recording.'
+		);
 	};
 
 	Cryptocat.Diag.message.isLatest = function(version) {
@@ -353,6 +369,18 @@ Cryptocat.Diag = {
 		}, callback);
 	};
 
+	Cryptocat.Diag.message.pendingRecordings = function(callback) {
+		dialog.showMessageBox({
+			type: 'question',
+			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			buttons: ['Return to Chat', 'Close Anyway'],
+			defaultId: 0,
+			title: 'Cryptocat: Pending Recordings',
+			message: 'Recordings are still being sent or received in this chat. ' +
+				'Are you sure you want to discard them?'
+		}, callback);
+	};
+
 	Cryptocat.Diag.save.updateDownloader = function(browserWindow, callback) {
 		var defaultPath = process.env.HOME + '/';
 		if (process.platform === 'win32') {
@@ -416,7 +444,7 @@ Cryptocat.Diag = {
 					extensions: [
 						'avi', 'flv', 'mkv',
 						'mov', 'mp4', 'mpeg',
-						'mpg'
+						'mpg', 'webm'
 					]
 				},
 				{
