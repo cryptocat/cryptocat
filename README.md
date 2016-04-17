@@ -18,7 +18,7 @@ Build for your platform (builds are in `dist`):
 ```
 npm run win
 npm run linux
-npm run  mac
+npm run mac
 ```
 
 ## Documentation
