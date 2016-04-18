@@ -104,7 +104,6 @@ div.chatTopStatus[data-theirchatstate='composing'] {
 }
 
 div#chatContents {
-	font-size: 13px;
 	border-bottom: none;
 	background: #FFF;
 	height: 330px;
@@ -192,7 +191,7 @@ span.chatMessageInfo, span.chatRecordingInfo {
 span.chatMessageInfo span.chatMessageSender,
 span.chatRecordingInfo span.chatRecordingSender {
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 0.9em;
 	opacity: 0.7;
 	margin-left: -4px;
 }
@@ -200,7 +199,7 @@ span.chatRecordingInfo span.chatRecordingSender {
 span.chatMessageInfo span.chatMessageTimestamp,
 span.chatRecordingInfo span.chatRecordingTimestamp {
 	font-style: italic;
-	font-size: 11px;
+	font-size: 0.8em;
 	float: right;
 	text-align: right;
 	opacity: 0.7;
@@ -502,7 +501,7 @@ textarea#chatInputText {
 	box-sizing: border-box;
 	outline: none;
 	cursor: text;
-	font-size: 14px;
+	font-size: 13px;
 	padding: 8px 5px 5px 8px;
 	border: none;
 }

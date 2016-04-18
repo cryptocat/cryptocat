@@ -43,6 +43,26 @@ window.addEventListener('load', function(e) {
 		{
 			label: 'Edit',
 			submenu: [{
+				label: 'Increase Font Size',
+				accelerator: 'CmdOrCtrl+Plus',
+				click: function() {
+					thisChat.window.increaseFontSize();
+				}
+			}, {
+				label: 'Decrease Font Size',
+				accelerator: 'CmdOrCtrl+-',
+				click: function() {
+					thisChat.window.decreaseFontSize();
+				}
+			}, {
+				label: 'Reset Font Size',
+				accelerator: 'CmdOrCtrl+0',
+				click: function() {
+					thisChat.window.resetFontSize();
+				}
+			}, {
+				type: 'separator'
+			}, {
 				label: 'Undo',
 				accelerator: 'CmdOrCtrl+Z',
 				role: 'undo'
@@ -359,6 +379,7 @@ window.addEventListener('load', function(e) {
 				unread:          0,
 				recordTime:      0,
 				recordCountdown: 3,
+				fontSize:       13,
 				chatInputText:   '',
 				myChatState:     'paused',
 				theirChatState:  'paused',
@@ -690,6 +711,21 @@ window.addEventListener('load', function(e) {
 				Remote.getCurrentWindow().setProgressBar(0);
 			});
 		},
+		increaseFontSize: function() {
+			this.setState({
+				fontSize: this.state.fontSize + 1
+			});
+		},
+		decreaseFontSize: function() {
+			this.setState({
+				fontSize: this.state.fontSize - 1
+			});
+		},
+		resetFontSize: function() {
+			this.setState({
+				fontSize: 13
+			});
+		},
 		statusMessages: [
 			' is offline and cannot receive messages.',
 			' is offline and can receive messages.',
@@ -714,7 +750,10 @@ window.addEventListener('load', function(e) {
 				})())),
 				React.createElement('div', {
 					key: 2,
-					id: 'chatContents'
+					id: 'chatContents',
+					style: {
+						'font-size': this.state.fontSize + 'px'
+					}
 				}, this.state.conversation),
 				React.createElement('div', {
 					key: 3,
@@ -830,6 +869,9 @@ window.addEventListener('load', function(e) {
 				})), React.createElement('textarea', {
 					key: 23,
 					id: 'chatInputText',
+					style: {
+						'font-size': this.state.fontSize + 'px'
+					},
 					autoFocus: true,
 					form: 'chatInput',
 					placeholder: 'Type in your message...',
