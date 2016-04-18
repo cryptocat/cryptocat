@@ -870,6 +870,9 @@ window.addEventListener('load', function(e) {
 			});
 			Remote.getCurrentWindow().show();
 		}
+		else {	
+			Remote.getCurrentWindow().show();
+		}
 	});
 
 	while (Cryptocat.Win.chatRetainer.length < 2) {
