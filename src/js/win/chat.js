@@ -1,6 +1,116 @@
 window.addEventListener('load', function(e) {
 	'use strict';
 
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate([
+		{
+			label: 'Buddy',
+			submenu: [
+				{
+					label: 'View Devices',
+					click: function() {
+						IPCRenderer.send(
+							'deviceManager.create',
+							thisChat.window.state.to
+						);
+					}
+				},
+				{
+					label: 'Send File',
+					accelerator: 'alt+F',
+					click: function() {
+						thisChat.window.sendFileDialog();
+					}
+				},
+				{
+					label: 'Record Audio/Video',
+					accelerator: 'alt+R',
+					click: function() {
+						thisChat.window.record();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Close',
+					accelerator: 'CmdOrCtrl+W',
+					click: function() {
+						Remote.getCurrentWindow().close();
+					}
+				}
+			]
+		},
+		{
+			label: 'Edit',
+			submenu: [{
+				label: 'Undo',
+				accelerator: 'CmdOrCtrl+Z',
+				role: 'undo'
+			}, {
+				label: 'Redo',
+				accelerator: 'Shift+CmdOrCtrl+Z',
+				role: 'redo'
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Cut',
+				accelerator: 'CmdOrCtrl+X',
+				role: 'cut'
+			}, {
+				label: 'Copy',
+				accelerator: 'CmdOrCtrl+C',
+				role: 'copy'
+			}, {
+				label: 'Paste',
+				accelerator: 'CmdOrCtrl+V',
+				role: 'paste'
+			}, {
+				label: 'Select All',
+				accelerator: 'CmdOrCtrl+A',
+				role: 'selectall'
+			}]
+		},
+		{
+			label: 'Help',
+			role: 'help',
+			submenu: [{
+				label: 'Getting Started',
+				click: function() {
+					Remote.shell.openExternal(
+						'https://crypto.cat/help.html'
+					)
+				}
+			},
+			/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/
+			{
+				label: 'Report a Bug',
+				click: function() {
+					Remote.shell.openExternal(
+						'https://github.com/cryptocat/cryptocat/issues/'
+					)
+				}
+			},
+			{
+				label: 'Check for Updates',
+				click: function() {
+					IPCRenderer.send(
+						'main.checkForUpdates'
+					);
+				}
+			},
+			{
+				type: 'separator'
+			},
+			{
+				label: 'About Cryptocat',
+				click: function() {
+					Cryptocat.Diag.message.about();
+				}
+			}
+			]
+		}
+	]));	
+
 	var getTimestamp = function(stamp) {
 		var date = new Date(stamp);
 		var h = date.getHours();
@@ -810,14 +920,6 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
-	IPCRenderer.on('chat.sendFile', function(e) {
-		thisChat.window.sendFileDialog();
-	});
-
-	IPCRenderer.on('chat.record', function(e) {
-		thisChat.window.record();
-	});
-	
 	Mousetrap(
 		document.getElementById('chatInputText')
 	).bind('enter', function(e, combo) {

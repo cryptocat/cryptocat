@@ -272,36 +272,6 @@ var buildMainMenu = function(settings) {
 			]
 		},
 		{
-			label: 'Edit',
-			submenu: [{
-				label: 'Undo',
-				accelerator: 'CmdOrCtrl+Z',
-				role: 'undo'
-			}, {
-				label: 'Redo',
-				accelerator: 'Shift+CmdOrCtrl+Z',
-				role: 'redo'
-			}, {
-				type: 'separator'
-			}, {
-				label: 'Cut',
-				accelerator: 'CmdOrCtrl+X',
-				role: 'cut'
-			}, {
-				label: 'Copy',
-				accelerator: 'CmdOrCtrl+C',
-				role: 'copy'
-			}, {
-				label: 'Paste',
-				accelerator: 'CmdOrCtrl+V',
-				role: 'paste'
-			}, {
-				label: 'Select All',
-				accelerator: 'CmdOrCtrl+A',
-				role: 'selectall'
-			}]
-		},
-		{
 			label: 'Help',
 			role: 'help',
 			submenu: [{
@@ -420,6 +390,9 @@ Electron.app.on('ready', function() {
 	}));
 });
 
+Electron.ipcMain.on('main.checkForUpdates', function(e, to, message) {
+	Windows.main.webContents.send('main.checkForUpdates');
+});
 
 Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	Windows.main.webContents.send('chat.sendMessage', to, message);
@@ -428,6 +401,7 @@ Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 
 Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
 	Windows.main.webContents.send('chat.myChatState', to, chatState);
+	e.returnValue = 'true';
 });
 
 Electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
@@ -442,6 +416,11 @@ Electron.ipcMain.on('changePassword.changePassword', function(e, password) {
 
 Electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 	Windows.main.webContents.send('addDevice.addDevice', name, icon);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('deviceManager.create', function(e, username) {
+	Windows.main.webContents.send('deviceManager.create', username);
 	e.returnValue = 'true';
 });
 
