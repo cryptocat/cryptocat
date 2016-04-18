@@ -1,12 +1,24 @@
-@keyframes chatMessageStickerSpin {
+@keyframes chatMessageStickerSpinLeft {
 	0% {
-		transform: rotate(-10deg)
+		transform: rotate(-14deg)
 	}
 	50% {
-		transform: rotate(10deg)
+		transform: rotate(14deg)
 	}
 	100% {
-		transform: rotate(-10deg)
+		transform: rotate(-14deg)
+	}
+}
+
+@keyframes chatMessageStickerSpinRight {
+	0% {
+		transform: rotate(14deg)
+	}
+	50% {
+		transform: rotate(-14deg)
+	}
+	100% {
+		transform: rotate(14deg)
 	}
 }
 
@@ -227,19 +239,19 @@ div.chatSticker img {
 	display: block;
 	-webkit-user-select: none !important;
 	user-select: none !important;
-	/* Disabled due to high CPU usage.
-	animation-name: chatMessageStickerSpin;
-	animation-duration: 1s;
+	animation-duration: 0.5s;
 	cursor: default;
-	animation-iteration-count: infinite; */
+	animation-iteration-count: 2;
 }
 
 div.chatSticker[data-alignment='left'] img {
 	transform: rotate(-14deg);
+	animation-name: chatMessageStickerSpinLeft;
 }
 
 div.chatSticker[data-alignment='right'] img {
 	transform: rotate(14deg);
+	animation-name: chatMessageStickerSpinRight;
 }
 
 div.chatFile {
