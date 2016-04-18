@@ -9,18 +9,6 @@ Cryptocat.Win = {
 window.addEventListener('load', function(e) {	
 	'use strict';
 
-	while (Cryptocat.Win.chatRetainer.length < 2) {
-		var chatRetainer = new Remote.BrowserWindow({
-			width: 450,
-			height: 450,
-			minWidth: 450,
-			minHeight: 150,
-			show: false
-		});
-		Cryptocat.Win.chatRetainer.push(chatRetainer);
-		chatRetainer.loadURL('file://' + __dirname + '/chat.html');
-	};
-
 	var mainLogin = React.createClass({
 		displayName: 'mainLogin',
 		getInitialState: function() {
@@ -636,32 +624,37 @@ window.addEventListener('load', function(e) {
 	);
 
 	Cryptocat.Win.main.beforeQuit = function() {
-		for (var username in Cryptocat.Win.chat) {
-			if (hasProperty(Cryptocat.Win.chat, username)) {
-				Cryptocat.Win.chat[username].destroy();
-				delete Cryptocat.Win.chat[username];
+		var position = Remote.getCurrentWindow().getPosition();
+		Cryptocat.Storage.updateCommon({
+			mainWindowBounds: Remote.getCurrentWindow().getBounds()
+		}, function() {;
+			for (var username in Cryptocat.Win.chat) {
+				if (hasProperty(Cryptocat.Win.chat, username)) {
+					Cryptocat.Win.chat[username].destroy();
+					delete Cryptocat.Win.chat[username];
+				}
 			}
-		}
-		if (Cryptocat.Me.connected) {
-			Cryptocat.XMPP.disconnect(function() {
+			if (Cryptocat.Me.connected) {
+				Cryptocat.XMPP.disconnect(function() {
+					IPCRenderer.sendSync('app.quit');
+				});
+				setTimeout(function() {
+					Cryptocat.Me.connected = false;
+					Cryptocat.Storage.updateUser(
+						Cryptocat.Me.username,
+						Cryptocat.Me.settings,
+						function() {
+							IPCRenderer.sendSync('app.quit');
+						}
+					);
+				}, 5000);
+			}
+			else {
 				IPCRenderer.sendSync('app.quit');
-			});
-			setTimeout(function() {
-				Cryptocat.Me.connected = false;
-				Cryptocat.Storage.updateUser(
-					Cryptocat.Me.username,
-					Cryptocat.Me.settings,
-					function() {
-						IPCRenderer.sendSync('app.quit');
-					}
-				);
-			}, 5000);
-		}
-		else {
-			IPCRenderer.sendSync('app.quit');
-		}
+			}
+		});
 	};
-
+	
 	IPCRenderer.on('chat.sendMessage', function(e, to, message) {
 		Cryptocat.OMEMO.sendMessage(to, message)
 	});
@@ -866,6 +859,31 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.beforeQuit', function(e) {
 		Cryptocat.Win.main.beforeQuit();
 	});
+
+	Cryptocat.Storage.getCommon(function(err, common) {
+		if (common) {
+			Remote.getCurrentWindow().setBounds({
+				x: common.mainWindowBounds.x,
+				y: common.mainWindowBounds.y - 20,
+				width: common.mainWindowBounds.width,
+				height: common.mainWindowBounds.height
+			});
+			Remote.getCurrentWindow().show();
+		}
+	});
+
+	while (Cryptocat.Win.chatRetainer.length < 2) {
+		var chatRetainer = new Remote.BrowserWindow({
+			width: 450,
+			height: 450,
+			minWidth: 450,
+			minHeight: 150,
+			show: false
+		});
+		Cryptocat.Win.chatRetainer.push(chatRetainer);
+		chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+	};
+
 });
 
 window.addEventListener('beforeunload', function(e) {

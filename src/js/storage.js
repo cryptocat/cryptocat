@@ -35,6 +35,46 @@ Cryptocat.Storage = {};
 		}
 	})();
 
+	Cryptocat.Storage.updateCommon = function(common, callback) {
+		var newCommon = {
+			_id: '*common*',
+			mainWindowBounds: {}
+		};
+		db.findOne({_id: '*common*'}, function(err, doc) {
+			if (doc === null) {
+				if (hasProperty(common, 'mainWindowBounds')) {
+					newCommon.mainWindowBounds = common.mainWindowBounds;
+				}
+				db.insert(newCommon, function(err, newDoc) {
+					db.persistence.compactDatafile();
+					setTimeout(function() {	
+						callback(err)
+					}, 300);
+				});
+			}
+			else {
+				var updateObj = {};
+				if (hasProperty(common, 'mainWindowBounds')) {
+					updateObj.mainWindowBounds = common.mainWindowBounds;
+				}
+				db.update({_id: '*common*'},
+					{$set: updateObj}, function(err, newDoc) {
+						db.persistence.compactDatafile();
+						setTimeout(function() {	
+							callback(err);
+						}, 300);
+					}
+				);
+			}
+		});
+	};
+
+	Cryptocat.Storage.getCommon = function(callback) {
+		db.findOne({_id: '*common*'}, function(err, doc) {
+			callback(err, doc);
+		});
+	};
+
 	Cryptocat.Storage.updateUser = function(username, loadedSettings, callback) {
 		var settings = Object.assign({}, loadedSettings);
 		var newSettings = {
@@ -110,7 +150,7 @@ Cryptocat.Storage = {};
 					db.persistence.compactDatafile();
 					setTimeout(function() {	
 						callback(err)
-					}, 500);
+					}, 300);
 				});
 			}
 			else {
@@ -173,7 +213,7 @@ Cryptocat.Storage = {};
 						db.persistence.compactDatafile();
 						setTimeout(function() {	
 							callback(err);
-						}, 500);
+						}, 300);
 					}
 				);
 			}
@@ -200,7 +240,7 @@ Cryptocat.Storage = {};
 				db.persistence.compactDatafile();
 				setTimeout(function() {
 					callback(err);
-				}, 500);
+				}, 300);
 			}
 		);
 	};
@@ -210,7 +250,7 @@ Cryptocat.Storage = {};
 			db.persistence.compactDatafile();
 			setTimeout(function() {
 				callback(err);
-			}, 500);
+			}, 300);
 		});
 	};
 

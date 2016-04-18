@@ -370,14 +370,11 @@ Electron.app.on('ready', function() {
 		width: 260,
 		maxWidth: 400,
 		height: 470,
-		minHeight: 260,
+		minHeight: 400,
 		maximizable: false,
 		fullscreenable: false,
 		show: false,
 		title: 'Cryptocat'
-	});
-	Windows.main.webContents.on('did-finish-load', function() {
-		Windows.main.show();
 	});
 	Windows.main.on('close', function(e) {
 		if (!IntentToQuit) {
