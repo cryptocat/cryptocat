@@ -625,8 +625,14 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.main.beforeQuit = function() {
 		var position = Remote.getCurrentWindow().getPosition();
+		var size     = Remote.getCurrentWindow().getSize();
 		Cryptocat.Storage.updateCommon({
-			mainWindowBounds: Remote.getCurrentWindow().getBounds()
+			mainWindowBounds: {
+				x:      position[0],
+				y:      position[1],
+				width:  size[0],
+				height: size[1]
+			}
 		}, function() {;
 			for (var username in Cryptocat.Win.chat) {
 				if (hasProperty(Cryptocat.Win.chat, username)) {
@@ -862,12 +868,14 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Storage.getCommon(function(err, common) {
 		if (common) {
-			Remote.getCurrentWindow().setBounds({
-				x: common.mainWindowBounds.x,
-				y: common.mainWindowBounds.y - 20,
-				width: common.mainWindowBounds.width,
-				height: common.mainWindowBounds.height
-			});
+			Remote.getCurrentWindow().setPosition(
+				common.mainWindowBounds.x,
+				common.mainWindowBounds.y
+			);
+			Remote.getCurrentWindow().setSize(
+				common.mainWindowBounds.width,
+				common.mainWindowBounds.height
+			);
 			Remote.getCurrentWindow().show();
 		}
 		else {	
