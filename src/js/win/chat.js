@@ -43,26 +43,6 @@ window.addEventListener('load', function(e) {
 		{
 			label: 'Edit',
 			submenu: [{
-				label: 'Increase Font Size',
-				accelerator: 'CmdOrCtrl+Plus',
-				click: function() {
-					thisChat.window.increaseFontSize();
-				}
-			}, {
-				label: 'Decrease Font Size',
-				accelerator: 'CmdOrCtrl+-',
-				click: function() {
-					thisChat.window.decreaseFontSize();
-				}
-			}, {
-				label: 'Reset Font Size',
-				accelerator: 'CmdOrCtrl+0',
-				click: function() {
-					thisChat.window.resetFontSize();
-				}
-			}, {
-				type: 'separator'
-			}, {
 				label: 'Undo',
 				accelerator: 'CmdOrCtrl+Z',
 				role: 'undo'
@@ -88,6 +68,28 @@ window.addEventListener('load', function(e) {
 				label: 'Select All',
 				accelerator: 'CmdOrCtrl+A',
 				role: 'selectall'
+			}]
+		},
+		{
+			label: 'View',
+			submenu: [{
+				label: 'Increase Font Size',
+				accelerator: 'CmdOrCtrl+Plus',
+				click: function() {
+					thisChat.window.increaseFontSize();
+				}
+			}, {
+				label: 'Decrease Font Size',
+				accelerator: 'CmdOrCtrl+-',
+				click: function() {
+					thisChat.window.decreaseFontSize();
+				}
+			}, {
+				label: 'Reset Font Size',
+				accelerator: 'CmdOrCtrl+0',
+				click: function() {
+					thisChat.window.resetFontSize();
+				}
 			}]
 		},
 		{
