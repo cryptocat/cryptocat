@@ -36,13 +36,15 @@ p.notice {
 	box-shadow: 2px 2px orange;
 	padding: 5px;
 	font-size: 12px;
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 }
 
 div.g-recaptcha {
 	float: right;
 	position: relative;
-	bottom: 75px;
+	bottom: 81px;
+	transform: scale(0.9);
+	left: 20px;
 }
 
 input[type=text], input[type=password] {
@@ -50,6 +52,10 @@ input[type=text], input[type=password] {
 	background: #FAFCFF;
 	border: 1px solid #96A5B2;
 	outline: none;
+}
+
+input[type=text] {
+	margin-bottom: 25px;
 }
 
 input[type=text]:active, input[type=password]:active {
@@ -76,4 +82,3 @@ button:active, input[type=button]:active, input[type=submit]:active {
 	box-shadow: inset 1px 1px #96A5B2 !important;
 	outline: none !important;
 }
-
