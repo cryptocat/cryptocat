@@ -5,7 +5,8 @@ window.addEventListener('load', function(e) {
 		displayName: 'changePassword',
 		getInitialState: function() {
 			return {
-				password: ''
+				password: '',
+				vassword: ''
 			};
 		},
 		componentDidMount: function() {
@@ -13,6 +14,9 @@ window.addEventListener('load', function(e) {
 		},
 		onChangePassword: function(e) {
 			this.setState({password: e.target.value});
+		},
+		onChangeVassword: function(e) {
+			this.setState({vassword: e.target.value});
 		},
 		onSubmit: function(e) {
 			var _t = this;
@@ -33,6 +37,8 @@ window.addEventListener('load', function(e) {
 		validInputs: function() {
 			return Cryptocat.Patterns.password.test(
 				this.state.password
+			) && (
+				this.state.password === this.state.vassword
 			);
 		},
 		render: function() {
@@ -61,6 +67,14 @@ window.addEventListener('load', function(e) {
 				}),
 				React.createElement('input', {
 					key: 3,
+					type: 'password',
+					placeholder: 'Verify Password',
+					value: this.state.vassword,
+					onChange: this.onChangeVassword,
+					maxLength: 512
+				}),
+				React.createElement('input', {
+					key: 4,
 					type: 'submit',
 					value: 'Change Password'
 				})

@@ -73,7 +73,8 @@ Cryptocat.Diag = {
 	Cryptocat.Diag.error.changePasswordValidation = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Invalid Password',
-			'Please check that your password is at least 12 characters long.'
+			'Please check that your password is at least 12 characters long ' +
+			'and that the same password is entered in both fields.'
 		);
 	};
 
