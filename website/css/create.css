@@ -44,6 +44,8 @@ div.g-recaptcha {
 	position: relative;
 	bottom: 81px;
 	transform: scale(0.9);
+	-webkit-transform: scale(0.9);
+	-moz-transform: scale(0.9);
 	left: 20px;
 }
 
