@@ -60,7 +60,7 @@ window.addEventListener('load', function(e) {
 
 	var verifySignature = function(path, hash, callback) {
 		var signature = '';
-		HTTPS.get(Cryptocat.Update.signatureURIs[process.platform], function(res) {
+		HTTPS.get(Cryptocat.Update.sigURIs[process.platform], function(res) {
 			res.on('data', function(chunk) {
 				signature += chunk;
 			});
@@ -90,7 +90,7 @@ window.addEventListener('load', function(e) {
 		var file = FS.createWriteStream(path);
 		var cur  = 0;
 		var hash = NodeCrypto.createHash('sha256');
-		HTTPS.get(Cryptocat.Update.downloadURIs[process.platform], function(res) {
+		HTTPS.get(Cryptocat.Update.clientURIs[process.platform], function(res) {
 			var len = parseInt(res.headers['content-length'], 10);
 			res.pipe(file);
 			res.on('data', function(chunk) {

@@ -1,18 +1,18 @@
 Cryptocat.Update = {
-	downloadURIs: {
-		win32:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.zip',
-		linux:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.zip',
-		darwin: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.zip'
+	clientURIs: {
+		win32:  'https://download.crypto.cat/client/Cryptocat-win32-x64.zip',
+		linux:  'https://download.crypto.cat/client/Cryptocat-linux-x64.zip',
+		darwin: 'https://download.crypto.cat/client/Cryptocat-darwin-x64.zip'
 	},
-	updateURIs: {
-		win32:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.txt',
-		linux:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.txt',
-		darwin: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.txt'
+	verURIs: {
+		win32:  'https://download.crypto.cat/ver/Cryptocat-win32-x64.txt',
+		linux:  'https://download.crypto.cat/ver/Cryptocat-linux-x64.txt',
+		darwin: 'https://download.crypto.cat/ver/Cryptocat-darwin-x64.txt'
 	},
-	signatureURIs: {
-		win32:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-win32-x64.sig',
-		linux:  'https://cryptocat.blob.core.windows.net/release/Cryptocat-linux-x64.sig',
-		darwin: 'https://cryptocat.blob.core.windows.net/release/Cryptocat-darwin-x64.sig'
+	sigURIs: {
+		win32:  'https://download.crypto.cat/sig/Cryptocat-win32-x64.txt',
+		linux:  'https://download.crypto.cat/sig/Cryptocat-linux-x64.txt',
+		darwin: 'https://download.crypto.cat/sig/Cryptocat-darwin-x64.txt'
 	},
 	signingKey: [
 		0x36, 0x91, 0xcc, 0x5e, 0xd9, 0x1a, 0x83, 0x70,
@@ -54,7 +54,7 @@ Cryptocat.Update = {
 	};
 
 	Cryptocat.Update.check = function(ifLatest) {
-		HTTPS.get(Cryptocat.Update.updateURIs[process.platform], function(res) {
+		HTTPS.get(Cryptocat.Update.verURIs[process.platform], function(res) {
 			var latest = '';
 			res.on('data', function(chunk) {
 				latest += chunk;
