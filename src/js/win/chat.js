@@ -676,7 +676,7 @@ window.addEventListener('load', function(e) {
 							})
 						)
 					});
-					Remote.getCurrentWindow().setProgressBar(0);
+					Remote.getCurrentWindow().setProgressBar(-1);
 				});
 			});
 		},
@@ -730,7 +730,7 @@ window.addEventListener('load', function(e) {
 						valid: info.valid,
 						binary: file
 					});
-					Remote.getCurrentWindow().setProgressBar(0);
+					Remote.getCurrentWindow().setProgressBar(-1);
 				});
 			});
 		},
@@ -749,7 +749,7 @@ window.addEventListener('load', function(e) {
 					ready: true,
 					valid: valid
 				});
-				Remote.getCurrentWindow().setProgressBar(0);
+				Remote.getCurrentWindow().setProgressBar(-1);
 			});
 		},
 		receiveRecording: function(recording) {
@@ -771,7 +771,7 @@ window.addEventListener('load', function(e) {
 					ready: true,
 					valid: valid
 				});
-				Remote.getCurrentWindow().setProgressBar(0);
+				Remote.getCurrentWindow().setProgressBar(-1);
 			});
 		},
 		increaseFontSize: function() {

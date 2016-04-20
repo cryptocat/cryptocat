@@ -16,6 +16,7 @@ window.addEventListener('load', function(e) {
 		onProgress: function(cur, len) {
 			var p = Math.round((cur * 100) / len);
 			var w = Math.round((p * 200) / 100);
+			Remote.getCurrentWindow().setProgressBar(p / 100);
 			this.setState({
 				progress: p,
 				progressBarIndicatorWidth: w + 'px'
@@ -100,6 +101,7 @@ window.addEventListener('load', function(e) {
 			});
 			file.on('finish', function() {
 				file.close();
+				Remote.getCurrentWindow().setProgressBar(-1);
 				thisUpdateDownloader.setState({
 					statusMessage: 'Verifying signature...'
 				});
