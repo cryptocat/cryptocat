@@ -139,7 +139,7 @@ div.chatMessage, div.chatSticker, div.chatFile, div.chatRecording {
 	margin: 4px 10px;
 }
 
-div.chatMessage * {
+div.chatMessage, div.chatMessage * {
 	-webkit-user-select: text;
 	user-select: text;
 	cursor: text;
