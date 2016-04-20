@@ -528,7 +528,7 @@ window.addEventListener('load', function(e) {
 		Cryptocat.Storage.updateCommon({
 			mainWindowBounds: {
 				x:      position[0],
-				y:      position[1],
+				y:      position[1] - 15,
 				width:  size[0],
 				height: size[1]
 			}

@@ -157,13 +157,13 @@ window.addEventListener('load', function(e) {
 				return {
 					sticker:   sticker,
 					isSticker: true
-				}
+				};
 			}
 		}
 		return {
 			sticker:   '',
 			isSticker: false
-		}
+		};
 	};
 
 	var checkIfFile = function(message) {
@@ -173,13 +173,13 @@ window.addEventListener('load', function(e) {
 				return {
 					file:	info,
 					isFile: true
-				}
+				};
 			}
 		}
 		return {
 			file:	{},
 			isFile: false
-		}
+		};
 	};
 
 	var checkIfRecording = function(message) {
@@ -229,7 +229,7 @@ window.addEventListener('load', function(e) {
 				valid: true,
 				binary: new Buffer([]),
 				saved: false
-			}
+			};
 		},
 		componentDidMount: function() {
 			return true;
@@ -322,7 +322,7 @@ window.addEventListener('load', function(e) {
 				valid: true,
 				src: '../img/icons/loading.webm',
 				saved: false
-			}
+			};
 		},
 		componentDidMount: function() {
 			return true;
@@ -361,29 +361,19 @@ window.addEventListener('load', function(e) {
 		getInitialState: function() {
 			return {
 				visible: false
-			}
+			};
 		},
 		componentDidMount: function() {
 			return true;
 		},
-		onDragEnter: function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			this.setState({visible: true});
-			return false;
-		},
-		onDragLeave: function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			
-			return false;
-		},
 		onDrop: function(e) {
-			e.stopPropagation();
 			e.preventDefault();
+			e.stopPropagation();
 			this.setState({visible: false});
 			if (e.isTrusted) {
-				thisChat.window.sendFile(e.dataTransfer.files[0].path);
+				thisChat.window.sendFile(
+					e.dataTransfer.files[0].path
+				);
 			}
 			return false;
 		},
@@ -391,8 +381,6 @@ window.addEventListener('load', function(e) {
 			return React.createElement('div', {
 				id: 'chatFileDragOverlay',
 				'data-visible': this.state.visible,
-				onDragEnter: this.onDragEnter,
-				onDragLeave: this.onDragLeave,
 				onDrop: this.onDrop,
 				key: 0
 			}, React.createElement('img', {
@@ -561,7 +549,7 @@ window.addEventListener('load', function(e) {
 				setTimeout(function() {
 					thisChat.contents().scrollTop = 
 						thisChat.contents().scrollHeight;
-				}, 50);
+				}, 100);
 			})
 		},
 		sendSticker: function(e) {
@@ -972,6 +960,7 @@ window.addEventListener('load', function(e) {
 		contents: function() {
 			return document.getElementById('chatContents');
 		},
+		chatFileDragOverlayCounter: 0,
 		focused: true,
 		theirComposingTimer: {},
 		myComposingTimer: {},
@@ -1075,6 +1064,24 @@ window.addEventListener('load', function(e) {
 			}, 3000);
 		});
 	});
+
+	document.addEventListener('dragenter', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		thisChat.chatFileDragOverlayCounter++;
+		thisChat.chatFileDragOverlay.setState({visible: true});
+		return false;
+	}, false);
+
+	document.addEventListener('dragleave', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		thisChat.chatFileDragOverlayCounter--;
+		if (thisChat.chatFileDragOverlayCounter <= 0) {
+			thisChat.chatFileDragOverlay.setState({visible: false});
+		}
+		return false;
+	}, false);
 
 	window.addEventListener('focus', function(e) {
 		document.getElementById('chatInputText').focus();
