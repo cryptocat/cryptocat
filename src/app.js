@@ -2,9 +2,9 @@ const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
 const FS            = require('fs');
 
-var Windows      = { main: null, last: null };
+var Windows      = {main: null, last: null};
 var TrayIcon     = {};
-var MenuSettings = {};
+var MenuSettings = {notify: false, sounds: false, typing: false};
 var IntentToQuit = false;
 
 var handleStartupEvent = function() {
@@ -163,7 +163,7 @@ var buildMainMenu = function(settings) {
 	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
-			id: 'Account',
+			id: '0',
 			enabled: true,
 			submenu: [{
 				label: 'Add Buddy',
@@ -186,132 +186,131 @@ var buildMainMenu = function(settings) {
 				type: 'separator'
 			}, {
 				label: 'Settings',
-				submenu: [
-					{
-						label: 'Notifications',
-						type: 'checkbox',
-						checked: settings.notify,
-						click: function(e) {
-							Windows.main.webContents.send(
-								'main.updateNotifySetting',
-								e.checked
-							);
-						}
-					}, {
-						label: 'Sounds',
-						type: 'checkbox',
-						checked: settings.sounds,
-						click: function(e) {
-								Windows.main.webContents.send(
-								'main.updateSoundsSetting',
-								e.checked
-							);
-						}
-					}, {
-						label: 'Send Typing Indicator',
-						type: 'checkbox',
-						checked: settings.typing,
-						click: function(e) {
-							Windows.main.webContents.send(
-								'main.updateTypingSetting',
-								e.checked
-							);
-						}
-					}, {
-						type: 'separator'
-					}, {
-						label: 'Delete Account',
-						click: function(e) {
-							Windows.main.webContents.send('main.deleteAccount');
-						}
+				submenu: [{
+					label: 'Notifications',
+					type: 'checkbox',
+					checked: settings.notify,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateNotifySetting',
+							e.checked
+						);
 					}
-				]
-			}, {
+				}, {
+					label: 'Sounds',
+					type: 'checkbox',
+					checked: settings.sounds,
+					click: function(e) {
+							Windows.main.webContents.send(
+							'main.updateSoundsSetting',
+							e.checked
+						);
+					}
+				}, {
+					label: 'Send Typing Indicator',
+					type: 'checkbox',
+					checked: settings.typing,
+					click: function(e) {
+						Windows.main.webContents.send(
+							'main.updateTypingSetting',
+							e.checked
+						);
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Delete Account',
+					click: function(e) {
+						Windows.main.webContents.send('main.deleteAccount');
+					}
+				}
+			]}, {
 				label: 'Log Out',
 				click: function(e) {
 					Windows.main.webContents.send('main.logOut');
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Close',
+					accelerator: 'CmdOrCtrl+W',
+					click: function(item, focusedWindow) {
+						if (focusedWindow) { focusedWindow.close(); }
+					}
+				}, {
+					label: 'Quit',
+					accelerator: 'CmdOrCtrl+Q',
+					click: function() {
+						Windows.main.webContents.send('main.beforeQuit');
+					}
 				}
-			}, {
-				type: 'separator'
-			}, {
-				label: 'Close',
-				accelerator: 'CmdOrCtrl+W',
-				click: function(item, focusedWindow) {
-					if (focusedWindow) { focusedWindow.close(); }
+			]}, {
+				label: 'Edit',
+				id: '2',
+				enabled: true,
+				submenu: [{
+					label: 'Undo',
+					accelerator: 'CmdOrCtrl+Z',
+					role: 'undo'
+				}, {
+					label: 'Redo',
+					accelerator: 'Shift+CmdOrCtrl+Z',
+					role: 'redo'
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Cut',
+					accelerator: 'CmdOrCtrl+X',
+					role: 'cut'
+				}, {
+					label: 'Copy',
+					accelerator: 'CmdOrCtrl+C',
+					role: 'copy'
+				}, {
+					label: 'Paste',
+					accelerator: 'CmdOrCtrl+V',
+					role: 'paste'
+				}, {
+					label: 'Select All',
+					accelerator: 'CmdOrCtrl+A',
+					role: 'selectall'
+			}]}, {
+				label: 'Help',
+				label: 'Help',
+				role: 'help',
+				id: '4',
+				enabled: true,
+				submenu: [{
+					label: 'Getting Started',
+					click: function() {
+						Electron.shell.openExternal(
+							'https://crypto.cat/help.html'
+						)
+					}
+				}, {
+					label: 'Report a Bug',
+					click: function() {
+						Electron.shell.openExternal(
+							'https://github.com/cryptocat/cryptocat/issues/'
+						)
 				}
-			}, {
-				label: 'Quit',
-				accelerator: 'CmdOrCtrl+Q',
-				click: function() {
-					Windows.main.webContents.send('main.beforeQuit');
-				}
-			}]
-		}, {
-			label: 'Edit',
-			id: 'Edit',
-			enabled: true,
-			submenu: [{
-				label: 'Undo',
-				accelerator: 'CmdOrCtrl+Z',
-				role: 'undo'
-			}, {
-				label: 'Redo',
-				accelerator: 'Shift+CmdOrCtrl+Z',
-				role: 'redo'
-			}, {
-				type: 'separator'
-			}, {
-				label: 'Cut',
-				accelerator: 'CmdOrCtrl+X',
-				role: 'cut'
-			}, {
-				label: 'Copy',
-				accelerator: 'CmdOrCtrl+C',
-				role: 'copy'
-			}, {
-				label: 'Paste',
-				accelerator: 'CmdOrCtrl+V',
-				role: 'paste'
-			}, {
-				label: 'Select All',
-				accelerator: 'CmdOrCtrl+A',
-				role: 'selectall'
-			}]
-		}, {
-			label: 'Help',
-			label: 'Help',
-			role: 'help',
-			enabled: true,
-			submenu: [{
-				label: 'Getting Started',
-				click: function() {
-					Electron.shell.openExternal(
-						'https://crypto.cat/help.html'
-					)
-				}
-			}, {
-				label: 'Report a Bug',
-				click: function() {
-					Electron.shell.openExternal(
-						'https://github.com/cryptocat/cryptocat/issues/'
-					)
-				}
-			}, {
-				label: 'Check for Updates',
-				click: function() {
-					Windows.main.webContents.send('main.checkForUpdates');
-				}
-			}, {
-				type: 'separator'
-			}, {
-				label: 'About Cryptocat',
-				click: function() {
-					Windows.main.webContents.send('aboutBox.create');
-				}
-			}]
-		}
-	]);
-	if (true) {
+				}, {
+					label: 'Check for Updates',
+					click: function() {
+						Windows.main.webContents.send('main.checkForUpdates');
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'About Cryptocat',
+					click: function() {
+						Windows.main.webContents.send('aboutBox.create');
+					}
+				}]
+			}
+		]
+	);
+	if (false) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
@@ -334,69 +333,64 @@ var buildMainMenu = function(settings) {
 };
 
 var buildMacMenu = function(settings) {
-	var chat = Electron.Menu.buildFromTemplate({
+	var isChatWindow = (/chat\.html$/).test(Windows.last.getURL());
+	var chat = Electron.Menu.buildFromTemplate([{
 		label: 'Chat',
-		position: 'after=Account',
-		enabled: (/chat\.html$/).test(Windows.last.getURL()),
+		id: '1',
 		submenu: [{
 			label: 'View Devices',
-			click: function() {
-				Windows.last.webContents.send('chat.viewDevices');
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.viewDevices');
 			}
 		}, {
 			label: 'Send File',
 			accelerator: 'alt+F',
-			click: function() {
-				Windows.last.webContents.send('chat.sendFile');
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.sendFile');
 			}
 		}, {
 			label: 'Record Audio/Video',
 			accelerator: 'alt+R',
-			click: function() {
-				Windows.last.webContents.send('chat.record');
-			}
-		}, {
-			type: 'separator'
-		}, {
-			label: 'Close',
-			accelerator: 'CmdOrCtrl+W',
-			click: function() {
-				Windows.last.close();
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.record');
 			}
 		}]
-	});
-	var view = Electron.Menu.buildFromTemplate({
+	}]);
+	var view = Electron.Menu.buildFromTemplate([{
 		label: 'View',
-		position: 'before=Help',
-		enabled: (/chat\.html$/).test(Windows.last.getURL()),
 		submenu: [{
 			label: 'Hide',
 			role: 'hide'
+		}, {
+			label: 'Show All',
+			role: 'unhide'
 		}, {
 			type: 'separator'
 		}, {
 			label: 'Increase Font Size',
 			accelerator: 'CmdOrCtrl+Plus',
-			click: function() {
-				Windows.last.webContents.send('chat.increaseFontSize');
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.increaseFontSize');
 			}
 		}, {
 			label: 'Decrease Font Size',
 			accelerator: 'CmdOrCtrl+-',
-			click: function() {
-				Windows.last.webContents.send('chat.decreaseFontSize');
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.decreaseFontSize');
 			}
 		}, {
 			label: 'Reset Font Size',
 			accelerator: 'CmdOrCtrl+0',
-			click: function() {
-				Windows.last.webContents.send('chat.resetFontSize');
+			click: function(item, focusedWindow) {
+				focusedWindow.webContents.send('chat.resetFontSize');
 			}
 		}]
-	});
+	}]);
 	var menu = buildMainMenu(settings);
-	menu.insert(1, chat);
-	menu.insert(3, view);
+	if (isChatWindow) {
+		menu.insert(1, chat.items[0]);
+		menu.insert(3, view.items[0]);
+	}
 	return menu;
 };
 	
@@ -531,7 +525,7 @@ Electron.app.on('browser-window-created', function(e, w) {
 Electron.app.on('browser-window-focus', function(e, w) {
 	Windows.last = w;
 	if (process.platform === 'darwin') {
-		Electron.Menu.setApplicationMenu(buildMacMenu(settings));
+		Electron.Menu.setApplicationMenu(buildMacMenu(MenuSettings));
 	}
 });
 
