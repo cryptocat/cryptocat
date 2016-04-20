@@ -62,10 +62,11 @@ Cryptocat.File = {};
 	};
 
 	Cryptocat.File.isAllowed = function(name) {
+		var lName = name.toLowerCase();
 		if (
-			(/\.\w{1,5}$/).test(name) &&
+			(/\.\w{1,5}$/).test(lName) &&
 			(Cryptocat.File.allowed.indexOf(
-				name.match(/\.\w{1,5}$/)[0].substr(1)
+				lName.match(/\.\w{1,5}$/)[0].substr(1)
 			) >= 0)
 		) {
 			return true;
