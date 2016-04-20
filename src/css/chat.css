@@ -88,10 +88,11 @@ div#chatTop {
 }
 
 div.chatTopStatus {
-	padding: 8px 0 6px 8px;
+	padding: 7px 0 6px 7px;
 	color: #FFF;
 	font-weight: bold;
 	height: 13px;
+	font-size: 12px;
 	transition: background-color 0.5s;
 }
 
