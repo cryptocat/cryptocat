@@ -1,46 +1,39 @@
 window.addEventListener('load', function(e) {
 	'use strict';
 
-	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate([
-		{
-			label: 'Buddy',
-			submenu: [
-				{
-					label: 'View Devices',
-					click: function() {
-						IPCRenderer.send(
-							'deviceManager.create',
-							thisChat.window.state.to
-						);
-					}
-				},
-				{
-					label: 'Send File',
-					accelerator: 'alt+F',
-					click: function() {
-						thisChat.window.sendFileDialog();
-					}
-				},
-				{
-					label: 'Record Audio/Video',
-					accelerator: 'alt+R',
-					click: function() {
-						thisChat.window.record();
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Close',
-					accelerator: 'CmdOrCtrl+W',
-					click: function() {
-						Remote.getCurrentWindow().close();
-					}
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate(
+		[{
+			label: 'Chat',
+			submenu: [{
+				label: 'View Devices',
+				click: function() {
+					IPCRenderer.send(
+						'deviceManager.create',
+						thisChat.window.state.to
+					);
 				}
-			]
-		},
-		{
+			}, {
+				label: 'Send File',
+				accelerator: 'alt+F',
+				click: function() {
+					thisChat.window.sendFileDialog();
+				}
+			}, {
+				label: 'Record Audio/Video',
+				accelerator: 'alt+R',
+				click: function() {
+					thisChat.window.record();
+				}
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Close',
+				accelerator: 'CmdOrCtrl+W',
+				click: function() {
+					Remote.getCurrentWindow().close();
+				}
+			}]
+		}, {
 			label: 'Edit',
 			submenu: [{
 				label: 'Undo',
@@ -69,8 +62,7 @@ window.addEventListener('load', function(e) {
 				accelerator: 'CmdOrCtrl+A',
 				role: 'selectall'
 			}]
-		},
-		{
+		}, {
 			label: 'View',
 			submenu: [{
 				label: 'Increase Font Size',
@@ -91,8 +83,7 @@ window.addEventListener('load', function(e) {
 					thisChat.window.resetFontSize();
 				}
 			}]
-		},
-		{
+		}, {
 			label: 'Help',
 			role: 'help',
 			submenu: [{
@@ -102,37 +93,31 @@ window.addEventListener('load', function(e) {
 						'https://crypto.cat/help.html'
 					)
 				}
-			},
-			/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/
-			{
+			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
 						'https://github.com/cryptocat/cryptocat/issues/'
 					)
 				}
-			},
-			{
+			}, {
 				label: 'Check for Updates',
 				click: function() {
 					IPCRenderer.send(
 						'main.checkForUpdates'
 					);
 				}
-			},
-			{
+			}, {
 				type: 'separator'
-			},
-			{
+			}, {
 				label: 'About Cryptocat',
 				click: function() {
 					Cryptocat.Diag.message.about();
 				}
-			}
-			]
-		}
-	]));	
-
+			}]
+		}]
+	));
+	 
 	var getTimestamp = function(stamp) {
 		var date = new Date(stamp);
 		var h = date.getHours();
@@ -161,11 +146,11 @@ window.addEventListener('load', function(e) {
 	var checkIfSticker = function(message) {
 		if (Cryptocat.Patterns.sticker.test(message)) {
 			var stickers = [
-				'angry',    'blushing',  'challengeAccepted',
-				'confused', 'crying',    'embarrassed',
-				'grinning', 'hurt',      'inLove',
-				'nerdy',    'sarcastic', 'sick',
-				'sleepy',   'smiling',   'winking'
+				'angry',	'blushing',  'challengeAccepted',
+				'confused', 'crying',	 'embarrassed',
+				'grinning', 'hurt',		 'inLove',
+				'nerdy',	'sarcastic', 'sick',
+				'sleepy',	'smiling',	 'winking'
 			];
 			var sticker = message.substr(17);
 			if (stickers.indexOf(sticker) >= 0) {
@@ -186,13 +171,13 @@ window.addEventListener('load', function(e) {
 			var info = Cryptocat.File.parseInfo(message);
 			if (info.valid) {
 				return {
-					file:   info,
+					file:	info,
 					isFile: true
 				}
 			}
 		}
 		return {
-			file:   {},
+			file:	{},
 			isFile: false
 		}
 	};
@@ -205,13 +190,13 @@ window.addEventListener('load', function(e) {
 				(info.name === 'recording.webm')
 			) {
 				return {
-					recording:   info,
+					recording:	 info,
 					isRecording: true
 				}
 			}
 		}
 		return {
-			recording:   {},
+			recording:	 {},
 			isRecording: false
 		}
 	};
@@ -375,23 +360,55 @@ window.addEventListener('load', function(e) {
 		displayName: 'chatWindow',
 		getInitialState: function() {
 			return {
-				recordVisible:   false,
-				status:         -1,
-				key:             0,
-				unread:          0,
-				recordTime:      0,
+				recordVisible:	 false,
+				status:			-1,
+				key:			 0,
+				unread:			 0,
+				recordTime:		 0,
 				recordCountdown: 3,
-				fontSize:       12,
-				chatInputText:   '',
-				myChatState:     'paused',
+				fontSize:		12,
+				chatInputText:	 '',
+				myChatState:	 'paused',
 				theirChatState:  'paused',
-				to:              '',
-				recordSrc:       '',
-				conversation:    [],
-				recordTimer:     {}
+				to:				 '',
+				recordSrc:		 '',
+				conversation:	 [],
+				recordTimer:	 {}
 			};
 		},
 		componentDidMount: function() {
+			document.getElementById('chatInputText').addEventListener('contextmenu', function(e) {
+				e.preventDefault();
+				(Remote.Menu.buildFromTemplate(
+					[{
+						label: 'Undo',
+						accelerator: 'CmdOrCtrl+Z',
+						role: 'undo'
+					}, {
+						label: 'Redo',
+						accelerator: 'Shift+CmdOrCtrl+Z',
+						role: 'redo'
+					}, {
+						type: 'separator'
+					}, {
+						label: 'Cut',
+						accelerator: 'CmdOrCtrl+X',
+						role: 'cut'
+					}, {
+						label: 'Copy',
+						accelerator: 'CmdOrCtrl+C',
+						role: 'copy'
+					}, {
+						label: 'Paste',
+						accelerator: 'CmdOrCtrl+V',
+						role: 'paste'
+					}, {
+						label: 'Select All',
+						accelerator: 'CmdOrCtrl+A',
+						role: 'selectall'
+					}]
+				)).popup(Remote.getCurrentWindow());
+			}, false);
 			return true;
 		},
 		componentDidUpdate: function() {	
@@ -418,8 +435,8 @@ window.addEventListener('load', function(e) {
 		files: {},
 		recordings: {},
 		updateConversation: function(fromMe, info) {
-			var _t        = this;
-			var sender    = this.state.to;
+			var _t		  = this;
+			var sender	  = this.state.to;
 			var alignment = (function() {
 				if (fromMe) {
 					sender = Cryptocat.Me.username;
@@ -428,7 +445,7 @@ window.addEventListener('load', function(e) {
 				return 'left';
 			})();
 			var sticker   = checkIfSticker(info.plaintext);
-			var file      = checkIfFile(info.plaintext);
+			var file	  = checkIfFile(info.plaintext);
 			var recording = checkIfRecording(info.plaintext);
 			if (sticker.isSticker) {
 				var res = React.createElement(chatSticker, {
