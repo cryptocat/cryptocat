@@ -1,6 +1,7 @@
 const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
 const FS            = require('fs');
+
 var Windows  = { main: null, last: null };
 var TrayIcon = {};
 var IntentToQuit = false;
@@ -73,86 +74,72 @@ var buildTrayMenu = function(settings) {
 				Windows.main.show();
 				Windows.main.focus();
 			}
-		},
-		{
+		}, {
 			type: 'separator'
-		},
-		{
+		}, {
 			label: 'Add Buddy',
 			click: function() {
 				Windows.main.webContents.send(
 					'addBuddy.create'
 				);
 			}
-		},
-		{
+		}, {
 			label: 'Manage Devices',
 			click: function() {
 				Windows.main.webContents.send(
 					'deviceManager.create'
 				);
 			}
-		},
-		{
+		}, {
 			type: 'separator'
-		},
-		{
+		}, {
 			label: 'Settings',
-			submenu: [
-				{
-					label: 'Notifications',
-					type: 'checkbox',
-					checked: settings.notify,
-					click: function(e) {
-						Windows.main.webContents.send(
-							'main.updateNotifySetting',
-							e.checked
-						);
-					}
-				},
-				{
-					label: 'Sounds',
-					type: 'checkbox',
-					checked: settings.sounds,
-					click: function(e) {
-						Windows.main.webContents.send(
-							'main.updateSoundsSetting',
-							e.checked
-						);
-					}
-				},
-				{
-					label: 'Send Typing Indicator',
-					type: 'checkbox',
-					checked: settings.typing,
-					click: function(e) {
-						Windows.main.webContents.send(
-							'main.updateTypingSetting',
-							e.checked
-						);
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Delete Account',
-					click: function(e) {
-						Windows.main.webContents.send('main.deleteAccount');
-					}
+			submenu: [{
+				label: 'Notifications',
+				type: 'checkbox',
+				checked: settings.notify,
+				click: function(e) {
+					Windows.main.webContents.send(
+						'main.updateNotifySetting',
+						e.checked
+					);
 				}
-			]
-		},
-		{
+			}, {
+				label: 'Sounds',
+				type: 'checkbox',
+				checked: settings.sounds,
+				click: function(e) {
+					Windows.main.webContents.send(
+						'main.updateSoundsSetting',
+						e.checked
+					);
+				}
+			}, {
+				label: 'Send Typing Indicator',
+				type: 'checkbox',
+				checked: settings.typing,
+				click: function(e) {
+					Windows.main.webContents.send(
+						'main.updateTypingSetting',
+						e.checked
+					);
+				}
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Delete Account',
+				click: function(e) {
+					Windows.main.webContents.send('main.deleteAccount');
+				}
+			}]
+		}, {
 			label: 'Log Out',
 			click: function(e) {
 				Windows.main.webContents.send('main.logOut');
 			}
-		},
-		{
+		}, {
 			type: 'separator'
-		},
-		{
+		}, {
 			label: 'Help',
 			click: function() {
 				Electron.shell.openExternal('https://crypto.cat/help.html');
@@ -175,103 +162,88 @@ var buildMainMenu = function(settings) {
 	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
-			submenu: [
-				{
-					label: 'Add Buddy',
-					accelerator: 'Alt+A',
-					click: function() {
-						Windows.main.webContents.send('addBuddy.create');
-					}
-				},
-				{
-					label: 'Manage Devices',
-					accelerator: 'Alt+D',
-					click: function() {
-						Windows.main.webContents.send('deviceManager.create');
-					}
-				},
-				{
-					label: 'Change Password',
-					click: function() {
-						Windows.main.webContents.send('changePassword.create');
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Settings',
-					submenu: [
-						{
-							label: 'Notifications',
-							type: 'checkbox',
-							checked: settings.notify,
-							click: function(e) {
-								Windows.main.webContents.send(
-									'main.updateNotifySetting',
-									e.checked
-								);
-							}
-						},
-						{
-							label: 'Sounds',
-							type: 'checkbox',
-							checked: settings.sounds,
-							click: function(e) {
-									Windows.main.webContents.send(
-									'main.updateSoundsSetting',
-									e.checked
-								);
-							}
-						},
-						{
-							label: 'Send Typing Indicator',
-							type: 'checkbox',
-							checked: settings.typing,
-							click: function(e) {
-								Windows.main.webContents.send(
-									'main.updateTypingSetting',
-									e.checked
-								);
-							}
-						},
-						{
-							type: 'separator'
-						},
-						{
-							label: 'Delete Account',
-							click: function(e) {
-								Windows.main.webContents.send('main.deleteAccount');
-							}
-						}
-					]
-				},
-				{
-					label: 'Log Out',
-					click: function(e) {
-						Windows.main.webContents.send('main.logOut');
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Close',
-					accelerator: 'CmdOrCtrl+W',
-					click: function(item, focusedWindow) {
-						if (focusedWindow) { focusedWindow.close(); }
-					}
-				},
-				{
-					label: 'Quit',
-					accelerator: 'CmdOrCtrl+Q',
-					click: function() {
-						Windows.main.webContents.send('main.beforeQuit');
-					}
+			submenu: [{
+				label: 'Add Buddy',
+				accelerator: 'Alt+A',
+				click: function() {
+					Windows.main.webContents.send('addBuddy.create');
 				}
-			]
-		},
-		{
+			}, {
+				label: 'Manage Devices',
+				accelerator: 'Alt+D',
+				click: function() {
+					Windows.main.webContents.send('deviceManager.create');
+				}
+			}, {
+				label: 'Change Password',
+				click: function() {
+					Windows.main.webContents.send('changePassword.create');
+				}
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Settings',
+				submenu: [
+					{
+						label: 'Notifications',
+						type: 'checkbox',
+						checked: settings.notify,
+						click: function(e) {
+							Windows.main.webContents.send(
+								'main.updateNotifySetting',
+								e.checked
+							);
+						}
+					}, {
+						label: 'Sounds',
+						type: 'checkbox',
+						checked: settings.sounds,
+						click: function(e) {
+								Windows.main.webContents.send(
+								'main.updateSoundsSetting',
+								e.checked
+							);
+						}
+					}, {
+						label: 'Send Typing Indicator',
+						type: 'checkbox',
+						checked: settings.typing,
+						click: function(e) {
+							Windows.main.webContents.send(
+								'main.updateTypingSetting',
+								e.checked
+							);
+						}
+					}, {
+						type: 'separator'
+					}, {
+						label: 'Delete Account',
+						click: function(e) {
+							Windows.main.webContents.send('main.deleteAccount');
+						}
+					}
+				]
+			}, {
+				label: 'Log Out',
+				click: function(e) {
+					Windows.main.webContents.send('main.logOut');
+				}
+			}, {
+				type: 'separator'
+			}, {
+				label: 'Close',
+				accelerator: 'CmdOrCtrl+W',
+				click: function(item, focusedWindow) {
+					if (focusedWindow) { focusedWindow.close(); }
+				}
+			}, {
+				label: 'Quit',
+				accelerator: 'CmdOrCtrl+Q',
+				click: function() {
+					Windows.main.webContents.send('main.beforeQuit');
+				}
+			}]
+		}, {
 			label: 'Edit',
 			submenu: [{
 				label: 'Undo',
@@ -300,8 +272,7 @@ var buildMainMenu = function(settings) {
 				accelerator: 'CmdOrCtrl+A',
 				role: 'selectall'
 			}]
-		},
-		{
+		}, {
 			label: 'Help',
 			role: 'help',
 			submenu: [{
@@ -311,25 +282,21 @@ var buildMainMenu = function(settings) {
 						'https://crypto.cat/help.html'
 					)
 				}
-			},
-			{
+			}, {
 				label: 'Report a Bug',
 				click: function() {
 					Electron.shell.openExternal(
 						'https://github.com/cryptocat/cryptocat/issues/'
 					)
 				}
-			},
-			{
+			}, {
 				label: 'Check for Updates',
 				click: function() {
 					Windows.main.webContents.send('main.checkForUpdates');
 				}
-			},
-			{
+			}, {
 				type: 'separator'
-			},
-			{
+			}, {
 				label: 'About Cryptocat',
 				click: function() {
 					Windows.main.webContents.send('aboutBox.create');
@@ -384,7 +351,7 @@ Electron.app.on('ready', function() {
 				TrayIcon.displayBalloon({
 					icon: __dirname + '/img/logo/logo.png',
 					title: 'Cryptocat is still running',
-					content: 'Click here to resume using Cryptocat.'
+					content: 'It awaits you snugly in your desktop tray.'
 				});
 			}
 		}
@@ -412,12 +379,12 @@ Electron.app.on('ready', function() {
 		TrayIcon.on('click', function() {
 			Windows.main.show();
 		});
+		Windows.main.setMenu(buildMainMenu({
+			notify: false,
+			sounds: false,
+			typing: false
+		}));
 	}
-	Windows.main.setMenu(buildMainMenu({
-		notify: false,
-		sounds: false,
-		typing: false
-	}));
 });
 
 Electron.ipcMain.on('main.checkForUpdates', function(e, to, message) {

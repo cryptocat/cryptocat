@@ -59,7 +59,7 @@ window.addEventListener('load', function(e) {
 			});
 			Cryptocat.Win.main.roster = ReactDOM.render(
 				React.createElement(mainRoster, null),
-				document.getElementById('mainRoster')
+				document.getElementById('renderB')
 			);
 			Cryptocat.Notify.playSound('loggedIn');
 			IPCRenderer.send('app.updateTraySettings', {
@@ -78,7 +78,7 @@ window.addEventListener('load', function(e) {
 				display: 'block'
 			});
 			ReactDOM.unmountComponentAtNode(
-				document.getElementById('mainRoster')
+				document.getElementById('renderB')
 			);
 		},
 		render: function() {
@@ -153,33 +153,30 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Win.create.chat(this.props.username);
 		},
 		onContextMenu: function(e) {
-			var _t = this;
-			var menu = new Remote.Menu();
-			menu.append(new Remote.MenuItem({
-				label: 'Open Chat',
-				click: function() { _t.onClick(); }
-			}));
-			menu.append(new Remote.MenuItem({
-				label: 'View Devices',
-				click: function() {
-					Cryptocat.Win.create.deviceManager(_t.props.username);
-				}
-			}));
-			menu.append(new Remote.MenuItem({
-				type: 'separator'
-			}));
-			menu.append(new Remote.MenuItem({
-				label: 'Remove Buddy',
-				click: function() {
-					Cryptocat.Diag.message.removeBuddyConfirm(function(response) {
-						if (response === 0) {
-							Cryptocat.XMPP.removeBuddy(_t.props.username);
-						}
-					});
-				}
-			}));
 			e.preventDefault();
-			menu.popup();
+			var _t = this;
+			(Remote.Menu.buildFromTemplate([
+				{
+					label: 'Open Chat',
+					click: function() { _t.onClick(); }
+				}, {
+					label: 'View Devices',
+					click: function() {
+						Cryptocat.Win.create.deviceManager(_t.props.username);
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Remove Buddy',
+					click: function() {
+						Cryptocat.Diag.message.removeBuddyConfirm(function(response) {
+							if (response === 0) {
+								Cryptocat.XMPP.removeBuddy(_t.props.username);
+							}
+						});
+					}
+				}
+			])).popup(Remote.getCurrentWindow());
 		},
 		render: function() {
 			return React.createElement('div', {
@@ -339,7 +336,7 @@ window.addEventListener('load', function(e) {
 				}, 'Welcome.'),
 				React.createElement('p', {
 					key: 4
-				}, 'Your buddy list is empty. Add your first buddy by pressing Alt+A.'))
+				}, ''))
 			].concat(buddiesArrays));
 		}
 	});
@@ -359,7 +356,9 @@ window.addEventListener('load', function(e) {
 		updateDownloader.webContents.on('did-finish-load', function() {
 			updateDownloader.show();
 		});
-		updateDownloader.loadURL('file://' + __dirname + '/updateDownloader.html');
+		updateDownloader.loadURL(
+			'file://' + __dirname + '/updateDownloader.html'
+		);
 	};
 
 	Cryptocat.Win.create.chat = function(username, callback) {
@@ -438,7 +437,9 @@ window.addEventListener('load', function(e) {
 		changePasswordWindow.webContents.on('did-finish-load', function() {
 			changePasswordWindow.show();
 		});
-		changePasswordWindow.loadURL('file://' + __dirname + '/changePassword.html');
+		changePasswordWindow.loadURL(
+			'file://' + __dirname + '/changePassword.html'
+		);
 	}
 
 	Cryptocat.Win.create.addDevice = function() {
@@ -483,7 +484,9 @@ window.addEventListener('load', function(e) {
 			delete Cryptocat.Win.deviceManager[username];
 		});
 		Cryptocat.Win.deviceManager[username].setMenu(null);
-		Cryptocat.Win.deviceManager[username].loadURL('file://' + __dirname + '/deviceManager.html');
+		Cryptocat.Win.deviceManager[username].loadURL(
+			'file://' + __dirname + '/deviceManager.html'
+		);
 	};
 
 	Cryptocat.Win.updateDeviceManager = function(username) {
@@ -505,16 +508,18 @@ window.addEventListener('load', function(e) {
 				)
 			});
 		}};
-		Cryptocat.Win.deviceManager[username].webContents.send('deviceManager.update', {
-			username: username,
-			devices: devices,
-			mine: (username === Cryptocat.Me.username)
-		});
+		Cryptocat.Win.deviceManager[username].webContents.send(
+			'deviceManager.update', {
+				username: username,
+				devices: devices,
+				mine: (username === Cryptocat.Me.username)
+			}
+		);
 	};
 
 	Cryptocat.Win.main.login = ReactDOM.render(
 		React.createElement(mainLogin, null),
-		document.getElementById('mainLogin')
+		document.getElementById('renderA')
 	);
 
 	Cryptocat.Win.main.beforeQuit = function() {
@@ -527,7 +532,7 @@ window.addEventListener('load', function(e) {
 				width:  size[0],
 				height: size[1]
 			}
-		}, function() {;
+		}, function() {
 			for (var username in Cryptocat.Win.chat) {
 				if (hasProperty(Cryptocat.Win.chat, username)) {
 					Cryptocat.Win.chat[username].destroy();
@@ -628,7 +633,9 @@ window.addEventListener('load', function(e) {
 		if (deviceId === Cryptocat.Me.settings.deviceId) {
 			Cryptocat.Diag.message.removeThisDevice(function(response) {
 				if (response === 0) {
-					var index = Cryptocat.Me.settings.deviceIds.indexOf(deviceId);
+					var index = Cryptocat.Me.settings.deviceIds.indexOf(
+						deviceId
+					);
 					if (index >= 0) {
 						Cryptocat.Me.settings.deviceIds.splice(index, 1);
 					}
@@ -649,7 +656,9 @@ window.addEventListener('load', function(e) {
 		else {
 			Cryptocat.Diag.message.removeDevice(function(response) {
 				if (response === 0) {
-					var index = Cryptocat.Me.settings.deviceIds.indexOf(deviceId);
+					var index = Cryptocat.Me.settings.deviceIds.indexOf(
+						deviceId
+					);
 					if (index >= 0) {
 						Cryptocat.Me.settings.deviceIds.splice(index, 1);
 					}
@@ -790,17 +799,4 @@ window.addEventListener('load', function(e) {
 	};
 
 });
-
-window.addEventListener('beforeunload', function(e) {
-});
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
 

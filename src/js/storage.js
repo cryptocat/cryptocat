@@ -18,12 +18,12 @@ Cryptocat.Storage = {};
 			var path = process.env.HOME + '/.config';
 			FS.stat(path, function(err, stats) {
 				if (err || !stats.isDirectory()) {
-					FS.mkdirSync(path);
+					FS.mkdirSync(path, '0o700');
 				}
 				path += '/Cryptocat';
 				FS.stat(path, function(err, stats) {
 					if (err || !stats.isDirectory()) {
-						FS.mkdirSync(path);
+						FS.mkdirSync(path, '0o700');
 					}
 					path += '/';
 					db = new NeDB({
@@ -226,13 +226,13 @@ Cryptocat.Storage = {};
 		var bundleObj = {};
 		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
 			var bundle = 'userBundles.' + user  + '.' + deviceId;
-			bundleObj[bundle + '.identityKey']           = userBundles[deviceId].identityKey;
-			bundleObj[bundle + '.signedPreKey']          = userBundles[deviceId].signedPreKey;
-			bundleObj[bundle + '.signedPreKeyId']        = userBundles[deviceId].signedPreKeyId;
+			bundleObj[bundle + '.identityKey'] = userBundles[deviceId].identityKey;
+			bundleObj[bundle + '.signedPreKey'] = userBundles[deviceId].signedPreKey;
+			bundleObj[bundle + '.signedPreKeyId'] = userBundles[deviceId].signedPreKeyId;
 			bundleObj[bundle + '.signedPreKeySignature'] = userBundles[deviceId].signedPreKeySignature;
-			bundleObj[bundle + '.preKeys']               = userBundles[deviceId].preKeys;
+			bundleObj[bundle + '.preKeys'] = userBundles[deviceId].preKeys;
 			if (overwriteAxolotl) {
-				bundleObj[bundle + '.axolotl']           = userBundles[deviceId].axolotl;
+				bundleObj[bundle + '.axolotl'] = userBundles[deviceId].axolotl;
 			}
 		}}
 		db.update({_id: username},

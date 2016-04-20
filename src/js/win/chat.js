@@ -1,8 +1,8 @@
 window.addEventListener('load', function(e) {
 	'use strict';
 
-	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate(
-		[{
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate([
+		{
 			label: 'Chat',
 			submenu: [{
 				label: 'View Devices',
@@ -115,8 +115,8 @@ window.addEventListener('load', function(e) {
 					Cryptocat.Diag.message.about();
 				}
 			}]
-		}]
-	));
+		}
+	]));
 	 
 	var getTimestamp = function(stamp) {
 		var date = new Date(stamp);
@@ -355,6 +355,59 @@ window.addEventListener('load', function(e) {
 			}));
 		}
 	});
+	
+	var chatFileDragOverlay = React.createClass({
+		displayName: 'chatFileDragOverlay',
+		getInitialState: function() {
+			return {
+				visible: false
+			}
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		onDragEnter: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			this.setState({visible: true});
+			return false;
+		},
+		onDragLeave: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			
+			return false;
+		},
+		onDrop: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			this.setState({visible: false});
+			if (e.isTrusted) {
+				thisChat.window.sendFile(e.dataTransfer.files[0].path);
+			}
+			return false;
+		},
+		render: function() {
+			return React.createElement('div', {
+				id: 'chatFileDragOverlay',
+				'data-visible': this.state.visible,
+				onDragEnter: this.onDragEnter,
+				onDragLeave: this.onDragLeave,
+				onDrop: this.onDrop,
+				key: 0
+			}, React.createElement('img', {
+				src: '../img/icons/file.png',
+				alt: '',
+				key: 1
+			}),
+			React.createElement('h2', {
+				key: 2
+			}, 'Drop File to Send.'),
+			React.createElement('p', {
+				key: 3
+			}, 'Your file will be encrypted and sent over Cryptocat.'));
+		}
+	});
 
 	var chatWindow = React.createClass({
 		displayName: 'chatWindow',
@@ -377,43 +430,11 @@ window.addEventListener('load', function(e) {
 			};
 		},
 		componentDidMount: function() {
-			document.getElementById('chatInputText').addEventListener('contextmenu', function(e) {
-				e.preventDefault();
-				(Remote.Menu.buildFromTemplate(
-					[{
-						label: 'Undo',
-						accelerator: 'CmdOrCtrl+Z',
-						role: 'undo'
-					}, {
-						label: 'Redo',
-						accelerator: 'Shift+CmdOrCtrl+Z',
-						role: 'redo'
-					}, {
-						type: 'separator'
-					}, {
-						label: 'Cut',
-						accelerator: 'CmdOrCtrl+X',
-						role: 'cut'
-					}, {
-						label: 'Copy',
-						accelerator: 'CmdOrCtrl+C',
-						role: 'copy'
-					}, {
-						label: 'Paste',
-						accelerator: 'CmdOrCtrl+V',
-						role: 'paste'
-					}, {
-						label: 'Select All',
-						accelerator: 'CmdOrCtrl+A',
-						role: 'selectall'
-					}]
-				)).popup(Remote.getCurrentWindow());
-			}, false);
 			return true;
 		},
 		componentDidUpdate: function() {	
 		},
-		onChangeChatInputText: function(e) {
+		onChatInputTextChange: function(e) {
 			this.setState({chatInputText: e.target.value});
 		},
 		onSubmit: function() {
@@ -431,6 +452,39 @@ window.addEventListener('load', function(e) {
 				offline: (this.state.status !== 2)
 			});
 			return false;
+		},
+		onChatInputTextContextMenu: function(e) {
+			e.preventDefault();
+			(Remote.Menu.buildFromTemplate([
+				{
+					label: 'Undo',
+					accelerator: 'CmdOrCtrl+Z',
+					role: 'undo'
+				}, {
+					label: 'Redo',
+					accelerator: 'Shift+CmdOrCtrl+Z',
+					role: 'redo'
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Cut',
+					accelerator: 'CmdOrCtrl+X',
+					role: 'cut'
+				}, {
+					label: 'Copy',
+					accelerator: 'CmdOrCtrl+C',
+					role: 'copy'
+				}, {
+					label: 'Paste',
+					accelerator: 'CmdOrCtrl+V',
+					role: 'paste'
+				}, {
+					label: 'Select All',
+					accelerator: 'CmdOrCtrl+A',
+					role: 'selectall'
+				}
+			])).popup(Remote.getCurrentWindow());
+			return true;
 		},
 		files: {},
 		recordings: {},
@@ -552,8 +606,10 @@ window.addEventListener('load', function(e) {
 						Cryptocat.Recording.start();
 						thisChat.window.setState({
 							recordTimer: setInterval(function() {
+								var rTP1 = thisChat.window
+									.state.recordTime + 1;
 								thisChat.window.setState({
-									recordTime: thisChat.window.state.recordTime + 1
+									recordTime: rTP1
 								});
 							}, 1000)
 						});
@@ -771,7 +827,7 @@ window.addEventListener('load', function(e) {
 					key: 2,
 					id: 'chatContents',
 					style: {
-						'font-size': this.state.fontSize + 'px'
+						fontSize: this.state.fontSize + 'px'
 					}
 				}, this.state.conversation),
 				React.createElement('div', {
@@ -889,12 +945,13 @@ window.addEventListener('load', function(e) {
 					key: 23,
 					id: 'chatInputText',
 					style: {
-						'font-size': this.state.fontSize + 'px'
+						fontSize: this.state.fontSize + 'px'
 					},
 					autoFocus: true,
 					form: 'chatInput',
 					placeholder: 'Type in your message...',
-					onChange: this.onChangeChatInputText,
+					onChange: this.onChatInputTextChange,
+					onContextMenu: this.onChatInputTextContextMenu,
 					disabled: (this.state.status === 0),
 					'data-enabled': !!this.state.status,
 					value: this.state.chatInputText
@@ -906,7 +963,11 @@ window.addEventListener('load', function(e) {
 	var thisChat = {
 		window: ReactDOM.render(
 			React.createElement(chatWindow, null),
-			document.getElementById('chatWindow')
+			document.getElementById('renderA')
+		),
+		chatFileDragOverlay: ReactDOM.render(
+			React.createElement(chatFileDragOverlay, null),
+			document.getElementById('renderB')
 		),
 		contents: function() {
 			return document.getElementById('chatContents');
@@ -1087,38 +1148,5 @@ window.addEventListener('load', function(e) {
 			e.returnValue = 'false';
 		}
 	});
-
-	var dragCounter = 0;
-	document.addEventListener('dragenter', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		document.getElementById('chatFileDragOverlay').dataset.visible = true;
-		dragCounter++;
-		return false;
-	}, false);
-	document.addEventListener('dragover', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		return false;
-	}, false);
-	document.addEventListener('dragleave', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		dragCounter--;
-		if (!dragCounter) {
-			document.getElementById('chatFileDragOverlay').dataset.visible = false;
-		}
-	}, false);
-	document.addEventListener('drop', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		dragCounter = 0;
-		document.getElementById('chatFileDragOverlay').dataset.visible = false;	
-		if (e.isTrusted) {
-			thisChat.window.sendFile(e.dataTransfer.files[0].path);
-		}
-		return false;
-	}, false);
-
 });
 

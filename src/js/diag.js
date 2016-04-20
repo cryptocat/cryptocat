@@ -135,9 +135,9 @@ Cryptocat.Diag = {
 	Cryptocat.Diag.error.recordTime = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Recording Too Long',
-			'Sorry, the recording you have created exceeds the allowed time limit ' +
-			'of 60 seconds. It cannot be sent. The small red bar indicates how much time ' +
-			'you have left for your recording.'
+			'Your recording exceeds the allowed time limit of ' +
+			'60 seconds. It cannot be sent. The small red bar ' +
+			'indicates how much time you have left for your recording.'
 		);
 	};
 
@@ -162,8 +162,8 @@ Cryptocat.Diag = {
 			title: 'Cryptocat: Logging in from New Device',
 			message: 'You are logging into your Cryptocat account ' +
 				'from a new computer.\n \n' +
-				'Doing so will add this computer to your list of trusted devices and ' +
-				'store sensitive encryption keys in your user profile. \n \n' +
+				'Doing so will add this computer to your list of trusted devices ' +
+				'and store sensitive encryption keys in your user profile. \n \n' +
 				'Continue and add this computer as a trusted device?'
 		}, callback);
 	};
@@ -283,8 +283,9 @@ Cryptocat.Diag = {
 			defaultId: 0,
 			title: 'About Cryptocat',
 			message: 'Cryptocat ' + Cryptocat.Version + ', Beta release.\n' +
-				'Authored by Nadim Kobeissi.\n\nDistributed as free software ' +
-				'under the GNU General Public License (version 3).\n\n' +
+				'Authored by Nadim Kobeissi.\n\n' +
+				'Distributed as free software under the GNU General ' +
+				'Public License (version 3).\n\n' +
 				'N. L.'
 		}, function(response) {
 			if (response === 1) {
@@ -331,7 +332,8 @@ Cryptocat.Diag = {
 			buttons: ['Accept', 'Deny', 'Remind me later'],
 			defaultId: 2,
 			title: 'Cryptocat: Buddy Request!',
-			message: '"' + username + '" would like to be your buddy. Accept their request?',
+			message: '"' + username + '" would like to be your buddy. ' +
+				'Accept their request?',
 		}, callback);
 	};
 
@@ -391,12 +393,10 @@ Cryptocat.Diag = {
 		dialog.showSaveDialog(browserWindow, {
 			title: 'Cryptocat: Save Update Installer',
 			defaultPath: defaultPath,
-			filters: [
-				{
-					name: 'Archives',
-					extensions: ['zip']
-				}
-			]
+			filters: [{
+				name: 'Archives',
+				extensions: ['zip']
+			}]
 		}, callback);
 	};
 
@@ -421,55 +421,47 @@ Cryptocat.Diag = {
 			title: 'Cryptocat: Select File to Send',
 			defaultPath: defaultPath,
 			properties: ['openFile'],
-			filters: [
-				{
-					name: 'All Files',
-					extensions: ['*']
-				},
-				{
-					name: 'Images',
-					extensions: [
-						'ai', 'bmp',  'eps',
-						'gif', 'jpg', 'jpeg',
-						'png', 'psd', 'svg',
-					]
-				},
-				{
-					name: 'Audio',
-					extensions: [
-						'aac', 'mp3', 'wma'
-					]
-				},
-				{
-					name: 'Videos',
-					extensions: [
-						'avi', 'flv', 'mkv',
-						'mov', 'mp4', 'mpeg',
-						'mpg', 'webm'
-					]
-				},
-				{
-					name: 'Documents',
-					extensions: [
-						'aut', 'cad',  'csv',
-						'doc', 'docx', 'pdf',
-						'ppt', 'ps',   'rtf',
-						'txt', 'xls',  'xlsx'
-					]
-				},
-				{
-					name: 'Code',
-					extensions: ['java']
-				},
-				{
-					name: 'Archives',
-					extensions: [
-						'7z',  'bin', 'bz2',
-						'db',  'iso', 'rar',
-						'sql', 'tar', 'zip'
-					]
-				}
-			]
+			filters: [{
+				name: 'All Files',
+				extensions: ['*']
+			}, {
+				name: 'Images',
+				extensions: [
+					'ai', 'bmp',  'eps',
+					'gif', 'jpg', 'jpeg',
+					'png', 'psd', 'svg',
+				]
+			}, {
+				name: 'Audio',
+				extensions: [
+					'aac', 'mp3', 'wma'
+				]
+			}, {
+				name: 'Videos',
+				extensions: [
+					'avi', 'flv', 'mkv',
+					'mov', 'mp4', 'mpeg',
+					'mpg', 'webm'
+				]
+			}, {
+				name: 'Documents',
+				extensions: [
+					'aut', 'cad',  'csv',
+					'doc', 'docx', 'pdf',
+					'ppt', 'ps',   'rtf',
+					'txt', 'xls',  'xlsx'
+				]
+			}, {
+				name: 'Code',
+				extensions: ['java']
+			}, {
+				name: 'Archives',
+				extensions: [
+					'7z',  'bin', 'bz2',
+					'db',  'iso', 'rar',
+					'sql', 'tar', 'zip'
+				]
+			}]
 		}, callback);
 	};
 

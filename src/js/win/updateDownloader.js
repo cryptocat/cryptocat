@@ -55,7 +55,7 @@ window.addEventListener('load', function(e) {
 
 	var thisUpdateDownloader = ReactDOM.render(
 		React.createElement(updateDownloader, null),
-		document.getElementById('updateDownloader')
+		document.getElementById('renderA')
 	);
 
 	var verifySignature = function(path, hash, callback) {
@@ -131,14 +131,3 @@ window.addEventListener('load', function(e) {
 	});
 
 });
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-

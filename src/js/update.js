@@ -47,7 +47,9 @@ Cryptocat.Update = {
 				Cryptocat.Win.create.updateDownloader();
 			}
 			if (response === 1) {
-				Remote.shell.openExternal('https://crypto.cat/news.html#' + latest);
+				Remote.shell.openExternal(
+					'https://crypto.cat/news.html#' + latest
+				);
 				Cryptocat.Update.updateAvailable(latest);
 			}
 		});

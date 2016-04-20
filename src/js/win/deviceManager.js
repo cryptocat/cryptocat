@@ -81,7 +81,7 @@ window.addEventListener('load', function(e) {
 	var thisDeviceManager = {
 		window: ReactDOM.render(
 			React.createElement(deviceManager, null),
-			document.getElementById('deviceManager')
+			document.getElementById('renderA')
 		)
 	};
 
@@ -106,14 +106,4 @@ window.addEventListener('load', function(e) {
 	});
 
 });
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
 

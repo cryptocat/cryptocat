@@ -84,18 +84,8 @@ window.addEventListener('load', function(e) {
 
 	var thisChangePassword = ReactDOM.render(
 		React.createElement(changePassword, null),
-		document.getElementById('changePassword')
+		document.getElementById('renderA')
 	);
 
 });
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
 

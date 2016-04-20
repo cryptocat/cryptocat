@@ -112,18 +112,8 @@ window.addEventListener('load', function(e) {
 	var thisAddDevice = {
 		window: ReactDOM.render(
 			React.createElement(addDevice, null),
-			document.getElementById('addDevice')
+			document.getElementById('renderB')
 		)
 	};
 });
-
-document.addEventListener('dragover', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
-
-document.addEventListener('drop', function(e) {
-	e.preventDefault();
-	return false;
-}, false);
 
