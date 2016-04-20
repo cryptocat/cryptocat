@@ -381,7 +381,7 @@ window.addEventListener('load', function(e) {
 				unread:          0,
 				recordTime:      0,
 				recordCountdown: 3,
-				fontSize:       13,
+				fontSize:       12,
 				chatInputText:   '',
 				myChatState:     'paused',
 				theirChatState:  'paused',
@@ -725,7 +725,7 @@ window.addEventListener('load', function(e) {
 		},
 		resetFontSize: function() {
 			this.setState({
-				fontSize: 13
+				fontSize: 12
 			});
 		},
 		statusMessages: [

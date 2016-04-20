@@ -513,7 +513,6 @@ textarea#chatInputText {
 	box-sizing: border-box;
 	outline: none;
 	cursor: text;
-	font-size: 13px;
 	padding: 8px 5px 5px 8px;
 	border: none;
 }
