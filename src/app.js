@@ -2,8 +2,9 @@ const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
 const FS            = require('fs');
 
-var Windows  = { main: null, last: null };
-var TrayIcon = {};
+var Windows      = { main: null, last: null };
+var TrayIcon     = {};
+var MenuSettings = {};
 var IntentToQuit = false;
 
 var handleStartupEvent = function() {
@@ -154,7 +155,7 @@ var buildTrayMenu = function(settings) {
 				Windows.main.webContents.send('main.beforeQuit');
 			}
 		}));
-	}
+	};
 	return menu;
 };
 
@@ -162,6 +163,8 @@ var buildMainMenu = function(settings) {
 	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
+			id: 'Account',
+			enabled: true,
 			submenu: [{
 				label: 'Add Buddy',
 				accelerator: 'Alt+A',
@@ -245,6 +248,8 @@ var buildMainMenu = function(settings) {
 			}]
 		}, {
 			label: 'Edit',
+			id: 'Edit',
+			enabled: true,
 			submenu: [{
 				label: 'Undo',
 				accelerator: 'CmdOrCtrl+Z',
@@ -274,7 +279,9 @@ var buildMainMenu = function(settings) {
 			}]
 		}, {
 			label: 'Help',
+			label: 'Help',
 			role: 'help',
+			enabled: true,
 			submenu: [{
 				label: 'Getting Started',
 				click: function() {
@@ -304,7 +311,7 @@ var buildMainMenu = function(settings) {
 			}]
 		}
 	]);
-	if (false) {
+	if (true) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
@@ -322,7 +329,74 @@ var buildMainMenu = function(settings) {
 				}
 			}]
 		}));
-	}
+	};
+	return menu;
+};
+
+var buildMacMenu = function(settings) {
+	var chat = Electron.Menu.buildFromTemplate({
+		label: 'Chat',
+		position: 'after=Account',
+		enabled: (/chat\.html$/).test(Windows.last.getURL()),
+		submenu: [{
+			label: 'View Devices',
+			click: function() {
+				Windows.last.webContents.send('chat.viewDevices');
+			}
+		}, {
+			label: 'Send File',
+			accelerator: 'alt+F',
+			click: function() {
+				Windows.last.webContents.send('chat.sendFile');
+			}
+		}, {
+			label: 'Record Audio/Video',
+			accelerator: 'alt+R',
+			click: function() {
+				Windows.last.webContents.send('chat.record');
+			}
+		}, {
+			type: 'separator'
+		}, {
+			label: 'Close',
+			accelerator: 'CmdOrCtrl+W',
+			click: function() {
+				Windows.last.close();
+			}
+		}]
+	});
+	var view = Electron.Menu.buildFromTemplate({
+		label: 'View',
+		position: 'before=Help',
+		enabled: (/chat\.html$/).test(Windows.last.getURL()),
+		submenu: [{
+			label: 'Hide',
+			role: 'hide'
+		}, {
+			type: 'separator'
+		}, {
+			label: 'Increase Font Size',
+			accelerator: 'CmdOrCtrl+Plus',
+			click: function() {
+				Windows.last.webContents.send('chat.increaseFontSize');
+			}
+		}, {
+			label: 'Decrease Font Size',
+			accelerator: 'CmdOrCtrl+-',
+			click: function() {
+				Windows.last.webContents.send('chat.decreaseFontSize');
+			}
+		}, {
+			label: 'Reset Font Size',
+			accelerator: 'CmdOrCtrl+0',
+			click: function() {
+				Windows.last.webContents.send('chat.resetFontSize');
+			}
+		}]
+	});
+	var menu = buildMainMenu(settings);
+	menu.insert(1, chat);
+	menu.insert(3, view);
 	return menu;
 };
 	
@@ -363,7 +437,7 @@ Electron.app.on('ready', function() {
 			sounds: false,
 			typing: false,
 		}));
-		Electron.Menu.setApplicationMenu(buildMainMenu({
+		Electron.Menu.setApplicationMenu(buildMacMenu({
 			notify: false,
 			sounds: false,
 			typing: false
@@ -431,9 +505,10 @@ Electron.ipcMain.on('main.beforeQuit', function(e) {
 	e.returnValue = 'true';
 });
 
-Electron.ipcMain.on('app.updateTraySettings', function(e, settings) {
+Electron.ipcMain.on('app.updateMenuSettings', function(e, settings) {
+	MenuSettings = settings;
 	if (process.platform === 'darwin') {
-		Electron.Menu.setApplicationMenu(buildMainMenu(settings));
+		Electron.Menu.setApplicationMenu(buildMacMenu(settings));
 		Electron.app.dock.setMenu(buildTrayMenu(settings));
 	}
 	else {
@@ -455,6 +530,9 @@ Electron.app.on('browser-window-created', function(e, w) {
 
 Electron.app.on('browser-window-focus', function(e, w) {
 	Windows.last = w;
+	if (process.platform === 'darwin') {
+		Electron.Menu.setApplicationMenu(buildMacMenu(settings));
+	}
 });
 
 Electron.app.on('activate', function(e) {

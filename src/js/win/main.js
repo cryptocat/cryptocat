@@ -62,7 +62,7 @@ window.addEventListener('load', function(e) {
 				document.getElementById('renderB')
 			);
 			Cryptocat.Notify.playSound('loggedIn');
-			IPCRenderer.send('app.updateTraySettings', {
+			IPCRenderer.send('app.updateMenuSettings', {
 				notify: Cryptocat.Me.settings.notify,
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing
@@ -685,7 +685,7 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.updateNotifySetting', function(e, notify) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.notify = notify;
-			IPCRenderer.send('app.updateTraySettings', {
+			IPCRenderer.send('app.updateMenuSettings', {
 				notify: Cryptocat.Me.settings.notify,
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing
@@ -699,7 +699,7 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.updateSoundsSetting', function(e, sounds) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.sounds = sounds;
-			IPCRenderer.send('app.updateTraySettings', {
+			IPCRenderer.send('app.updateMenuSettings', {
 				notify: Cryptocat.Me.settings.notify,
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing
@@ -713,7 +713,7 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.updateTypingSetting', function(e, typing) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.typing = typing;
-			IPCRenderer.send('app.updateTraySettings', {
+			IPCRenderer.send('app.updateMenuSettings', {
 				notify: Cryptocat.Me.settings.notify,
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing

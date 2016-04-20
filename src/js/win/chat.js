@@ -1031,6 +1031,33 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	IPCRenderer.on('chat.viewDevices', function(e) {
+		IPCRenderer.send(
+			'deviceManager.create',
+			thisChat.window.state.to
+		);
+	});
+
+	IPCRenderer.on('chat.sendFile', function(e) {
+		thisChat.window.sendFileDialog();
+	});
+
+	IPCRenderer.on('chat.record', function(e) {
+		thisChat.window.record();
+	});
+
+	IPCRenderer.on('chat.increaseFontSize', function(e) {
+		thisChat.window.increaseFontSize();
+	});
+
+	IPCRenderer.on('chat.decreaseFontSize', function(e) {
+		thisChat.window.decreaseFontSize();
+	});
+
+	IPCRenderer.on('chat.resetFontSize', function(e) {
+		thisChat.window.resetFontSize();
+	});
+
 	Mousetrap(
 		document.getElementById('chatInputText')
 	).bind('enter', function(e, combo) {
