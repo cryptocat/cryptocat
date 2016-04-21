@@ -441,7 +441,7 @@ window.addEventListener('load', function(e) {
 			});
 			return false;
 		},
-		onChatInputTextContextMenu: function(e) {
+		onContextMenu: function(e) {
 			e.preventDefault();
 			(Remote.Menu.buildFromTemplate([
 				{
@@ -814,6 +814,7 @@ window.addEventListener('load', function(e) {
 				React.createElement('div', {
 					key: 2,
 					id: 'chatContents',
+					onContextMenu: this.onContextMenu,
 					style: {
 						fontSize: this.state.fontSize + 'px'
 					}
@@ -939,7 +940,7 @@ window.addEventListener('load', function(e) {
 					form: 'chatInput',
 					placeholder: 'Type in your message...',
 					onChange: this.onChatInputTextChange,
-					onContextMenu: this.onChatInputTextContextMenu,
+					onContextMenu: this.onContextMenu,
 					disabled: (this.state.status === 0),
 					'data-enabled': !!this.state.status,
 					value: this.state.chatInputText
