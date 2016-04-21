@@ -411,6 +411,7 @@ Electron.app.on('ready', function() {
 		show: false,
 		title: 'Cryptocat'
 	});
+	Windows.last = Windows.main;
 	Windows.main.on('close', function(e) {
 		if (!IntentToQuit) {
 			e.preventDefault();
@@ -516,10 +517,6 @@ Electron.ipcMain.on('app.quit', function(e) {
 	Windows.main.destroy();
 	Electron.app.quit();
 	e.returnValue = 'true';
-});
-
-Electron.app.on('browser-window-created', function(e, w) {
-	Windows.last = w;
 });
 
 Electron.app.on('browser-window-focus', function(e, w) {
