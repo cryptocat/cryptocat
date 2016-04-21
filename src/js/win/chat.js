@@ -407,7 +407,7 @@ window.addEventListener('load', function(e) {
 				unread:          0,
 				recordTime:      0,
 				recordCountdown: 3,
-				fontSize:		 12,
+				fontSize:        12,
 				chatInputText:   '',
 				myChatState:     'paused',
 				theirChatState:  'paused',
