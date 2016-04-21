@@ -112,7 +112,7 @@ window.addEventListener('load', function(e) {
 	var thisAddDevice = {
 		window: ReactDOM.render(
 			React.createElement(addDevice, null),
-			document.getElementById('renderB')
+			document.getElementById('renderA')
 		)
 	};
 });
