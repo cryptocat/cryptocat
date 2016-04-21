@@ -8,16 +8,7 @@ Cryptocat.Recording = {};
 	var recordedBlobs = [];
 	
 	Cryptocat.Recording.createStream = function(callback) {
-		mediaSource = new MediaSource();
-		mediaSource.addEventListener('sourceopen', function(e) {
-			sourceBuffer = mediaSource.addSourceBuffer(
-				'video/webm; codecs="vp8"'
-			);
-		}, false);
-		navigator.webkitGetUserMedia({
-			audio: true,
-			video: true
-		}, function(stream) {
+		var onStream = function(stream) {
 			callback(stream);
 			mediaRecorder = new MediaRecorder(stream, {
 				mimeType: 'video/webm'
@@ -34,7 +25,28 @@ Cryptocat.Recording = {};
 					track.stop();
 				});
 			};
-		}, function(err) {});
+		};
+		mediaSource = new MediaSource();
+		mediaSource.addEventListener('sourceopen', function(e) {
+			sourceBuffer = mediaSource.addSourceBuffer(
+				'video/webm; codecs="vp8"'
+			);
+		}, false);
+		navigator.webkitGetUserMedia({
+			audio: true,
+			video: true
+		}, function(stream) {
+			onStream(stream);
+		}, function(err) {
+			navigator.webkitGetUserMedia({
+				audio: true,
+				video: false
+			}, function(stream) {
+				onStream(stream);
+			}, function(err) {
+				Cryptocat.Diag.error.recordingInput();
+			});
+		});
 		return false;
 	}
 

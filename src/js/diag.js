@@ -125,6 +125,13 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.error.recordingInput = function() {
+		dialog.showErrorBox(
+			'Cryptocat: Recording Error',
+			'Cryptocat could not detect a webcam or microphone on this computer.'
+		);
+	};
+
 	Cryptocat.Diag.error.recordingGeneral = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Recording Error',
