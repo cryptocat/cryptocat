@@ -261,7 +261,7 @@ window.addEventListener('load', function(e) {
 				key: 0
 			}, React.createElement('img', {
 				className: 'chatFileIcon',
-				src: '../img/files/' + this.props.file.type + '.png',
+				src: '../img/files/' + this.props.file.type.toLowerCase() + '.png',
 				onClick: this.onClick,
 				key: 1
 			}), React.createElement('div', {
