@@ -401,20 +401,20 @@ window.addEventListener('load', function(e) {
 		displayName: 'chatWindow',
 		getInitialState: function() {
 			return {
-				recordVisible:	 false,
-				status:			-1,
-				key:			 0,
-				unread:			 0,
-				recordTime:		 0,
+				recordVisible:   false,
+				status:          -1,
+				key:             0,
+				unread:          0,
+				recordTime:      0,
 				recordCountdown: 3,
-				fontSize:		12,
-				chatInputText:	 '',
-				myChatState:	 'paused',
+				fontSize:		 12,
+				chatInputText:   '',
+				myChatState:     'paused',
 				theirChatState:  'paused',
-				to:				 '',
-				recordSrc:		 '',
-				conversation:	 [],
-				recordTimer:	 {}
+				to:              '',
+				recordSrc:       '',
+				conversation:    [],
+				recordTimer:     {}
 			};
 		},
 		componentDidMount: function() {
