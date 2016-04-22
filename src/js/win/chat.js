@@ -393,7 +393,8 @@ window.addEventListener('load', function(e) {
 			}, 'Drop File to Send.'),
 			React.createElement('p', {
 				key: 3
-			}, 'Your file will be encrypted and sent over Cryptocat.'));
+			},
+			'Your file will be encrypted and sent over Cryptocat.'));
 		}
 	});
 
