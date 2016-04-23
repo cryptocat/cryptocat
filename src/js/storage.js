@@ -18,12 +18,18 @@ Cryptocat.Storage = {};
 			var path = process.env.HOME + '/.config';
 			FS.stat(path, function(err, stats) {
 				if (err || !stats.isDirectory()) {
-					FS.mkdirSync(path, '0o700');
+					FS.mkdirSync(path, 0o700);
+				}
+				else {
+					FS.chmodSync(path, 0o700);
 				}
 				path += '/Cryptocat';
 				FS.stat(path, function(err, stats) {
 					if (err || !stats.isDirectory()) {
-						FS.mkdirSync(path, '0o700');
+						FS.mkdirSync(path, 0o700);
+					}
+					else {
+						FS.chmodSync(path, 0o700);
 					}
 					path += '/';
 					db = new NeDB({
