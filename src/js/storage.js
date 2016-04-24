@@ -2,7 +2,6 @@ Cryptocat.Storage = {};
 
 (function() {
 	'use strict';
-	const NeDB = require('nedb');
 	var db = {};
 	
 	(function() {
