@@ -403,6 +403,7 @@ window.addEventListener('load', function(e) {
 		getInitialState: function() {
 			return {
 				recordVisible:   false,
+				connected:       true,
 				status:          -1,
 				key:             0,
 				unread:          0,
@@ -804,11 +805,19 @@ window.addEventListener('load', function(e) {
 				}, React.createElement('div', {
 					key: 1,
 					className: 'chatTopStatus',
-					'data-status': this.state.status,
+					'data-status': (function() {
+						if (!_t.state.connected) {
+							return 0;
+						}
+						return _t.state.status;
+					})(),
 					'data-theirchatstate': this.state.theirChatState
 				}, (function() {
 					if (_t.state.theirChatState === 'composing') {
 						return _t.state.to + ' is typing...';
+					}
+					if (!_t.state.connected) {
+						return 'You are experiencing connection difficulties.'
 					}
 					return _t.state.to + _t.statusMessages[_t.state.status];
 				})())),
@@ -942,8 +951,14 @@ window.addEventListener('load', function(e) {
 					placeholder: 'Type in your message...',
 					onChange: this.onChatInputTextChange,
 					onContextMenu: this.onContextMenu,
-					disabled: (this.state.status === 0),
-					'data-enabled': !!this.state.status,
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
+					'data-enabled': (
+						this.state.status &&
+						this.state.connected
+					),
 					value: this.state.chatInputText
 				})))
 			]);
@@ -963,7 +978,7 @@ window.addEventListener('load', function(e) {
 			return document.getElementById('chatContents');
 		},
 		chatFileDragOverlayCounter: 0,
-		focused: true,
+		focused: true, 
 		theirComposingTimer: {},
 		myComposingTimer: {},
 		sendQueue: {
@@ -1007,6 +1022,10 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('chat.status', function(e, status) {
 		thisChat.window.setState({status: status});
+	});
+
+	IPCRenderer.on('chat.connected', function(e, connected) {
+		thisChat.window.setState({connected: connected});
 	});
 
 	IPCRenderer.on('chat.theirChatState', function(e, chatState) {

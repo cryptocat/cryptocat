@@ -70,6 +70,12 @@ window.addEventListener('load', function(e) {
 				sounds: Cryptocat.Me.settings.sounds,
 				typing: Cryptocat.Me.settings.typing
 			});
+			for (var username in Cryptocat.Win.chat) {
+				if (hasProperty(Cryptocat.Win.chat, username) {
+					Cryptocat.Win.chat[username]
+						.webContents.send('chat.connected', true);
+				}
+			}
 		},
 		onAuthFailed: function() {
 			Cryptocat.Diag.error.loginInvalid();
@@ -90,6 +96,12 @@ window.addEventListener('load', function(e) {
 				_t.setState({
 					isReconn: true
 				});
+				for (var username in Cryptocat.Win.chat) {
+					if (hasProperty(Cryptocat.Win.chat, username) {
+						Cryptocat.Win.chat[username]
+							.webContents.send('chat.connected', false);
+					}
+				}
 			}
 			console.info(
 				'Cryptocat.Win:',
