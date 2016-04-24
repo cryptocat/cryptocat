@@ -28,7 +28,7 @@ window.addEventListener('load', function(e) {
 			var _t = this;
 			if (Cryptocat.Win.main.roster) {
 				Cryptocat.Win.main.roster.setState({
-					isReconn: _t.state.isReconn;
+					isReconn: _t.state.isReconn
 				});
 			};
 		},
