@@ -17,7 +17,7 @@ window.addEventListener('load', function(e) {
 				password: '',
 				disabled: false,
 				display: 'block',
-				reconnectInterval: 5000
+				reconn: 5000
 			};
 		},
 		componentDidMount: function() {
@@ -89,14 +89,14 @@ window.addEventListener('load', function(e) {
 						_t.onSubmit();
 					});
 					_t.setState({
-						reconnectInterval: reconnectInterval + 5000
+						reconn: _t.state.reconn + 5000
 					});
 					return false;
 				}
 				_t.setState({
-					reconnectInterval: 5000
+					reconn: 5000
 				});
-			}, _t.state.reconnectInterval);
+			}, _t.state.reconn);
 			Cryptocat.Me.connected = false;
 		},
 		onLogOut: function() {

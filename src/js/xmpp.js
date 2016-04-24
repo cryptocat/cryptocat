@@ -152,30 +152,21 @@ Cryptocat.XMPP = {};
 	};
 
 	handler.disconnected = function(callback) {
-		if (Cryptocat.Me.username.length) {
-			Cryptocat.Storage.updateUser(
-				Cryptocat.Me.username,
-				Cryptocat.Me.settings,
-				function() {
-					if (callbacks.disconnected.armed) {
-						callbacks.disconnected.armed = false;
-						callbacks.disconnected.payload();
-					}
-					else {
-						callback(false);
-					}
-				}
-			);
-		}
-		else {
+		var chooseCallback = function() {
 			if (callbacks.disconnected.armed) {
 				callbacks.disconnected.armed = false;
 				callbacks.disconnected.payload();
 			}
-			else {
-				callback(false);
-			}
+			else { callback(false); }
+		};
+		if (Cryptocat.Me.username.length) {
+			Cryptocat.Storage.updateUser(
+				Cryptocat.Me.username,
+				Cryptocat.Me.settings,
+				function() { chooseCallback(); }
+			);
 		}
+		else { chooseCallback(); }
 	};
 	
 	handler.encrypted = function(encrypted) {
