@@ -24,6 +24,14 @@ window.addEventListener('load', function(e) {
 		componentDidMount: function() {
 			return true;
 		},
+		componentDidUpdate: function() {
+			var _t = this;
+			if (Cryptocat.Win.main.roster) {
+				Cryptocat.Win.main.roster.setState({
+					isReconn: _t.state.isReconn;
+				});
+			};
+		},
 		onChangeUsername: function(e) {
 			this.setState({username: e.target.value.toLowerCase()});
 		},
@@ -271,6 +279,7 @@ window.addEventListener('load', function(e) {
 		getInitialState: function() {
 			return {
 				buddies: {},
+				isReconn: false,
 				filter: ''
 			};
 		},
@@ -394,7 +403,7 @@ window.addEventListener('load', function(e) {
 					'data-visible': this.state.isReconn
 				}, 'Disconnected. Reconnecting...'),
 				React.createElement('input', {
-					key: 1,
+					key: 2,
 					type: 'text',
 					className: 'mainRosterFilter',
 					placeholder: 'Filter...',
@@ -402,14 +411,14 @@ window.addEventListener('load', function(e) {
 					onChange: this.onChangeFilter
 				}),
 				React.createElement('div', {
-					key: 2,
+					key: 3,
 					className: 'mainRosterIntro',
 					'data-visible': !buddiesArrays.length
 				}, React.createElement('h2', {
-					key: 3
+					key: 4
 				}, 'Welcome.'),
 				React.createElement('p', {
-					key: 4
+					key: 5
 				}, ''))
 			].concat(buddiesArrays));
 		}
