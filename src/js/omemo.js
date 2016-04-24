@@ -434,14 +434,14 @@ Cryptocat.OMEMO = {};
 		});
 		console.info(deviceIds);
 		if (username === Cryptocat.Me.username) {
+			Cryptocat.XMPP.sendBundle();
 			if (deviceIds.indexOf(Cryptocat.Me.settings.deviceId) < 0) {
 				Cryptocat.XMPP.sendDeviceList(deviceIds.concat(
 					[Cryptocat.Me.settings.deviceId]
 				));
-				Cryptocat.XMPP.sendBundle();
 				setTimeout(function() {
 					Cryptocat.XMPP.getDeviceList(username);
-				}, 1000);
+				}, 2000);
 			}
 			else {
 				Cryptocat.Me.settings.deviceIds = deviceIds;
