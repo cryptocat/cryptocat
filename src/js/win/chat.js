@@ -1015,7 +1015,8 @@ window.addEventListener('load', function(e) {
 		Cryptocat.Me.username = data.myUsername;
 		thisChat.window.setState({
 			status: data.status,
-			to: data.theirUsername
+			to: data.theirUsername,
+			connected: data.connected
 		});
 		document.getElementById('chatInputText').focus();
 	});

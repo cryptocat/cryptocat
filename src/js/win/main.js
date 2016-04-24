@@ -113,7 +113,7 @@ window.addEventListener('load', function(e) {
 					_t.state.isReconn
 				) {
 					var incr = (function() {
-						if (_t.state.reconn < 30000) {
+						if (_t.state.reconn < 20000) {
 							return 5000
 						}
 						return 0
@@ -215,7 +215,11 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		onClick: function() {
-			Cryptocat.Win.create.chat(this.props.username);
+			if (Cryptocat.Me.connected) {
+				Cryptocat.Win.create.chat(
+					this.props.username
+				);
+			}
 		},
 		onContextMenu: function(e) {
 			e.preventDefault();
@@ -384,6 +388,11 @@ window.addEventListener('load', function(e) {
 				className: 'mainRoster',
 				onSubmit: this.onSubmit
 			}, [
+				React.createElement('div', {
+					key: 1,
+					className: 'mainRosterIsReconn',
+					'data-visible': this.state.isReconn
+				}, 'Disconnected. Reconnecting...'),
 				React.createElement('input', {
 					key: 1,
 					type: 'text',
@@ -451,7 +460,8 @@ window.addEventListener('load', function(e) {
 		Cryptocat.Win.chat[username].webContents.send('chat.init', {
 			myUsername: Cryptocat.Me.username,
 			theirUsername: username,
-			status: Cryptocat.Win.main.roster.getBuddyStatus(username)
+			status: Cryptocat.Win.main.roster.getBuddyStatus(username),
+			connected: Cryptocat.Me.connected
 		});
 		Cryptocat.Win.chat[username].setTitle('Chat with ' + username);
 		if (typeof(callback) === 'function') { callback() }

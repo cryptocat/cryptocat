@@ -54,6 +54,22 @@ div.mainRosterIntro[data-visible="false"] {
 	display: none;
 }
 
+div.mainRosterIsReconn {
+	height: 14px;
+	font-size: 12px;
+	padding: 2px;
+	position: relative;
+	top: -18px;
+	transition: top 0.5s;
+	background-color: #F1375A;
+	color: #FFF;
+	font-weight: bold;
+}
+
+div.mainRosterIsReconn[data-visible="true"] {
+	top: 0px;
+}
+
 input.mainRosterFilter {
 	margin: 0 auto;
 	display: block;
