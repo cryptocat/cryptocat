@@ -84,6 +84,7 @@ window.addEventListener('load', function(e) {
 		onDisconnect: function() {
 			var _t = this;
 			if (Cryptocat.Me.connected) {
+				Cryptocat.Me.connected = false;
 				_t.setState({
 					isReconn: true
 				});
