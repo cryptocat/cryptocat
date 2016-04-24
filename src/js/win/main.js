@@ -16,7 +16,8 @@ window.addEventListener('load', function(e) {
 				username: '',
 				password: '',
 				disabled: false,
-				display: 'block'
+				display: 'block',
+				reconnectInterval: 5000
 			};
 		},
 		componentDidMount: function() {
@@ -54,7 +55,6 @@ window.addEventListener('load', function(e) {
 		},
 		onConnect: function() {
 			this.setState({
-				password: '',
 				display: 'none'
 			});
 			Cryptocat.Win.main.roster = ReactDOM.render(
@@ -79,13 +79,32 @@ window.addEventListener('load', function(e) {
 			);
 		},
 		onDisconnect: function() {
-		
+			var _t = this;
+			if (!Cryptocat.Me.connected) {
+				return false;
+			}
+			setTimeout(function() {
+				if (!Cryptocat.Me.connected) {
+					Cryptocat.XMPP.disconnect(function() {
+						_t.onSubmit();
+					});
+					_t.setState({
+						reconnectInterval: reconnectInterval + 5000
+					});
+					return false;
+				}
+				_t.setState({
+					reconnectInterval: 5000
+				});
+			}, _t.state.reconnectInterval);
+			Cryptocat.Me.connected = false;
 		},
 		onLogOut: function() {
 			Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
 			this.setState({
 				disabled: false,
-				display: 'block'
+				display: 'block',
+				password: ''
 			});
 			ReactDOM.unmountComponentAtNode(
 				document.getElementById('renderB')

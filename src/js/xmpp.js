@@ -152,20 +152,30 @@ Cryptocat.XMPP = {};
 	};
 
 	handler.disconnected = function(callback) {
-		Cryptocat.Me.connected = false;
-		Cryptocat.Storage.updateUser(
-			Cryptocat.Me.username,
-			Cryptocat.Me.settings,
-			function() {
-				if (callbacks.disconnected.armed) {
-					callbacks.disconnected.armed = false;
-					callbacks.disconnected.payload();
+		if (Cryptocat.Me.username.length) {
+			Cryptocat.Storage.updateUser(
+				Cryptocat.Me.username,
+				Cryptocat.Me.settings,
+				function() {
+					if (callbacks.disconnected.armed) {
+						callbacks.disconnected.armed = false;
+						callbacks.disconnected.payload();
+					}
+					else {
+						callback(false);
+					}
 				}
-				else {
-					callback(false);
-				}
+			);
+		}
+		else {
+			if (callbacks.disconnected.armed) {
+				callbacks.disconnected.armed = false;
+				callbacks.disconnected.payload();
 			}
-		);
+			else {
+				callback(false);
+			}
+		}
 	};
 	
 	handler.encrypted = function(encrypted) {
@@ -490,15 +500,18 @@ Cryptocat.XMPP = {};
 	};
 
 	Cryptocat.XMPP.disconnect = function(callback) {
-		client.sendPresence({
-			type: 'unavailable'
-		});
+		if (Cryptocat.Me.connected) {
+			client.sendPresence({
+				type: 'unavailable'
+			});
+		}
 		if (typeof(callback) === 'function') {
 			callbacks.disconnected = {
 				armed: true,
 				payload: callback
 			}
 		}
+		Cryptocat.Me.connected = false;
 		client.disconnect();
 	};
 
