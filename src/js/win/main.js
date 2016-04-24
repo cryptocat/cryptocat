@@ -780,7 +780,12 @@ window.addEventListener('load', function(e) {
 	});
 
 	Cryptocat.Storage.getCommon(function(err, common) {
-		if (common) {
+		var screenRes = Remote.screen.getPrimaryDisplay().size;
+		if (
+			common &&
+			(screenRes.width  > common.mainWindowBounds.x) &&
+			(screenRes.height > common.mainWindowBounds.y)
+		) {
 			Remote.getCurrentWindow().setPosition(
 				common.mainWindowBounds.x,
 				common.mainWindowBounds.y
