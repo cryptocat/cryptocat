@@ -71,7 +71,7 @@ window.addEventListener('load', function(e) {
 				typing: Cryptocat.Me.settings.typing
 			});
 			for (var username in Cryptocat.Win.chat) {
-				if (hasProperty(Cryptocat.Win.chat, username) {
+				if (hasProperty(Cryptocat.Win.chat, username)) {
 					Cryptocat.Win.chat[username]
 						.webContents.send('chat.connected', true);
 				}
@@ -97,7 +97,7 @@ window.addEventListener('load', function(e) {
 					isReconn: true
 				});
 				for (var username in Cryptocat.Win.chat) {
-					if (hasProperty(Cryptocat.Win.chat, username) {
+					if (hasProperty(Cryptocat.Win.chat, username)) {
 						Cryptocat.Win.chat[username]
 							.webContents.send('chat.connected', false);
 					}
