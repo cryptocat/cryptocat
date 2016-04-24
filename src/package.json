@@ -17,9 +17,6 @@
     "url": "https://github.com/cryptocat/cryptocat/issues"
   },
   "homepage": "https://crypto.cat",
-  "dependencies": {
-    "nedb": "latest",
-    "xml2js": "latest"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }
