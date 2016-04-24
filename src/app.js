@@ -232,6 +232,22 @@ var buildMainMenu = function(settings) {
 				}, {
 					type: 'separator'
 				}, {
+					label: 'Hide',
+					accelerator: 'CmdOrCtrl+H',
+					role: 'hide',
+					click: function(item, focusedWindow) {
+						if (focusedWindow) { focusedWindow.hide(); }
+					}
+				}, {
+					label: 'Show All',
+					role: 'unhide',
+					visible: (process.platform === 'darwin'),
+					click: function(item, focusedWindow) {
+						if (focusedWindow) { focusedWindow.hide(); }
+					}
+				}, {
+					type: 'separator'
+				}, {
 					label: 'Close',
 					accelerator: 'CmdOrCtrl+W',
 					click: function(item, focusedWindow) {
@@ -359,14 +375,6 @@ var buildMacMenu = function(settings) {
 	var view = Electron.Menu.buildFromTemplate([{
 		label: 'View',
 		submenu: [{
-			label: 'Hide',
-			role: 'hide'
-		}, {
-			label: 'Show All',
-			role: 'unhide'
-		}, {
-			type: 'separator'
-		}, {
 			label: 'Increase Font Size',
 			accelerator: 'CmdOrCtrl+Plus',
 			click: function(item, focusedWindow) {
