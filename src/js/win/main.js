@@ -17,7 +17,8 @@ window.addEventListener('load', function(e) {
 				password: '',
 				disabled: false,
 				display: 'block',
-				reconn: 5000
+				reconn: 5000,
+				isReconn: false
 			};
 		},
 		componentDidMount: function() {
@@ -72,7 +73,9 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Diag.error.loginInvalid();
 			this.setState({
 				disabled: false,
-				display: 'block'
+				display: 'block',
+				isReconn: false,
+				reconn: 5000
 			});
 			ReactDOM.unmountComponentAtNode(
 				document.getElementById('renderB')
@@ -80,31 +83,39 @@ window.addEventListener('load', function(e) {
 		},
 		onDisconnect: function() {
 			var _t = this;
-			if (!Cryptocat.Me.connected) {
-				return false;
+			if (Cryptocat.Me.connected) {
+				_t.setState({
+					isReconn: true
+				});
 			}
 			setTimeout(function() {
-				if (!Cryptocat.Me.connected) {
+				if (
+					!Cryptocat.Me.connected &&
+					_t.state.isReconn
+				) {
 					Cryptocat.XMPP.disconnect(function() {
 						_t.onSubmit();
 					});
 					_t.setState({
-						reconn: _t.state.reconn + 5000
+						reconn: _t.state.reconn + 5000,
+						isReconn: true
 					});
 					return false;
 				}
 				_t.setState({
-					reconn: 5000
+					reconn: 5000,
+					isReconn: false
 				});
 			}, _t.state.reconn);
-			Cryptocat.Me.connected = false;
 		},
 		onLogOut: function() {
 			Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
 			this.setState({
 				disabled: false,
 				display: 'block',
-				password: ''
+				password: '',
+				iReconn: false,
+				reconn: 5000
 			});
 			ReactDOM.unmountComponentAtNode(
 				document.getElementById('renderB')
