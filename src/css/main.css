@@ -57,17 +57,19 @@ div.mainRosterIntro[data-visible="false"] {
 div.mainRosterIsReconn {
 	height: 14px;
 	font-size: 12px;
-	padding: 2px;
-	position: relative;
-	top: -18px;
-	transition: top 0.5s;
+	padding: 6px 0;
+	text-align: center;
+	width: 98%;
+	margin: -31px auto 5px auto;
+	border-radius: 0 0 4px 4px;
+	transition: margin-top 0.5s;
 	background-color: #F1375A;
 	color: #FFF;
 	font-weight: bold;
 }
 
 div.mainRosterIsReconn[data-visible="true"] {
-	top: 0px;
+	margin-top: -5px;
 }
 
 input.mainRosterFilter {
@@ -154,4 +156,3 @@ div.mainRosterBuddy[data-status="2"]:hover {
 	background-color: #34B3C2;
 	color: #FFF;
 }
-

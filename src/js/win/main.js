@@ -66,7 +66,9 @@ window.addEventListener('load', function(e) {
 		},
 		onConnect: function() {
 			this.setState({
-				display: 'none'
+				display: 'none',
+				isReconn: false,
+				reconn: 5000
 			});
 			Cryptocat.Win.main.roster = ReactDOM.render(
 				React.createElement(mainRoster, null),
