@@ -140,7 +140,6 @@ Cryptocat.XMPP = {};
 		Cryptocat.OMEMO.setup(function() {
 			Cryptocat.Me.connected = true;
 			Cryptocat.XMPP.getDeviceList(username);
-			Cryptocat.XMPP.sendBundle();
 			client.getRoster();
 			client.sendPresence();
 			client.connectDate = Math.floor(Date.now() / 1000);
