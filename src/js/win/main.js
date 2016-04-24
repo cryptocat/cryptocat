@@ -68,10 +68,20 @@ window.addEventListener('load', function(e) {
 				typing: Cryptocat.Me.settings.typing
 			});
 		},
-		onDisconnect: function(skipError) {
-			if (!skipError) {
-				Cryptocat.Diag.error.loginError();
-			}
+		onAuthFailed: function() {
+			Cryptocat.Diag.error.loginInvalid();
+			this.setState({
+				disabled: false,
+				display: 'block'
+			});
+			ReactDOM.unmountComponentAtNode(
+				document.getElementById('renderB')
+			);
+		},
+		onDisconnect: function() {
+		
+		},
+		onLogOut: function() {
 			Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
 			this.setState({
 				disabled: false,
@@ -528,7 +538,7 @@ window.addEventListener('load', function(e) {
 		Cryptocat.Storage.updateCommon({
 			mainWindowBounds: {
 				x:      position[0],
-				y:      position[1] - 15,
+				y:      position[1],
 				width:  size[0],
 				height: size[1]
 			}
@@ -727,7 +737,7 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.logOut', function(e) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.XMPP.disconnect(function() {
-				Cryptocat.Win.main.login.onDisconnect(true);
+				Cryptocat.Win.main.login.onLogOut();
 			});
 		}
 		else {

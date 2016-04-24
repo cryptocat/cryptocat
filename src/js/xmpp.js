@@ -147,6 +147,10 @@ Cryptocat.XMPP = {};
 		});
 	};
 
+	handler.authFailed = function(data) {
+		Cryptocat.Win.main.login.onAuthFailed();
+	};
+
 	handler.disconnected = function(callback) {
 		Cryptocat.Me.connected = false;
 		Cryptocat.Storage.updateUser(
@@ -313,6 +317,9 @@ Cryptocat.XMPP = {};
 		});
 		client.on('session:started', function(data) {
 			handler.connected(username, data, callback);	
+		});
+		client.on('auth:failed', function(data) {
+			handler.authFailed(data);
 		});
 		client.on('disconnected', function() {
 			handler.disconnected(callback);

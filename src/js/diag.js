@@ -26,7 +26,7 @@ Cryptocat.Diag = {
 		);
 	},
 
-	Cryptocat.Diag.error.loginError = function() {
+	Cryptocat.Diag.error.loginDisconnect = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Connection Error',
 			'Could not connect to Cryptocat. Please try again.'
