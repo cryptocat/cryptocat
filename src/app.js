@@ -310,7 +310,7 @@ var buildMainMenu = function(settings) {
 			}
 		]
 	);
-	if (true) {
+	if (false) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
