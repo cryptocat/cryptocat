@@ -42,7 +42,9 @@ window.addEventListener('load', function(e) {
 			else {
 				Cryptocat.Diag.error.loginInvalid();
 			}
-			e.preventDefault();
+			if (e) {
+				e.preventDefault();
+			}
 			return false;
 		},
 		validInputs: function() {
@@ -89,16 +91,26 @@ window.addEventListener('load', function(e) {
 					isReconn: true
 				});
 			}
+			console.info(
+				'Cryptocat.Win:',
+				'Reconnecting in ' + _t.state.reconn
+			);
 			setTimeout(function() {
 				if (
 					!Cryptocat.Me.connected &&
 					_t.state.isReconn
 				) {
+					var incr = (function() {
+						if (_t.state.reconn < 30000) {
+							return 5000
+						}
+						return 0
+					})();
 					Cryptocat.XMPP.disconnect(function() {
 						_t.onSubmit();
 					});
 					_t.setState({
-						reconn: _t.state.reconn + 5000,
+						reconn: _t.state.reconn + incr,
 						isReconn: true
 					});
 					return false;
