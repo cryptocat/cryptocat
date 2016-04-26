@@ -9,6 +9,13 @@ Cryptocat.Win = {
 window.addEventListener('load', function(e) {	
 	'use strict';
 
+	var windowRenderHeight = function(h) {
+		if (process.platform === 'win32') {
+			return h + 40;
+		}
+		return h;
+	};
+	
 	var mainLogin = React.createClass({
 		displayName: 'mainLogin',
 		getInitialState: function() {
@@ -429,7 +436,7 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.updateDownloader = function() {
 		var updateDownloader = new Remote.BrowserWindow({
 			width: 330,
-			height: 160,
+			height: windowRenderHeight(120),
 			title: 'Downloading Update...',
 			resizable: false,
 			minimizable: false,
@@ -454,9 +461,9 @@ window.addEventListener('load', function(e) {
 		if (!Cryptocat.Win.chatRetainer.length) {
 			var chatRetainer = new Remote.BrowserWindow({
 				width: 450,
-				height: 450,
+				height: windowRenderHeight(450),
+				minHeight: windowRenderHeight(150),
 				minWidth: 450,
-				minHeight: 150,
 				show: false
 			});
 			Cryptocat.Win.chatRetainer.push(chatRetainer);
@@ -480,9 +487,9 @@ window.addEventListener('load', function(e) {
 		if (Cryptocat.Win.chatRetainer.length < 2) {
 			var chatRetainer = new Remote.BrowserWindow({
 				width: 450,
-				height: 450,
+				height: windowRenderHeight(450),
+				minHeight: windowRenderHeight(150),
 				minWidth: 450,
-				minHeight: 150,
 				show: false
 			});
 			Cryptocat.Win.chatRetainer.push(chatRetainer);
@@ -493,7 +500,7 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.addBuddy = function() {
 		var addBuddyWindow = new Remote.BrowserWindow({
 			width: 320,
-			height: 200,
+			height: windowRenderHeight(160),
 			title: 'Add Buddy',
 			resizable: false,
 			minimizable: false,
@@ -511,7 +518,7 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.changePassword = function() {
 		var changePasswordWindow = new Remote.BrowserWindow({
 			width: 310,
-			height: 200,
+			height: windowRenderHeight(185),
 			title: 'Change Password',
 			resizable: false,
 			minimizable: false,
@@ -531,7 +538,7 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.addDevice = function() {
 		var addDeviceWindow = new Remote.BrowserWindow({
 			width: 400,
-			height: 265,
+			height: windowRenderHeight(250),
 			title: 'Add Device',
 			resizable: false,
 			minimizable: false,
@@ -553,7 +560,7 @@ window.addEventListener('load', function(e) {
 		}
 		Cryptocat.Win.deviceManager[username] = new Remote.BrowserWindow({
 			width: 470,
-			height: 250,
+			height: windowRenderHeight(250),
 			title: 'Manage Devices',
 			resizable: false,
 			minimizable: true,
@@ -880,9 +887,9 @@ window.addEventListener('load', function(e) {
 	while (Cryptocat.Win.chatRetainer.length < 2) {
 		var chatRetainer = new Remote.BrowserWindow({
 			width: 450,
-			height: 450,
+			height: windowRenderHeight(450),
+			minHeight: windowRenderHeight(450),
 			minWidth: 450,
-			minHeight: 150,
 			show: false
 		});
 		Cryptocat.Win.chatRetainer.push(chatRetainer);

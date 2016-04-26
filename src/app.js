@@ -413,7 +413,7 @@ Electron.app.on('ready', function() {
 		width: 260,
 		maxWidth: 400,
 		height: 470,
-		minHeight: 400,
+		minHeight: 440,
 		maximizable: false,
 		fullscreenable: false,
 		show: false,
