@@ -271,6 +271,9 @@ Cryptocat.XMPP = {};
 					);
 					client.acceptSubscription(data.from.bare);
 					Cryptocat.XMPP.sendBuddyRequest(data.from.local);
+					setTimeout(function() {
+						client.sendPresence();
+					}, 5000);
 				}
 				if (response === 1) {
 					client.denySubscription(data.from.bare);
@@ -284,6 +287,7 @@ Cryptocat.XMPP = {};
 		if (username.valid) {
 			Cryptocat.Diag.message.buddyUnsubscribed(username.username);
 			Cryptocat.XMPP.removeBuddy(username.username);
+			client.sendPresence();
 		}
 	};
 
