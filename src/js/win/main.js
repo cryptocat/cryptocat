@@ -518,7 +518,7 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.changePassword = function() {
 		var changePasswordWindow = new Remote.BrowserWindow({
 			width: 310,
-			height: windowRenderHeight(185),
+			height: windowRenderHeight(195),
 			title: 'Change Password',
 			resizable: false,
 			minimizable: false,
