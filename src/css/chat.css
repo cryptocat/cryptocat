@@ -143,6 +143,7 @@ div.chatMessage, div.chatMessage * {
 	-webkit-user-select: text;
 	user-select: text;
 	cursor: text;
+	white-space: pre;
 }
 
 div.chatMessage[data-alignment='left'],
