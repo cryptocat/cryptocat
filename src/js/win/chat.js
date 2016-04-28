@@ -93,7 +93,7 @@ window.addEventListener('load', function(e) {
 						'https://crypto.cat/help.html'
 					)
 				}
-			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
+			},{label:'Developer',click:function(i,f){f.toggleDevTools();}},{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
@@ -261,7 +261,7 @@ window.addEventListener('load', function(e) {
 				key: 0
 			}, React.createElement('img', {
 				className: 'chatFileIcon',
-				src: '../img/files/' + this.props.file.type.toLowerCase() + '.png',
+				src: '../img/files/' + this.props.file.type + '.png',
 				onClick: this.onClick,
 				key: 1
 			}), React.createElement('div', {
@@ -313,6 +313,47 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	var chatImage = React.createClass({
+		displayName: 'chatImage',
+		getInitialState: function() {
+			return {
+				progress: 0,
+				ready: false,
+				valid: true,
+				src: '../img/icons/loading.webm',
+				saved: false
+			};
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		render: function() {
+			var className = 'chatImage';
+			return React.createElement('div', {
+				className: 'chatImage',
+				'data-alignment': this.props.alignment,
+				'data-offline': this.props.offline,
+				key: 0
+			}, React.createElement('span', {
+				className: 'chatImageInfo',
+				key: 1
+			}, React.createElement('span', {
+				className: 'chatImageSender',
+				key: 2
+			}, this.props.sender),
+			React.createElement('span', {
+				className: 'chatImageTimestamp',
+				key: 3
+			}, this.props.timestamp)),
+			React.createElement('img', {
+				className: 'chatImageImg',
+				src: this.state.src,
+				alt: '',
+				key: 4
+			}));
+		}
+	});
+	
 	var chatRecording = React.createClass({
 		displayName: 'chatRecording',
 		getInitialState: function() {

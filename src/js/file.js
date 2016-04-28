@@ -5,20 +5,46 @@ Cryptocat.File = {};
 
 	Cryptocat.File.maxSize   = 51000000;
 	Cryptocat.File.chunkSize = 25000;
-
-	Cryptocat.File.allowed = [
-		'7z',   'aac',  'ai',  'aut',
-		'avi',  'bin',  'bmp', 'bz2',
-		'cad',  'csv',  'db',  'doc',
-		'docx', 'eps',  'flv', 'gif',
-		'iso',  'java', 'jpg', 'jpeg',
-		'mkv',  'mov',  'mp3', 'mp4', 
-		'mpeg', 'mpg',  'pdf', 'png',
-		'ppt',  'psd',  'ps',  'rar',
-		'rtf',  'sql',  'svg', 'tar',
-		'txt',  'webm', 'wma',  'xls',
-		'xlsx', 'zip'
-	];
+	Cryptocat.File.allowed  = {
+		archive: [
+			'7z', '7zx', 'bin',
+			'bz2', 'db', 'iso',
+			'rar', 'sql', 'tar',
+			'zip', 'zipx'
+		],
+		audio: [
+			'aac', 'aif', 'm4a',
+			'mid', 'mp3', 'ogg',
+			'wav', 'wma'
+		],
+		code: [
+			'c', 'cc', 'class',
+			'cpp', 'cs', 'go',
+			'h', 'hs', 'java',
+			'lhs', 'm', 'ml',
+			'pl', 'py', 'rb',
+			'rs', 'swift' 
+		],
+		document: [
+			'ai', 'aut', 'cad',
+			'csv', 'doc', 'docx',
+			'eps', 'odt', 'pdf',
+			'ppt', 'pptx', 'ps',
+			'rtf', 'torrent', 'txt',
+			'xls', 'xlsx'
+		],
+		image: [
+			'bmp', 'gif', 'jpg',
+			'jpeg', 'png', 'psd',
+			'svg', 'webp'
+		],
+		video: [
+			'3gp', 'avi', 'flv',
+			'm4v', 'mkv', 'mov',
+			'mp4', 'mpeg', 'mpg',
+			'mpg', 'webm', 'wmv'
+		]
+	};
 
 	var fileCrypto = {
 		encrypt: function(k, iv, m) {
@@ -63,15 +89,25 @@ Cryptocat.File = {};
 
 	Cryptocat.File.isAllowed = function(name) {
 		var lName = name.toLowerCase();
-		if (
-			(/\.\w{1,5}$/).test(lName) &&
-			(Cryptocat.File.allowed.indexOf(
-				lName.match(/\.\w{1,5}$/)[0].substr(1)
-			) >= 0)
-		) {
-			return true;
+		if (!(/\.\w{1,5}$/).test(lName)) {
+			return false;
 		}
-		return false;
+		var ext = lName.match(/\.\w{1,5}$/)[0].substr(1);
+		for (var type in Cryptocat.File.allowed) {
+			if (
+				(hasProperty(Cryptocat.File.allowed, type)) &&
+				(Cryptocat.File.allowed[type].indexOf(ext) >= 0)
+			) {
+				return {
+					allowed: true,
+					type: type
+				};
+			}
+		}
+		return {
+			allowed: false,
+			type: ''
+		};
 	};
 
 	Cryptocat.File.parseInfo = function(infoString) {
@@ -96,17 +132,17 @@ Cryptocat.File = {};
 			hasProperty(parsed, 'iv')    &&
 			hasProperty(parsed, 'tag')   &&
 			hasProperty(parsed, 'valid') &&
-			!(/(\/|\\|\~)/).test(parsed.name)     &&
-			Cryptocat.File.isAllowed(parsed.name) &&
+			!(/(\/|\\|\~)/).test(parsed.name) &&
 			Cryptocat.Patterns.hex64.test(parsed.url) &&
 			Cryptocat.Patterns.hex32.test(parsed.key) &&
 			Cryptocat.Patterns.hex12.test(parsed.iv)  &&
 			Cryptocat.Patterns.hex16.test(parsed.tag) &&
+			Cryptocat.File.isAllowed(parsed.name).allowed &&
 			(parsed.valid === true)
 		) {
 			return {
 				name:  parsed.name,
-				type:  parsed.name.match(/\.\w{1,5}$/)[0].substr(1),
+				type:  Cryptocat.File.isAllowed(parsed.name).type,
 				url:   parsed.url,
 				key:   parsed.key,
 				iv:    parsed.iv,

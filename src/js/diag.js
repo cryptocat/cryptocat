@@ -427,48 +427,7 @@ Cryptocat.Diag = {
 		dialog.showOpenDialog(browserWindow, {
 			title: 'Cryptocat: Select File to Send',
 			defaultPath: defaultPath,
-			properties: ['openFile'],
-			filters: [{
-				name: 'All Files',
-				extensions: ['*']
-			}, {
-				name: 'Images',
-				extensions: [
-					'ai', 'bmp',  'eps',
-					'gif', 'jpg', 'jpeg',
-					'png', 'psd', 'svg',
-				]
-			}, {
-				name: 'Audio',
-				extensions: [
-					'aac', 'mp3', 'wma'
-				]
-			}, {
-				name: 'Videos',
-				extensions: [
-					'avi', 'flv', 'mkv',
-					'mov', 'mp4', 'mpeg',
-					'mpg', 'webm'
-				]
-			}, {
-				name: 'Documents',
-				extensions: [
-					'aut', 'cad',  'csv',
-					'doc', 'docx', 'pdf',
-					'ppt', 'ps',   'rtf',
-					'txt', 'xls',  'xlsx'
-				]
-			}, {
-				name: 'Code',
-				extensions: ['java']
-			}, {
-				name: 'Archives',
-				extensions: [
-					'7z',  'bin', 'bz2',
-					'db',  'iso', 'rar',
-					'sql', 'tar', 'zip'
-				]
-			}]
+			properties: ['openFile']
 		}, callback);
 	};
 

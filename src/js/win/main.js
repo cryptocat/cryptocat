@@ -461,9 +461,9 @@ window.addEventListener('load', function(e) {
 		if (!Cryptocat.Win.chatRetainer.length) {
 			var chatRetainer = new Remote.BrowserWindow({
 				width: 450,
+				minWidth: 450,
 				height: windowRenderHeight(450),
 				minHeight: windowRenderHeight(150),
-				minWidth: 450,
 				show: false
 			});
 			Cryptocat.Win.chatRetainer.push(chatRetainer);
@@ -487,9 +487,9 @@ window.addEventListener('load', function(e) {
 		if (Cryptocat.Win.chatRetainer.length < 2) {
 			var chatRetainer = new Remote.BrowserWindow({
 				width: 450,
+				minWidth: 450,
 				height: windowRenderHeight(450),
 				minHeight: windowRenderHeight(150),
-				minWidth: 450,
 				show: false
 			});
 			Cryptocat.Win.chatRetainer.push(chatRetainer);
@@ -887,9 +887,9 @@ window.addEventListener('load', function(e) {
 	while (Cryptocat.Win.chatRetainer.length < 2) {
 		var chatRetainer = new Remote.BrowserWindow({
 			width: 450,
+			minWidth: 450,
 			height: windowRenderHeight(450),
 			minHeight: windowRenderHeight(450),
-			minWidth: 450,
 			show: false
 		});
 		Cryptocat.Win.chatRetainer.push(chatRetainer);
