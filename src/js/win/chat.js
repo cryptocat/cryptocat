@@ -412,9 +412,12 @@ window.addEventListener('load', function(e) {
 			e.stopPropagation();
 			this.setState({visible: false});
 			if (e.isTrusted) {
-				thisChat.window.sendFile(
-					e.dataTransfer.files[0].path
-				);
+				var files = e.dataTransfer.files;
+				for (var i in files) {
+					if (hasProperty(files, i)) {
+						thisChat.window.sendFile(files[i].path);
+					}
+				}
 			}
 			return false;
 		},
@@ -728,10 +731,12 @@ window.addEventListener('load', function(e) {
 			document.getElementById('chatInputText').focus();
 			Cryptocat.Diag.open.sendFile(
 				Remote.getCurrentWindow(), function(path) {
-					if (!path) {
-						return false;
+					if (!path || !path.length) { return false; }
+					for (var i in path) {
+						if (hasProperty(path, i)) {
+							_t.sendFile(path[i]);
+						}
 					}
-					_t.sendFile(path[0]);
 				}
 			);
 		},

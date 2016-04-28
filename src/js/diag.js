@@ -427,7 +427,7 @@ Cryptocat.Diag = {
 		dialog.showOpenDialog(browserWindow, {
 			title: 'Cryptocat: Select File to Send',
 			defaultPath: defaultPath,
-			properties: ['openFile']
+			properties: ['openFile', 'multiSelections']
 		}, callback);
 	};
 
