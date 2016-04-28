@@ -128,7 +128,7 @@ div#chatContents {
 	line-height: 1.6em;
 }
 
-div.chatMessage, div.chatSticker, div.chatFile, div.chatRecording {
+div.chatMessage, div.chatSticker, div.chatFile, div.chatRecording, div.chatImage {
 	background: #F0F8FF;
 	padding: 0px 10px 5px 5px;
 	word-wrap: break-word;
@@ -149,14 +149,16 @@ div.chatMessage, div.chatMessage * {
 div.chatMessage[data-alignment='left'],
 div.chatSticker[data-alignment='left'],
 div.chatFile[data-alignment='left'],
-div.chatRecording[data-alignment='left'] {
+div.chatRecording[data-alignment='left'],
+div.chatImage[data-alignment='left'] {
 	float: left;
 	clear: both;
 }
 
 div.chatMessage[data-alignment='left'],
 div.chatFile[data-alignment='left'],
-div.chatRecording[data-alignment='left'] {
+div.chatRecording[data-alignment='left'],
+div.chatImage[data-alignment='left'] {
 	border-left: 1px solid #96A5B2;
 	border-bottom: 1px solid #96A5B2;
 	box-shadow: -1px 1px 3px rgba(150, 165, 178, 0.6);
@@ -165,14 +167,17 @@ div.chatRecording[data-alignment='left'] {
 div.chatMessage[data-alignment='right'],
 div.chatSticker[data-alignment='right'],
 div.chatFile[data-alignment='right'],
-div.chatRecording[data-alignment='right'] {
+div.chatRecording[data-alignment='right'],
+div.chatImage[data-alignment='right'] {
 	float: right;
 	clear: both;
 }
 
 div.chatMessage[data-alignment='right'],
 div.chatFile[data-alignment='right'],
-div.chatRecording[data-alignment='right'] {
+div.chatRecording[data-alignment='right'],
+div.chatImage[data-alignment='right']
+ {
 	border-right: 1px solid #96A5B2;
 	border-bottom: 1px solid #96A5B2;
 	box-shadow: 1px 1px 3px rgba(150, 165, 178, 0.6);
@@ -186,12 +191,13 @@ div.chatMessage[data-valid="false"] {
 
 div.chatMessage[data-offline="true"],
 div.chatFile[data-offline="true"],
-div.chatRecording[data-offline="true"] {
+div.chatRecording[data-offline="true"],
+div.chatImage[data-offline="true"] {
 	background-color: #FFD6B0;
 	border-color: #CFA8A6;
 }
 
-span.chatMessageInfo, span.chatRecordingInfo {
+span.chatMessageInfo, span.chatRecordingInfo, span.chatImageInfo {
 	padding: 0 5px 0 10px;
 	margin: 0 0 8px -5px;
 	display: block;
@@ -202,7 +208,8 @@ span.chatMessageInfo, span.chatRecordingInfo {
 }
 
 span.chatMessageInfo span.chatMessageSender,
-span.chatRecordingInfo span.chatRecordingSender {
+span.chatRecordingInfo span.chatRecordingSender,
+span.chatImageInfo span.chatImageSender {
 	font-weight: bold;
 	font-size: 0.9em;
 	opacity: 0.7;
@@ -210,7 +217,8 @@ span.chatRecordingInfo span.chatRecordingSender {
 }
 
 span.chatMessageInfo span.chatMessageTimestamp,
-span.chatRecordingInfo span.chatRecordingTimestamp {
+span.chatRecordingInfo span.chatRecordingTimestamp,
+span.chatImageInfo span.chatImageTimestamp {
 	font-style: italic;
 	font-size: 0.8em;
 	float: right;
@@ -222,6 +230,16 @@ div.chatRecording {
 }
 
 div.chatRecording video.chatRecordingVideo {
+	width: 100%;
+	height: auto;
+	margin-left: 2px;
+	border-radius: 2px;
+}
+
+div.chatImage {
+}
+
+div.chatImage img.chatImageImg {
 	width: 100%;
 	height: auto;
 	margin-left: 2px;
@@ -521,3 +539,4 @@ textarea#chatInputText {
 textarea#chatInputText[data-enabled='false'] {
 	cursor: not-allowed !important;
 }
+

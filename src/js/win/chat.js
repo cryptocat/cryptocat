@@ -93,7 +93,7 @@ window.addEventListener('load', function(e) {
 						'https://crypto.cat/help.html'
 					)
 				}
-			},{label:'Developer',click:function(i,f){f.toggleDevTools();}},{
+			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
@@ -320,15 +320,44 @@ window.addEventListener('load', function(e) {
 				progress: 0,
 				ready: false,
 				valid: true,
-				src: '../img/icons/loading.webm',
-				saved: false
+				saved: false,
+				binary: new Buffer([])
 			};
 		},
 		componentDidMount: function() {
 			return true;
 		},
+		onContextMenu: function(e) {
+			var _t = this;
+			e.preventDefault();
+			e.stopPropagation();
+			(Remote.Menu.buildFromTemplate([{
+				label: 'Save to Disk',
+				click: _t.saveToDisk
+			}])).popup(Remote.getCurrentWindow());
+			return true;
+		},
+		saveToDisk: function() {
+			var _t = this;
+			Cryptocat.Diag.save.sendFile(
+				Remote.getCurrentWindow(), _t.props.file.name, function(path) {
+					if (!path) { return false; }
+					FS.writeFile(path, _t.state.binary, function() {
+						_t.setState({saved: true});
+					});
+				}
+			);
+		},
 		render: function() {
 			var className = 'chatImage';
+			var src = '../img/icons/loading.gif';
+			if (this.state.binary.length) {
+				src = URL.createObjectURL(
+					new Blob([this.state.binary], {
+						type: 'image/*'
+					})
+				);
+			}
 			return React.createElement('div', {
 				className: 'chatImage',
 				'data-alignment': this.props.alignment,
@@ -347,8 +376,9 @@ window.addEventListener('load', function(e) {
 			}, this.props.timestamp)),
 			React.createElement('img', {
 				className: 'chatImageImg',
-				src: this.state.src,
+				src: src,
 				alt: '',
+				onContextMenu: this.onContextMenu,
 				key: 4
 			}));
 		}
@@ -361,7 +391,6 @@ window.addEventListener('load', function(e) {
 				progress: 0,
 				ready: false,
 				valid: true,
-				src: '../img/icons/loading.webm',
 				saved: false,
 				binary: new Buffer([])
 			};
@@ -392,6 +421,14 @@ window.addEventListener('load', function(e) {
 		},
 		render: function() {
 			var className = 'chatRecording';
+			var src = '../img/icons/loading.webm';
+			if (this.state.binary.length) {
+				src = URL.createObjectURL(
+					new Blob([this.state.binary], {
+						type: 'video/webm'
+					})
+				);
+			}
 			return React.createElement('div', {
 				className: 'chatRecording',
 				'data-alignment': this.props.alignment,
@@ -410,7 +447,7 @@ window.addEventListener('load', function(e) {
 			}, this.props.timestamp)),
 			React.createElement('video', {
 				className: 'chatRecordingVideo',
-				src: this.state.src,
+				src: src,
 				autoPlay: !this.state.ready,
 				controls: this.state.ready,
 				loop: !this.state.ready,
@@ -563,6 +600,22 @@ window.addEventListener('load', function(e) {
 					key: this.state.key,
 					alignment: alignment,
 					sticker: sticker.sticker,
+				});
+			}
+			else if (file.isFile && file.file.type === 'image') {
+				var res = React.createElement(chatImage, {
+					key: this.state.key,
+					sender: sender,
+					alignment: alignment,
+					timestamp: getTimestamp(info.stamp),
+					file: file.file,
+					offline: info.offline,
+					ref: function(f) {
+						_t.files[file.file.url] = f;
+						if (!fromMe) {
+							_t.receiveFile(file.file);
+						}
+					}
 				});
 			}
 			else if (file.isFile) {
@@ -739,11 +792,6 @@ window.addEventListener('load', function(e) {
 						progress: 100,
 						ready: true,
 						valid: info.valid,
-						src: URL.createObjectURL(
-							new Blob([file], {
-								type: 'video/webm'
-							})
-						),
 						binary: video
 					});
 					Remote.getCurrentWindow().setProgressBar(-1);
@@ -829,11 +877,6 @@ window.addEventListener('load', function(e) {
 				Remote.getCurrentWindow().setProgressBar(p / 100);
 			}, function(url, video, valid) {
 				_t.recordings[url].setState({
-					src: URL.createObjectURL(
-						new Blob([video], {
-							type: 'video/webm'
-						})
-					),
 					binary: video,
 					progress: 100,
 					ready: valid,

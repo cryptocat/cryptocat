@@ -30,13 +30,12 @@ Cryptocat.File = {};
 			'csv', 'doc', 'docx',
 			'eps', 'odt', 'pdf',
 			'ppt', 'pptx', 'ps',
-			'rtf', 'torrent', 'txt',
-			'xls', 'xlsx'
+			'psd', 'rtf', 'torrent',
+			'txt', 'xls', 'xlsx'
 		],
 		image: [
 			'bmp', 'gif', 'jpg',
-			'jpeg', 'png', 'psd',
-			'svg', 'webp'
+			'jpeg', 'png', 'webp'
 		],
 		video: [
 			'3gp', 'avi', 'flv',
