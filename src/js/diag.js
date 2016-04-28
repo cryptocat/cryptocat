@@ -85,34 +85,26 @@ Cryptocat.Diag = {
 		);
 	};
 
-	Cryptocat.Diag.error.fileSave = function() {
+	Cryptocat.Diag.error.fileGeneral = function(name) {
 		dialog.showErrorBox(
-			'Cryptocat: Cannot Save File',
-			'Your file could not be saved.'
+			'Cryptocat: Cannot Send File',
+			'"' + name + '" could not be sent. The file type could be ' +
+			'unsupported or there could be a network error.'
 		);
 	};
 
-	Cryptocat.Diag.error.fileGeneral = function() {
+	Cryptocat.Diag.error.fileExt = function(name) {
 		dialog.showErrorBox(
 			'Cryptocat: Cannot Send File',
-			'This file could not be sent. It could be unsupported, or ' +
-			'there could be a network error.'
-		);
-	};
-
-	Cryptocat.Diag.error.fileExt = function() {
-		dialog.showErrorBox(
-			'Cryptocat: Cannot Send File',
-			'This file type is not supported. You can still ' +
+			'"' + name + '"\'s file type is not supported. You can still ' +
 			'send this file by first adding it to a Zip archive.'
 		);
 	};
 
-	Cryptocat.Diag.error.fileMaxSize = function() {
+	Cryptocat.Diag.error.fileMaxSize = function(name) {
 		dialog.showErrorBox(
 			'Cryptocat: File Too Large',
-			'Cryptocat offers file sharing as a free service. ' +
-			'Your file is too large to be sent over Cryptocat.'
+			'"' + name + '" is too large to be sent over Cryptocat.'
 		);
 	};
 

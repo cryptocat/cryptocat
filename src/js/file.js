@@ -194,11 +194,11 @@ Cryptocat.File = {};
 		name, file, onBegin, onProgress, onEnd
 	) {
 		if (!Cryptocat.File.isAllowed(name)) {
-			Cryptocat.Diag.error.fileExt();
+			Cryptocat.Diag.error.fileExt(name);
 			return false;
 		}
 		if (file.length > Cryptocat.File.maxSize) {
-			Cryptocat.Diag.error.fileMaxSize();
+			Cryptocat.Diag.error.fileMaxSize(name);
 			onBegin({
 				name:  name,
 				url:   '',
@@ -216,7 +216,7 @@ Cryptocat.File = {};
 			});
 			res.on('end', function() {
 				if (!Cryptocat.Patterns.fileSas.test(sas)) {
-					Cryptocat.Diag.error.fileGeneral();
+					Cryptocat.Diag.error.fileGeneral(name);
 					onBegin({
 						name:  name,
 						url:   '',

@@ -745,7 +745,7 @@ window.addEventListener('load', function(e) {
 			var name = (require('path')).basename(path);
 			FS.readFile(path, function(err, file) {
 				if (err) {
-					Cryptocat.Diag.error.fileGeneral();
+					return false;
 				}
 				Cryptocat.File.send(name, file, function(info) {	
 					if (!info.valid) {
@@ -763,6 +763,7 @@ window.addEventListener('load', function(e) {
 					Remote.getCurrentWindow().setProgressBar(p / 100);
 				}, function(info, file) {
 					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+					Remote.getCurrentWindow().setProgressBar(-1);
 					if (info.valid) {
 						thisChat.sendQueue.messages.push(sendInfo);
 						if (!thisChat.sendQueue.isOn) {
@@ -770,7 +771,8 @@ window.addEventListener('load', function(e) {
 						}
 					}
 					else {
-						Cryptocat.Diag.error.fileGeneral();
+						Cryptocat.Diag.error.fileGeneral(info.name);
+						return false;
 					}
 					_t.files[info.url].setState({
 						progress: 100,
@@ -778,7 +780,6 @@ window.addEventListener('load', function(e) {
 						valid: info.valid,
 						binary: file
 					});
-					Remote.getCurrentWindow().setProgressBar(-1);
 				});
 			});
 		},
@@ -788,13 +789,10 @@ window.addEventListener('load', function(e) {
 				_t.files[url].setState({progress: p});
 				Remote.getCurrentWindow().setProgressBar(p / 100);
 			}, function(url, plaintext, valid) {
-				if (!valid) {
-					Cryptocat.Diag.error.fileSave();
-				}
 				_t.files[url].setState({
 					binary: plaintext,
 					progress: 100,
-					ready: true,
+					ready: valid,
 					valid: valid
 				});
 				Remote.getCurrentWindow().setProgressBar(-1);
@@ -806,9 +804,6 @@ window.addEventListener('load', function(e) {
 				_t.recordings[url].setState({progress: p});
 				Remote.getCurrentWindow().setProgressBar(p / 100);
 			}, function(url, video, valid) {
-				if (!valid) {
-					Cryptocat.Diag.error.fileSave();
-				}
 				_t.recordings[url].setState({
 					src: URL.createObjectURL(
 						new Blob([video], {
@@ -816,7 +811,7 @@ window.addEventListener('load', function(e) {
 						})
 					),
 					progress: 100,
-					ready: true,
+					ready: valid,
 					valid: valid
 				});
 				Remote.getCurrentWindow().setProgressBar(-1);
