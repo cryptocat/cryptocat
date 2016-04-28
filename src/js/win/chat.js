@@ -249,7 +249,7 @@ window.addEventListener('load', function(e) {
 					if (!path) { return false; }
 					FS.writeFile(path, _t.state.binary, function() {
 						_t.setState({saved: true});
-					})
+					});
 				}
 			);
 		},
@@ -362,11 +362,33 @@ window.addEventListener('load', function(e) {
 				ready: false,
 				valid: true,
 				src: '../img/icons/loading.webm',
-				saved: false
+				saved: false,
+				binary: new Buffer([])
 			};
 		},
 		componentDidMount: function() {
 			return true;
+		},
+		onContextMenu: function(e) {
+			var _t = this;
+			e.preventDefault();
+			e.stopPropagation();
+			(Remote.Menu.buildFromTemplate([{
+				label: 'Save to Disk',
+				click: _t.saveToDisk
+			}])).popup(Remote.getCurrentWindow());
+			return true;
+		},
+		saveToDisk: function() {
+			var _t = this;
+			Cryptocat.Diag.save.sendFile(
+				Remote.getCurrentWindow(), 'video.webm', function(path) {
+					if (!path) { return false; }
+					FS.writeFile(path, _t.state.binary, function() {
+						_t.setState({saved: true});
+					});
+				}
+			);
 		},
 		render: function() {
 			var className = 'chatRecording';
@@ -392,6 +414,7 @@ window.addEventListener('load', function(e) {
 				autoPlay: !this.state.ready,
 				controls: this.state.ready,
 				loop: !this.state.ready,
+				onContextMenu: this.onContextMenu,
 				key: 4
 			}));
 		}
@@ -720,7 +743,8 @@ window.addEventListener('load', function(e) {
 							new Blob([file], {
 								type: 'video/webm'
 							})
-						)
+						),
+						binary: video
 					});
 					Remote.getCurrentWindow().setProgressBar(-1);
 				});
@@ -810,6 +834,7 @@ window.addEventListener('load', function(e) {
 							type: 'video/webm'
 						})
 					),
+					binary: video,
 					progress: 100,
 					ready: valid,
 					valid: valid
