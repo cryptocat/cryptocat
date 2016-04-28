@@ -889,7 +889,7 @@ window.addEventListener('load', function(e) {
 			width: 450,
 			minWidth: 450,
 			height: windowRenderHeight(450),
-			minHeight: windowRenderHeight(450),
+			minHeight: windowRenderHeight(150),
 			show: false
 		});
 		Cryptocat.Win.chatRetainer.push(chatRetainer);

@@ -425,7 +425,7 @@ window.addEventListener('load', function(e) {
 				onDrop: this.onDrop,
 				key: 0
 			}, React.createElement('img', {
-				src: '../img/icons/file.png',
+				src: '../img/files/image.png',
 				alt: '',
 				key: 1
 			}),
