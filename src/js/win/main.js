@@ -323,6 +323,9 @@ window.addEventListener('load', function(e) {
 		updateBuddyStatus: function(username, status, notify) {
 			var newBuddies = this.state.buddies;
 			var _t = this;
+			if (newBuddies[username].props.status === status) {
+				return false;
+			}
 			newBuddies[username] = React.createElement(mainRosterBuddy, {
 				key:          username,
 				username:     username,
