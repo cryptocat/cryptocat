@@ -49,7 +49,7 @@ window.addEventListener('load', function(e) {
 			var _t = this;
 			if (this.validInputs()) {
 				this.setState({disabled: true});
-				Cryptocat.XMPP.login(
+				Cryptocat.XMPP.connect(
 					this.state.username, this.state.password,
 					function(s) { (s? _t.onConnect() : _t.onDisconnect()) }
 				);

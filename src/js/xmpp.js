@@ -147,6 +147,10 @@ Cryptocat.XMPP = {};
 		});
 	};
 
+	handler.streamManagementResumed = function() {
+		client.sendPresence();
+	};
+
 	handler.authFailed = function(data) {
 		Cryptocat.Win.main.login.onAuthFailed();
 	};
@@ -291,8 +295,16 @@ Cryptocat.XMPP = {};
 		}
 	};
 
-	Cryptocat.XMPP.login = function(username, password, callback) {
+	Cryptocat.XMPP.connect = function(username, password, callback) {
 		console.info('Cryptocat.XMPP', 'Connecting as ' + username);
+		if (
+			hasProperty(client, 'jid') &&
+			hasProperty(client.jid, 'local') &&
+			(client.jid.local === username)
+		) {
+			client.connect();
+			return false;
+		}
 		client = XMPP.createClient({
 			jid: username + '@crypto.cat',
 			server: 'crypto.cat',
@@ -322,6 +334,9 @@ Cryptocat.XMPP = {};
 		});
 		client.on('session:started', function(data) {
 			handler.connected(username, data, callback);	
+		});
+		client.on('stream:management:resumed', function(data) {
+			handler.streamManagementResumed();
 		});
 		client.on('auth:failed', function(data) {
 			handler.authFailed(data);
