@@ -358,7 +358,7 @@ const RATCHET = {
 	},
 	attemptDecrypt: function(myIdentityKey, myEphemeralKey, them, msg) {
 		var keys = RATCHET.deriveRecvKeys(
-			myEphemeralKey.priv, them, msg.ephemeralKey
+			myEphemeralKey.priv, Type_them.assert(them), msg.ephemeralKey
 		)
 		var hENC = Type_key.fromBitstring(ProScript.crypto.SHA256(
 			Type_key.toBitstring(keys.kENC) + Type_iv.toBitstring(msg.iv)
@@ -446,7 +446,7 @@ const HANDLE = {
 	},
 
 	sending: function(myIdentityKey, them, initEphemeralKeyPub, plaintext) {
-		const keys = RATCHET.deriveSendKeys(them, them.myEphemeralKeyP4.priv)
+		const keys = RATCHET.deriveSendKeys(Type_them.assert(them), them.myEphemeralKeyP4.priv)
 		const iv   = Type_iv.assert(ProScript.crypto.random12Bytes('a1'))
 		const hENC = Type_key.fromBitstring(ProScript.crypto.SHA256(
 			Type_key.toBitstring(keys.kENC) + Type_iv.toBitstring(iv)
@@ -713,7 +713,10 @@ const Axolotl = {
 	send: function(myIdentityKey, them, plaintext) {
 		var myIdentityKey    = Type_keypair.assert(myIdentityKey)
 		var them             = Type_them.assert(them)
-		var initEphemeralKey = Type_keypair.construct()
+		var initEphemeralKey = {
+			priv: Type_key.construct(),
+			pub: Type_key.construct()
+		}
 		if (them.established === false) {
 			initEphemeralKey = UTIL.newKeyPair('a4')
 			return HANDLE.sending(
