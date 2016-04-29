@@ -142,6 +142,11 @@ Cryptocat.XMPP = {};
 			Cryptocat.XMPP.getDeviceList(username);
 			client.getRoster();
 			client.sendPresence();
+			setTimeout(function() {
+				if (Cryptocat.Me.connected) {
+					client.sendPresence();
+				}
+			}, 60000);
 			client.connectDate = Math.floor(Date.now() / 1000);
 			callback(true);
 		});
