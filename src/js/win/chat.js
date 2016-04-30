@@ -241,7 +241,7 @@ window.addEventListener('load', function(e) {
 			) {
 				return false;
 			}
-			thisChat.savingFile = this;
+			var _t = this;
 			IPCRenderer.send(
 				'chat.saveFile',
 				thisChat.window.state.to,
@@ -405,6 +405,7 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		saveToDisk: function() {
+			var _t = this;
 			IPCRenderer.send(
 				'chat.saveFile',
 				thisChat.window.state.to,

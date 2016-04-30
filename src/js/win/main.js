@@ -665,9 +665,13 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSave,
 			name, function(path) {
+				var delim = '/';
+				if (process.platform === 'win32') {
+					delim = '\\';
+				}
 				if (!path) { return false; }
 				Cryptocat.Me.settings.directories.fileSave =
-					(require('path')).dirname(path);
+					(require('path')).dirname(path) + delim;
 				FS.writeFile(path, binary, function() {});
 			}
 		);
@@ -678,9 +682,13 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSelect,
 			function(paths) {
+				var delim = '/';
+				if (process.platform === 'win32') {
+					delim = '\\';
+				}
 				if (!paths || !paths.length) { return false; }
 				Cryptocat.Me.settings.directories.fileSelect =
-					(require('path')).dirname(paths[0]);
+					(require('path')).dirname(paths[0]) + delim;
 				Cryptocat.Win.chat[to].webContents.send(
 					'chat.openFile', paths
 				);

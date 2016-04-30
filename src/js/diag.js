@@ -1,4 +1,5 @@
 Cryptocat.Diag = {
+	util: {},
 	error: {},
 	message: {},
 	save: {},
