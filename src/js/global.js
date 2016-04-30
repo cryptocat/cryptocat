@@ -48,6 +48,7 @@ const Cryptocat = {
 	Recording: {}
 };
 
+Object.freeze(Cryptocat.EmptyMe);
 Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
 
 const hasProperty = function(o, p) {
