@@ -9,7 +9,7 @@ const Cryptocat = {
 	Win: {},
 	XMPP: {},
 	TextSecure: {},
-	emptyMe: {
+	EmptyMe: {
 		username: '',
 		connected: false,
 		settings: {
@@ -28,7 +28,11 @@ const Cryptocat = {
 			notify: true,
 			typing: true,
 			status: 0,
-			refresh: 0
+			refresh: 0,
+			directories: {
+				fileSelect: '',
+				fileSave: ''
+			}
 		}
 	},
 	Diag: {},
@@ -44,8 +48,8 @@ const Cryptocat = {
 	Recording: {}
 };
 
-Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
+Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
 
 const hasProperty = function(o, p) {
 	return ({}).hasOwnProperty.call(o, p);
-}
+};

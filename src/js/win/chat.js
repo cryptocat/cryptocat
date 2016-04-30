@@ -241,17 +241,14 @@ window.addEventListener('load', function(e) {
 			) {
 				return false;
 			}
-			var _t = this;
-			Cryptocat.Diag.save.sendFile(
-				Remote.getCurrentWindow(),
+			thisChat.savingFile = this;
+			IPCRenderer.send(
+				'chat.saveFile',
+				thisChat.window.state.to,
 				_t.props.file.name,
-				function(path) {
-					if (!path) { return false; }
-					FS.writeFile(path, _t.state.binary, function() {
-						_t.setState({saved: true});
-					});
-				}
+				_t.state.binary
 			);
+			this.setState({saved: true});
 		},
 		render: function() {
 			return React.createElement('div', {
@@ -339,14 +336,13 @@ window.addEventListener('load', function(e) {
 		},
 		saveToDisk: function() {
 			var _t = this;
-			Cryptocat.Diag.save.sendFile(
-				Remote.getCurrentWindow(), _t.props.file.name, function(path) {
-					if (!path) { return false; }
-					FS.writeFile(path, _t.state.binary, function() {
-						_t.setState({saved: true});
-					});
-				}
+			IPCRenderer.send(
+				'chat.saveFile',
+				thisChat.window.state.to,
+				_t.props.file.name,
+				_t.state.binary
 			);
+			this.setState({saved: true});
 		},
 		render: function() {
 			var className = 'chatImage';
@@ -409,15 +405,13 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		saveToDisk: function() {
-			var _t = this;
-			Cryptocat.Diag.save.sendFile(
-				Remote.getCurrentWindow(), 'video.webm', function(path) {
-					if (!path) { return false; }
-					FS.writeFile(path, _t.state.binary, function() {
-						_t.setState({saved: true});
-					});
-				}
+			IPCRenderer.send(
+				'chat.saveFile',
+				thisChat.window.state.to,
+				'video.webm',
+				_t.state.binary
 			);
+			this.setState({saved: true});
 		},
 		render: function() {
 			var className = 'chatRecording';
@@ -799,17 +793,10 @@ window.addEventListener('load', function(e) {
 			});
 		},
 		sendFileDialog: function(e) {
-			var _t = this;
 			document.getElementById('chatInputText').focus();
-			Cryptocat.Diag.open.sendFile(
-				Remote.getCurrentWindow(), function(path) {
-					if (!path || !path.length) { return false; }
-					for (var i in path) {
-						if (hasProperty(path, i)) {
-							_t.sendFile(path[i]);
-						}
-					}
-				}
+			IPCRenderer.send(
+				'chat.openFile',
+				thisChat.window.state.to
 			);
 		},
 		sendFile: function(path) {
@@ -1134,6 +1121,14 @@ window.addEventListener('load', function(e) {
 		thisChat.window.setState({status: status});
 	});
 
+	IPCRenderer.on('chat.openFile', function(e, paths) {
+		for (var i in paths) {
+			if (hasProperty(paths, i)) {
+				thisChat.window.sendFile(paths[i]);
+			}
+		}
+	});
+
 	IPCRenderer.on('chat.connected', function(e, connected) {
 		thisChat.window.setState({connected: connected});
 	});
@@ -1167,10 +1162,6 @@ window.addEventListener('load', function(e) {
 			'deviceManager.create',
 			thisChat.window.state.to
 		);
-	});
-
-	IPCRenderer.on('chat.sendFile', function(e) {
-		thisChat.window.sendFileDialog();
 	});
 
 	IPCRenderer.on('chat.record', function(e) {

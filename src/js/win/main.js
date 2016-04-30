@@ -151,7 +151,7 @@ window.addEventListener('load', function(e) {
 			}, _t.state.reconn);
 		},
 		onLogOut: function() {
-			Cryptocat.Me = Object.assign({}, Cryptocat.emptyMe);
+			Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
 			this.setState({
 				disabled: false,
 				display: 'block',
@@ -658,6 +658,34 @@ window.addEventListener('load', function(e) {
 	
 	IPCRenderer.on('chat.sendMessage', function(e, to, message) {
 		Cryptocat.OMEMO.sendMessage(to, message)
+	});
+
+	IPCRenderer.on('chat.saveFile', function(e, to, name, binary) {
+		Cryptocat.Diag.save.file(
+			Cryptocat.Win.chat[to],
+			Cryptocat.Me.settings.directories.fileSave,
+			name, function(path) {
+				if (!path) { return false; }
+				Cryptocat.Me.settings.directories.fileSave =
+					(require('path')).dirname(path);
+				FS.writeFile(path, binary, function() {});
+			}
+		);
+	});
+
+	IPCRenderer.on('chat.openFile', function(e, to) {
+		Cryptocat.Diag.open.file(
+			Cryptocat.Win.chat[to],
+			Cryptocat.Me.settings.directories.fileSelect,
+			function(paths) {
+				if (!paths || !paths.length) { return false; }
+				Cryptocat.Me.settings.directories.fileSelect =
+					(require('path')).dirname(paths[0]);
+				Cryptocat.Win.chat[to].webContents.send(
+					'chat.openFile', paths
+				);
+			}
+		);
 	});
 
 	IPCRenderer.on('chat.myChatState', function(e, to, chatState) {

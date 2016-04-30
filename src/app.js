@@ -473,9 +473,16 @@ Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	e.returnValue = 'true';
 });
 
+Electron.ipcMain.on('chat.saveFile', function(e, to, name, binary) {
+	Windows.main.webContents.send('chat.saveFile', to, name, binary);
+});
+
+Electron.ipcMain.on('chat.openFile', function(e, to, name) {
+	Windows.main.webContents.send('chat.openFile', to);
+});
+
 Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
 	Windows.main.webContents.send('chat.myChatState', to, chatState);
-	e.returnValue = 'true';
 });
 
 Electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
@@ -495,7 +502,6 @@ Electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 
 Electron.ipcMain.on('deviceManager.create', function(e, username) {
 	Windows.main.webContents.send('deviceManager.create', username);
-	e.returnValue = 'true';
 });
 
 Electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {

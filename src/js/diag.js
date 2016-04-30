@@ -9,6 +9,33 @@ Cryptocat.Diag = {
 	'use strict';
 	var dialog = Remote.require('dialog');
 
+	Cryptocat.Diag.util.defaultDirectory = function(preferred, callback) {
+		var delim = '/';
+		var home = process.env.HOME;
+		if (process.platform === 'win32') {
+			delim = '\\';
+			home = process.env.USERPROFILE;
+		}
+		var path = home + delim + preferred;
+		FS.stat(path, function(err, stats) {
+			if (err || !stats.isDirectory()) {
+				path = home + delim + 'Downloads'
+				FS.stat(path, function(err, stats) {
+					if (err || !stats.isDirectory()) {
+						callback(home + delim);
+					}
+					else {
+						callback(path + delim);
+					}
+				});
+			}
+			else {
+				callback(path + delim);
+			}
+		});
+		return false;
+	};
+
 	Cryptocat.Diag.error.updateCheck = function() {
 		dialog.showErrorBox(
 			'Cryptocat: Cannot Check for Updates',
@@ -383,44 +410,67 @@ Cryptocat.Diag = {
 		}, callback);
 	};
 
-	Cryptocat.Diag.save.updateDownloader = function(browserWindow, callback) {
-		var defaultPath = process.env.HOME + '/';
-		if (process.platform === 'win32') {
-			defaultPath = process.env.USERPROFILE + '\\';
-		}
-		defaultPath += 'Cryptocat-' + process.platform + '-x64.zip';
-		dialog.showSaveDialog(browserWindow, {
-			title: 'Cryptocat: Save Update Installer',
-			defaultPath: defaultPath,
-			filters: [{
-				name: 'Archives',
-				extensions: ['zip']
-			}]
-		}, callback);
+	Cryptocat.Diag.save.update = function(browserWindow, callback) {
+		var save = function(path) {
+			dialog.showSaveDialog(browserWindow, {
+				title: 'Cryptocat: Save Update Installer',
+				defaultPath: path,
+				filters: [{
+					name: 'Archives',
+					extensions: ['zip']
+				}]
+			}, callback);
+		};
+		var name = 'Cryptocat-' + process.platform + '-x64.zip';
+		var path = Cryptocat.Me.settings.directories.updateSave;
+		Cryptocat.Diag.util.defaultDirectory(
+			'Downloads', function(d) {
+				save(d + name);
+			}
+		);
 	};
 
-	Cryptocat.Diag.save.sendFile = function(browserWindow, name, callback) {
-		var defaultPath = process.env.HOME + '/';
-		if (process.platform === 'win32') {
-			defaultPath = process.env.USERPROFILE + '\\';
-		}
-		defaultPath += name;
-		dialog.showSaveDialog(browserWindow, {
-			title: 'Cryptocat: Save File',
-			defaultPath: defaultPath,
-		}, callback);
+	Cryptocat.Diag.save.file = function(browserWindow, path, name, callback) {
+		var save = function(path) {
+			dialog.showSaveDialog(browserWindow, {
+				title: 'Cryptocat: Save File',
+				defaultPath: path,
+			}, callback);
+		};
+		FS.stat(path, function(err, stats) {
+			if (err || !stats.isDirectory()) {
+				Cryptocat.Diag.util.defaultDirectory(
+					'Desktop', function(d) {
+						save(d + name);
+					}
+				);
+			}
+			else {
+				save(path + name);
+			}
+		});
 	};
 
-	Cryptocat.Diag.open.sendFile = function(browserWindow, callback) {
-		var defaultPath = process.env.HOME;
-		if (process.platform === 'win32') {
-			defaultPath = process.env.USERPROFILE;
-		}
-		dialog.showOpenDialog(browserWindow, {
-			title: 'Cryptocat: Select File to Send',
-			defaultPath: defaultPath,
-			properties: ['openFile', 'multiSelections']
-		}, callback);
+	Cryptocat.Diag.open.file = function(browserWindow, path, callback) {
+		var open = function(path) {
+			dialog.showOpenDialog(browserWindow, {
+				title: 'Cryptocat: Select File',
+				defaultPath: path,
+				properties: ['openFile', 'multiSelections']
+			}, callback);
+		};
+		FS.stat(path, function(err, stats) {
+			if (err || !stats.isDirectory()) {
+				Cryptocat.Diag.util.defaultDirectory(
+					'Documents', function(d) {
+						open(d);
+					}
+				);
+			}
+			else {
+				open(path);
+			}
+		});
 	};
 
 })();
