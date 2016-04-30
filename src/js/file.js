@@ -28,10 +28,11 @@ Cryptocat.File = {};
 		document: [
 			'ai', 'aut', 'cad',
 			'csv', 'doc', 'docx',
-			'eps', 'odt', 'pdf',
-			'ppt', 'pptx', 'ps',
-			'psd', 'rtf', 'torrent',
-			'txt', 'xls', 'xlsx'
+			'eps', 'markdown', 'md',
+			'odt', 'pdf', 'ppt',
+			'pptx', 'ps', 'psd',
+			'rtf', 'torrent', 'txt',
+			'xls', 'xlsx'
 		],
 		image: [
 			'bmp', 'gif', 'jpg',
