@@ -1,3 +1,5 @@
+'use strict';
+
 Cryptocat.Patterns = {
 	username:   /^([a-z0-9]|_){1,16}$/,
 	password:   /^.{12,512}$/,
