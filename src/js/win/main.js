@@ -533,7 +533,6 @@ window.addEventListener('load', function(e) {
 		});
 		updateDownloader.setMenu(null);
 		updateDownloader.webContents.on('did-finish-load', function() {
-			updateDownloader.toggleDevTools();
 			updateDownloader.show();
 		});
 		updateDownloader.loadURL(
