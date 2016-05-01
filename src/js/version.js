@@ -1,2 +1,2 @@
 'use strict';
-Cryptocat.Version = '3.1.13';
+Cryptocat.Version = '3.1.14';
