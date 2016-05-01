@@ -3,6 +3,19 @@ Cryptocat.Storage = {};
 (function() {
 	'use strict';
 	var db = {};
+	var EmptyCommon = {
+		_id: '*common*',
+		mainWindowBounds: {
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0
+		},
+		rememberedLogin: {
+			username: '',
+			password: ''
+		}
+	};
 	
 	(function() {
 		var path = '';
@@ -44,14 +57,16 @@ Cryptocat.Storage = {};
 	})();
 
 	Cryptocat.Storage.updateCommon = function(common, callback) {
-		var newCommon = {
-			_id: '*common*',
-			mainWindowBounds: {}
-		};
+		var newCommon = Object.assign({}, EmptyCommon);
 		db.findOne({_id: '*common*'}, function(err, doc) {
 			if (doc === null) {
-				if (hasProperty(common, 'mainWindowBounds')) {
-					newCommon.mainWindowBounds = common.mainWindowBounds;
+				for (var setting in common) {
+					if (
+						hasProperty(common, setting) &&
+						hasProperty(newCommon, setting)
+					) {
+						newCommon[setting] = common[setting];
+					}
 				}
 				db.insert(newCommon, function(err, newDoc) {
 					db.persistence.compactDatafile();
@@ -60,8 +75,13 @@ Cryptocat.Storage = {};
 			}
 			else {
 				var updateObj = {};
-				if (hasProperty(common, 'mainWindowBounds')) {
-					updateObj.mainWindowBounds = common.mainWindowBounds;
+				for (var setting in common) {
+					if (
+						hasProperty(common, setting) &&
+						hasProperty(newCommon, setting)
+					) {
+						updateObj[setting] = common[setting];
+					}
 				}
 				db.update({_id: '*common*'},
 					{$set: updateObj}, function(err, newDoc) {
@@ -74,8 +94,21 @@ Cryptocat.Storage = {};
 	};
 
 	Cryptocat.Storage.getCommon = function(callback) {
+		var newObj = Object.assign({}, EmptyCommon);
 		db.findOne({_id: '*common*'}, function(err, doc) {
-			callback(err, doc);
+			if (!doc) {
+				callback(err, null);
+				return false;
+			}
+			for (var setting in newObj) {
+				if (
+					hasProperty(newObj, setting) &&
+					hasProperty(doc, setting)
+				) {
+					newObj[setting] = doc[setting];
+				}
+			}
+			callback(err, newObj);
 		});
 	};
 

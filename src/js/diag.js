@@ -139,6 +139,19 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.message.rememberIsChecked = function() {
+		Dialog.showMessageBox({
+			type: 'info',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
+			buttons: ['OK'],
+			defaultId: 0,
+			title: 'Cryptocat: Remembering Login',
+			message: 'Only enable this feature on computers you trust.\n' +
+				'Others with access to this computer may ' +
+				'also be able to login with this username.'
+		});
+	};
+
 	Cryptocat.Diag.message.isLatest = function(version) {
 		Dialog.showMessageBox({
 			type: 'info',

@@ -46,7 +46,8 @@ window.addEventListener('load', function(e) {
 				disabled: false,
 				display: 'block',
 				reconn: 5000,
-				isReconn: false
+				isReconn: false,
+				rememberIsChecked: false
 			};
 		},
 		componentDidMount: function() {
@@ -98,6 +99,17 @@ window.addEventListener('load', function(e) {
 				isReconn: false,
 				reconn: 5000
 			});
+			var rememberedLogin = {
+				username: '',
+				password: ''
+			};
+			if (this.state.rememberIsChecked) {
+				rememberedLogin.username = this.state.username;
+				rememberedLogin.password = this.state.password;
+			}
+			Cryptocat.Storage.updateCommon({
+				rememberedLogin: rememberedLogin
+			}, function() {});
 			Cryptocat.Win.main.roster = ReactDOM.render(
 				React.createElement(mainRoster, null),
 				document.getElementById('renderB')
@@ -176,13 +188,36 @@ window.addEventListener('load', function(e) {
 			this.setState({
 				disabled: false,
 				display: 'block',
-				password: '',
 				iReconn: false,
 				reconn: 5000
 			});
+			if (!this.state.rememberIsChecked) {
+				this.setState({
+					password: ''
+				});
+			}
 			ReactDOM.unmountComponentAtNode(
 				document.getElementById('renderB')
 			);
+		},
+		onRememberCheckboxChange: function(e) {
+			var bef = this.state.rememberIsChecked;
+			var now = e.target.checked;
+			this.setState({
+				rememberIsChecked: now
+			}, function() {
+				if (!bef && now) {
+					Cryptocat.Diag.message.rememberIsChecked();
+				}
+				if (bef && !now) {
+					Cryptocat.Storage.updateCommon({
+						rememberedLogin: {
+							username: '',
+							password: ''
+						}
+					}, function() {})
+				}
+			});
 		},
 		render: function() {
 			return React.createElement('form', {
@@ -216,6 +251,22 @@ window.addEventListener('load', function(e) {
 					onChange: this.onChangePassword,
 					disabled: this.state.disabled
 				}),
+				React.createElement('label', {
+					key: 4,
+					checked: this.state.rememberIsChecked,
+					disabled: this.state.disabled,
+					className: 'mainLoginRemember'
+				}, [
+				React.createElement('input', {
+					key: 4,
+					type: 'checkbox',
+					onChange: this.onRememberCheckboxChange,
+					className: 'mainLoginRememberCheckbox'
+				}),
+				React.createElement('span', {
+					key: 5,
+					className: 'mainLoginRememberText'
+				}, 'Remember me')]),
 				React.createElement('input', {
 					key: 3,
 					type: 'submit',
@@ -223,10 +274,10 @@ window.addEventListener('load', function(e) {
 					disabled: this.state.disabled
 				}),
 				React.createElement('br', {
-					key: 4,
+					key: 6,
 				}),
 				React.createElement('input', {
-					key: 5,
+					key: 7,
 					className: 'create',
 					type: 'button',
 					value: 'Create Account',
@@ -235,7 +286,7 @@ window.addEventListener('load', function(e) {
 					}
 				}),
 				React.createElement('span', {
-					key: 6,
+					key: 8,
 					className: 'version',
 				}, Cryptocat.Version + ', Beta software.')
 			]);
@@ -958,6 +1009,22 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Storage.getCommon(function(err, common) {
 		var screenRes = Remote.screen.getPrimaryDisplay().size;
+		if (
+			common &&
+			common.rememberedLogin.username.length &&
+			common.rememberedLogin.password.length
+		) {
+			Cryptocat.Win.main.login.setState({
+				username: common.rememberedLogin.username,
+				password: common.rememberedLogin.password,
+				rememberIsChecked: true
+			}, function() {
+				Cryptocat.Win.main.login.onSubmit();
+			});
+			document.getElementsByClassName(
+				'mainLoginRememberCheckbox'
+			)[0].checked = true;
+		}
 		if (
 			common &&
 			(screenRes.width  > common.mainWindowBounds.x) &&

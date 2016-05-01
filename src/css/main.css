@@ -4,7 +4,7 @@ div#renderA, div#renderB {
 
 form.mainLogin {
 	display: block;
-	margin: 80px auto 0 auto;
+	margin: 70px auto 0 auto;
 }
 
 form.mainLogin img.logo {
@@ -15,11 +15,35 @@ form.mainLogin img.logo {
 	margin: 0 auto 20px auto;
 }
 
-form.mainLogin input {
+form.mainLogin input[type=text],
+form.mainLogin input[type=password],
+form.mainLogin input[type=button],
+form.mainLogin input[type=submit] {
 	font-size: 1.1em;
 	display: block;
-	margin: 0 auto 10px auto;
+	margin: 0 auto 5px auto;
 	width: 150px;
+}
+
+form.mainLogin label.mainLoginRemember {
+	margin: 0 auto 20px auto;
+	display: block;
+	background-color: rgba(0, 100, 150, 0.1);
+	padding: 1px 5px;
+	width: 150px;
+	opacity: 0.8;
+	box-shadow: 1px 1px #96A5B2;
+}
+
+form.mainLogin input.mainLoginRememberCheckbox {
+	display: inline;
+}
+
+form.mainLogin span.mainLoginRememberText {
+	position: relative;
+	bottom: 2px;
+	margin-left: 5px;
+	font-size: 11px;
 }
 
 form.mainLogin input.create {
