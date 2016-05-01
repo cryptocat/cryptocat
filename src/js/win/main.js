@@ -856,6 +856,14 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('changePassword.changePassword', function(e, password) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.XMPP.changePassword(Cryptocat.Me.username, password);
+			if (Cryptocat.Win.main.login.state.rememberIsChecked) {
+				Cryptocat.Storage.updateCommon({
+					rememberedLogin: {
+						username: '',
+						password: ''
+					}
+				}, function() {});
+			}
 			Cryptocat.Diag.message.changePasswordSuccess();
 		}
 		else {
@@ -880,6 +888,14 @@ window.addEventListener('load', function(e) {
 					Cryptocat.XMPP.sendDeviceList(
 						Cryptocat.Me.settings.deviceIds
 					);
+					if (Cryptocat.Win.main.login.state.rememberIsChecked) {
+						Cryptocat.Storage.updateCommon({
+							rememberedLogin: {
+								username: '',
+								password: ''
+							}
+						}, function() {});
+					}
 					Cryptocat.XMPP.disconnect(function() {
 						Cryptocat.Storage.deleteUser(
 							Cryptocat.Me.username,
@@ -983,6 +999,14 @@ window.addEventListener('load', function(e) {
 						);
 					}
 					if (response === 2) {
+						if (Cryptocat.Win.main.login.state.rememberIsChecked) {
+							Cryptocat.Storage.updateCommon({
+								rememberedLogin: {
+									username: '',
+									password: ''
+								}
+							}, function() {});
+						}
 						Cryptocat.XMPP.deleteAccount(
 							Cryptocat.Me.username
 						);
