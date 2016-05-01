@@ -252,7 +252,7 @@ window.addEventListener('load', function(e) {
 					disabled: this.state.disabled
 				}),
 				React.createElement('label', {
-					key: 4,
+					key: 3,
 					checked: this.state.rememberIsChecked,
 					disabled: this.state.disabled,
 					className: 'mainLoginRemember'
@@ -268,16 +268,16 @@ window.addEventListener('load', function(e) {
 					className: 'mainLoginRememberText'
 				}, 'Remember me')]),
 				React.createElement('input', {
-					key: 3,
+					key: 6,
 					type: 'submit',
 					value: 'Login',
 					disabled: this.state.disabled
 				}),
 				React.createElement('br', {
-					key: 6,
+					key: 7,
 				}),
 				React.createElement('input', {
-					key: 7,
+					key: 8,
 					className: 'create',
 					type: 'button',
 					value: 'Create Account',
@@ -286,7 +286,7 @@ window.addEventListener('load', function(e) {
 					}
 				}),
 				React.createElement('span', {
-					key: 8,
+					key: 9,
 					className: 'version',
 				}, Cryptocat.Version + ', Beta software.')
 			]);
