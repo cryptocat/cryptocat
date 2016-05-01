@@ -430,7 +430,7 @@ Electron.app.on('ready', function() {
 			Windows.main.hide();
 			if (process.platform !== 'darwin') {
 				TrayIcon.displayBalloon({
-					icon: Path.join(__dirname + 'img/logo/logo.png'),
+					icon: Path.join(__dirname, 'img/logo/logo.png'),
 					title: 'Cryptocat is still running',
 					content: 'It awaits you snugly in your desktop tray.'
 				});
