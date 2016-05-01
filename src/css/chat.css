@@ -266,6 +266,7 @@ div.chatFile img.chatFileIcon {
 	height: auto;
 	float: left;
 	cursor: pointer;
+	margin-top: -5px;
 }
 
 div.chatFile div.chatFileProgressBar {
@@ -273,7 +274,7 @@ div.chatFile div.chatFileProgressBar {
 	float: left;
 	width: 120px;
 	height: 18px;
-	margin: 23px 0 0 8px;
+	margin: 18px 0 0 8px;
 	padding: 1px;
 	transition: border-color 0.5s;
 }

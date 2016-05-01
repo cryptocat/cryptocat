@@ -237,14 +237,25 @@ window.addEventListener('load', function(e) {
 				'data-alignment': this.props.alignment,
 				'data-offline': this.props.offline,
 				key: 0
-			}, React.createElement('img', {
+			}, React.createElement('span', {
+				className: 'chatMediaInfo',
+				key: 1
+			}, React.createElement('span', {
+				className: 'chatMediaSender',
+				key: 2
+			}, this.props.sender),
+			React.createElement('span', {
+				className: 'chatMediaTimestamp',
+				key: 3
+			}, this.props.timestamp)),
+			React.createElement('img', {
 				className: 'chatFileIcon',
 				src: '../img/files/' + this.props.file.type + '.png',
 				onClick: this.onClick,
-				key: 1
+				key: 4
 			}), React.createElement('div', {
 				className: 'chatFileProgressBar',
-				key: 2,
+				key: 5,
 				'data-valid': this.state.valid,
 				'data-complete': (
 					this.state.ready &&
@@ -255,7 +266,7 @@ window.addEventListener('load', function(e) {
 				style: {
 					width: this.state.progress + '%'
 				},
-				key: 3
+				key: 6
 			})));
 		}
 	});
