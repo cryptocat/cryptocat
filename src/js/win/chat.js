@@ -522,8 +522,8 @@ window.addEventListener('load', function(e) {
 				}
 				return 'left';
 			})();
-			var sticker   = checkIfSticker(info.plaintext);
-			var file	  = checkIfFile(info.plaintext);
+			var sticker = checkIfSticker(info.plaintext);
+			var file    = checkIfFile(info.plaintext);
 			if (sticker.isSticker) {
 				var res = React.createElement(chatSticker, {
 					key: this.state.key,
