@@ -6,7 +6,6 @@ Cryptocat.Patterns = {
 	version:    /^(\d){1,2}.(\d){1,2}.(\d){1,2}$/,
 	sticker:    /^CryptocatSticker:\w{4,20}$/,
 	file:       /^CryptocatFile:.{240,512}$/,
-	recording:  /^CryptocatReco:.{240,512}$/,
 	deviceName: /^(\w|\s|\"|\'){1,24}$/,
 	deviceIcon: /^(0|1|2)$/,
 	dateTime:   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/,

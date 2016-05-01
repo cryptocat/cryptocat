@@ -485,9 +485,6 @@ Cryptocat.XMPP = {};
 				if (Cryptocat.Patterns.file.test(notifText)) {
 					notifText = username + ' sent you a file.';
 				}
-				if (Cryptocat.Patterns.recording.test(notifText)) {
-					notifText = username + ' sent you a recording.';
-				}
 				Cryptocat.Notify.showNotification(
 					username, notifText, function() {
 						Cryptocat.Win.chat[username].focus();

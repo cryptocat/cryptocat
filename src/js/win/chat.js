@@ -182,25 +182,6 @@ window.addEventListener('load', function(e) {
 		};
 	};
 
-	var checkIfRecording = function(message) {
-		if (Cryptocat.Patterns.recording.test(message)) {
-			var info = Cryptocat.File.parseInfo(message);
-			if (
-				info.valid &&
-				(info.name === 'recording.webm')
-			) {
-				return {
-					recording:	 info,
-					isRecording: true
-				}
-			}
-		}
-		return {
-			recording:	 {},
-			isRecording: false
-		}
-	};
-
 	var chatSticker = React.createClass({
 		displayName: 'chatSticker',
 		getInitialState: function() {
@@ -310,8 +291,8 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
-	var chatImage = React.createClass({
-		displayName: 'chatImage',
+	var chatMedia = React.createClass({
+		displayName: 'chatMedia',
 		getInitialState: function() {
 			return {
 				progress: 0,
@@ -345,104 +326,53 @@ window.addEventListener('load', function(e) {
 			this.setState({saved: true});
 		},
 		render: function() {
-			var className = 'chatImage';
-			var src = '../img/icons/loading.gif';
+			var className = 'chatMedia';
+			var renderer  = 'img';
+			var blobType  = 'image/*';
+			var loadingExt = 'gif';
+			if (this.props.file.type === 'recording') {
+				renderer = 'video';
+				blobType = 'video/*';
+				loadingExt = 'webm';
+			}
+			if (
+				(this.props.file.type === 'recording') &&
+				(
+					/^(aac)|(m4a)|(mp3)|(ogg)|(wav)$/
+				).test(this.props.file.ext) &&
+				this.state.ready
+			) {
+				renderer = 'audio';
+				blobType = 'audio/*';
+			}
+			var src = '../img/icons/loading.' + loadingExt;
 			if (this.state.binary.length) {
 				src = URL.createObjectURL(
 					new Blob([this.state.binary], {
-						type: 'image/*'
+						type: blobType
 					})
 				);
 			}
 			return React.createElement('div', {
-				className: 'chatImage',
+				className: 'chatMedia',
 				'data-alignment': this.props.alignment,
 				'data-offline': this.props.offline,
 				key: 0
 			}, React.createElement('span', {
-				className: 'chatImageInfo',
+				className: 'chatMediaInfo',
 				key: 1
 			}, React.createElement('span', {
-				className: 'chatImageSender',
+				className: 'chatMediaSender',
 				key: 2
 			}, this.props.sender),
 			React.createElement('span', {
-				className: 'chatImageTimestamp',
+				className: 'chatMediaTimestamp',
 				key: 3
 			}, this.props.timestamp)),
-			React.createElement('img', {
-				className: 'chatImageImg',
+			React.createElement(renderer, {
+				className: 'chatMediaRenderer',
 				src: src,
 				alt: '',
-				onContextMenu: this.onContextMenu,
-				key: 4
-			}));
-		}
-	});
-	
-	var chatRecording = React.createClass({
-		displayName: 'chatRecording',
-		getInitialState: function() {
-			return {
-				progress: 0,
-				ready: false,
-				valid: true,
-				saved: false,
-				binary: new Buffer([])
-			};
-		},
-		componentDidMount: function() {
-			return true;
-		},
-		onContextMenu: function(e) {
-			var _t = this;
-			e.preventDefault();
-			e.stopPropagation();
-			(Remote.Menu.buildFromTemplate([{
-				label: 'Save to Disk',
-				click: _t.saveToDisk
-			}])).popup(Remote.getCurrentWindow());
-			return true;
-		},
-		saveToDisk: function() {
-			var _t = this;
-			IPCRenderer.send(
-				'chat.saveFile',
-				thisChat.window.state.to,
-				'video.webm',
-				_t.state.binary
-			);
-			this.setState({saved: true});
-		},
-		render: function() {
-			var className = 'chatRecording';
-			var src = '../img/icons/loading.webm';
-			if (this.state.binary.length) {
-				src = URL.createObjectURL(
-					new Blob([this.state.binary], {
-						type: 'video/webm'
-					})
-				);
-			}
-			return React.createElement('div', {
-				className: 'chatRecording',
-				'data-alignment': this.props.alignment,
-				'data-offline': this.props.offline,
-				key: 0
-			}, React.createElement('span', {
-				className: 'chatRecordingInfo',
-				key: 1
-			}, React.createElement('span', {
-				className: 'chatRecordingSender',
-				key: 2
-			}, this.props.sender),
-			React.createElement('span', {
-				className: 'chatRecordingTimestamp',
-				key: 3
-			}, this.props.timestamp)),
-			React.createElement('video', {
-				className: 'chatRecordingVideo',
-				src: src,
 				autoPlay: !this.state.ready,
 				controls: this.state.ready,
 				loop: !this.state.ready,
@@ -582,7 +512,6 @@ window.addEventListener('load', function(e) {
 			return true;
 		},
 		files: {},
-		recordings: {},
 		updateConversation: function(fromMe, info) {
 			var _t		  = this;
 			var sender	  = this.state.to;
@@ -595,7 +524,6 @@ window.addEventListener('load', function(e) {
 			})();
 			var sticker   = checkIfSticker(info.plaintext);
 			var file	  = checkIfFile(info.plaintext);
-			var recording = checkIfRecording(info.plaintext);
 			if (sticker.isSticker) {
 				var res = React.createElement(chatSticker, {
 					key: this.state.key,
@@ -603,8 +531,11 @@ window.addEventListener('load', function(e) {
 					sticker: sticker.sticker,
 				});
 			}
-			else if (file.isFile && file.file.type === 'image') {
-				var res = React.createElement(chatImage, {
+			else if (
+				file.isFile &&
+				(/^(image)|(recording)$/).test(file.file.type)
+			) {
+				var res = React.createElement(chatMedia, {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
@@ -631,21 +562,6 @@ window.addEventListener('load', function(e) {
 						_t.files[file.file.url] = f;
 						if (!fromMe) {
 							_t.receiveFile(file.file);
-						}
-					}
-				});
-			}
-			else if (recording.isRecording) {
-				var res = React.createElement(chatRecording, {
-					key: this.state.key,
-					sender: sender,
-					alignment: alignment,
-					timestamp: getTimestamp(info.stamp),
-					offline: info.offline,
-					ref: function(r) {
-						_t.recordings[recording.recording.url] = r;
-						if (!fromMe) {
-							_t.receiveRecording(recording.recording);
 						}
 					}
 				});
@@ -764,39 +680,7 @@ window.addEventListener('load', function(e) {
 					Cryptocat.Diag.error.recordTime();
 					return false;
 				}
-				Cryptocat.File.send('recording.webm', video, function(info) {	
-					if (!info.valid) {
-						return false;
-					}
-					var sendInfo = 'CryptocatReco:' + JSON.stringify(info);
-					_t.updateConversation(true, {
-						plaintext: sendInfo,
-						valid: true,
-						stamp: (new Date()).toString(),
-						offline: (_t.state.status !== 2),
-					});
-				}, function(url, p) {
-					_t.recordings[url].setState({progress: p});
-					Remote.getCurrentWindow().setProgressBar(p / 100);
-				}, function(info, file) {
-					var sendInfo = 'CryptocatReco:' + JSON.stringify(info);
-					if (info.valid) {
-						thisChat.sendQueue.messages.push(sendInfo);
-						if (!thisChat.sendQueue.isOn) {
-							thisChat.sendQueue.turnOn();
-						}
-					}
-					else {
-						Cryptocat.Diag.error.recordingGeneral();
-					}
-					_t.recordings[info.url].setState({
-						progress: 100,
-						ready: true,
-						valid: info.valid,
-						binary: video
-					});
-					Remote.getCurrentWindow().setProgressBar(-1);
-				});
+				_t.sendFile('video.webm', video);
 			});
 		},
 		sendFileDialog: function(e) {
@@ -852,21 +736,6 @@ window.addEventListener('load', function(e) {
 			}, function(url, plaintext, valid) {
 				_t.files[url].setState({
 					binary: plaintext,
-					progress: 100,
-					ready: valid,
-					valid: valid
-				});
-				Remote.getCurrentWindow().setProgressBar(-1);
-			});
-		},
-		receiveRecording: function(recording) {
-			var _t = this;
-			Cryptocat.File.receive(recording, function(url, p) {
-				_t.recordings[url].setState({progress: p});
-				Remote.getCurrentWindow().setProgressBar(p / 100);
-			}, function(url, video, valid) {
-				_t.recordings[url].setState({
-					binary: video,
 					progress: 100,
 					ready: valid,
 					valid: valid
@@ -1253,20 +1122,6 @@ window.addEventListener('load', function(e) {
 	}); window.dispatchEvent(new Event('resize'));
 
 	window.addEventListener('beforeunload', function(e) {
-		for (var recording in thisChat.window.recordings) {
-			if (
-				hasProperty(thisChat.window.recordings, recording) &&
-				!thisChat.window.recordings[recording].state.ready
-			) {
-				e.returnValue = 'false';
-				Cryptocat.Diag.message.pendingRecordings(function(response) {
-					if (response === 1) {
-						Remote.getCurrentWindow().destroy();
-					}
-				});
-				break;
-			}
-		}
 		for (var file in thisChat.window.files) {
 			if (
 				hasProperty(thisChat.window.files, file) &&

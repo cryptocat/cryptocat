@@ -5,7 +5,7 @@ Cryptocat.File = {};
 	
 	Cryptocat.File.maxSize   = 51000000;
 	Cryptocat.File.chunkSize = 25000;
-	Cryptocat.File.allowed  = {
+	Cryptocat.File.types  = {
 		archive: [
 			'7z', '7zx', 'bin',
 			'bz2', 'db', 'iso',
@@ -13,9 +13,7 @@ Cryptocat.File = {};
 			'zip', 'zipx'
 		],
 		audio: [
-			'aac', 'aif', 'm4a',
-			'mid', 'mp3', 'ogg',
-			'wav', 'wma'
+			'aif', 'mid', 'wma'
 		],
 		code: [
 			'c', 'cc', 'class',
@@ -38,11 +36,16 @@ Cryptocat.File = {};
 			'bmp', 'gif', 'jpg',
 			'jpeg', 'png', 'webp'
 		],
+		recording: [
+			'aac', 'gifv', 'm4a',
+			'mp3', 'mp4', 'ogg',
+			'wav', 'webm'
+		],
 		video: [
 			'3gp', 'avi', 'flv',
 			'm4v', 'mkv', 'mov',
-			'mp4', 'mpeg', 'mpg',
-			'mpg', 'webm', 'wmv'
+			'mpeg', 'mpg', 'mpg',
+			'wmv'
 		]
 	};
 
@@ -87,26 +90,32 @@ Cryptocat.File = {};
 		}
 	};
 
-	Cryptocat.File.isAllowed = function(name) {
+	Cryptocat.File.getType = function(name) {
 		var lName = name.toLowerCase();
 		if (!(/\.\w{1,5}$/).test(lName)) {
-			return false;
+			return {
+				allowed: false,
+				type: '',
+				ext: ''
+			}
 		}
 		var ext = lName.match(/\.\w{1,5}$/)[0].substr(1);
-		for (var type in Cryptocat.File.allowed) {
+		for (var type in Cryptocat.File.types) {
 			if (
-				(hasProperty(Cryptocat.File.allowed, type)) &&
-				(Cryptocat.File.allowed[type].indexOf(ext) >= 0)
+				(hasProperty(Cryptocat.File.types, type)) &&
+				(Cryptocat.File.types[type].indexOf(ext) >= 0)
 			) {
 				return {
 					allowed: true,
-					type: type
+					type: type,
+					ext: ext
 				};
 			}
 		}
 		return {
 			allowed: false,
-			type: ''
+			type: '',
+			ext: ''
 		};
 	};
 
@@ -118,6 +127,7 @@ Cryptocat.File = {};
 			return {
 				name:  '',
 				type:  '',
+				ext:   '',
 				url:   '',
 				key:   '',
 				iv:    '',
@@ -125,6 +135,7 @@ Cryptocat.File = {};
 				valid: false
 			};
 		};
+		var fileType = Cryptocat.File.getType(parsed.name);
 		if (
 			hasProperty(parsed, 'name')  &&
 			hasProperty(parsed, 'url')   &&
@@ -137,12 +148,13 @@ Cryptocat.File = {};
 			Cryptocat.Patterns.hex32.test(parsed.key) &&
 			Cryptocat.Patterns.hex12.test(parsed.iv)  &&
 			Cryptocat.Patterns.hex16.test(parsed.tag) &&
-			Cryptocat.File.isAllowed(parsed.name).allowed &&
+			fileType.allowed &&
 			(parsed.valid === true)
 		) {
 			return {
 				name:  parsed.name,
-				type:  Cryptocat.File.isAllowed(parsed.name).type,
+				type:  fileType.type,
+				ext:   fileType.ext,
 				url:   parsed.url,
 				key:   parsed.key,
 				iv:    parsed.iv,
@@ -153,6 +165,7 @@ Cryptocat.File = {};
 		return {
 			name:  '',
 			type:  '',
+			ext:   '',
 			url:   '',
 			key:   '',
 			iv:    '',
@@ -193,7 +206,7 @@ Cryptocat.File = {};
 	Cryptocat.File.send = function(
 		name, file, onBegin, onProgress, onEnd
 	) {
-		if (!Cryptocat.File.isAllowed(name)) {
+		if (!Cryptocat.File.getType(name).allowed) {
 			Cryptocat.Diag.error.fileExt(name);
 			return false;
 		}

@@ -369,17 +369,4 @@ Cryptocat.Diag = {
 				'being sent. Are you sure you want to discard them?'
 		}, callback);
 	};
-
-	Cryptocat.Diag.message.pendingRecordings = function(callback) {
-		Dialog.showMessageBox({
-			type: 'question',
-			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
-			buttons: ['Return to Chat', 'Close Anyway'],
-			defaultId: 0,
-			title: 'Cryptocat: Pending Recordings',
-			message: 'Recordings are still being sent or received in this chat. ' +
-				'Are you sure you want to discard them?'
-		}, callback);
-	};
-
 })();
