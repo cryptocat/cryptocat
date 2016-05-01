@@ -468,11 +468,17 @@ window.addEventListener('load', function(e) {
 			this.setState({visible: false});
 			if (e.isTrusted) {
 				var files = e.dataTransfer.files;
+				var paths = [];
 				for (var i in files) {
 					if (hasProperty(files, i)) {
-						thisChat.window.sendFile(files[i].path);
+						paths.push(files[i].path);
 					}
 				}
+				IPCRenderer.send(
+					'chat.sendFile',
+					thisChat.window.state.to,
+					paths
+				);
 			}
 			return false;
 		},
@@ -796,50 +802,45 @@ window.addEventListener('load', function(e) {
 		sendFileDialog: function(e) {
 			document.getElementById('chatInputText').focus();
 			IPCRenderer.send(
-				'chat.openFile',
-				thisChat.window.state.to
+				'chat.sendFile',
+				thisChat.window.state.to,
+				[]
 			);
 		},
-		sendFile: function(path) {
+		sendFile: function(name, file) {
 			var _t = this;
-			var name = (require('path')).basename(path);
-			FS.readFile(path, function(err, file) {
-				if (err) {
+			Cryptocat.File.send(name, file, function(info) {	
+				if (!info.valid) {
 					return false;
 				}
-				Cryptocat.File.send(name, file, function(info) {	
-					if (!info.valid) {
-						return false;
+				var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+				_t.updateConversation(true, {
+					plaintext: sendInfo,
+					valid: true,
+					stamp: (new Date()).toString(),
+					offline: (_t.state.status !== 2)
+				});
+			}, function(url, p) {
+				_t.files[url].setState({progress: p});
+				Remote.getCurrentWindow().setProgressBar(p / 100);
+			}, function(info, file) {
+				var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
+				Remote.getCurrentWindow().setProgressBar(-1);
+				if (info.valid) {
+					thisChat.sendQueue.messages.push(sendInfo);
+					if (!thisChat.sendQueue.isOn) {
+						thisChat.sendQueue.turnOn();
 					}
-					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
-					_t.updateConversation(true, {
-						plaintext: sendInfo,
-						valid: true,
-						stamp: (new Date()).toString(),
-						offline: (_t.state.status !== 2)
-					});
-				}, function(url, p) {
-					_t.files[url].setState({progress: p});
-					Remote.getCurrentWindow().setProgressBar(p / 100);
-				}, function(info, file) {
-					var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
-					Remote.getCurrentWindow().setProgressBar(-1);
-					if (info.valid) {
-						thisChat.sendQueue.messages.push(sendInfo);
-						if (!thisChat.sendQueue.isOn) {
-							thisChat.sendQueue.turnOn();
-						}
-					}
-					else {
-						Cryptocat.Diag.error.fileGeneral(info.name);
-						return false;
-					}
-					_t.files[info.url].setState({
-						progress: 100,
-						ready: true,
-						valid: info.valid,
-						binary: file
-					});
+				}
+				else {
+					Cryptocat.Diag.error.fileGeneral(info.name);
+					return false;
+				}
+				_t.files[info.url].setState({
+					progress: 100,
+					ready: true,
+					valid: info.valid,
+					binary: file
 				});
 			});
 		},
@@ -1122,12 +1123,8 @@ window.addEventListener('load', function(e) {
 		thisChat.window.setState({status: status});
 	});
 
-	IPCRenderer.on('chat.openFile', function(e, paths) {
-		for (var i in paths) {
-			if (hasProperty(paths, i)) {
-				thisChat.window.sendFile(paths[i]);
-			}
-		}
+	IPCRenderer.on('chat.sendFile', function(e, name, file) {
+		thisChat.window.sendFile(name, file);
 	});
 
 	IPCRenderer.on('chat.connected', function(e, connected) {
@@ -1147,7 +1144,7 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(false, info);
 		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
-		if (!thisChat.focused && (process.platform === 'darwin')) {
+		if (!thisChat.focused && (proc.platform === 'darwin')) {
 			thisChat.window.setState({
 				unread: thisChat.window.state.unread + 1
 			});
@@ -1235,7 +1232,7 @@ window.addEventListener('load', function(e) {
 
 	window.addEventListener('focus', function(e) {
 		document.getElementById('chatInputText').focus();
-		if (process.platform !== 'darwin') {
+		if (proc.platform !== 'darwin') {
 			return false;
 		}
 		var badgeCount = parseInt(Remote.app.dock.getBadge());

@@ -1,6 +1,7 @@
 const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
 const FS            = require('fs');
+const Path          = require('path');
 
 var Windows      = {main: null, last: null};
 var TrayIcon     = {};
@@ -10,7 +11,7 @@ var IntentToQuit = false;
 var handleStartupEvent = function() {
 	if (process.platform === 'linux') {
 		var shortcut = '[Desktop Entry]\n';
-		var path     = process.env.HOME + '/.local';
+		var path     = Path.join(process.env.HOME, '.local');
 		var exePath  = Electron.app.getPath('exe');
 		var icoPath  = exePath.slice(0, -9) + 'logo.png';
 		shortcut    += 'Name=Cryptocat\n';
@@ -24,17 +25,17 @@ var handleStartupEvent = function() {
 			if (!stats.isDirectory()) {
 				FS.mkdirSync(path, '0o700');
 			}
-			path += '/share';
+			path = Path.join(path, 'share');
 			FS.stat(path, function(err, stats) {
 				if (!stats.isDirectory()) {
 					FS.mkdirSync(path, '0o700');
 				}
-				path += '/applications';
+				path = Path.join(path, 'applications');
 				FS.stat(path, function(err, stats) {
 					if (!stats.isDirectory()) {
 						FS.mkdirSync(path, '0o700');
 					}
-					path += '/Cryptocat.desktop';
+					path = Path.join(path, 'Cryptocat.desktop');
 					FS.writeFile(path, shortcut, function(err) {
 					});
 				});
@@ -46,7 +47,7 @@ var handleStartupEvent = function() {
 		return false;
 	}
 	const childProc = require('child_process');
-	const AppDataDir = process.env.LOCALAPPDATA + '\\Cryptocat'
+	const AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
 	if (process.argv[1] === '--squirrel-install') {
 		childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
 			cwd: AppDataDir, timeout: 10000
@@ -405,7 +406,7 @@ var buildMacMenu = function(settings) {
 Electron.app.on('ready', function() {
 	if (process.platform !== 'darwin') {
 		TrayIcon = new Electron.Tray(
-			__dirname + '/img/logo/logo.png'
+			Path.join(__dirname, 'img/logo/logo.png')
 		);
 	}
 	Windows.main = new BrowserWindow({
@@ -417,7 +418,10 @@ Electron.app.on('ready', function() {
 		maximizable: false,
 		fullscreenable: false,
 		show: false,
-		title: 'Cryptocat'
+		title: 'Cryptocat',
+		webPreferences: {
+			preload: Path.join(__dirname, 'js/global.js')
+		}
 	});
 	Windows.last = Windows.main;
 	Windows.main.on('close', function(e) {
@@ -426,7 +430,7 @@ Electron.app.on('ready', function() {
 			Windows.main.hide();
 			if (process.platform !== 'darwin') {
 				TrayIcon.displayBalloon({
-					icon: __dirname + '/img/logo/logo.png',
+					icon: Path.join(__dirname + 'img/logo/logo.png'),
 					title: 'Cryptocat is still running',
 					content: 'It awaits you snugly in your desktop tray.'
 				});
@@ -477,8 +481,8 @@ Electron.ipcMain.on('chat.saveFile', function(e, to, name, binary) {
 	Windows.main.webContents.send('chat.saveFile', to, name, binary);
 });
 
-Electron.ipcMain.on('chat.openFile', function(e, to, name) {
-	Windows.main.webContents.send('chat.openFile', to);
+Electron.ipcMain.on('chat.sendFile', function(e, to, name) {
+	Windows.main.webContents.send('chat.sendFile', to, name);
 });
 
 Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {

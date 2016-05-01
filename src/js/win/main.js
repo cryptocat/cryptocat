@@ -9,11 +9,32 @@ Cryptocat.Win = {
 window.addEventListener('load', function(e) {	
 	'use strict';
 
-	var windowRenderHeight = function(h) {
+	var renderWindowHeight = function(h) {
 		if (process.platform === 'win32') {
 			return h + 40;
 		}
 		return h;
+	};
+
+	var spawnChatWindow = function() {
+		var chatWindow = new Remote.BrowserWindow({
+			width: 450,
+			minWidth: 450,
+			height: renderWindowHeight(450),
+			minHeight: renderWindowHeight(150),
+			show: false,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
+		});
+		chatWindow.loadURL(
+			Path.join('file://' + __dirname, 'chat.html')
+		);
+		return chatWindow;
 	};
 	
 	var mainLogin = React.createClass({
@@ -323,7 +344,12 @@ window.addEventListener('load', function(e) {
 		updateBuddyStatus: function(username, status, notify) {
 			var newBuddies = this.state.buddies;
 			var _t = this;
-			if (newBuddies[username].props.status === status) {
+			if (
+				hasProperty(newBuddies, username) &&
+				hasProperty(newBuddies[username], 'props') &&
+				hasProperty(newBuddies[username].props, 'status') &&
+				(newBuddies[username].props.status === status)
+			) {
 				return false;
 			}
 			newBuddies[username] = React.createElement(mainRosterBuddy, {
@@ -439,20 +465,28 @@ window.addEventListener('load', function(e) {
 	Cryptocat.Win.create.updateDownloader = function() {
 		var updateDownloader = new Remote.BrowserWindow({
 			width: 330,
-			height: windowRenderHeight(120),
+			height: renderWindowHeight(120),
 			title: 'Downloading Update...',
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
 			fullscreenable: false,
-			show: false
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
 		});
 		updateDownloader.setMenu(null);
 		updateDownloader.webContents.on('did-finish-load', function() {
+			updateDownloader.toggleDevTools();
 			updateDownloader.show();
 		});
 		updateDownloader.loadURL(
-			'file://' + __dirname + '/updateDownloader.html'
+			Path.join('file://' + __dirname, 'updateDownloader.html')
 		);
 	};
 
@@ -462,15 +496,7 @@ window.addEventListener('load', function(e) {
 			return false;
 		}
 		if (!Cryptocat.Win.chatRetainer.length) {
-			var chatRetainer = new Remote.BrowserWindow({
-				width: 450,
-				minWidth: 450,
-				height: windowRenderHeight(450),
-				minHeight: windowRenderHeight(150),
-				show: false
-			});
-			Cryptocat.Win.chatRetainer.push(chatRetainer);
-			chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
 		Cryptocat.XMPP.getDeviceList(username);
 		Cryptocat.Win.chat[username] = Cryptocat.Win.chatRetainer[0];
@@ -488,72 +514,89 @@ window.addEventListener('load', function(e) {
 		if (typeof(callback) === 'function') { callback() }
 		Cryptocat.Win.chat[username].show();
 		if (Cryptocat.Win.chatRetainer.length < 2) {
-			var chatRetainer = new Remote.BrowserWindow({
-				width: 450,
-				minWidth: 450,
-				height: windowRenderHeight(450),
-				minHeight: windowRenderHeight(150),
-				show: false
-			});
-			Cryptocat.Win.chatRetainer.push(chatRetainer);
-			chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
 	};
 
 	Cryptocat.Win.create.addBuddy = function() {
 		var addBuddyWindow = new Remote.BrowserWindow({
 			width: 320,
-			height: windowRenderHeight(160),
+			height: renderWindowHeight(160),
 			title: 'Add Buddy',
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
 			fullscreenable: false,
-			show: false
+			show: false,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
 		});
 		addBuddyWindow.setMenu(null);
 		addBuddyWindow.webContents.on('did-finish-load', function() {
 			addBuddyWindow.show();
 		});
-		addBuddyWindow.loadURL('file://' + __dirname + '/addBuddy.html');
+		addBuddyWindow.loadURL(
+			Path.join('file://' + __dirname, 'addBuddy.html')
+		);
 	};
 
 	Cryptocat.Win.create.changePassword = function() {
 		var changePasswordWindow = new Remote.BrowserWindow({
 			width: 320,
-			height: windowRenderHeight(190),
+			height: renderWindowHeight(190),
 			title: 'Change Password',
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
 			fullscreenable: false,
-			show: false
+			show: false,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
 		});
 		changePasswordWindow.setMenu(null);
 		changePasswordWindow.webContents.on('did-finish-load', function() {
 			changePasswordWindow.show();
 		});
-		changePasswordWindow.loadURL(
-			'file://' + __dirname + '/changePassword.html'
+		changePasswordWindow.loadURL(	
+			Path.join('file://' + __dirname, 'changePassword.html')
 		);
 	}
 
 	Cryptocat.Win.create.addDevice = function() {
 		var addDeviceWindow = new Remote.BrowserWindow({
 			width: 400,
-			height: windowRenderHeight(250),
+			height: renderWindowHeight(250),
 			title: 'Add Device',
 			resizable: false,
 			minimizable: false,
 			maximizable: false,
 			fullscreenable: false,
-			show: false
+			show: false,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
 		});
 		addDeviceWindow.setMenu(null);
 		addDeviceWindow.webContents.on('did-finish-load', function() {
 			addDeviceWindow.show();
 		});
-		addDeviceWindow.loadURL('file://' + __dirname + '/addDevice.html');
+		addDeviceWindow.loadURL(
+			Path.join('file://' + __dirname, 'addDevice.html')
+		);
 	};
 
 	Cryptocat.Win.create.deviceManager = function(username) {
@@ -563,13 +606,20 @@ window.addEventListener('load', function(e) {
 		}
 		Cryptocat.Win.deviceManager[username] = new Remote.BrowserWindow({
 			width: 470,
-			height: windowRenderHeight(250),
+			height: renderWindowHeight(250),
 			title: 'Manage Devices',
 			resizable: false,
 			minimizable: true,
 			maximizable: false,
 			fullscreenable: false,
-			show: false
+			show: false,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
 		});
 		Cryptocat.Win.deviceManager[username].webContents.on('did-finish-load', function() {
 			Cryptocat.Win.updateDeviceManager(username);
@@ -581,7 +631,7 @@ window.addEventListener('load', function(e) {
 		});
 		Cryptocat.Win.deviceManager[username].setMenu(null);
 		Cryptocat.Win.deviceManager[username].loadURL(
-			'file://' + __dirname + '/deviceManager.html'
+			Path.join('file://' + __dirname, 'deviceManager.html')
 		);
 	};
 
@@ -661,37 +711,42 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('chat.saveFile', function(e, to, name, binary) {
-		Cryptocat.Diag.save.file(
+		Cryptocat.Directories.saveDialog(
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSave,
 			name, function(path) {
-				var delim = '/';
-				if (process.platform === 'win32') {
-					delim = '\\';
-				}
 				if (!path) { return false; }
 				Cryptocat.Me.settings.directories.fileSave =
-					(require('path')).dirname(path) + delim;
+					Path.dirname(path) + Path.sep;
 				FS.writeFile(path, binary, function() {});
 			}
 		);
 	});
 
-	IPCRenderer.on('chat.openFile', function(e, to) {
-		Cryptocat.Diag.open.file(
+	IPCRenderer.on('chat.sendFile', function(e, to, paths) {
+		var readFiles = function(paths) {
+			for (var i in paths) { if (hasProperty(paths, i)) {
+				var name = Path.basename(paths[i]);
+				FS.readFile(paths[i], function(err, file) {
+					if (err) { return false; }
+					Cryptocat.Win.chat[to].webContents.send(
+						'chat.sendFile', name, file
+					);
+				});
+			}}
+		};
+		if (paths.length) {
+			readFiles(paths);
+			return false;
+		}
+		Cryptocat.Directories.openDialog(
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSelect,
 			function(paths) {
-				var delim = '/';
-				if (process.platform === 'win32') {
-					delim = '\\';
-				}
 				if (!paths || !paths.length) { return false; }
 				Cryptocat.Me.settings.directories.fileSelect =
-					(require('path')).dirname(paths[0]) + delim;
-				Cryptocat.Win.chat[to].webContents.send(
-					'chat.openFile', paths
-				);
+					Path.dirname(paths[0]) + Path.sep;
+				readFiles(paths);
 			}
 		);
 	});
@@ -924,15 +979,7 @@ window.addEventListener('load', function(e) {
 	});
 
 	while (Cryptocat.Win.chatRetainer.length < 2) {
-		var chatRetainer = new Remote.BrowserWindow({
-			width: 450,
-			minWidth: 450,
-			height: windowRenderHeight(450),
-			minHeight: windowRenderHeight(150),
-			show: false
-		});
-		Cryptocat.Win.chatRetainer.push(chatRetainer);
-		chatRetainer.loadURL('file://' + __dirname + '/chat.html');
+		Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 	};
 
 });

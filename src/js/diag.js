@@ -1,5 +1,4 @@
 Cryptocat.Diag = {
-	util: {},
 	error: {},
 	message: {},
 	save: {},
@@ -8,37 +7,9 @@ Cryptocat.Diag = {
 
 (function() {
 	'use strict';
-	var dialog = Remote.require('dialog');
-
-	Cryptocat.Diag.util.defaultDirectory = function(preferred, callback) {
-		var delim = '/';
-		var home = process.env.HOME;
-		if (process.platform === 'win32') {
-			delim = '\\';
-			home = process.env.USERPROFILE;
-		}
-		var path = home + delim + preferred;
-		FS.stat(path, function(err, stats) {
-			if (err || !stats.isDirectory()) {
-				path = home + delim + 'Downloads'
-				FS.stat(path, function(err, stats) {
-					if (err || !stats.isDirectory()) {
-						callback(home + delim);
-					}
-					else {
-						callback(path + delim);
-					}
-				});
-			}
-			else {
-				callback(path + delim);
-			}
-		});
-		return false;
-	};
 
 	Cryptocat.Diag.error.updateCheck = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Cannot Check for Updates',
 			'Cryptocat was unable to check for updates. ' +
 			'Please make sure you are online: Keeping your ' +
@@ -47,7 +18,7 @@ Cryptocat.Diag = {
 	},
 
 	Cryptocat.Diag.error.updateDownloader = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Update Download Failed',
 			'Your Cryptocat update could not be downloaded. Please ' +
 			'check your Internet connection and try again.'
@@ -55,21 +26,21 @@ Cryptocat.Diag = {
 	},
 
 	Cryptocat.Diag.error.loginDisconnect = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Connection Error',
 			'Could not connect to Cryptocat. Please try again.'
 		);
 	};
 
 	Cryptocat.Diag.error.loginInvalid = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Login Error',
 			'Please check that you have entered a valid username and password.'
 		);
 	};
 
 	Cryptocat.Diag.error.offline = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Must be Logged in',
 			'You must be logged into your Cryptocat ' +
 			'account in order to perform this action.'
@@ -77,7 +48,7 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.messagesQueued = function(count) {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: ' + count + ' Messages Queued',
 			'Cryptocat is still sending ' + count + ' messages. ' +
 			'Please try closing this chat window again in a few seconds.'
@@ -85,21 +56,21 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.addBuddyValidation = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Invalid Buddy Username',
 			'Please check that your buddy\'s username is valid.'
 		);
 	};
 
 	Cryptocat.Diag.error.addBuddySelf = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Cannot Add Yourself',
 			'You cannot add yourself to your own buddy list.'
 		);
 	};
 
 	Cryptocat.Diag.error.changePasswordValidation = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Invalid Password',
 			'Please check that your password is at least 12 characters long ' +
 			'and that the same password is entered in both fields.'
@@ -107,14 +78,14 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.addDeviceValidation = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Invalid Device Name',
 			'Please check that your device name contains only numbers and letters.'
 		);
 	};
 
 	Cryptocat.Diag.error.fileGeneral = function(name) {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Cannot Send File',
 			'"' + name + '" could not be sent. The file type could be ' +
 			'unsupported or there could be a network error.'
@@ -122,7 +93,7 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.fileExt = function(name) {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Cannot Send File',
 			'"' + name + '"\'s file type is not supported. You can still ' +
 			'send this file by first adding it to a Zip archive.'
@@ -130,14 +101,14 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.fileMaxSize = function(name) {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: File Too Large',
 			'"' + name + '" is too large to be sent over Cryptocat.'
 		);
 	};
 
 	Cryptocat.Diag.error.checkCertificate = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Security Error',
 			'Cryptocat cannot securely validate the identity of the Cryptocat ' +
 			'server. In order to protect your account, the client will now quit. ' +
@@ -146,21 +117,21 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.error.recordingInput = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Recording Error',
 			'Cryptocat could not detect a webcam or microphone on this computer.'
 		);
 	};
 
 	Cryptocat.Diag.error.recordingGeneral = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Recording Error',
 			'Your recording could not be sent. Please try again later.'
 		);
 	};
 
 	Cryptocat.Diag.error.recordTime = function() {
-		dialog.showErrorBox(
+		Dialog.showErrorBox(
 			'Cryptocat: Recording Too Long',
 			'Your recording exceeds the allowed time limit of ' +
 			'60 seconds. It cannot be sent. The small red bar ' +
@@ -169,9 +140,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.isLatest = function(version) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK'],
 			defaultId: 0,
 			title: 'Cryptocat: No Updates Available',
@@ -181,9 +152,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.deviceSetup = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Continue', 'Learn more', 'Quit'],
 			defaultId: 0,
 			title: 'Cryptocat: Logging in from New Device',
@@ -196,9 +167,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.removeDevice = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Remove device', 'Cancel'],
 			defaultId: 1,
 			title: 'Cryptocat: Remove another device?',
@@ -210,9 +181,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.removeThisDevice = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Remove device', 'Cancel'],
 			defaultId: 1,
 			title: 'Cryptocat: Remove this device?',
@@ -222,9 +193,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.updateAvailable = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Download now', 'What\'s new', 'Remind me later'],
 			defaultId: 0,
 			title: 'Cryptocat: Update Available!',
@@ -235,9 +206,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.updateDownloaded = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK'],
 			defaultId: 0,
 			title: 'Cryptocat: Update Downloaded',
@@ -247,9 +218,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.addBuddySuccess = function() {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK'],
 			defaultId: 0,
 			title: 'Cryptocat: Success!',
@@ -258,9 +229,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.removeBuddyConfirm = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Remove buddy', 'Cancel'],
 			defaultId: 1,
 			title: 'Cryptocat: Remove Buddy?',
@@ -269,9 +240,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.deleteAccount = function(username, callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Cancel', 'Learn more', 'Delete account'],
 			defaultId: 0,
 			title: 'Cryptocat: Delete Account?',
@@ -287,9 +258,9 @@ Cryptocat.Diag = {
 				);
 			}
 			if (response === 2) {
-				dialog.showMessageBox({
+				Dialog.showMessageBox({
 					type: 'question',
-					icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+					icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 					buttons: ['Cancel', 'Learn more', 'Delete account'],
 					defaultId: 0,
 					title: 'Cryptocat: Delete Account, Final Warning',
@@ -303,9 +274,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.about = function() {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK', 'Learn more', 'License'],
 			defaultId: 0,
 			title: 'About Cryptocat',
@@ -327,9 +298,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.newDevice = function(username, callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['View devices', 'OK'],
 			defaultId: 0,
 			title: 'Cryptocat: New Device for ' + username,
@@ -340,9 +311,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.changePasswordSuccess = function() {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK'],
 			defaultId: 0,
 			title: 'Cryptocat: Password Changed',
@@ -353,9 +324,9 @@ Cryptocat.Diag = {
 	Cryptocat.Diag.message.addBuddyRequest = function(
 		username, callback
 	) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Accept', 'Deny', 'Remind me later'],
 			defaultId: 2,
 			title: 'Cryptocat: Buddy Request!',
@@ -365,9 +336,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.buddyUnsubscribed = function(username) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'info',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['OK'],
 			defaultId: 0,
 			title: 'Cryptocat: ' + username + ' Removed You',
@@ -376,9 +347,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.unsavedFiles = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Return to Chat', 'Close Anyway'],
 			defaultId: 0,
 			title: 'Cryptocat: Unsaved Files',
@@ -388,9 +359,9 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.unsentFiles = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Return to Chat', 'Close Anyway'],
 			defaultId: 0,
 			title: 'Cryptocat: Unsent Files',
@@ -400,78 +371,15 @@ Cryptocat.Diag = {
 	};
 
 	Cryptocat.Diag.message.pendingRecordings = function(callback) {
-		dialog.showMessageBox({
+		Dialog.showMessageBox({
 			type: 'question',
-			icon: __dirname.slice(0, -3) + 'img/logo/logo64.png',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['Return to Chat', 'Close Anyway'],
 			defaultId: 0,
 			title: 'Cryptocat: Pending Recordings',
 			message: 'Recordings are still being sent or received in this chat. ' +
 				'Are you sure you want to discard them?'
 		}, callback);
-	};
-
-	Cryptocat.Diag.save.update = function(browserWindow, callback) {
-		var save = function(path) {
-			dialog.showSaveDialog(browserWindow, {
-				title: 'Cryptocat: Save Update Installer',
-				defaultPath: path,
-				filters: [{
-					name: 'Archives',
-					extensions: ['zip']
-				}]
-			}, callback);
-		};
-		var name = 'Cryptocat-' + process.platform + '-x64.zip';
-		var path = Cryptocat.Me.settings.directories.updateSave;
-		Cryptocat.Diag.util.defaultDirectory(
-			'Downloads', function(d) {
-				save(d + name);
-			}
-		);
-	};
-
-	Cryptocat.Diag.save.file = function(browserWindow, path, name, callback) {
-		var save = function(path) {
-			dialog.showSaveDialog(browserWindow, {
-				title: 'Cryptocat: Save File',
-				defaultPath: path,
-			}, callback);
-		};
-		FS.stat(path, function(err, stats) {
-			if (err || !stats.isDirectory()) {
-				Cryptocat.Diag.util.defaultDirectory(
-					'Desktop', function(d) {
-						save(d + name);
-					}
-				);
-			}
-			else {
-				save(path + name);
-			}
-		});
-	};
-
-	Cryptocat.Diag.open.file = function(browserWindow, path, callback) {
-		var open = function(path) {
-			dialog.showOpenDialog(browserWindow, {
-				title: 'Cryptocat: Select File',
-				defaultPath: path,
-				properties: ['openFile', 'multiSelections']
-			}, callback);
-		};
-		FS.stat(path, function(err, stats) {
-			if (err || !stats.isDirectory()) {
-				Cryptocat.Diag.util.defaultDirectory(
-					'Documents', function(d) {
-						open(d);
-					}
-				);
-			}
-			else {
-				open(path);
-			}
-		});
 	};
 
 })();

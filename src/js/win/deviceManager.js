@@ -104,6 +104,5 @@ window.addEventListener('load', function(e) {
 			mine: data.mine
 		});
 	});
-
 });
 

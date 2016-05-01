@@ -41,6 +41,25 @@ Cryptocat.Update = {
 		return false;
 	};
 
+	Cryptocat.Update.saveDialog = function(browserWindow, callback) {
+		var save = function(path) {
+			Dialog.showSaveDialog(browserWindow, {
+				title: 'Cryptocat: Save Update Installer',
+				defaultPath: path,
+				filters: [{
+					name: 'Archives',
+					extensions: ['zip']
+				}]
+			}, callback);
+		};
+		var name = 'Cryptocat-' + process.platform + '-x64.zip';
+		Cryptocat.Directories.getDirectory(
+			'Downloads', function(d) {
+				save(d + name);
+			}
+		);
+	};
+
 	Cryptocat.Update.updateAvailable = function(latest) {
 		Cryptocat.Diag.message.updateAvailable(function(response) {
 			if (response === 0) {

@@ -2,7 +2,7 @@ Cryptocat.File = {};
 
 (function() {
 	'use strict';
-
+	
 	Cryptocat.File.maxSize   = 51000000;
 	Cryptocat.File.chunkSize = 25000;
 	Cryptocat.File.allowed  = {

@@ -81,7 +81,7 @@ window.addEventListener('load', function(e) {
 		});
 	}
 
-	Cryptocat.Diag.save.update(Remote.getCurrentWindow(), function(path) {
+	Cryptocat.Update.saveDialog(Remote.getCurrentWindow(), function(path) {
 		if (!path) {
 			setInterval(function() {
 				Remote.getCurrentWindow().close();

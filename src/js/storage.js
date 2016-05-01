@@ -7,14 +7,18 @@ Cryptocat.Storage = {};
 	(function() {
 		var path = '';
 		if (process.platform === 'win32') {
-			path = process.env.APPDATA + '\\Cryptocat\\';
+			path = Path.join(
+				process.env.APPDATA,
+				'Cryptocat',
+				'users.db'
+			);
 			db = new NeDB({
-				filename: path + 'users.db',
+				filename: path,
 				autoload: true
 			});
 		}
 		else {
-			var path = process.env.HOME + '/.config';
+			path = Path.join(process.env.HOME, '.config');
 			FS.stat(path, function(err, stats) {
 				if (err || !stats.isDirectory()) {
 					FS.mkdirSync(path, 0o700);
@@ -22,7 +26,7 @@ Cryptocat.Storage = {};
 				else {
 					FS.chmodSync(path, 0o700);
 				}
-				path += '/Cryptocat';
+				path = Path.join(path, 'Cryptocat');
 				FS.stat(path, function(err, stats) {
 					if (err || !stats.isDirectory()) {
 						FS.mkdirSync(path, 0o700);
@@ -30,9 +34,8 @@ Cryptocat.Storage = {};
 					else {
 						FS.chmodSync(path, 0o700);
 					}
-					path += '/';
 					db = new NeDB({
-						filename: path + 'users.db',
+						filename: Path.join(path, 'users.db'),
 						autoload: true
 					});
 				});
@@ -153,6 +156,10 @@ Cryptocat.Storage = {};
 	Cryptocat.Storage.getUser = function(username, callback) {
 		var newObj = Object.assign({}, Cryptocat.EmptyMe.settings);
 		db.findOne({_id: username}, function(err, doc) {
+			if (!doc) {
+				callback(err, null);
+				return false;
+			}
 			for (var setting in newObj) {
 				if (
 					hasProperty(newObj, setting) &&
