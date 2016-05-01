@@ -147,10 +147,6 @@ Cryptocat.XMPP = {};
 		});
 	};
 
-	handler.streamManagementResumed = function() {
-		client.sendPresence();
-	};
-
 	handler.authFailed = function(data) {
 		Cryptocat.Win.main.login.onAuthFailed();
 	};
@@ -319,7 +315,7 @@ Cryptocat.XMPP = {};
 			transport: 'websocket',
 			timeout: 10000,
 			wsURL: 'wss://crypto.cat:443/socket',
-			useStreamManagement: true
+			useStreamManagement: false
 		});
 		client.use(Cryptocat.OMEMO.plugins.deviceList);
 		client.use(Cryptocat.OMEMO.plugins.bundle);
@@ -334,9 +330,6 @@ Cryptocat.XMPP = {};
 		});
 		client.on('session:started', function(data) {
 			handler.connected(username, data, callback);	
-		});
-		client.on('stream:management:resumed', function(data) {
-			handler.streamManagementResumed();
 		});
 		client.on('auth:failed', function(data) {
 			handler.authFailed(data);
