@@ -177,6 +177,8 @@ div#main div.tableOfContents {
 	box-shadow: 2px 2px #F0F8FF;
 	padding-bottom: 5px;
 	border: 1px solid #F0F8FF;
+	max-height: 200px;
+	overflow: auto;
 }
 
 div#main div.tableOfContents ul {
