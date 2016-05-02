@@ -320,6 +320,18 @@ Cryptocat.Diag = {
 		});
 	};
 
+	Cryptocat.Diag.message.updatedMyDevices = function(username, callback) {
+		Dialog.showMessageBox({
+			type: 'info',
+			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
+			buttons: ['View devices', 'OK'],
+			defaultId: 0,
+			title: 'Cryptocat: Devices Updated',
+			message: 'Your device list was recently updated. If this is unexpected, ' +
+				'it is recommended that you view your device list and verify it.'
+		}, callback);
+	};
+	
 	Cryptocat.Diag.message.updatedDevices = function(username, callback) {
 		Dialog.showMessageBox({
 			type: 'info',
@@ -327,7 +339,8 @@ Cryptocat.Diag = {
 			buttons: ['View devices', 'OK'],
 			defaultId: 0,
 			title: 'Cryptocat: Updated devices for ' + username,
-			message: username + ' appears to have updated their device list.'
+			message: username + ' appears to have recently updated their device list. ' +
+				'If this is unexpected, you may want to verify their devices.'
 		}, callback);
 	};
 

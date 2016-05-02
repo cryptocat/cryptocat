@@ -500,7 +500,11 @@ Cryptocat.OMEMO = {};
 			!hasProperty(Cryptocat.Win.deviceManager, username) &&
 			(!isNewUser && isNewBundle)
 		) {
-			Cryptocat.Diag.message.updatedDevices(username, function(response) {
+			var diag = Cryptocat.Diag.message.updatedDevices;
+			if (username === Cryptocat.Me.username) {
+				diag = Cryptocat.Diag.message.updatedMyDevices;
+			}
+			diag(username, function(response) {
 				if (response === 0) {
 					Cryptocat.Win.create.deviceManager(username);
 				}
