@@ -1111,17 +1111,17 @@ window.addEventListener('load', function(e) {
 	}, false);
 
 	window.addEventListener('focus', function(e) {
-		document.getElementById('chatInputText').focus();
-		if (proc.platform !== 'darwin') {
-			return false;
-		}
-		var badgeCount = parseInt(Remote.app.dock.getBadge());
-		if (isNaN(badgeCount)) { badgeCount = 0; }
-		badgeCount = badgeCount - thisChat.window.state.unread;
-		if (badgeCount <= 0) { badgeCount = ''; }
-		Remote.app.dock.setBadge(badgeCount.toString());
-		thisChat.window.state.unread  = 0;
+		var unread = thisChat.window.state.unread;
+		thisChat.window.state.unread = 0;
 		thisChat.focused = true;
+		document.getElementById('chatInputText').focus();
+		if (proc.platform === 'darwin') {
+			var badgeCount = parseInt(Remote.app.dock.getBadge());
+			if (isNaN(badgeCount)) { badgeCount = 0; }
+			badgeCount = badgeCount - unread;
+			if (badgeCount <= 0) { badgeCount = ''; }
+			Remote.app.dock.setBadge(badgeCount.toString());
+		}
 	});
 
 	window.addEventListener('blur', function(e) {
@@ -1133,6 +1133,15 @@ window.addEventListener('load', function(e) {
 	}); window.dispatchEvent(new Event('resize'));
 
 	window.addEventListener('beforeunload', function(e) {
+		var unread = thisChat.window.state.unread;
+		thisChat.window.state.unread = 0;
+		if (proc.platform === 'darwin') {
+			var badgeCount = parseInt(Remote.app.dock.getBadge());
+			if (isNaN(badgeCount)) { badgeCount = 0; }
+			badgeCount = badgeCount - unread;
+			if (badgeCount <= 0) { badgeCount = ''; }
+			Remote.app.dock.setBadge(badgeCount.toString());
+		}
 		for (var file in thisChat.window.files) {
 			if (
 				hasProperty(thisChat.window.files, file) &&
