@@ -122,8 +122,9 @@ window.addEventListener('load', function(e) {
 			});
 			for (var username in Cryptocat.Win.chat) {
 				if (hasProperty(Cryptocat.Win.chat, username)) {
-					Cryptocat.Win.chat[username]
-						.webContents.send('chat.connected', true);
+					Cryptocat.Win.chat[username].webContents.send(
+						'chat.connected', true
+					);
 				}
 			}
 		},
@@ -148,8 +149,9 @@ window.addEventListener('load', function(e) {
 				});
 				for (var username in Cryptocat.Win.chat) {
 					if (hasProperty(Cryptocat.Win.chat, username)) {
-						Cryptocat.Win.chat[username]
-							.webContents.send('chat.connected', false);
+						Cryptocat.Win.chat[username].webContents.send(
+							'chat.connected', false
+						);
 					}
 				}
 			}
@@ -191,6 +193,13 @@ window.addEventListener('load', function(e) {
 				iReconn: false,
 				reconn: 5000
 			});
+			for (var username in Cryptocat.Win.chat) {
+				if (hasProperty(Cryptocat.Win.chat, username)) {
+					Cryptocat.Win.chat[username].webContents.send(
+						'chat.connected', false
+					);
+				}
+			}
 			if (!this.state.rememberIsChecked) {
 				this.setState({
 					password: ''
@@ -435,12 +444,18 @@ window.addEventListener('load', function(e) {
 		removeBuddy: function(username) {
 			var _t = this;
 			var newBuddies = _t.state.buddies;
-			if (hasProperty(newBuddies, username)) {
-				delete newBuddies[username];
-				this.setState({buddies: newBuddies}, function() {
-					delete _t.buddies[username];
-					delete Cryptocat.Me.settings.userBundles[username];
-				});
+			if (!hasProperty(newBuddies, username)) {
+				return false;
+			}
+			delete newBuddies[username];
+			this.setState({buddies: newBuddies}, function() {
+				delete _t.buddies[username];
+				delete Cryptocat.Me.settings.userBundles[username];
+			});
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.status', 0
+				);
 			}
 		},
 		onChangeFilter: function(e) {

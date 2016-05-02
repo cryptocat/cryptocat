@@ -795,7 +795,7 @@ window.addEventListener('load', function(e) {
 						return _t.state.to + ' is typing...';
 					}
 					if (!_t.state.connected) {
-						return 'You are experiencing connection difficulties.'
+						return 'You are not currently connected to Cryptocat.'
 					}
 					return _t.state.to + _t.statusMessages[_t.state.status];
 				})())),
