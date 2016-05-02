@@ -895,14 +895,16 @@ window.addEventListener('load', function(e) {
 							}
 						}, function() {});
 					}
-					Cryptocat.XMPP.disconnect(function() {
-						Cryptocat.Storage.deleteUser(
-							Cryptocat.Me.username,
-							function() {
-								Cryptocat.Win.main.beforeQuit();
-							}
-						);
-					});
+					setTimeout(function() {
+						Cryptocat.XMPP.disconnect(function() {
+							Cryptocat.Storage.deleteUser(
+								Cryptocat.Me.username,
+								function() {
+									Cryptocat.Win.main.beforeQuit();
+								}
+							);
+						});
+					}, 3000);
 				}
 			});
 		}
@@ -925,7 +927,7 @@ window.addEventListener('load', function(e) {
 						Cryptocat.XMPP.getDeviceList(
 							Cryptocat.Me.username
 						);
-					}, 1000);
+					}, 3000);
 				}
 			});
 		}
