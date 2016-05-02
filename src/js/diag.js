@@ -320,16 +320,14 @@ Cryptocat.Diag = {
 		});
 	};
 
-	Cryptocat.Diag.message.newDevice = function(username, callback) {
+	Cryptocat.Diag.message.updatedDevices = function(username, callback) {
 		Dialog.showMessageBox({
 			type: 'info',
 			icon: Path.join(Path.resolve(__gdirname, '..', 'img/logo'), 'logo64.png'),
 			buttons: ['View devices', 'OK'],
 			defaultId: 0,
-			title: 'Cryptocat: New Device for ' + username,
-			message: username + ' appears to have added a new device ' +
-				'to their Cryptocat account. Would you like to view ' +
-				'their devices?'
+			title: 'Cryptocat: Updated devices for ' + username,
+			message: username + ' appears to have updated their device list.'
 		}, callback);
 	};
 
