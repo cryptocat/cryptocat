@@ -4,6 +4,7 @@
 	const IPCRenderer   = require('ipc-renderer');
 	const HTTPS         = require('https');
 	const Remote        = require('remote');
+	const FS            = require('fs');
 	const Dialog        = Remote.require('dialog');
 	const Path          = (function() {
 		if (process.platform === 'win32') {
@@ -65,6 +66,7 @@
 		global.NodeCrypto = NodeCrypto;
 		global.IPCRenderer = IPCRenderer;
 		global.HTTPS = HTTPS;
+		global.FS = FS;
 		global.Dialog = Dialog;
 		global.Path = Path;
 		global.proc = {

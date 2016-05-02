@@ -224,10 +224,10 @@ window.addEventListener('load', function(e) {
 			}
 			var _t = this;
 			IPCRenderer.send(
-				'chat.saveFile',
+				'chat.saveDialog',
 				thisChat.window.state.to,
 				_t.props.file.name,
-				_t.state.binary
+				_t.props.file.url
 			);
 			this.setState({saved: true});
 		},
@@ -329,10 +329,10 @@ window.addEventListener('load', function(e) {
 		saveToDisk: function() {
 			var _t = this;
 			IPCRenderer.send(
-				'chat.saveFile',
+				'chat.saveDialog',
 				thisChat.window.state.to,
 				_t.props.file.name,
-				_t.state.binary
+				_t.props.file.url
 			);
 			this.setState({saved: true});
 		},
@@ -415,11 +415,13 @@ window.addEventListener('load', function(e) {
 						paths.push(files[i].path);
 					}
 				}
-				IPCRenderer.send(
-					'chat.sendFile',
-					thisChat.window.state.to,
-					paths
-				);
+				for (var i in paths) { if (hasProperty(paths, i)) {
+					var name = Path.basename(paths[i]);
+					FS.readFile(paths[i], function(err, file) {
+						if (err) { return false; }
+						thisChat.window.sendFile(name, file);
+					});
+				}}
 			}
 			return false;
 		},
@@ -697,9 +699,8 @@ window.addEventListener('load', function(e) {
 		sendFileDialog: function(e) {
 			document.getElementById('chatInputText').focus();
 			IPCRenderer.send(
-				'chat.sendFile',
-				thisChat.window.state.to,
-				[]
+				'chat.openDialog',
+				thisChat.window.state.to
 			);
 		},
 		sendFile: function(name, file) {
@@ -1003,8 +1004,26 @@ window.addEventListener('load', function(e) {
 		thisChat.window.setState({status: status});
 	});
 
-	IPCRenderer.on('chat.sendFile', function(e, name, file) {
-		thisChat.window.sendFile(name, file);
+	IPCRenderer.on('chat.sendFile', function(e) {
+		thisChat.window.sendFileDialog();
+	});
+
+	IPCRenderer.on('chat.saveDialog', function(e, path, url) {
+		FS.writeFile(
+			path,
+			thisChat.window.files[url].state.binary,
+			function() {}
+		);
+	});
+
+	IPCRenderer.on('chat.openDialog', function(e, paths) {
+		for (var i in paths) { if (hasProperty(paths, i)) {
+			var name = Path.basename(paths[i]);
+			FS.readFile(paths[i], function(err, file) {
+				if (err) { return false; }
+				thisChat.window.sendFile(name, file);
+			});
+		}}
 	});
 
 	IPCRenderer.on('chat.connected', function(e, connected) {

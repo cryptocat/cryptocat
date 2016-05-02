@@ -8,9 +8,9 @@ Cryptocat.File = {};
 	Cryptocat.File.types  = {
 		archive: [
 			'7z', '7zx', 'bin',
-			'bz2', 'db', 'iso',
-			'rar', 'sql', 'tar',
-			'zip', 'zipx'
+			'bz2', 'db', 'gz',
+			'iso', 'rar', 'sql',
+			'tar', 'zip', 'zipx'
 		],
 		audio: [
 			'aif', 'mid', 'wma'

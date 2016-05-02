@@ -775,7 +775,7 @@ window.addEventListener('load', function(e) {
 		Cryptocat.OMEMO.sendMessage(to, message)
 	});
 
-	IPCRenderer.on('chat.saveFile', function(e, to, name, binary) {
+	IPCRenderer.on('chat.saveDialog', function(e, to, name, url) {
 		Cryptocat.Directories.saveDialog(
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSave,
@@ -783,27 +783,14 @@ window.addEventListener('load', function(e) {
 				if (!path) { return false; }
 				Cryptocat.Me.settings.directories.fileSave =
 					Path.dirname(path) + Path.sep;
-				FS.writeFile(path, binary, function() {});
+				Cryptocat.Win.chat[to].webContents.send(
+					'chat.saveDialog', path, url
+				);
 			}
 		);
 	});
 
-	IPCRenderer.on('chat.sendFile', function(e, to, paths) {
-		var readFiles = function(paths) {
-			for (var i in paths) { if (hasProperty(paths, i)) {
-				var name = Path.basename(paths[i]);
-				FS.readFile(paths[i], function(err, file) {
-					if (err) { return false; }
-					Cryptocat.Win.chat[to].webContents.send(
-						'chat.sendFile', name, file
-					);
-				});
-			}}
-		};
-		if (paths.length) {
-			readFiles(paths);
-			return false;
-		}
+	IPCRenderer.on('chat.openDialog', function(e, to) {
 		Cryptocat.Directories.openDialog(
 			Cryptocat.Win.chat[to],
 			Cryptocat.Me.settings.directories.fileSelect,
@@ -811,7 +798,9 @@ window.addEventListener('load', function(e) {
 				if (!paths || !paths.length) { return false; }
 				Cryptocat.Me.settings.directories.fileSelect =
 					Path.dirname(paths[0]) + Path.sep;
-				readFiles(paths);
+				Cryptocat.Win.chat[to].webContents.send(
+					'chat.openDialog', paths
+				);
 			}
 		);
 	});

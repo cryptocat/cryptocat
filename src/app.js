@@ -477,12 +477,12 @@ Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
 	e.returnValue = 'true';
 });
 
-Electron.ipcMain.on('chat.saveFile', function(e, to, name, binary) {
-	Windows.main.webContents.send('chat.saveFile', to, name, binary);
+Electron.ipcMain.on('chat.saveDialog', function(e, to, name, url) {
+	Windows.main.webContents.send('chat.saveDialog', to, name, url);
 });
 
-Electron.ipcMain.on('chat.sendFile', function(e, to, name) {
-	Windows.main.webContents.send('chat.sendFile', to, name);
+Electron.ipcMain.on('chat.openDialog', function(e, to) {
+	Windows.main.webContents.send('chat.openDialog', to);
 });
 
 Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
