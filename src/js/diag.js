@@ -62,6 +62,16 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.error.addBuddyAdded = function() {
+		Dialog.showErrorBox(
+			'Cryptocat: Buddy Already Added',
+			'This buddy is already in your buddy list. Please ' +
+			'remove them first if you wish to add them again. ' +
+			'You may do so by right clicking on the buddy and ' +
+			'selecting "Remove Buddy".'
+		);
+	};
+
 	Cryptocat.Diag.error.addBuddySelf = function() {
 		Dialog.showErrorBox(
 			'Cryptocat: Cannot Add Yourself',

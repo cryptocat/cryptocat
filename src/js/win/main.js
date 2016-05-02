@@ -857,6 +857,9 @@ window.addEventListener('load', function(e) {
 			if (username === Cryptocat.Me.username) {
 				Cryptocat.Diag.error.addBuddySelf();
 			}
+			else if (hasProperty(Cryptocat.Win.main.roster.buddies, username)) {
+				Cryptocat.Diag.error.addBuddyAdded();
+			}
 			else {
 				Cryptocat.XMPP.sendBuddyRequest(username);
 				Cryptocat.Diag.message.addBuddySuccess();
