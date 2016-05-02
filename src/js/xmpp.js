@@ -10,6 +10,12 @@ Cryptocat.XMPP = {};
 			payload: function() {}
 		}
 	};
+
+	setInterval(function() {
+		if (Cryptocat.Me.connected) {
+			client.sendPresence();
+		}
+	}, 30000);
 	
 	handler.raw = function(raw) {
 		XML2JS.parseString(raw, function(err, res) {
@@ -230,9 +236,6 @@ Cryptocat.XMPP = {};
 		) {
 			s = 1;
 		}
-		else {
-			Cryptocat.XMPP.getDeviceList(local.username);
-		}
 		client.subscribeToNode(
 			local.username + '@crypto.cat', 'urn:xmpp:omemo:0:devicelist'
 		);
@@ -261,6 +264,7 @@ Cryptocat.XMPP = {};
 		}
 		if (hasProperty(Cryptocat.Win.main.roster.buddies, data.from.local)) {
 			client.acceptSubscription(data.from.bare);
+			Cryptocat.XMPP.sendBuddyRequest(data.from.local);
 			return false;
 		}
 		Cryptocat.Diag.message.addBuddyRequest(
