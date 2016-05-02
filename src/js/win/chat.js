@@ -1031,7 +1031,6 @@ window.addEventListener('load', function(e) {
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
 			if (isNaN(badgeCount)) { badgeCount = 0; }
 			Remote.app.dock.setBadge((badgeCount + 1).toString());
-			Remote.app.dock.bounce();
 		}
 	});
 
