@@ -117,7 +117,6 @@ Cryptocat.Storage.getCommon = function(callback) {
 Cryptocat.Storage.updateUser = function(username, loadedSettings, callback) {
 	var settings = Object.assign({}, loadedSettings);
 	var newObj = {};
-	console.log('lol');
 	db.findOne({_id: username}, function(err, doc) {
 		if (!doc) {
 			newObj = Object.assign({}, EmptyMe.settings);
