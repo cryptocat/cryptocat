@@ -1,10 +1,10 @@
 ![Cryptocat](https://raw.githubusercontent.com/cryptocat/cryptocat/master/src/img/logo/logo64.png)
-*Currently Beta Software.*
-[![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat)
 
-## Build Instructions
-This is the build environment. The actual client source code is located in `src`.
+[![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat) *Currently Beta Software.*
 
+[Documentation](https://crypto.cat/help.html) | [Security](https://crypto.cat/security.html) | [License](http://www.gnu.org/licenses/gpl-3.0.en.html)
+
+### Build Instructions
 Install dependencies:
 ```
 npm run setup
@@ -21,19 +21,3 @@ npm run win
 npm run linux
 npm run mac
 ```
-
-## Documentation
-Please refer to the [Help](https://crypto.cat/help.html) and [Security](https://crypto.cat/security.html) pages on the Cryptocat website.
-
-## Reporting Issues
-Please use the [GitHub issue tracker](https://github.com/kaepora/kaepora) to report bugs and other issues.
-
-## Localization
-No localization effort is yet organized. Stay tuned.
-
-## License
-Released under version 3 of the GNU General Public License.
-
-## Author
-Nadim Kobeissi.
-

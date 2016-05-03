@@ -1,19 +1,19 @@
 (function() {
 	'use strict';
-	const NodeCrypto    = require('crypto');
-	const IPCRenderer   = require('ipc-renderer');
-	const HTTPS         = require('https');
-	const Remote        = require('remote');
-	const FS            = require('fs');
-	const Dialog        = Remote.require('dialog');
-	const Path          = (function() {
+	var NodeCrypto    = require('crypto');
+	var IPCRenderer   = require('ipc-renderer');
+	var HTTPS         = require('https');
+	var Remote        = require('remote');
+	var FS            = require('fs');
+	var Dialog        = Remote.require('dialog');
+	var Path          = (function() {
 		if (process.platform === 'win32') {
 			return (require('path')).win32;
 		}
 		return require('path');
 	})();
 	
-	const Cryptocat = {
+	var Cryptocat = {
 		Win: {},
 		XMPP: {},
 		TextSecure: {},
