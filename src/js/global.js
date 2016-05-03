@@ -69,19 +69,10 @@
 		global.FS = FS;
 		global.Dialog = Dialog;
 		global.Path = Path;
+		global.Remote = Remote;
 		global.proc = {
 			platform: process.platform
 		}
-		global.Remote = {
-			BrowserWindow: Remote.BrowserWindow,
-			screen: Remote.screen,
-			getCurrentWindow: Remote.getCurrentWindow,
-			app: Remote.app,
-			Menu: Remote.Menu,
-			shell: {
-				openExternal: Remote.shell.openExternal
-			}
-		};
 		global.setImmediate = _setImmediate;
 		global.clearImmediate = _clearImmediate;
 		global.__gdirname = __dirname;

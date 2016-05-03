@@ -5,7 +5,6 @@ Cryptocat.Win = {
 	deviceManager: {},
 	create:        {}
 };
-
 window.addEventListener('load', function(e) {	
 	'use strict';
 
@@ -51,6 +50,47 @@ window.addEventListener('load', function(e) {
 			};
 		},
 		componentDidMount: function() {
+			var _t = this;
+			Cryptocat.Storage.getCommon(function(err, common) {
+				var screenRes = Remote.screen.getPrimaryDisplay().size;
+				if (
+					common &&
+					common.rememberedLogin.username.length &&
+					common.rememberedLogin.password.length
+				) {
+					_t.setState({
+						username: common.rememberedLogin.username,
+						password: common.rememberedLogin.password,
+						rememberIsChecked: true
+					}, function() {
+						_t.onSubmit();
+					});
+					document.getElementsByClassName(
+						'mainLoginRememberCheckbox'
+					)[0].checked = true;
+				}
+				if (
+					common &&
+					(screenRes.width  > common.mainWindowBounds.x) &&
+					(screenRes.height > common.mainWindowBounds.y)
+				) {
+					Remote.getCurrentWindow().setPosition(
+						common.mainWindowBounds.x,
+						common.mainWindowBounds.y
+					);
+					Remote.getCurrentWindow().setSize(
+						common.mainWindowBounds.width,
+						common.mainWindowBounds.height
+					);
+					Remote.getCurrentWindow().show();
+				}
+				else {	
+					Remote.getCurrentWindow().show();
+				}
+			});
+			while (Cryptocat.Win.chatRetainer.length < 2) {
+				Cryptocat.Win.chatRetainer.push(spawnChatWindow());
+			};
 			return true;
 		},
 		componentDidUpdate: function() {
@@ -1038,48 +1078,6 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('main.beforeQuit', function(e) {
 		Cryptocat.Win.main.beforeQuit();
 	});
-
-	Cryptocat.Storage.getCommon(function(err, common) {
-		var screenRes = Remote.screen.getPrimaryDisplay().size;
-		if (
-			common &&
-			common.rememberedLogin.username.length &&
-			common.rememberedLogin.password.length
-		) {
-			Cryptocat.Win.main.login.setState({
-				username: common.rememberedLogin.username,
-				password: common.rememberedLogin.password,
-				rememberIsChecked: true
-			}, function() {
-				Cryptocat.Win.main.login.onSubmit();
-			});
-			document.getElementsByClassName(
-				'mainLoginRememberCheckbox'
-			)[0].checked = true;
-		}
-		if (
-			common &&
-			(screenRes.width  > common.mainWindowBounds.x) &&
-			(screenRes.height > common.mainWindowBounds.y)
-		) {
-			Remote.getCurrentWindow().setPosition(
-				common.mainWindowBounds.x,
-				common.mainWindowBounds.y
-			);
-			Remote.getCurrentWindow().setSize(
-				common.mainWindowBounds.width,
-				common.mainWindowBounds.height
-			);
-			Remote.getCurrentWindow().show();
-		}
-		else {	
-			Remote.getCurrentWindow().show();
-		}
-	});
-
-	while (Cryptocat.Win.chatRetainer.length < 2) {
-		Cryptocat.Win.chatRetainer.push(spawnChatWindow());
-	};
 
 });
 
