@@ -15,7 +15,7 @@ Cryptocat.XMPP = {};
 		if (Cryptocat.Me.connected) {
 			client.sendPresence();
 		}
-	}, 30000);
+	}, 60000);
 	
 	handler.raw = function(raw) {
 		XML2JS.parseString(raw, function(err, res) {
