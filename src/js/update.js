@@ -24,84 +24,84 @@ Cryptocat.Update = {
 };
 
 (function() {
-	var compareVersionStrings = function(local, remote) {
-		if (local === remote) { return false; }
-		var l = local.split('.');
-		var r = remote.split('.');
-		if (parseInt(r[0]) > parseInt(l[0])) {
-			return true;
-		}
-		if (parseInt(r[1]) > parseInt(l[1])) {
-			return true;
-		}
-		if (parseInt(r[2]) > parseInt(l[2])) {
-			return true;
-		}
-		return false;
-	};
+var compareVersionStrings = function(local, remote) {
+	if (local === remote) { return false; }
+	var l = local.split('.');
+	var r = remote.split('.');
+	if (parseInt(r[0]) > parseInt(l[0])) {
+		return true;
+	}
+	if (parseInt(r[1]) > parseInt(l[1])) {
+		return true;
+	}
+	if (parseInt(r[2]) > parseInt(l[2])) {
+		return true;
+	}
+	return false;
+};
 
-	Cryptocat.Update.saveDialog = function(browserWindow, callback) {
-		var save = function(path) {
-			Dialog.showSaveDialog(browserWindow, {
-				title: 'Cryptocat: Save Update Installer',
-				defaultPath: path,
-				filters: [{
-					name: 'Archives',
-					extensions: ['zip']
-				}]
-			}, callback);
-		};
-		var name = 'Cryptocat-' + process.platform + '-x64.zip';
-		Cryptocat.Directories.getDirectory(
-			'Downloads', function(d) {
-				save(d + name);
-			}
-		);
+Cryptocat.Update.saveDialog = function(browserWindow, callback) {
+	var save = function(path) {
+		Dialog.showSaveDialog(browserWindow, {
+			title: 'Cryptocat: Save Update Installer',
+			defaultPath: path,
+			filters: [{
+				name: 'Archives',
+				extensions: ['zip']
+			}]
+		}, callback);
 	};
+	var name = 'Cryptocat-' + process.platform + '-x64.zip';
+	Cryptocat.Directories.getDirectory(
+		'Downloads', function(d) {
+			save(d + name);
+		}
+	);
+};
 
-	Cryptocat.Update.updateAvailable = function(latest) {
-		Cryptocat.Diag.message.updateAvailable(function(response) {
-			if (response === 0) {
-				Cryptocat.Win.create.updateDownloader();
+Cryptocat.Update.updateAvailable = function(latest) {
+	Cryptocat.Diag.message.updateAvailable(function(response) {
+		if (response === 0) {
+			Cryptocat.Win.create.updateDownloader();
+		}
+		if (response === 1) {
+			Remote.shell.openExternal(
+				'https://crypto.cat/news.html#' + latest
+			);
+			Cryptocat.Update.updateAvailable(latest);
+		}
+	});
+};
+
+Cryptocat.Update.check = function(ifLatest) {
+	HTTPS.get(Cryptocat.Update.verURIs[process.platform], function(res) {
+		var latest = '';
+		res.on('data', function(chunk) {
+			latest += chunk;
+		});
+		res.on('end', function() {
+			latest = latest.replace(/(\r\n|\n|\r)/gm, '');
+			if (!Cryptocat.Patterns.version.test(latest)) {
+				Cryptocat.Diag.error.updateCheck();
+				return false;
 			}
-			if (response === 1) {
-				Remote.shell.openExternal(
-					'https://crypto.cat/news.html#' + latest
-				);
+			if (compareVersionStrings(Cryptocat.Version, latest)) {
 				Cryptocat.Update.updateAvailable(latest);
 			}
+			else {
+				console.info(
+					'Cryptocat.Update:',
+					'No updates available (' + latest + ').'
+				);
+				ifLatest();
+			}
 		});
-	};
-
-	Cryptocat.Update.check = function(ifLatest) {
-		HTTPS.get(Cryptocat.Update.verURIs[process.platform], function(res) {
-			var latest = '';
-			res.on('data', function(chunk) {
-				latest += chunk;
-			});
-			res.on('end', function() {
-				latest = latest.replace(/(\r\n|\n|\r)/gm, '');
-				if (!Cryptocat.Patterns.version.test(latest)) {
-					Cryptocat.Diag.error.updateCheck();
-					return false;
-				}
-				if (compareVersionStrings(Cryptocat.Version, latest)) {
-					Cryptocat.Update.updateAvailable(latest);
-				}
-				else {
-					console.info(
-						'Cryptocat.Update:',
-						'No updates available (' + latest + ').'
-					);
-					ifLatest();
-				}
-			});
-		}).on('error', function(err) {
-			Cryptocat.Diag.error.updateCheck();
-		});
-	};
-
-	// Run on application start
-	Cryptocat.Update.check(function() {
+	}).on('error', function(err) {
+		Cryptocat.Diag.error.updateCheck();
 	});
+};
+
+// Run on application start
+Cryptocat.Update.check(function() {
+});
 })();

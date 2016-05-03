@@ -3,7 +3,6 @@
 var VERSION = '3.1.18';
 
 module.exports = function(grunt) {
-	
 	grunt.loadNpmTasks('grunt-electron');
 	grunt.loadNpmTasks('grunt-electron-installer');
 	grunt.loadNpmTasks('grunt-shell');
