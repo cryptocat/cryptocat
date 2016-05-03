@@ -279,6 +279,9 @@ handler.subscribe = function(data) {
 		Cryptocat.XMPP.sendBuddyRequest(username.username);
 		return false;
 	}
+	if (!Cryptocat.Patterns.username.test(data.from.local)) {
+		return false;
+	}
 	Cryptocat.Diag.message.addBuddyRequest(
 		data.from.local, function(response) {
 			if (response === 0) {

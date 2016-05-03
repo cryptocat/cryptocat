@@ -181,12 +181,14 @@ var mainRoster = React.createClass({
 		return this.state.buddies[username].props.status;
 	},
 	removeBuddy: function(username) {
+		var _t = this;
 		var newBuddies = this.state.buddies;
 		if (!hasProperty(newBuddies, username)) {
 			return false;
 		}
 		delete newBuddies[username];
 		this.setState({buddies: newBuddies}, function() {
+			delete _t.renderedBuddies[username];
 			delete Cryptocat.Me.settings.userBundles[username];
 		});
 		if (hasProperty(Cryptocat.Win.chat, username)) {
