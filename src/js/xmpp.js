@@ -124,7 +124,9 @@ handler.devicelist = function(fromUser, data) {
 
 handler.bundle = function(fromUser, data) {
 	var preKeys   = [];
-	var deviceId = Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).deviceId;
+	var deviceId = Cryptocat.OMEMO.nodeHasDeviceId(
+		data.$.node
+	).deviceId;
 	if (!Cryptocat.OMEMO.isProperBundle(data)) {
 		return false;
 	}
