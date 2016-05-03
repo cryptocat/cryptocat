@@ -14,7 +14,7 @@
     "grunt": "latest",
     "grunt-electron": "latest",
     "grunt-electron-installer": "latest",
-    "grunt-exec": "latest",
+    "grunt-shell": "latest",
     "grunt-string-replace": "latest",
 	"grunt-contrib-jshint": "latest",
 	"jshint": "latest"

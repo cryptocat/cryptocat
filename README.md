@@ -1,5 +1,6 @@
-#Cryptocat
+![Cryptocat](https://raw.githubusercontent.com/cryptocat/cryptocat/master/src/img/logo/logo64.png)
 *Currently Beta Software.*
+[![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat)
 
 ## Build Instructions
 This is the build environment. The actual client source code is located in `src`.

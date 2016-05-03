@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 	
 	grunt.loadNpmTasks('grunt-electron');
 	grunt.loadNpmTasks('grunt-electron-installer');
-	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		exec: {
+		shell: {
 			cleanDist: 'rm -rf dist/Cryptocat*',
 			winClean: 'echo "GPLv3" > dist/Cryptocat-win32-x64/LICENSE',
 			linuxLogo: 'cp src/img/logo/logo.png dist/Cryptocat-linux-x64/logo.png',
@@ -136,37 +136,37 @@ module.exports = function(grunt) {
 	grunt.registerTask('win', 'Create Windows Package', [
 		'string-replace:dist',
 		'electron:windows',
-		'exec:winClean',
+		'shell:winClean',
 		'create-windows-installer:x64',
-		'exec:winWriteVer'
+		'shell:winWriteVer'
 	]);
 	grunt.registerTask('linux', 'Create Linux Package', [
 		'string-replace:dist',
 		'electron:linux',
-		'exec:linuxLogo',
-		'exec:linuxClean',
-		'exec:linuxZip',
-		'exec:linuxRmDir',
-		'exec:writeVer'
+		'shell:linuxLogo',
+		'shell:linuxClean',
+		'shell:linuxZip',
+		'shell:linuxRmDir',
+		'shell:writeVer'
 	]);
 	grunt.registerTask('mac', 'Create Mac Package', [
 		'string-replace:dist',
 		'electron:mac',
-		'exec:macMv',
-		'exec:macClean',
-		'exec:writeVer'
+		'shell:macMv',
+		'shell:macClean',
+		'shell:writeVer'
 	]);
 	grunt.registerTask('winZip', 'Archive Windows Package',
-		['exec:winZip', 'exec:winRmDir']
+		['shell:winZip', 'shell:winRmDir']
 	);
 	grunt.registerTask('macZip', 'Archive Mac Package',
-		['exec:macZip', 'exec:macRmDir']
+		['shell:macZip', 'shell:macRmDir']
 	);
 	grunt.registerTask('writeVersion', 'Write Version Number',
-		['exec:writeVersion']
+		['shell:writeVersion']
 	);
 	grunt.registerTask('clean', 'Clean',
-		['exec:cleanDist']
+		['shell:cleanDist']
 	);
 	grunt.registerTask('ci', 'Verify Continuous Integration',
 		['jshint']

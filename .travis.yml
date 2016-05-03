@@ -2,7 +2,9 @@ language: node_js
 
 before_script:
   - "npm install -g grunt-cli"
-  - "npm install"
+  - "npm install grunt"
+  - "npm install grunt-contrib-jshint"
+  - "npm install jshint"
 
 script:
   - "grunt ci"
