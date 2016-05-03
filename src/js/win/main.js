@@ -110,6 +110,11 @@ var mainRoster = React.createClass({
 	componentDidMount: function() {
 		return true;
 	},
+	componentWillUnmount: function() {
+		delete this.renderedBuddies;
+		return true;
+	},
+	renderedBuddies: {},
 	buildRoster: function(rosterItems) {
 		var newBuddies = {};
 		var userBundles = Cryptocat.Me.settings.userBundles;
@@ -127,8 +132,8 @@ var mainRoster = React.createClass({
 				username:     item.jid.local,
 				subscription: item.subscription,
 				status:       status,
-				ref:          function(b) {
-					_t.buddies[item.jid.local] = b;
+				ref: function(b) {
+					_t.renderedBuddies[item.jid.local] = b;
 				}
 			});
 			newBuddies[item.jid.local] = buddy;
@@ -151,8 +156,8 @@ var mainRoster = React.createClass({
 			username:     username,
 			subscription: '',
 			status:       status,
-			ref:          function(b) {
-				_t.buddies[username] = b;
+			ref: function(b) {
+				_t.renderedBuddies[username] = b;
 			}
 		}, null);
 		this.setState({buddies: newBuddies});
@@ -173,17 +178,15 @@ var mainRoster = React.createClass({
 		}
 	},
 	getBuddyStatus: function(username) {
-		return this.buddies[username].props.status;
+		return this.state.buddies[username].props.status;
 	},
 	removeBuddy: function(username) {
-		var _t = this;
-		var newBuddies = _t.state.buddies;
+		var newBuddies = this.state.buddies;
 		if (!hasProperty(newBuddies, username)) {
 			return false;
 		}
 		delete newBuddies[username];
 		this.setState({buddies: newBuddies}, function() {
-			delete _t.buddies[username];
 			delete Cryptocat.Me.settings.userBundles[username];
 		});
 		if (hasProperty(Cryptocat.Win.chat, username)) {
@@ -196,18 +199,16 @@ var mainRoster = React.createClass({
 		var _t = this;
 		var f  = e.target.value.toLowerCase();
 		_t.setState({filter: f}, function() {
-			for (var b in _t.buddies) {
-				if (hasProperty(_t.buddies, b)) {
-					_t.buddies[b].setState({
-						visible: (_t.buddies[b].props
-							.username.indexOf(f) === 0
-						)
+			for (var b in _t.renderedBuddies) {
+				if (hasProperty(_t.renderedBuddies, b)) {
+					_t.renderedBuddies[b].setState({
+						visible: (_t.renderedBuddies[b].props
+							.username.indexOf(f) === 0)
 					});
 				}
 			}
 		});
 	},
-	buddies: {},
 	render: function() {
 		var buddiesArrays = [[], [], []];
 		for (var p in this.state.buddies) {
@@ -416,6 +417,7 @@ var mainLogin = React.createClass({
 		ReactDOM.unmountComponentAtNode(
 			document.getElementById('renderB')
 		);
+		delete Cryptocat.Win.main.roster;
 	},
 	onDisconnect: function() {
 		var _t = this;
@@ -485,6 +487,7 @@ var mainLogin = React.createClass({
 		ReactDOM.unmountComponentAtNode(
 			document.getElementById('renderB')
 		);
+		delete Cryptocat.Win.main.roster;
 	},
 	onRememberCheckboxChange: function(e) {
 		var bef = this.state.rememberIsChecked;
@@ -897,7 +900,7 @@ IPCRenderer.on('addBuddy.sendRequest', function(e, username) {
 		if (username === Cryptocat.Me.username) {
 			Cryptocat.Diag.error.addBuddySelf();
 		}
-		else if (hasProperty(Cryptocat.Win.main.roster.buddies, username)) {
+		else if (Cryptocat.OMEMO.jidHasUsername(username).valid) {
 			Cryptocat.Diag.error.addBuddyAdded();
 		}
 		else {

@@ -248,7 +248,7 @@ handler.availability = function(data) {
 	) {
 		s = 1;
 	}
-	if (s !== Cryptocat.Win.main.roster.buddies[local.username].props.status) {
+	if (s !== Cryptocat.Win.main.roster.state.buddies[local.username].props.status) {
 		client.subscribeToNode(
 			local.username + '@crypto.cat', 'urn:xmpp:omemo:0:devicelist'
 		);
@@ -273,12 +273,10 @@ handler.roster = function(roster) {
 };
 
 handler.subscribe = function(data) {
-	if (!Cryptocat.Patterns.username.test(data.from.local)) {
-		return false;
-	}
-	if (hasProperty(Cryptocat.Win.main.roster.buddies, data.from.local)) {
+	var username = Cryptocat.OMEMO.jidHasUsername(data.from.bare);
+	if (username.valid) {
 		client.acceptSubscription(data.from.bare);
-		Cryptocat.XMPP.sendBuddyRequest(data.from.local);
+		Cryptocat.XMPP.sendBuddyRequest(username.username);
 		return false;
 	}
 	Cryptocat.Diag.message.addBuddyRequest(
@@ -314,7 +312,8 @@ Cryptocat.XMPP.connect = function(username, password, callback) {
 	if (
 		hasProperty(client, 'jid') &&
 		hasProperty(client.jid, 'local') &&
-		(client.jid.local === username)
+		(client.jid.local === username) &&
+		(Cryptocat.Me.username === username)
 	) {
 		client.connect();
 		return false;

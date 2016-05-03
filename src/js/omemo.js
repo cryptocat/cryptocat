@@ -18,7 +18,9 @@ Cryptocat.OMEMO.jidHasUsername = function(jid) {
 		if (
 			(Cryptocat.Patterns.username.test(username)) && (
 				(username === Cryptocat.Me.username) ||
-				(hasProperty(Cryptocat.Win.main.roster.buddies, username))
+				(hasProperty(
+					Cryptocat.Win.main.roster.state.buddies, username
+				))
 			)
 		) {
 			valid = true;
