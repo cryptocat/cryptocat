@@ -1,7 +1,8 @@
+/* jshint maxcomplexity: 15 */
+'use strict';
 Cryptocat.OMEMO = {};
 
 (function() {
-	'use strict';
 	var callbacks = {
 		setup: {
 			armed: false,
@@ -25,7 +26,7 @@ Cryptocat.OMEMO = {};
 			else {
 				username = '';
 			}
-		};
+		}
 		return {
 			username: username,
 			valid: valid
@@ -105,36 +106,13 @@ Cryptocat.OMEMO = {};
 			var bundleGetSet = {
 				get: function() {},
 				set: function(items) {
-					var cE = stanza.utils.createElement;
-					var sA = stanza.utils.setAttribute;
-					var sT = stanza.utils.setText;
-					var identityKey    = items.identityKey;
-					var identityDHKey  = items.identityDHKey;
-					var signedPreKey   = items.signedPreKey;
-					var signedPreKeyId = items.signedPreKeyId;
-					var sPKSignature   = items.signedPreKeySignature;
-					var preKeys        = items.preKeys;
-					var bATHS          = ProScript.encoding.byteArrayToHexString;
-					var iKElement      = cE('', 'identityKey', '');
-					var sPKElement     = cE('', 'signedPreKeyPublic', '');
-					var sPKSElement    = cE('', 'signedPreKeySignature', '');
-					var pKsElement     = cE('', 'prekeys', '');
-					sT(iKElement,   bATHS(identityKey) + bATHS(identityDHKey));
-					sA(iKElement, 'deviceName', items.deviceName);
-					sA(iKElement, 'deviceIcon', items.deviceIcon + '');
-					sT(sPKElement,  bATHS(signedPreKey));
-					sA(sPKElement, 'signedPreKeyId', signedPreKeyId + '');
-					sT(sPKSElement, sPKSignature);
-					preKeys.forEach(function(preKey, preKeyId) {
-						var pKElement = cE('', 'preKeyPublic', '');
-						sA(pKElement, 'preKeyId', preKeyId + '');
-						sT(pKElement, bATHS(preKey.pub));
-						pKsElement.appendChild(pKElement);
-					});
-					this.xml.appendChild(iKElement);
-					this.xml.appendChild(sPKElement);
-					this.xml.appendChild(sPKSElement);
-					this.xml.appendChild(pKsElement);
+					var elements = Cryptocat.OMEMO.setBundleXml(
+						stanza, items
+					);
+					this.xml.appendChild(elements.iK);
+					this.xml.appendChild(elements.sPK);
+					this.xml.appendChild(elements.sPKS);
+					this.xml.appendChild(elements.pKs);
 				}
 			};
 			var bundle = stanza.define({
@@ -157,113 +135,20 @@ Cryptocat.OMEMO = {};
 					var fromUser = Cryptocat.OMEMO.jidHasUsername(jid);
 					if (!fromUser.valid) { return false; }
 					XML2JS.parseString(this.xml.parent, function(err, res) {
-						if (!hasProperty(res, 'message')) {
-							return false;
-						}
-						var myInfo = {
-							stamp: (new Date()).toString(),
-							offline: false
-						};
-						res = res.message;
-						if (
-							Array.isArray(res.delay)             &&
-							hasProperty(res.delay, '0')          &&
-							hasProperty(res.delay[0], '$')       &&
-							hasProperty(res.delay[0].$, 'stamp') &&
-							Cryptocat.Patterns.dateTime.test(res.delay[0].$.stamp)
-						) {
-							myInfo.stamp   = res.delay[0].$.stamp;
-							myInfo.offline = true;
-						}
-						if (
-							err                                               ||
-							!Array.isArray(res.encrypted)                     ||
-							!hasProperty(res.encrypted, '0')                  ||
-							!Array.isArray(res.encrypted[0].header)           ||
-							!Array.isArray(res.encrypted[0].header[0].key)    ||
-							!Array.isArray(res.encrypted[0].header[0].iv)     ||
-							!Array.isArray(res.encrypted[0].header[0].tag)    ||
-							!Array.isArray(res.encrypted[0].payload)          ||
-							!hasProperty(res.encrypted[0].header[0], '$')     ||
-							!hasProperty(res.encrypted[0].header[0].$, 'sid')
-						) {
-							return false;
-						}
-						res = res.encrypted[0];
-						res.header[0].key.forEach(function(key) {
-							if (
-								(key.$.rid !== Cryptocat.Me.settings.deviceId) ||
-								!Array.isArray(key.ciphertext)                 ||
-								!Array.isArray(key.ephemeralKey)               ||
-								!Array.isArray(key.initEphemeralKey)           ||
-								!Array.isArray(key.iv)                         ||
-								!Array.isArray(key.tag)                        ||
-								!Array.isArray(key.preKeyId)
-							) {
-								return false;
-							}
-							myInfo.key = {
-								ciphertext:       key.ciphertext[0],
-								ephemeralKey:     key.ephemeralKey[0],
-								initEphemeralKey: key.initEphemeralKey[0],
-								iv:               key.iv[0],
-								tag:              key.tag[0],
-								preKeyId:         key.preKeyId[0]
-							};
-							myInfo.iv      = res.header[0].iv[0];
-							myInfo.tag     = res.header[0].tag[0];
-							myInfo.payload = res.payload[0];
-							myInfo.sid     = res.header[0].$.sid;
-							myInfo.from    = fromUser.username;
-						});
-						if (hasProperty(myInfo, 'key')) {
-							client.emit('encrypted', myInfo);
+						var myInfo = Cryptocat.OMEMO.getMessageXml(
+							fromUser, err, res
+						);
+						if (myInfo.valid) {
+							client.emit('encrypted', myInfo.myInfo);
 						}
 					});
 				},
 				set: function(items) {
-					var cE = stanza.utils.createElement;
-					var sA = stanza.utils.setAttribute;
-					var sT = stanza.utils.setText;
-					var devices  = items.devices;
-					var payload  = items.payload;
-					var sid      = items.sid;
-					var bATHS    = ProScript.encoding.byteArrayToHexString;
-					var hElement = cE('', 'header', '');
-					var iElement = cE('', 'iv', '');
-					var tElement = cE('', 'tag', '');
-					var pElement = cE('', 'payload', '');
-					sA(hElement, 'sid', sid);
-					sT(iElement, payload.iv);
-					sT(tElement, payload.tag);
-					sT(pElement, payload.ciphertext);
-					hElement.appendChild(iElement);
-					hElement.appendChild(tElement);
-					for (var deviceId in devices) { if (hasProperty(devices, deviceId)) {
-						var kElement    = cE('', 'key', '');
-						var _cElement   = cE('', 'ciphertext', '');
-						var _eKElement  = cE('', 'ephemeralKey', '');
-						var _iEKElement = cE('', 'initEphemeralKey', '');
-						var _iElement   = cE('', 'iv', '');
-						var _tElement   = cE('', 'tag', '');
-						var _pKIElement = cE('', 'preKeyId', '');
-						sA(kElement, 'rid', deviceId);
-						sT(_cElement,   devices[deviceId].ciphertext);
-						sT(_eKElement,  bATHS(devices[deviceId].ephemeralKey));
-						sT(_iEKElement, bATHS(devices[deviceId].initEphemeralKey));
-						sT(_iElement,   bATHS(devices[deviceId].iv));
-						sT(_tElement,   devices[deviceId].tag);
-						sT(_pKIElement, devices[deviceId].preKeyId);
-						kElement.appendChild(_cElement);
-						kElement.appendChild(_eKElement);
-						kElement.appendChild(_iEKElement);
-						kElement.appendChild(_iElement);
-						kElement.appendChild(_tElement);
-						kElement.appendChild(_pKIElement);
-						hElement.appendChild(kElement);
-					}};
-					this.xml.appendChild(hElement);
-					this.xml.appendChild(pElement);
+					var elements = Cryptocat.OMEMO.setMessageXml(
+						stanza, items
+					);
+					this.xml.appendChild(elements.h);
+					this.xml.appendChild(elements.p);
 				}
 			};
 			var encrypted = stanza.define({
@@ -276,8 +161,173 @@ Cryptocat.OMEMO = {};
 			});
 			stanza.withMessage(function(message) {
 				stanza.extend(message, encrypted);
-			})
+			});
 		}
+	};
+
+	Cryptocat.OMEMO.setBundleXml = function(stanza, items) {
+		var cE = stanza.utils.createElement;
+		var sA = stanza.utils.setAttribute;
+		var sT = stanza.utils.setText;
+		var identityKey    = items.identityKey;
+		var identityDHKey  = items.identityDHKey;
+		var signedPreKey   = items.signedPreKey;
+		var signedPreKeyId = items.signedPreKeyId;
+		var sPKSignature   = items.signedPreKeySignature;
+		var preKeys        = items.preKeys;
+		var bATHS          = ProScript.encoding.byteArrayToHexString;
+		var iKElement      = cE('', 'identityKey', '');
+		var sPKElement     = cE('', 'signedPreKeyPublic', '');
+		var sPKSElement    = cE('', 'signedPreKeySignature', '');
+		var pKsElement     = cE('', 'prekeys', '');
+		sT(iKElement,   bATHS(identityKey) + bATHS(identityDHKey));
+		sA(iKElement, 'deviceName', items.deviceName);
+		sA(iKElement, 'deviceIcon', items.deviceIcon + '');
+		sT(sPKElement,  bATHS(signedPreKey));
+		sA(sPKElement, 'signedPreKeyId', signedPreKeyId + '');
+		sT(sPKSElement, sPKSignature);
+		preKeys.forEach(function(preKey, preKeyId) {
+			var pKElement = cE('', 'preKeyPublic', '');
+			sA(pKElement, 'preKeyId', preKeyId + '');
+			sT(pKElement, bATHS(preKey.pub));
+			pKsElement.appendChild(pKElement);
+		});
+		return {
+			iK: iKElement,
+			sPK: sPKElement,
+			sPKS: sPKSElement,
+			pKs: pKsElement
+		};
+	};
+
+	Cryptocat.OMEMO.getMessageXml = function(fromUser, err, res) {
+		var myInfo = {
+			stamp: (new Date()).toString(),
+			offline: false
+		};
+		if (
+			err ||
+			!hasProperty(res, 'message')
+		) {
+			return {
+				myInfo: {},
+				valid: false
+			};
+		}
+		res = res.message;
+		if (
+			Array.isArray(res.delay)             &&
+			hasProperty(res.delay, '0')          &&
+			hasProperty(res.delay[0], '$')       &&
+			hasProperty(res.delay[0].$, 'stamp') &&
+			Cryptocat.Patterns.dateTime.test(res.delay[0].$.stamp)
+		) {
+			myInfo.stamp   = res.delay[0].$.stamp;
+			myInfo.offline = true;
+		}
+		if (
+			!Array.isArray(res.encrypted)                     ||
+			!hasProperty(res.encrypted, '0')                  ||
+			!Array.isArray(res.encrypted[0].header)           ||
+			!Array.isArray(res.encrypted[0].header[0].key)    ||
+			!Array.isArray(res.encrypted[0].header[0].iv)     ||
+			!Array.isArray(res.encrypted[0].header[0].tag)    ||
+			!Array.isArray(res.encrypted[0].payload)          ||
+			!hasProperty(res.encrypted[0].header[0], '$')     ||
+			!hasProperty(res.encrypted[0].header[0].$, 'sid')
+		) {
+			return {
+				myInfo: {},
+				valid: false
+			};
+		}
+		res = res.encrypted[0];
+		res.header[0].key.forEach(function(key) {
+			if (
+				(key.$.rid !== Cryptocat.Me.settings.deviceId) ||
+				!Array.isArray(key.ciphertext)                 ||
+				!Array.isArray(key.ephemeralKey)               ||
+				!Array.isArray(key.initEphemeralKey)           ||
+				!Array.isArray(key.iv)                         ||
+				!Array.isArray(key.tag)                        ||
+				!Array.isArray(key.preKeyId)
+			) {
+				return {
+					myInfo: {},
+					valid: false
+				};
+			}
+			myInfo.key = {
+				ciphertext:       key.ciphertext[0],
+				ephemeralKey:     key.ephemeralKey[0],
+				initEphemeralKey: key.initEphemeralKey[0],
+				iv:               key.iv[0],
+				tag:              key.tag[0],
+				preKeyId:         key.preKeyId[0]
+			};
+			myInfo.iv      = res.header[0].iv[0];
+			myInfo.tag     = res.header[0].tag[0];
+			myInfo.payload = res.payload[0];
+			myInfo.sid     = res.header[0].$.sid;
+			myInfo.from    = fromUser.username;
+		});
+		if (hasProperty(myInfo, 'key')) {
+			return {
+				myInfo: myInfo,
+				valid: true
+			};
+		}
+		return {
+			myInfo: {},
+			valid: false
+		};
+	};
+
+	Cryptocat.OMEMO.setMessageXml = function(stanza, items) {
+		var cE = stanza.utils.createElement;
+		var sA = stanza.utils.setAttribute;
+		var sT = stanza.utils.setText;
+		var devices  = items.devices;
+		var payload  = items.payload;
+		var sid      = items.sid;
+		var bATHS    = ProScript.encoding.byteArrayToHexString;
+		var hElement = cE('', 'header', '');
+		var iElement = cE('', 'iv', '');
+		var tElement = cE('', 'tag', '');
+		var pElement = cE('', 'payload', '');
+		sA(hElement, 'sid', sid);
+		sT(iElement, payload.iv);
+		sT(tElement, payload.tag);
+		sT(pElement, payload.ciphertext);
+		hElement.appendChild(iElement);
+		hElement.appendChild(tElement);
+		for (var deviceId in devices) { if (hasProperty(devices, deviceId)) {
+			var kElement    = cE('', 'key', '');
+			var _cElement   = cE('', 'ciphertext', '');
+			var _eKElement  = cE('', 'ephemeralKey', '');
+			var _iEKElement = cE('', 'initEphemeralKey', '');
+			var _iElement   = cE('', 'iv', '');
+			var _tElement   = cE('', 'tag', '');
+			var _pKIElement = cE('', 'preKeyId', '');
+			sA(kElement, 'rid', deviceId);
+			sT(_cElement,   devices[deviceId].ciphertext);
+			sT(_eKElement,  bATHS(devices[deviceId].ephemeralKey));
+			sT(_iEKElement, bATHS(devices[deviceId].initEphemeralKey));
+			sT(_iElement,   bATHS(devices[deviceId].iv));
+			sT(_tElement,   devices[deviceId].tag);
+			sT(_pKIElement, devices[deviceId].preKeyId);
+			kElement.appendChild(_cElement);
+			kElement.appendChild(_eKElement);
+			kElement.appendChild(_iEKElement);
+			kElement.appendChild(_iElement);
+			kElement.appendChild(_tElement);
+			kElement.appendChild(_pKIElement);
+			hElement.appendChild(kElement);
+		}}
+		return {
+			h: hElement,
+			p: pElement
+		};
 	};
 
 	Cryptocat.OMEMO.isProperBundle = function(data) {
@@ -394,7 +444,7 @@ Cryptocat.OMEMO = {};
 			identityKey.priv, identityKey.pub
 		);
 		var preKeys = [];
-		for (var i = 0; i < 100; i++) {
+		for (var i = 0; i < 100; i += 1) {
 			preKeys.push(Cryptocat.Axolotl.newKeyPair());
 		}
 		Cryptocat.Storage.updateUser(Cryptocat.Me.username, {
@@ -469,7 +519,7 @@ Cryptocat.OMEMO = {};
 				}
 			}
 		}
-		for (var i = 0; i < deviceIds.length; i++) {
+		for (var i = 0; i < deviceIds.length; i += 1) {
 			Cryptocat.XMPP.getBundle(username, deviceIds[i]);
 		}
 	};
@@ -517,10 +567,11 @@ Cryptocat.OMEMO = {};
 	) {
 		var dNIHash = (function() {
 			var h = '';
-			for (var i = 0; i < username.length; i++) {
+			var i = 0;
+			for (i = 0; i < username.length; i += 1) {
 				h += ProScript.encoding.a2h(username);
 			}
-			for (var i = 0; i < deviceName.length; i++) {
+			for (i = 0; i < deviceName.length; i += 1) {
 				h += ProScript.encoding.a2h(deviceName[i]);
 			}
 			h += ProScript.encoding.a2h(deviceIcon);
@@ -544,7 +595,7 @@ Cryptocat.OMEMO = {};
 			devices: {},
 			payload: {},
 			sid: Cryptocat.Me.settings.deviceId
-		}
+		};
 		if (message.length) {
 			while (message.length % 32) {
 				message += String.fromCharCode(0);
@@ -588,7 +639,7 @@ Cryptocat.OMEMO = {};
 				res.devices[deviceId] = next.output;
 				bundles[deviceId].axolotl = next.them;
 			}
-		}};
+		}}
 		Cryptocat.XMPP.sendMessage(username, res);
 		return true;
 	};
@@ -653,7 +704,7 @@ Cryptocat.OMEMO = {};
 					ciphertext: encrypted.payload,
 					tag: encrypted.tag
 				},
-			'')
+			'');
 			if (message.valid) {
 				while (
 					message.plaintext.length &&

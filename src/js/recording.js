@@ -1,7 +1,7 @@
+'use strict';
 Cryptocat.Recording = {};
 
 (function() {
-	'use strict';
 	var mediaRecorder = {};
 	var mediaSource   = {};
 	var sourceBuffer  = {};
@@ -48,7 +48,7 @@ Cryptocat.Recording = {};
 			});
 		});
 		return false;
-	}
+	};
 
 	Cryptocat.Recording.start = function() {
 		mediaRecorder.start(10);

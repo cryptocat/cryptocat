@@ -1,3 +1,4 @@
+'use strict';
 Cryptocat.Diag = {
 	error: {},
 	message: {},
@@ -6,8 +7,6 @@ Cryptocat.Diag = {
 };
 
 (function() {
-	'use strict';
-
 	Cryptocat.Diag.error.updateCheck = function() {
 		Dialog.showErrorBox(
 			'Cryptocat: Cannot Check for Updates',
@@ -15,7 +14,7 @@ Cryptocat.Diag = {
 			'Please make sure you are online: Keeping your ' +
 			'Cryptocat client up to date is important.'
 		);
-	},
+	};
 
 	Cryptocat.Diag.error.updateDownloader = function() {
 		Dialog.showErrorBox(
@@ -23,7 +22,7 @@ Cryptocat.Diag = {
 			'Your Cryptocat update could not be downloaded. Please ' +
 			'check your Internet connection and try again.'
 		);
-	},
+	};
 
 	Cryptocat.Diag.error.loginDisconnect = function() {
 		Dialog.showErrorBox(

@@ -1,3 +1,5 @@
+'use strict';
+
 Cryptocat.Win = {
 	main:          {},
 	chat:          {},
@@ -6,8 +8,6 @@ Cryptocat.Win = {
 	create:        {}
 };
 window.addEventListener('load', function(e) {	
-	'use strict';
-
 	var renderWindowHeight = function(h) {
 		if (process.platform === 'win32') {
 			return h + 40;
@@ -35,7 +35,237 @@ window.addEventListener('load', function(e) {
 		);
 		return chatWindow;
 	};
-	
+
+	var mainRosterBuddy = React.createClass({
+		displayName: 'mainRosterBuddy',
+		getInitialState: function() {
+			return {
+				visible: true
+			};
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		onClick: function() {
+			if (Cryptocat.Me.connected) {
+				Cryptocat.Win.create.chat(
+					this.props.username
+				);
+			}
+		},
+		onContextMenu: function(e) {
+			e.preventDefault();
+			var _t = this;
+			(Remote.Menu.buildFromTemplate([
+				{
+					label: 'Open Chat',
+					click: function() { _t.onClick(); }
+				}, {
+					label: 'View Devices',
+					click: function() {
+						Cryptocat.Win.create.deviceManager(_t.props.username);
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Remove Buddy',
+					click: function() {
+						Cryptocat.Diag.message.removeBuddyConfirm(function(response) {
+							if (response === 0) {
+								Cryptocat.XMPP.removeBuddy(_t.props.username);
+							}
+						});
+					}
+				}
+			])).popup(Remote.getCurrentWindow());
+		},
+		render: function() {
+			return React.createElement('div', {
+				key: 0,
+				className: 'mainRosterBuddy',
+				'data-status': this.props.status,
+				'data-visible': this.state.visible,
+				title: 'Right click for buddy options',
+				onClick: this.onClick,
+				onContextMenu: this.onContextMenu
+			}, [
+				React.createElement('span', {
+					key: 1,
+					className: 'mainRosterBuddyStatus',
+				}),
+				this.props.username
+			]);
+		}
+	});
+
+	var mainRoster = React.createClass({
+		displayName: 'mainRoster',
+		getInitialState: function() {
+			return {
+				buddies: {},
+				isReconn: false,
+				filter: ''
+			};
+		},
+		componentDidMount: function() {
+			return true;
+		},
+		buildRoster: function(rosterItems) {
+			var newBuddies = {};
+			var userBundles = Cryptocat.Me.settings.userBundles;
+			var _t = this;
+			rosterItems.forEach(function(item) {
+				var status = 0;
+				if (
+					hasProperty(userBundles, item.jid.local) &&
+					Object.keys(userBundles[item.jid.local]).length
+				) {
+					status = 1;
+				}
+				var buddy = React.createElement(mainRosterBuddy, {
+					key:          item.jid.local,
+					username:     item.jid.local,
+					subscription: item.subscription,
+					status:       status,
+					ref:          function(b) {
+						_t.buddies[item.jid.local] = b;
+					}
+				});
+				newBuddies[item.jid.local] = buddy;
+			});
+			this.setState({buddies: newBuddies});
+		},
+		updateBuddyStatus: function(username, status, notify) {
+			var newBuddies = this.state.buddies;
+			var _t = this;
+			if (
+				hasProperty(newBuddies, username) &&
+				hasProperty(newBuddies[username], 'props') &&
+				hasProperty(newBuddies[username].props, 'status') &&
+				(newBuddies[username].props.status === status)
+			) {
+				return false;
+			}
+			newBuddies[username] = React.createElement(mainRosterBuddy, {
+				key:          username,
+				username:     username,
+				subscription: '',
+				status:       status,
+				ref:          function(b) {
+					_t.buddies[username] = b;
+				}
+			}, null);
+			this.setState({buddies: newBuddies});
+			if (notify && (status === 2)) {
+				Cryptocat.Notify.showNotification(
+					username + ' is online.',
+					'Click here to chat with them.',
+					function() {
+						Cryptocat.Win.create.chat(username);
+					}
+				);
+				Cryptocat.Notify.playSound('buddyOnline');
+			}
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.status', status
+				);
+			}
+		},
+		getBuddyStatus: function(username) {
+			return this.buddies[username].props.status;
+		},
+		removeBuddy: function(username) {
+			var _t = this;
+			var newBuddies = _t.state.buddies;
+			if (!hasProperty(newBuddies, username)) {
+				return false;
+			}
+			delete newBuddies[username];
+			this.setState({buddies: newBuddies}, function() {
+				delete _t.buddies[username];
+				delete Cryptocat.Me.settings.userBundles[username];
+			});
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.status', 0
+				);
+			}
+		},
+		onChangeFilter: function(e) {
+			var _t = this;
+			var f  = e.target.value.toLowerCase();
+			_t.setState({filter: f}, function() {
+				for (var b in _t.buddies) {
+					if (hasProperty(_t.buddies, b)) {
+						_t.buddies[b].setState({
+							visible: (_t.buddies[b].props
+								.username.indexOf(f) === 0
+							)
+						});
+					}
+				}
+			});
+		},
+		buddies: {},
+		render: function() {
+			var buddiesArrays = [[], [], []];
+			for (var p in this.state.buddies) {
+				if (hasProperty(this.state.buddies, p)) {
+					var b = this.state.buddies[p];
+					buddiesArrays[
+						Math.abs(b.props.status - 2)
+					].push(b);
+				}
+			}
+			for (var i = 0; i < 3; i += 1) {
+				buddiesArrays[i].sort(function(a, b) {
+					if (a.props.username < b.props.username) {
+						return -1;
+					}
+					else {
+						return +1;
+					}
+					return 0;
+				});
+			}
+			buddiesArrays = buddiesArrays[0].concat(
+				buddiesArrays[1].concat(
+					buddiesArrays[2]
+				)
+			);
+			return React.createElement('div', {
+				key: 0,
+				className: 'mainRoster',
+				onSubmit: this.onSubmit
+			}, [
+				React.createElement('div', {
+					key: 1,
+					className: 'mainRosterIsReconn',
+					'data-visible': this.state.isReconn
+				}, 'Disconnected. Reconnecting...'),
+				React.createElement('input', {
+					key: 2,
+					type: 'text',
+					className: 'mainRosterFilter',
+					placeholder: 'Filter...',
+					value: this.state.filter,
+					onChange: this.onChangeFilter
+				}),
+				React.createElement('div', {
+					key: 3,
+					className: 'mainRosterIntro',
+					'data-visible': !buddiesArrays.length
+				}, React.createElement('h2', {
+					key: 4
+				}, 'Welcome.'),
+				React.createElement('p', {
+					key: 5
+				}, ''))
+			].concat(buddiesArrays));
+		}
+	});
+
 	var mainLogin = React.createClass({
 		displayName: 'mainLogin',
 		getInitialState: function() {
@@ -90,7 +320,7 @@ window.addEventListener('load', function(e) {
 			});
 			while (Cryptocat.Win.chatRetainer.length < 2) {
 				Cryptocat.Win.chatRetainer.push(spawnChatWindow());
-			};
+			}
 			return true;
 		},
 		componentDidUpdate: function() {
@@ -99,7 +329,7 @@ window.addEventListener('load', function(e) {
 				Cryptocat.Win.main.roster.setState({
 					isReconn: _t.state.isReconn
 				});
-			};
+			}
 		},
 		onChangeUsername: function(e) {
 			this.setState({username: e.target.value.toLowerCase()});
@@ -113,7 +343,14 @@ window.addEventListener('load', function(e) {
 				this.setState({disabled: true});
 				Cryptocat.XMPP.connect(
 					this.state.username, this.state.password,
-					function(s) { (s? _t.onConnect() : _t.onDisconnect()) }
+					function(s) {
+						if (s) {
+							_t.onConnect();
+						}
+						else {
+							_t.onDisconnect();
+						}
+					}
 				);
 			}
 			else {
@@ -129,9 +366,9 @@ window.addEventListener('load', function(e) {
 				Cryptocat.Patterns.username.test(this.state.username) &&
 				Cryptocat.Patterns.password.test(this.state.password)
 			) {
-				return true	
+				return true;
 			}
-			return false
+			return false;
 		},
 		onConnect: function() {
 			this.setState({
@@ -206,9 +443,9 @@ window.addEventListener('load', function(e) {
 				) {
 					var incr = (function() {
 						if (_t.state.reconn < 20000) {
-							return 5000
+							return 5000;
 						}
-						return 0
+						return 0;
 					})();
 					Cryptocat.XMPP.disconnect(function() {
 						_t.onSubmit();
@@ -264,7 +501,7 @@ window.addEventListener('load', function(e) {
 							username: '',
 							password: ''
 						}
-					}, function() {})
+					}, function() {});
 				}
 			});
 		},
@@ -341,233 +578,7 @@ window.addEventListener('load', function(e) {
 			]);
 		}
 	});
-
-	var mainRosterBuddy = React.createClass({
-		displayName: 'mainRosterBuddy',
-		getInitialState: function() {
-			return {
-				visible: true
-			};
-		},
-		componentDidMount: function() {
-			return true;
-		},
-		onClick: function() {
-			if (Cryptocat.Me.connected) {
-				Cryptocat.Win.create.chat(
-					this.props.username
-				);
-			}
-		},
-		onContextMenu: function(e) {
-			e.preventDefault();
-			var _t = this;
-			(Remote.Menu.buildFromTemplate([
-				{
-					label: 'Open Chat',
-					click: function() { _t.onClick(); }
-				}, {
-					label: 'View Devices',
-					click: function() {
-						Cryptocat.Win.create.deviceManager(_t.props.username);
-					}
-				}, {
-					type: 'separator'
-				}, {
-					label: 'Remove Buddy',
-					click: function() {
-						Cryptocat.Diag.message.removeBuddyConfirm(function(response) {
-							if (response === 0) {
-								Cryptocat.XMPP.removeBuddy(_t.props.username);
-							}
-						});
-					}
-				}
-			])).popup(Remote.getCurrentWindow());
-		},
-		render: function() {
-			return React.createElement('div', {
-				key: 0,
-				className: 'mainRosterBuddy',
-				'data-status': this.props.status,
-				'data-visible': this.state.visible,
-				title: 'Right click for buddy options',
-				onClick: this.onClick,
-				onContextMenu: this.onContextMenu
-			}, [
-				React.createElement('span', {
-					key: 1,
-					className: 'mainRosterBuddyStatus',
-				}),
-				this.props.username
-			])
-		}
-	});
-
-	var mainRoster = React.createClass({
-		displayName: 'mainRoster',
-		getInitialState: function() {
-			return {
-				buddies: {},
-				isReconn: false,
-				filter: ''
-			};
-		},
-		componentDidMount: function() {
-			return true;
-		},
-		buildRoster: function(rosterItems) {
-			var newBuddies = {};
-			var userBundles = Cryptocat.Me.settings.userBundles;
-			var _t = this;
-			rosterItems.forEach(function(item) {
-				var status = 0;
-				if (
-					hasProperty(userBundles, item.jid.local) &&
-					Object.keys(userBundles[item.jid.local]).length
-				) {
-					status = 1;
-				}
-				var buddy = React.createElement(mainRosterBuddy, {
-					key:          item.jid.local,
-					username:     item.jid.local,
-					subscription: item.subscription,
-					status:       status,
-					ref:          function(b) {
-						_t.buddies[item.jid.local] = b;
-					}
-				});
-				newBuddies[item.jid.local] = buddy;
-			})
-			this.setState({buddies: newBuddies})
-		},
-		updateBuddyStatus: function(username, status, notify) {
-			var newBuddies = this.state.buddies;
-			var _t = this;
-			if (
-				hasProperty(newBuddies, username) &&
-				hasProperty(newBuddies[username], 'props') &&
-				hasProperty(newBuddies[username].props, 'status') &&
-				(newBuddies[username].props.status === status)
-			) {
-				return false;
-			}
-			newBuddies[username] = React.createElement(mainRosterBuddy, {
-				key:          username,
-				username:     username,
-				subscription: '',
-				status:       status,
-				ref:          function(b) {
-					_t.buddies[username] = b;
-				}
-			}, null);
-			this.setState({buddies: newBuddies});
-			if (notify && (status === 2)) {
-				Cryptocat.Notify.showNotification(
-					username + ' is online.',
-					'Click here to chat with them.',
-					function() {
-						Cryptocat.Win.create.chat(username);
-					}
-				);
-				Cryptocat.Notify.playSound('buddyOnline');
-			}
-			if (hasProperty(Cryptocat.Win.chat, username)) {
-				Cryptocat.Win.chat[username].webContents.send(
-					'chat.status', status
-				);
-			}
-		},
-		getBuddyStatus: function(username) {
-			return this.buddies[username].props.status;
-		},
-		removeBuddy: function(username) {
-			var _t = this;
-			var newBuddies = _t.state.buddies;
-			if (!hasProperty(newBuddies, username)) {
-				return false;
-			}
-			delete newBuddies[username];
-			this.setState({buddies: newBuddies}, function() {
-				delete _t.buddies[username];
-				delete Cryptocat.Me.settings.userBundles[username];
-			});
-			if (hasProperty(Cryptocat.Win.chat, username)) {
-				Cryptocat.Win.chat[username].webContents.send(
-					'chat.status', 0
-				);
-			}
-		},
-		onChangeFilter: function(e) {
-			var _t = this;
-			var f  = e.target.value.toLowerCase();
-			_t.setState({filter: f}, function() {
-				for (var b in _t.buddies) {
-					if (hasProperty(_t.buddies, b)) {
-						_t.buddies[b].setState({
-							visible: (_t.buddies[b].props
-								.username.indexOf(f) == 0
-							)
-						});
-					}
-				}
-			});
-		},
-		buddies: {},
-		render: function() {
-			var buddiesArrays = [[], [], []];
-			for (var p in this.state.buddies) {
-				if (hasProperty(this.state.buddies, p)) {
-					var b = this.state.buddies[p];
-					buddiesArrays[
-						Math.abs(b.props.status - 2)
-					].push(b);
-				}
-			}
-			for (var i = 0; i < 3; i++) {
-				buddiesArrays[i].sort(function(a, b) {
-					if (a.props.username < b.props.username) {
-						return -1
-					} else { return +1 }; return 0
-				});
-			}
-			buddiesArrays = buddiesArrays[0].concat(
-				buddiesArrays[1].concat(
-					buddiesArrays[2]
-				)
-			);
-			return React.createElement('div', {
-				key: 0,
-				className: 'mainRoster',
-				onSubmit: this.onSubmit
-			}, [
-				React.createElement('div', {
-					key: 1,
-					className: 'mainRosterIsReconn',
-					'data-visible': this.state.isReconn
-				}, 'Disconnected. Reconnecting...'),
-				React.createElement('input', {
-					key: 2,
-					type: 'text',
-					className: 'mainRosterFilter',
-					placeholder: 'Filter...',
-					value: this.state.filter,
-					onChange: this.onChangeFilter
-				}),
-				React.createElement('div', {
-					key: 3,
-					className: 'mainRosterIntro',
-					'data-visible': !buddiesArrays.length
-				}, React.createElement('h2', {
-					key: 4
-				}, 'Welcome.'),
-				React.createElement('p', {
-					key: 5
-				}, ''))
-			].concat(buddiesArrays));
-		}
-	});
-
+	
 	Cryptocat.Win.create.updateDownloader = function() {
 		var updateDownloader = new Remote.BrowserWindow({
 			width: 330,
@@ -616,7 +627,7 @@ window.addEventListener('load', function(e) {
 			connected: Cryptocat.Me.connected
 		});
 		Cryptocat.Win.chat[username].setTitle('Chat with ' + username);
-		if (typeof(callback) === 'function') { callback() }
+		if (typeof(callback) === 'function') { callback(); }
 		Cryptocat.Win.chat[username].show();
 		if (Cryptocat.Win.chatRetainer.length < 2) {
 			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
@@ -675,7 +686,7 @@ window.addEventListener('load', function(e) {
 		changePasswordWindow.loadURL(	
 			Path.join('file://' + __dirname, 'changePassword.html')
 		);
-	}
+	};
 
 	Cryptocat.Win.create.addDevice = function() {
 		var addDeviceWindow = new Remote.BrowserWindow({
@@ -758,7 +769,7 @@ window.addEventListener('load', function(e) {
 					userBundles[deviceId].identityKey
 				)
 			});
-		}};
+		}}
 		Cryptocat.Win.deviceManager[username].webContents.send(
 			'deviceManager.update', {
 				username: username,
@@ -812,7 +823,7 @@ window.addEventListener('load', function(e) {
 	};
 	
 	IPCRenderer.on('chat.sendMessage', function(e, to, message) {
-		Cryptocat.OMEMO.sendMessage(to, message)
+		Cryptocat.OMEMO.sendMessage(to, message);
 	});
 
 	IPCRenderer.on('chat.saveDialog', function(e, to, name, url) {

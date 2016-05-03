@@ -1,6 +1,6 @@
-window.addEventListener('load', function(e) {	
-	'use strict';
+'use strict';
 
+window.addEventListener('load', function(e) {
 	var addBuddy = React.createClass({
 		displayName: 'addBuddy',
 		getInitialState: function() {

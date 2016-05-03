@@ -1,8 +1,7 @@
+'use strict';
 Cryptocat.File = {};
 
 (function() {
-	'use strict';
-	
 	Cryptocat.File.maxSize   = 51000000;
 	Cryptocat.File.chunkSize = 25000;
 	Cryptocat.File.types  = {
@@ -86,8 +85,54 @@ Cryptocat.File = {};
 					plaintext: new Buffer([]),
 					valid:     false
 				};
-			};
+			}
 		}
+	};
+
+	var putFile = function(file, onProgress, onEnd) {
+		var put = HTTPS.request({
+			hostname: 'cryptocat.blob.core.windows.net',
+			port: 443,
+			method: 'PUT',
+			path: '/files/' + file.sas,
+			headers: {
+				'X-Ms-Blob-Type': 'BlockBlob',
+				'Content-Type':   'application/octet-stream',
+				'Content-Length': file.encrypted.ciphertext.length
+			},
+			agent: false
+		}, function(res) {
+			console.info(res.statusCode);
+			onEnd({
+				name:  file.name,
+				url:   file.sas.substring(0, 128),
+				key:   (new Buffer(file.key)).toString('hex'),
+				iv:    (new Buffer(file.iv)).toString('hex'),
+				tag:   file.encrypted.tag,
+				valid: (res.statusCode === 201)
+			}, file.file);
+		});
+		var putChunk = function(offset) {
+			var nOffset = offset + Cryptocat.File.chunkSize;
+			var chunk = file.encrypted.ciphertext.slice(offset, nOffset);
+			if (nOffset < file.encrypted.ciphertext.length) {
+				put.write(chunk, function() {
+					onProgress(file.sas.substring(0, 128), Math.ceil(
+						(nOffset * 100) / file.encrypted.ciphertext.length
+					));
+					putChunk(nOffset);
+				});
+			}
+			else {
+				put.end(chunk);
+			}
+		};
+		put.flushHeaders();
+		put.setTimeout(3000, function() {
+			put.abort();
+			putFile(file, onProgress, onEnd);
+		});
+		putChunk(0);
 	};
 
 	Cryptocat.File.getType = function(name) {
@@ -97,7 +142,7 @@ Cryptocat.File = {};
 				allowed: false,
 				type: '',
 				ext: ''
-			}
+			};
 		}
 		var ext = lName.match(/\.\w{1,5}$/)[0].substr(1);
 		for (var type in Cryptocat.File.types) {
@@ -134,7 +179,7 @@ Cryptocat.File = {};
 				tag:   '',
 				valid: false
 			};
-		};
+		}
 		var fileType = Cryptocat.File.getType(parsed.name);
 		if (
 			hasProperty(parsed, 'name')  &&
@@ -247,10 +292,14 @@ Cryptocat.File = {};
 				var encrypted = fileCrypto.encrypt(
 					key, iv, file
 				);
-				putFile(
-					name, sas, file, key, iv, encrypted,
-					onProgress, onEnd
-				);
+				putFile({
+					name: name,
+					sas: sas,
+					file: file,
+					key: key,
+					iv: iv,
+					encrypted: encrypted
+				}, onProgress, onEnd);
 				onBegin({
 					name:  name,
 					url:   sas.substring(0, 128),
@@ -261,60 +310,5 @@ Cryptocat.File = {};
 				});
 			});
 		});
-	};
-
-	var putFile = function(
-		name, sas, file, key, iv, encrypted,
-		onProgress, onEnd
-	) {
-		var put = HTTPS.request({
-			hostname: 'cryptocat.blob.core.windows.net',
-			port: 443,
-			method: 'PUT',
-			path: '/files/' + sas,
-			headers: {
-				'X-Ms-Blob-Type': 'BlockBlob',
-				'Content-Type':   'application/octet-stream',
-				'Content-Length': encrypted.ciphertext.length
-			},
-			agent: false
-		}, function(res) {
-			console.info(res.statusCode);
-			onEnd({
-				name:  name,
-				url:   sas.substring(0, 128),
-				key:   (new Buffer(key)).toString('hex'),
-				iv:    (new Buffer(iv)).toString('hex'),
-				tag:   encrypted.tag,
-				valid: (res.statusCode === 201)
-			}, file);
-		});
-		var putChunk = function(offset) {
-			var nOffset = offset + Cryptocat.File.chunkSize;
-			var chunk = encrypted.ciphertext.slice(offset, nOffset);
-			if (nOffset < encrypted.ciphertext.length) {
-				put.write(chunk, function() {
-					onProgress(sas.substring(0, 128), Math.ceil(
-						(nOffset * 100) / encrypted.ciphertext.length
-					));
-					putChunk(nOffset);
-				});
-			}
-			else {
-				put.end(chunk);
-			}
-		};
-		put.flushHeaders();
-		put.on('error', function(err) {
-		});
-		put.setTimeout(3000, function() {
-			put.abort();
-			putFile(
-				name, sas, file, key, iv, encrypted,
-				onProgress, onEnd
-			);
-		});
-		putChunk(0);
-	};
-
+	};	
 })();

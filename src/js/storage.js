@@ -1,8 +1,9 @@
+'use strict';
 Cryptocat.Storage = {};
 
 (function() {
-	'use strict';
 	var db = {};
+	var EmptyMe = Cryptocat.EmptyMe;
 	var EmptyCommon = {
 		_id: '*common*',
 		mainWindowBounds: {
@@ -16,7 +17,14 @@ Cryptocat.Storage = {};
 			password: ''
 		}
 	};
-	
+	var settingUpdateDisallowed = [
+		'identityKey',
+		'identityDHKey',
+		'deviceId',
+		'deviceName',
+		'deviceIcon'
+	];
+
 	(function() {
 		var path = '';
 		if (process.platform === 'win32') {
@@ -57,38 +65,32 @@ Cryptocat.Storage = {};
 	})();
 
 	Cryptocat.Storage.updateCommon = function(common, callback) {
-		var newCommon = Object.assign({}, EmptyCommon);
+		var newObj = {};
 		db.findOne({_id: '*common*'}, function(err, doc) {
-			if (doc === null) {
-				for (var setting in common) {
-					if (
-						hasProperty(common, setting) &&
-						hasProperty(newCommon, setting)
-					) {
-						newCommon[setting] = common[setting];
-					}
-				}
-				db.insert(newCommon, function(err, newDoc) {
-					db.persistence.compactDatafile();
-					callback(err);
-				});
+			if (!doc) {
+				newObj = Object.assign({}, EmptyCommon);
 			}
-			else {
-				var updateObj = {};
-				for (var setting in common) {
-					if (
-						hasProperty(common, setting) &&
-						hasProperty(newCommon, setting)
-					) {
-						updateObj[setting] = common[setting];
-					}
+			for (var setting in common) {
+				if (
+					hasProperty(common, setting) &&
+					hasProperty(EmptyCommon, setting)
+				) {
+					newObj[setting] = common[setting];
 				}
+			}
+			if (doc) {
 				db.update({_id: '*common*'},
-					{$set: updateObj}, function(err, newDoc) {
+					{$set: newObj}, function(err, newDoc) {
 						db.persistence.compactDatafile();
 						callback(err);
 					}
 				);
+			}
+			else {
+				db.insert(newObj, function(err, newDoc) {
+					db.persistence.compactDatafile();
+					callback(err);
+				});
 			}
 		});
 	};
@@ -114,44 +116,37 @@ Cryptocat.Storage = {};
 
 	Cryptocat.Storage.updateUser = function(username, loadedSettings, callback) {
 		var settings = Object.assign({}, loadedSettings);
-		var newObj = Object.assign({}, Cryptocat.EmptyMe.settings);
+		var newObj = {};
+		console.log('lol');
 		db.findOne({_id: username}, function(err, doc) {
-			if (doc === null) {
+			if (!doc) {
+				newObj = Object.assign({}, EmptyMe.settings);
 				newObj._id = username;
-				for (var setting in newObj) {
-					if (
-						hasProperty(newObj, setting) &&
-						hasProperty(settings, setting)
-					) {
-						newObj[setting] = settings[setting];
-					}
-				}
-				db.insert(newObj, function(err, newDoc) {
-					db.persistence.compactDatafile();
-					callback(err);
-				});
 			}
-			else {
-				var updateObj = {};
-				for (var setting in newObj) {
-					if (
-						hasProperty(newObj, setting) &&
-						hasProperty(settings, setting) &&
-						(setting !== 'identityKey') &&
-						(setting !== 'identityDHKey') &&
-						(setting !== 'deviceId') &&
-						(setting !== 'deviceName') &&
-						(setting !== 'deviceIcon')
-					) {
-						updateObj[setting] = settings[setting];
+			for (var setting in settings) {
+				if (
+					hasProperty(settings, setting) &&
+					hasProperty(EmptyMe.settings, setting)
+				) {
+					if (doc && (settingUpdateDisallowed.indexOf(setting) >= 0)) {
+						continue;
 					}
+					newObj[setting] = settings[setting];
 				}
+			}
+			if (doc) {
 				db.update({_id: username},
-					{$set: updateObj}, function(err, newDoc) {
+					{$set: newObj}, function(err, newDoc) {
 						db.persistence.compactDatafile();
 						callback(err);
 					}
 				);
+			}
+			else {
+				db.insert(newObj, function(err, newDoc) {
+					db.persistence.compactDatafile();
+					callback(err);
+				});
 			}
 		});
 	};
@@ -187,15 +182,16 @@ Cryptocat.Storage = {};
 	};
 
 	Cryptocat.Storage.getUser = function(username, callback) {
-		var newObj = Object.assign({}, Cryptocat.EmptyMe.settings);
+		var newObj = Object.assign({}, EmptyMe.settings);
+		var setting = '';
 		db.findOne({_id: username}, function(err, doc) {
 			if (!doc) {
 				callback(err, null);
 				return false;
 			}
-			for (var setting in newObj) {
+			for (setting in newObj) {
 				if (
-					hasProperty(newObj, setting) &&
+					hasProperty(EmptyMe.settings, setting) &&
 					hasProperty(doc, setting)
 				) {
 					newObj[setting] = doc[setting];

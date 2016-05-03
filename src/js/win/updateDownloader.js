@@ -1,6 +1,6 @@
-window.addEventListener('load', function(e) {	
-	'use strict';
+'use strict';
 
+window.addEventListener('load', function(e) {	
 	var updateDownloader = React.createClass({
 		displayName: 'updateDownloader',
 		getInitialState: function() {
@@ -79,7 +79,7 @@ window.addEventListener('load', function(e) {
 				Remote.getCurrentWindow().close();
 			}, 250);
 		});
-	}
+	};
 
 	Cryptocat.Update.saveDialog(Remote.getCurrentWindow(), function(path) {
 		if (!path) {

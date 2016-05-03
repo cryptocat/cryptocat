@@ -1,6 +1,15 @@
+/* jshint quotmark: false */
+'use strict';
 const VERSION = '3.1.18';
 
 module.exports = function(grunt) {
+	
+	grunt.loadNpmTasks('grunt-electron');
+	grunt.loadNpmTasks('grunt-electron-installer');
+	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		electron: {
@@ -98,22 +107,40 @@ module.exports = function(grunt) {
 			macRmDir: 'rm -r dist/Cryptocat.app',
 			winWriteVer: "awk -vORS= ' BEGIN { print \"" + VERSION + "\" } ' > dist/version.txt",
 			writeVer: 'echo ' + VERSION + ' > dist/version.txt'
+		},
+		jshint: {
+			options: {
+				jshintrc: '.jshintrc',
+			},
+			files: [
+				'Gruntfile.js',
+				'src/app.js',
+				'src/js/win/*.js',
+				'src/js/diag.js',
+				'src/js/directories.js',
+				'src/js/file.js',
+				'src/js/global.js',
+				'src/js/notify.js',
+				'src/js/omemo.js',
+				'src/js/patterns.js',
+				'src/js/pinning.js',
+				'src/js/recording.js',
+				'src/js/storage.js',
+				'src/js/update.js',
+				'src/js/version.js',
+				'src/js/xmpp.js'
+			]
 		}
 	});
-
-	grunt.loadNpmTasks('grunt-electron');
-	grunt.loadNpmTasks('grunt-electron-installer');
-	grunt.loadNpmTasks('grunt-exec');
-	grunt.loadNpmTasks('grunt-string-replace');
-
-	grunt.registerTask('win', [
+	
+	grunt.registerTask('win', 'Create Windows Package', [
 		'string-replace:dist',
 		'electron:windows',
 		'exec:winClean',
 		'create-windows-installer:x64',
 		'exec:winWriteVer'
 	]);
-	grunt.registerTask('linux', [
+	grunt.registerTask('linux', 'Create Linux Package', [
 		'string-replace:dist',
 		'electron:linux',
 		'exec:linuxLogo',
@@ -122,15 +149,26 @@ module.exports = function(grunt) {
 		'exec:linuxRmDir',
 		'exec:writeVer'
 	]);
-	grunt.registerTask('mac', [
+	grunt.registerTask('mac', 'Create Mac Package', [
 		'string-replace:dist',
 		'electron:mac',
 		'exec:macMv',
 		'exec:macClean',
 		'exec:writeVer'
 	]);
-	grunt.registerTask('winZip', ['exec:winZip', 'exec:winRmDir']);
-	grunt.registerTask('macZip', ['exec:macZip', 'exec:macRmDir']);
-	grunt.registerTask('writeVersion', ['exec:writeVersion']);
-	grunt.registerTask('clean', ['exec:cleanDist']);
+	grunt.registerTask('winZip', 'Archive Windows Package',
+		['exec:winZip', 'exec:winRmDir']
+	);
+	grunt.registerTask('macZip', 'Archive Mac Package',
+		['exec:macZip', 'exec:macRmDir']
+	);
+	grunt.registerTask('writeVersion', 'Write Version Number',
+		['exec:writeVersion']
+	);
+	grunt.registerTask('clean', 'Clean',
+		['exec:cleanDist']
+	);
+	grunt.registerTask('ci', 'Verify Continuous Integration',
+		['jshint']
+	);
 };

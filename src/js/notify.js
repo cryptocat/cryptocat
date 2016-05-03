@@ -1,3 +1,4 @@
+'use strict';
 Cryptocat.Notify = {
 	sounds: {
 		loggingIn:    (new Audio('../snd/loggingIn.ogg')),
@@ -9,14 +10,12 @@ Cryptocat.Notify = {
 };
 
 (function() {
-	'use strict';
-	
 	for (var sound in Cryptocat.Notify.sounds) {
 		if (hasProperty(Cryptocat.Notify.sounds, sound)) {
 			Cryptocat.Notify.sounds[sound].load();
 			Cryptocat.Notify.sounds[sound].volume = 0.5;
 		}
-	};
+	}
 
 	Cryptocat.Notify.playSound = function(sound) {
 		if (Cryptocat.Me.settings.sounds) {

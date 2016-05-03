@@ -1,7 +1,7 @@
+'use strict';
 Cryptocat.Directories = {};
 
 (function() {
-	'use strict';
 	Cryptocat.Directories.getDirectory = function(preferred, callback) {
 		var home = process.env.HOME;
 		if (process.platform === 'win32') {

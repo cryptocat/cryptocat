@@ -1,6 +1,7 @@
-window.addEventListener('load', function(e) {
-	'use strict';
+/* jshint latedef: false */
+'use strict';
 
+window.addEventListener('load', function(e) {
 	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate([
 		{
 			label: 'Chat',
@@ -91,14 +92,14 @@ window.addEventListener('load', function(e) {
 				click: function() {
 					Remote.shell.openExternal(
 						'https://crypto.cat/help.html'
-					)
+					);
 				}
 			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
 						'https://github.com/cryptocat/cryptocat/issues/'
-					)
+					);
 				}
 			}, {
 				label: 'Check for Updates',
@@ -407,20 +408,24 @@ window.addEventListener('load', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			this.setState({visible: false});
+			var readFile = function(path) {
+				var name = Path.basename(path);
+				FS.readFile(path, function(err, file) {
+					if (err) { return false; }
+					thisChat.window.sendFile(name, file);
+				});
+			};
 			if (e.isTrusted) {
 				var files = e.dataTransfer.files;
 				var paths = [];
-				for (var i in files) {
+				var i = '';
+				for (i in files) {
 					if (hasProperty(files, i)) {
 						paths.push(files[i].path);
 					}
 				}
-				for (var i in paths) { if (hasProperty(paths, i)) {
-					var name = Path.basename(paths[i]);
-					FS.readFile(paths[i], function(err, file) {
-						if (err) { return false; }
-						thisChat.window.sendFile(name, file);
-					});
+				for (i in paths) { if (hasProperty(paths, i)) {
+					readFile(paths[i]);
 				}}
 			}
 			return false;
@@ -477,7 +482,7 @@ window.addEventListener('load', function(e) {
 		},
 		onSubmit: function() {
 			var message = this.state.chatInputText;
-			if (!message.length) { return false; };
+			if (!message.length) { return false; }
 			this.setState({chatInputText: ''});
 			thisChat.sendQueue.messages.push(message);
 			if (!thisChat.sendQueue.isOn) {
@@ -535,10 +540,11 @@ window.addEventListener('load', function(e) {
 				}
 				return 'left';
 			})();
+			var res = {};
 			var sticker = checkIfSticker(info.plaintext);
 			var file    = checkIfFile(info.plaintext);
 			if (sticker.isSticker) {
-				var res = React.createElement(chatSticker, {
+				res = React.createElement(chatSticker, {
 					key: this.state.key,
 					alignment: alignment,
 					sticker: sticker.sticker,
@@ -548,7 +554,7 @@ window.addEventListener('load', function(e) {
 				file.isFile &&
 				(/^(image)|(recording)$/).test(file.file.type)
 			) {
-				var res = React.createElement(chatMedia, {
+				res = React.createElement(chatMedia, {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
@@ -564,7 +570,7 @@ window.addEventListener('load', function(e) {
 				});
 			}
 			else if (file.isFile) {
-				var res = React.createElement(chatFile, {
+				res = React.createElement(chatFile, {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
@@ -580,7 +586,7 @@ window.addEventListener('load', function(e) {
 				});
 			}
 			else {
-				var res = React.createElement(chatMessage, {
+				res = React.createElement(chatMessage, {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
@@ -602,7 +608,7 @@ window.addEventListener('load', function(e) {
 					thisChat.contents().scrollTop = 
 						thisChat.contents().scrollHeight;
 				}, 100);
-			})
+			});
 		},
 		sendSticker: function(e) {
 			var sticker = 'CryptocatSticker:' + 
@@ -796,7 +802,7 @@ window.addEventListener('load', function(e) {
 						return _t.state.to + ' is typing...';
 					}
 					if (!_t.state.connected) {
-						return 'You are not currently connected to Cryptocat.'
+						return 'You are not currently connected to Cryptocat.';
 					}
 					return _t.state.to + _t.statusMessages[_t.state.status];
 				})())),
@@ -942,7 +948,7 @@ window.addEventListener('load', function(e) {
 				})))
 			]);
 		}
-	})
+	});
 
 	var thisChat = {
 		window: ReactDOM.render(
@@ -971,7 +977,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.turnOff();
 						return false;
 					}
-					if ((Date.now() - thisChat.sendQueue.lastRecv) < 500) {
+					if ((Date.now() - thisChat.sendQueue.lastRecv) < 100) {
 						return false;
 					}
 					IPCRenderer.sendSync(
@@ -980,7 +986,7 @@ window.addEventListener('load', function(e) {
 						thisChat.sendQueue.messages[0]
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
-				}, 500);
+				}, 100);
 				thisChat.sendQueue.isOn = true;
 			},
 			turnOff: function() {
@@ -1017,12 +1023,15 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('chat.openDialog', function(e, paths) {
-		for (var i in paths) { if (hasProperty(paths, i)) {
-			var name = Path.basename(paths[i]);
-			FS.readFile(paths[i], function(err, file) {
+		var readFile = function(path) {
+			var name = Path.basename(path);
+			FS.readFile(path, function(err, file) {
 				if (err) { return false; }
 				thisChat.window.sendFile(name, file);
 			});
+		};
+		for (var i in paths) { if (hasProperty(paths, i)) {
+			readFile(paths[i]);
 		}}
 	});
 
@@ -1113,7 +1122,7 @@ window.addEventListener('load', function(e) {
 	document.addEventListener('dragenter', function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		thisChat.chatFileDragOverlayCounter++;
+		thisChat.chatFileDragOverlayCounter += 1;
 		thisChat.chatFileDragOverlay.setState({visible: true});
 		return false;
 	}, false);
@@ -1121,7 +1130,7 @@ window.addEventListener('load', function(e) {
 	document.addEventListener('dragleave', function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		thisChat.chatFileDragOverlayCounter--;
+		thisChat.chatFileDragOverlayCounter -= 1;
 		if (thisChat.chatFileDragOverlayCounter <= 0) {
 			thisChat.chatFileDragOverlay.setState({visible: false});
 		}
@@ -1152,6 +1161,20 @@ window.addEventListener('load', function(e) {
 
 	window.addEventListener('beforeunload', function(e) {
 		var unread = thisChat.window.state.unread;
+		var unsavedFilesDiag = function() {
+			Cryptocat.Diag.message.unsavedFiles(function(response) {
+				if (response === 1) {
+					Remote.getCurrentWindow().destroy();
+				}
+			});
+		};
+		var unsentFilesDiag = function() {
+			Cryptocat.Diag.message.unsentFiles(function(response) {
+				if (response === 1) {
+					Remote.getCurrentWindow().destroy();
+				}
+			});
+		};
 		thisChat.window.state.unread = 0;
 		if (proc.platform === 'darwin') {
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
@@ -1167,11 +1190,7 @@ window.addEventListener('load', function(e) {
 				!thisChat.window.files[file].state.saved
 			) {
 				e.returnValue = 'false';
-				Cryptocat.Diag.message.unsavedFiles(function(response) {
-					if (response === 1) {
-						Remote.getCurrentWindow().destroy();
-					}
-				});
+				unsavedFilesDiag();
 				break;
 			}
 			else if (
@@ -1180,11 +1199,7 @@ window.addEventListener('load', function(e) {
 				(thisChat.window.files[file].state.progress < 100)
 			) {
 				e.returnValue = 'false';
-				Cryptocat.Diag.message.unsentFiles(function(response) {
-					if (response === 1) {
-						Remote.getCurrentWindow().destroy();
-					}
-				});
+				unsentFilesDiag();
 				break;
 			}
 		}

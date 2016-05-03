@@ -1,8 +1,7 @@
+'use strict';
 Cryptocat.Pinning = {};
 
 (function() {
-'use strict';
-
 var fingerprint = '9C:DC:80:19:8E:E1:32:A6:7E:B3:D4:EE:9E:CB:C5:BF:4E:50:BB:68';
 var issuerCn    = 'Gandi Standard SSL CA 2';
 var subjectCn   = 'crypto.cat';

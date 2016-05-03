@@ -1,6 +1,6 @@
-window.addEventListener('load', function(e) {
-	'use strict';
+'use strict';
 
+window.addEventListener('load', function(e) {
 	var device = React.createClass({
 		displayName: 'device',
 		getInitialState: function() {

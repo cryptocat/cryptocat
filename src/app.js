@@ -1,3 +1,4 @@
+'use strict';
 const Electron      = require('electron');
 const BrowserWindow = require('browser-window');
 const FS            = require('fs');
@@ -8,8 +9,30 @@ var TrayIcon     = {};
 var MenuSettings = {notify: false, sounds: false, typing: false};
 var IntentToQuit = false;
 
-var handleStartupEvent = function() {
-	if (process.platform === 'linux') {
+var handleStartupEvent = {
+	win32: function() {
+		const childProc = require('child_process');
+		const AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
+		if (process.argv[1] === '--squirrel-install') {
+			childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
+				cwd: AppDataDir, timeout: 10000
+			});
+			Electron.app.quit();
+		}
+		if (process.argv[1] === '--squirrel-updated') {
+			childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
+				cwd: AppDataDir, timeout: 10000
+			});
+			Electron.app.quit();
+		}
+		if (process.argv[1] === '--squirrel-obsolete') {
+			Electron.app.quit();
+		}
+		if (process.argv[1] === '--squirrel-uninstall') {
+			Electron.app.quit();
+		}
+	},
+	linux: function() {
 		var shortcut = '[Desktop Entry]\n';
 		var path     = Path.join(process.env.HOME, '.local');
 		var exePath  = Electron.app.getPath('exe');
@@ -20,7 +43,7 @@ var handleStartupEvent = function() {
 		shortcut    += 'Terminal=false\n';
 		shortcut    += 'Type=Application\n';
 		shortcut    += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
-		shortcut    += 'Comment=Easy, secure chat for your computer.'
+		shortcut    += 'Comment=Easy, secure chat for your computer.';
 		FS.stat(path, function(err, stats) {
 			if (!stats.isDirectory()) {
 				FS.mkdirSync(path, '0o700');
@@ -42,31 +65,14 @@ var handleStartupEvent = function() {
 			});
 		});
 		return false;
-	}
-	else if (process.platform === 'darwin') {
+	},
+	darwin: function() {
 		return false;
 	}
-	const childProc = require('child_process');
-	const AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
-	if (process.argv[1] === '--squirrel-install') {
-		childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
-			cwd: AppDataDir, timeout: 10000
-		});
-		Electron.app.quit();
-	}
-	if (process.argv[1] === '--squirrel-updated') {
-		childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
-			cwd: AppDataDir, timeout: 10000
-		});
-		Electron.app.quit();
-	}
-	if (process.argv[1] === '--squirrel-obsolete') {
-		Electron.app.quit();
-	}
-	if (process.argv[1] === '--squirrel-uninstall') {
-		Electron.app.quit();
-	}
-}; if (handleStartupEvent()) { return false };
+};
+if (handleStartupEvent[process.platform]()) {
+	return false;
+}
 
 var buildTrayMenu = function(settings) {
 	var menu = Electron.Menu.buildFromTemplate([
@@ -156,7 +162,7 @@ var buildTrayMenu = function(settings) {
 				Windows.main.webContents.send('main.beforeQuit');
 			}
 		}));
-	};
+	}
 	return menu;
 };
 
@@ -293,7 +299,6 @@ var buildMainMenu = function(settings) {
 					role: 'selectall'
 			}]}, {
 				label: 'Help',
-				label: 'Help',
 				role: 'help',
 				id: '4',
 				enabled: true,
@@ -302,15 +307,15 @@ var buildMainMenu = function(settings) {
 					click: function() {
 						Electron.shell.openExternal(
 							'https://crypto.cat/help.html'
-						)
+						);
 					}
 				}, {
 					label: 'Report a Bug',
 					click: function() {
 						Electron.shell.openExternal(
 							'https://github.com/cryptocat/cryptocat/issues/'
-						)
-				}
+						);
+					}
 				}, {
 					label: 'Check for Updates',
 					click: function() {
@@ -334,18 +339,22 @@ var buildMainMenu = function(settings) {
 				label: 'Reload',
 				accelerator: 'CmdOrCtrl+R',
 				click: function(item, focusedWindow) {
-					if (focusedWindow) focusedWindow.reload();
+					if (focusedWindow) {
+						focusedWindow.reload();
+					}
 				}
 			},
 			{
 				label: 'Developer Tools',
 				accelerator: 'Shift+CmdOrCtrl+I',
 				click: function(item, focusedWindow) {
-					if (focusedWindow) focusedWindow.toggleDevTools();
+					if (focusedWindow) {
+						focusedWindow.toggleDevTools();
+					}
 				}
 			}]
 		}));
-	};
+	}
 	return menu;
 };
 

@@ -1,3 +1,4 @@
+'use strict';
 Cryptocat.Update = {
 	clientURIs: {
 		win32:  'https://download.crypto.cat/client/Cryptocat-win32-x64.zip',
@@ -23,10 +24,8 @@ Cryptocat.Update = {
 };
 
 (function() {
-	'use strict';
-
 	var compareVersionStrings = function(local, remote) {
-		if (local === remote) { return false; };
+		if (local === remote) { return false; }
 		var l = local.split('.');
 		var r = remote.split('.');
 		if (parseInt(r[0]) > parseInt(l[0])) {

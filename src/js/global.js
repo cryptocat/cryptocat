@@ -72,7 +72,7 @@
 		global.Remote = Remote;
 		global.proc = {
 			platform: process.platform
-		}
+		};
 		global.setImmediate = _setImmediate;
 		global.clearImmediate = _clearImmediate;
 		global.__gdirname = __dirname;

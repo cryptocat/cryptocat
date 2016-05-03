@@ -1,6 +1,6 @@
-window.addEventListener('load', function(e) {
-	'use strict';
+'use strict';
 
+window.addEventListener('load', function(e) {
 	var addDevice = React.createClass({
 		displayName: 'addDevice',
 		getInitialState: function() {
@@ -45,9 +45,9 @@ window.addEventListener('load', function(e) {
 			this.setState({
 				icon: parseInt(e.target.getAttribute('data-icon'))
 			});
-			for (var i = 0; i < 3; i++) {
+			for (var i = 0; i < 3; i += 1) {
 				icons[i].setAttribute('data-selected', 'false');
-			};
+			}
 			icon.setAttribute('data-selected', 'true');
 		},
 		render: function() {
