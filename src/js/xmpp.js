@@ -236,15 +236,17 @@ Cryptocat.XMPP = {};
 		) {
 			s = 1;
 		}
-		client.subscribeToNode(
-			local.username + '@crypto.cat', 'urn:xmpp:omemo:0:devicelist'
-		);
-		Cryptocat.XMPP.getDeviceList(local.username);
-		Cryptocat.Win.main.roster.updateBuddyStatus(
-			local.username, s, (
-				Math.floor(Date.now() / 1000) > (client.connectDate + 10)
-			)
-		);
+		if (s !== Cryptocat.Win.main.roster.buddies[local.username].props.status) {
+			client.subscribeToNode(
+				local.username + '@crypto.cat', 'urn:xmpp:omemo:0:devicelist'
+			);
+			Cryptocat.XMPP.getDeviceList(local.username);
+			Cryptocat.Win.main.roster.updateBuddyStatus(
+				local.username, s, (
+					Math.floor(Date.now() / 1000) > (client.connectDate + 10)
+				)
+			);
+		}
 	};
 
 	handler.roster = function(roster) {
