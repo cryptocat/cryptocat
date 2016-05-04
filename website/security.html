@@ -52,7 +52,7 @@
 			<hr />
 			<h2 id="overview">Encryption Overview</h2>
 			<p>
-				Cryptocat uses a TextSecure-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging. In terms of the transport layer, Cryptocat uses XMPP over a long-standing, TLS-encrypted WebSockets connection.
+				Cryptocat uses a Double Ratchet-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging. In terms of the transport layer, Cryptocat uses XMPP over a long-standing, TLS-encrypted WebSockets connection.
 			</p>
 			<p>
 				Every Cryptocat device owns a long-term <span class="code">identityKeyPair</span> which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
@@ -60,6 +60,17 @@
 			<p>
 				Between messages, Cryptocat maintains a forward-secure ratcheting chain that derives new ephemeral key pairs that keep their chain of authenticity by mixing in with the authenticated key exchanged via a Hash-Based Key Derivation Function (HKDF).
 			</p>
+			<h3>File Sharing</h3>
+			<p>
+				Cryptocat software provides users with the ability to share documents, video recordings, photos and other such media. These are all threated as the same type of plaintext (a "file") and are all handled as follows:
+			</p>
+			<ul>
+				<li>A 256-bit <span class="code">AES-GCM</span> <span class="code">fileKey</a> is randomly chosen and used to symmetrically encrypt the file.</li>
+				<li>The encrypted file is then uploaded to a Cryptocat server where it is stored for 30 days. The Cryptocat server obtains the encrypted file and is able to determine its size, but is nevertheless not able to determine anything else about the file, including its type or file name.</li>
+				<li>The sender then sends the <span class="code">fileKey</a> and its corresponding <span class="code">AES-GCM</span> <span class="code">fileNonce</span>, <span class="code">fileTag</a> to the user, along with a <span class="code">fileUrl</span> pointer to where the encrypted file can be fetched from the Cryptocat network and a <span class="code">fileName</span> value indicating the name of the file. This information is communicated a specially formatted, but nevertheless regularly encrypted Cryptocat chat message.</li>
+				<li>The recipient's client parses the chat message as one that is pointing to a file, downloads the ciphertext from <span class="code">fileUrl</span>, decrypts it with <span class="code">fileKey</span> and <span class="code">fileNonce</span> and authenticates it with <span class="code">fileTag</span>.</li>
+				<li>If decryption and authentication are successful, the file is presented to the recipient for viewing or download, depending on what is appropriate for the file type.</li>
+			</ul>
 			<h3>Primitives</h3>
 			<ul>
 				<li><em>AES</em> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
@@ -68,7 +79,7 @@
 				<li><em>SHA256</em> is used as the standard hashing function and as the underlying hash function for the HKDF.</li>
 			</ul>
 			<h3>Threat Model</h3>
-			Cryptocat makes the following assumptions:
+			<p>Cryptocat makes the following assumptions:</p>
 			<ul>
 				<li><em>Untrusted network</em>: We assume that an attacker controls the network and so can intercept, tamper with and inject network messages.</li>
 				<li><em>Long-term key compromise</em>: We assume that an attacker may at some point compromise the long-term <span class="code">identityKeyPair</span> of a participant.</li>
@@ -79,7 +90,7 @@
 				<li><em>Secrecy</em>: A message sent between buddies can only be decrypted between these buddies.</li>
 				<li><em>Authenticity</em>: If Alice receive an apparently valid message from Bob, then Bob must have sent this message to Alice.</li>
 				<li><em>Indistinguishability</em>: If Alice randomly chooses between two messages of the same size and sends only one to Bob, an attacker cannot determine which message was sent.</li>
-				<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is susbsequently compromised, all previous messages retain their Secrecy property.</li>
+				<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is subsequently compromised, all previous messages retain their Secrecy property.</li>
 				<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
 			</ul>
 			<hr />
