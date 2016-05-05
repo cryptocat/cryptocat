@@ -478,50 +478,50 @@ Cryptocat.OMEMO = {};
 	};
 
 	Cryptocat.OMEMO.onGetDeviceList = function(username, deviceIds) {
-			console.info('Cryptocat.OMEMO', username + ' has a new deviceList.');
-			var userBundles = Cryptocat.Me.settings.userBundles;
-			deviceIds = deviceIds.filter(function(item, pos) {
-				return deviceIds.indexOf(item) === pos;
-			});
-			console.info(deviceIds);
-			if (username === Cryptocat.Me.username) {
-				Cryptocat.XMPP.sendBundle();
-				if (deviceIds.indexOf(Cryptocat.Me.settings.deviceId) < 0) {
-					Cryptocat.XMPP.sendDeviceList(deviceIds.concat(
-						[Cryptocat.Me.settings.deviceId]
-					));
-					setTimeout(function() {
-						Cryptocat.XMPP.getDeviceList(username);
-					}, 2000);
-				} else {
-					Cryptocat.Me.settings.deviceIds = deviceIds;
-				}
+		console.info('Cryptocat.OMEMO', username + ' has a new deviceList.');
+		var userBundles = Cryptocat.Me.settings.userBundles;
+		deviceIds = deviceIds.filter(function(item, pos) {
+			return deviceIds.indexOf(item) === pos;
+		});
+		console.info(deviceIds);
+		if (username === Cryptocat.Me.username) {
+			Cryptocat.XMPP.sendBundle();
+			if (deviceIds.indexOf(Cryptocat.Me.settings.deviceId) < 0) {
+				Cryptocat.XMPP.sendDeviceList(deviceIds.concat(
+					[Cryptocat.Me.settings.deviceId]
+				));
+				setTimeout(function() {
+					Cryptocat.XMPP.getDeviceList(username);
+				}, 2000);
 			} else {
+				Cryptocat.Me.settings.deviceIds = deviceIds;
+			}
+		} else {
+			if (
+				(Cryptocat.Win.main.roster.getBuddyStatus(username) === 0) &&
+				deviceIds.length
+			) {
+				Cryptocat.Win.main.roster.updateBuddyStatus(username, 1, false);
+			}
+			if (!deviceIds.length) {
+				Cryptocat.Win.main.roster.updateBuddyStatus(username, 0, false);
+			}
+		}
+		if (hasProperty(userBundles, username)) {
+			for (var userBundle in userBundles[username]) {
 				if (
-					(Cryptocat.Win.main.roster.getBuddyStatus(username) === 0) &&
-					deviceIds.length
+					hasProperty(userBundles[username], userBundle) &&
+					(userBundle !== Cryptocat.Me.settings.deviceId) &&
+					(deviceIds.indexOf(userBundle) < 0)
 				) {
-					Cryptocat.Win.main.roster.updateBuddyStatus(username, 1, false);
-				}
-				if (!deviceIds.length) {
-					Cryptocat.Win.main.roster.updateBuddyStatus(username, 0, false);
+					delete userBundles[username][userBundle];
 				}
 			}
-			if (hasProperty(userBundles, username)) {
-				for (var userBundle in userBundles[username]) {
-					if (
-						hasProperty(userBundles[username], userBundle) &&
-						(userBundle !== Cryptocat.Me.settings.deviceId) &&
-						(deviceIds.indexOf(userBundle) < 0)
-					) {
-						delete userBundles[username][userBundle];
-					}
-				}
-			}
-			for (var i = 0; i < deviceIds.length; i += 1) {
-				Cryptocat.XMPP.getBundle(username, deviceIds[i]);
-			}
-		};
+		}
+		for (var i = 0; i < deviceIds.length; i += 1) {
+			Cryptocat.XMPP.getBundle(username, deviceIds[i]);
+		}
+	};
 
 	Cryptocat.OMEMO.onGetBundle = function(username, deviceId, userBundle) {
 		var isNewUser = false;
