@@ -8,6 +8,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-jscs');
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -75,7 +76,7 @@ module.exports = function(grunt) {
 		'string-replace': {
 			dist: {
 				files: {
-					'src/': ['src/package.json', 'src/js/version.js'],
+					'src/': ['src/package.json', 'src/js/version.js']
 				},
 				options: {
 					replacements: [
@@ -85,7 +86,7 @@ module.exports = function(grunt) {
 						},
 						{
 							pattern: /Cryptocat\.Version = '(\d|\.){5,8}';/,
-							replacement: 'Cryptocat.Version = ' + "'" + VERSION + "';"
+							replacement: 'Cryptocat.Version = ' + '\'' + VERSION + '\';'
 						}
 					]
 				}
@@ -104,15 +105,36 @@ module.exports = function(grunt) {
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
 			macRmDir: 'rm -r dist/Cryptocat.app',
-			winWriteVer: "awk -vORS= ' BEGIN { print \"" + VERSION + "\" } ' > dist/version.txt",
+			winWriteVer: 'awk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
 			writeVer: 'echo ' + VERSION + ' > dist/version.txt'
 		},
 		jshint: {
 			options: {
-				jshintrc: '.jshintrc',
+				jshintrc: '.jshintrc'
 			},
 			files: [
-				'Gruntfile.js',
+				'src/app.js',
+				'src/js/win/*.js',
+				'src/js/diag.js',
+				'src/js/directories.js',
+				'src/js/file.js',
+				'src/js/global.js',
+				'src/js/notify.js',
+				'src/js/omemo.js',
+				'src/js/patterns.js',
+				'src/js/pinning.js',
+				'src/js/recording.js',
+				'src/js/storage.js',
+				'src/js/update.js',
+				'src/js/version.js',
+				'src/js/xmpp.js'
+			]
+		},
+		jscs: {
+			options: {
+				config: '.jscsrc'
+			},
+			src: [
 				'src/app.js',
 				'src/js/win/*.js',
 				'src/js/diag.js',
@@ -131,7 +153,7 @@ module.exports = function(grunt) {
 			]
 		}
 	});
-	
+
 	grunt.registerTask('win', 'Create Windows Package', [
 		'string-replace:dist',
 		'electron:windows',
@@ -168,6 +190,6 @@ module.exports = function(grunt) {
 		['shell:cleanDist']
 	);
 	grunt.registerTask('ci', 'Verify Continuous Integration',
-		['jshint']
+		['jshint', 'jscs']
 	);
 };

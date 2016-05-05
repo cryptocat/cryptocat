@@ -4,9 +4,7 @@ install: true
 
 before_script:
   - "npm install -g grunt-cli"
-  - "npm install grunt"
-  - "npm install grunt-contrib-jshint"
-  - "npm install jshint"
+  - "npm install grunt grunt-contrib-jshint jshint grunt-jscs jscs"
 
 script:
   - "grunt ci"

@@ -208,7 +208,7 @@ var buildMainMenu = function(settings) {
 					type: 'checkbox',
 					checked: settings.sounds,
 					click: function(e) {
-							Windows.main.webContents.send(
+						Windows.main.webContents.send(
 							'main.updateSoundsSetting',
 							e.checked
 						);
@@ -235,8 +235,8 @@ var buildMainMenu = function(settings) {
 				label: 'Log Out',
 				click: function(e) {
 					Windows.main.webContents.send('main.logOut');
-					}
-				}, {
+				}
+			}, {
 					type: 'separator'
 				}, {
 					label: 'Hide',
@@ -297,7 +297,7 @@ var buildMainMenu = function(settings) {
 					label: 'Select All',
 					accelerator: 'CmdOrCtrl+A',
 					role: 'selectall'
-			}]}, {
+				}]}, {
 				label: 'Help',
 				role: 'help',
 				id: '4',
@@ -411,7 +411,7 @@ var buildMacMenu = function(settings) {
 	}
 	return menu;
 };
-	
+
 Electron.app.on('ready', function() {
 	if (process.platform !== 'darwin') {
 		TrayIcon = new Electron.Tray(
@@ -451,15 +451,14 @@ Electron.app.on('ready', function() {
 		Electron.app.dock.setMenu(buildTrayMenu({
 			notify: false,
 			sounds: false,
-			typing: false,
+			typing: false
 		}));
 		Electron.Menu.setApplicationMenu(buildMacMenu({
 			notify: false,
 			sounds: false,
 			typing: false
 		}));
-	}
-	else {
+	} else {
 		TrayIcon.setToolTip('Cryptocat');
 		TrayIcon.setContextMenu(buildTrayMenu({
 			notify: false,
@@ -532,8 +531,7 @@ Electron.ipcMain.on('app.updateMenuSettings', function(e, settings) {
 	if (process.platform === 'darwin') {
 		Electron.Menu.setApplicationMenu(buildMacMenu(settings));
 		Electron.app.dock.setMenu(buildTrayMenu(settings));
-	}
-	else {
+	} else {
 		Windows.main.setMenu(buildMainMenu(settings));
 		TrayIcon.setContextMenu(buildTrayMenu(settings));
 	}

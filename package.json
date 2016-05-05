@@ -12,12 +12,13 @@
   "devDependencies": {
     "electron-prebuilt": "latest",
     "grunt": "latest",
+    "grunt-contrib-jshint": "latest",
     "grunt-electron": "latest",
     "grunt-electron-installer": "latest",
+    "grunt-jscs": "latest",
     "grunt-shell": "latest",
     "grunt-string-replace": "latest",
-	"grunt-contrib-jshint": "latest",
-	"jshint": "latest"
+    "jshint": "latest"
   },
   "scripts": {
     "setup": "npm install",
