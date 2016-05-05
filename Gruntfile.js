@@ -114,20 +114,8 @@ module.exports = function(grunt) {
 			},
 			files: [
 				'src/app.js',
-				'src/js/win/*.js',
-				'src/js/diag.js',
-				'src/js/directories.js',
-				'src/js/file.js',
-				'src/js/global.js',
-				'src/js/notify.js',
-				'src/js/omemo.js',
-				'src/js/patterns.js',
-				'src/js/pinning.js',
-				'src/js/recording.js',
-				'src/js/storage.js',
-				'src/js/update.js',
-				'src/js/version.js',
-				'src/js/xmpp.js'
+				'src/js/*.js',
+				'src/js/win/*.js'
 			]
 		},
 		jscs: {
@@ -136,20 +124,8 @@ module.exports = function(grunt) {
 			},
 			src: [
 				'src/app.js',
-				'src/js/win/*.js',
-				'src/js/diag.js',
-				'src/js/directories.js',
-				'src/js/file.js',
-				'src/js/global.js',
-				'src/js/notify.js',
-				'src/js/omemo.js',
-				'src/js/patterns.js',
-				'src/js/pinning.js',
-				'src/js/recording.js',
-				'src/js/storage.js',
-				'src/js/update.js',
-				'src/js/version.js',
-				'src/js/xmpp.js'
+				'src/js/*.js',
+				'src/js/win/*.js'
 			]
 		}
 	});
