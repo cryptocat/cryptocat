@@ -45,7 +45,6 @@ var Cryptocat = {
 	},
 	Diag: {},
 	Storage: {},
-	Axolotl: {},
 	OMEMO: {},
 	Version: '',
 	Update: {},

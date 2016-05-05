@@ -1,4 +1,4 @@
-Cryptocat.Axolotl = {};
+var DR = {};
 
 (function() {
 const Type_key = {
@@ -683,7 +683,7 @@ const HANDLE = {
 	}
 }
 
-const Axolotl = {	
+const TOPLEVEL = {	
 	newSession: function(
 		mySignedPreKey, myPreKey, theirIdentityKeyPub,
 		theirIdentityDHKeyPub, theirSignedPreKeyPub,
@@ -758,12 +758,12 @@ const Axolotl = {
 	}
 }
 
-Cryptocat.Axolotl = {
+DR = {
 	newIdentityKey: UTIL.newIdentityKey,
 	getDHPublicKey: UTIL.getDHPublicKey,
 	newKeyPair:     UTIL.newKeyPair,
-	newSession:     Axolotl.newSession,
-	send:           Axolotl.send,
-	recv:           Axolotl.recv
+	newSession:     TOPLEVEL.newSession,
+	send:           TOPLEVEL.send,
+	recv:           TOPLEVEL.recv
 }
 })();

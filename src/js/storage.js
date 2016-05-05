@@ -146,7 +146,7 @@ Cryptocat.Storage = {};
 	};
 
 	Cryptocat.Storage.updateUserBundles = function(
-		username, user, userBundles, overwriteAxolotl, callback
+		username, user, userBundles, overwriteDr, callback
 	) {
 		var bundleObj = {};
 		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
@@ -167,10 +167,10 @@ Cryptocat.Storage = {};
 			bundleObj[
 				bundle + '.preKeys'
 			] = dBundle.preKeys;
-			if (overwriteAxolotl) {
+			if (overwriteDr) {
 				bundleObj[
-					bundle + '.axolotl'
-				] = dBundle.axolotl;
+					bundle + '.dr'
+				] = dBundle.dr;
 			}
 		}}
 		db.update({_id: username},

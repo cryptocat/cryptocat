@@ -23,6 +23,7 @@
 	"node": true,
 	"globals": {
 		"Cryptocat": true,
+		"DR": true,
 		"NodeCrypto": true,
 		"HTTPS": true,
 		"Remote": true,

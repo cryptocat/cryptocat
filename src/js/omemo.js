@@ -407,8 +407,8 @@ Cryptocat.OMEMO = {};
 	};
 
 	Cryptocat.OMEMO.onAddDevice = function(deviceName, deviceIcon) {
-		var identityKey = Cryptocat.Axolotl.newIdentityKey();
-		var identityDHKey = Cryptocat.Axolotl.getDHPublicKey(identityKey.priv);
+		var identityKey = DR.newIdentityKey();
+		var identityDHKey = DR.getDHPublicKey(identityKey.priv);
 		var deviceId = ProScript.encoding.byteArrayToHexString(
 			ProScript.crypto.random32Bytes('o0')
 		);
@@ -436,14 +436,14 @@ Cryptocat.OMEMO = {};
 	Cryptocat.OMEMO.refreshOwnBundle = function(identityKey, callback) {
 		console.info('Cryptocat.OMEMO:', 'Refreshing own bundle.');
 		var now = Math.floor(Date.now() / 1000);
-		var signedPreKey = Cryptocat.Axolotl.newKeyPair();
+		var signedPreKey = DR.newKeyPair();
 		var signedPreKeySignature = ProScript.crypto.ED25519.signature(
 			ProScript.encoding.byteArrayToHexString(signedPreKey.pub),
 			identityKey.priv, identityKey.pub
 		);
 		var preKeys = [];
 		for (var i = 0; i < 100; i += 1) {
-			preKeys.push(Cryptocat.Axolotl.newKeyPair());
+			preKeys.push(DR.newKeyPair());
 		}
 		Cryptocat.Storage.updateUser(Cryptocat.Me.username, {
 			signedPreKey: signedPreKey,
@@ -464,15 +464,15 @@ Cryptocat.OMEMO = {};
 		if (
 			!hasProperty(userBundles, username) ||
 			!hasProperty(userBundles[username], deviceId) ||
-			!hasProperty(userBundles[username][deviceId], 'axolotl')
+			!hasProperty(userBundles[username][deviceId], 'dr')
 		) {
 			return false;
 		}
 		console.info(
 			'Cryptocat.OMEMO',
-			'Rebuilding Axolotl session with ' + username
+			'Rebuilding DR session with ' + username
 		);
-		delete userBundles[username][deviceId].axolotl;
+		delete userBundles[username][deviceId].dr;
 		Cryptocat.OMEMO.sendMessage(username, '');
 		return true;
 	};
@@ -611,32 +611,32 @@ Cryptocat.OMEMO = {};
 		res.payload.tag = messageEnc.tag;
 		for (var deviceId in bundles) { if (hasProperty(bundles, deviceId)) {
 			if (
-				!hasProperty(bundles[deviceId], 'axolotl') ||
-				!hasProperty(bundles[deviceId].axolotl, 'myEphemeralKeyP4')
+				!hasProperty(bundles[deviceId], 'dr') ||
+				!hasProperty(bundles[deviceId].dr, 'myEphemeralKeyP4')
 			) {
 				var preKeyId = Cryptocat.OMEMO.selectPreKey(username, deviceId);
 				var iK = bundles[deviceId].identityKey.substr(0, 64);
 				var iDHK = bundles[deviceId].identityKey.substr(64, 128);
 				console.info(
 					'Cryptocat.OMEMO',
-					'Setting up new Axolotl session with ' + username
+					'Setting up new DR session with ' + username
 				);
-				bundles[deviceId].axolotl = Cryptocat.Axolotl.newSession(
+				bundles[deviceId].dr = DR.newSession(
 					Cryptocat.Me.settings.signedPreKey,
-					Cryptocat.Axolotl.newKeyPair(), iK, iDHK,
+					DR.newKeyPair(), iK, iDHK,
 					bundles[deviceId].signedPreKey,
 					bundles[deviceId].signedPreKeySignature,
 					bundles[deviceId].preKeys[preKeyId], preKeyId
 				);
 			}
-			var next = Cryptocat.Axolotl.send(
+			var next = DR.send(
 				Cryptocat.Me.settings.identityKey,
-				bundles[deviceId].axolotl,
+				bundles[deviceId].dr,
 				ProScript.encoding.byteArrayToHexString(messageKey)
 			);
 			if (next.output.valid) {
 				res.devices[deviceId] = next.output;
-				bundles[deviceId].axolotl = next.them;
+				bundles[deviceId].dr = next.them;
 			}
 		}}
 		Cryptocat.XMPP.sendMessage(username, res);
@@ -666,28 +666,28 @@ Cryptocat.OMEMO = {};
 			encrypted.from
 		][encrypted.sid];
 		if (
-			!hasProperty(bundle, 'axolotl') ||
-			!bundle.axolotl.established ||
-			!hasProperty(bundle.axolotl, 'myEphemeralKeyP4') ||
+			!hasProperty(bundle, 'dr') ||
+			!bundle.dr.established ||
+			!hasProperty(bundle.dr, 'myEphemeralKeyP4') ||
 			!(/^0+$/).test(encrypted.key.initEphemeralKey)
 		) {
 			var iK = bundle.identityKey.substr(0, 64);
 			var iDHK = bundle.identityKey.substr(64, 128);
 			console.info(
 				'Cryptocat.OMEMO',
-				'Setting up new Axolotl session with ' + encrypted.from
+				'Setting up new DR session with ' + encrypted.from
 			);
-			bundle.axolotl = Cryptocat.Axolotl.newSession(
+			bundle.dr = DR.newSession(
 				Cryptocat.Me.settings.signedPreKey,
 				Cryptocat.Me.settings.preKeys[encrypted.key.preKeyId],
 				iK, iDHK, bundle.signedPreKey, bundle.signedPreKeySignature,
 				ProScript.crypto.random32Bytes('o4'), parseInt(encrypted.key.preKeyId)
 			);
 		}
-		var next = Cryptocat.Axolotl.recv(
+		var next = DR.recv(
 			Cryptocat.Me.settings.identityKey,
 			Cryptocat.Me.settings.signedPreKey,
-			bundle.axolotl, {
+			bundle.dr, {
 				valid: true,
 				ephemeralKey: ProScript.encoding.hexStringTo32ByteArray(
 					encrypted.key.ephemeralKey
@@ -704,7 +704,7 @@ Cryptocat.OMEMO = {};
 			}
 		);
 		if (next.output.valid) {
-			bundle.axolotl = next.them;
+			bundle.dr = next.them;
 			var message = ProScript.crypto.AESGCMDecrypt(
 				ProScript.encoding.hexStringTo32ByteArray(next.plaintext),
 				ProScript.encoding.hexStringTo12ByteArray(encrypted.iv),
