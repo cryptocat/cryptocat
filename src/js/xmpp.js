@@ -33,7 +33,9 @@ handler.raw = function(raw) {
 			if (
 				hasProperty(res.message,      '$') &&
 				hasProperty(res.message.$, 'from') &&
-				Cryptocat.OMEMO.jidHasUsername(res.message.$.from).valid
+				Cryptocat.OMEMO.jidHasUsername(
+					res.message.$.from
+				).valid
 			) {
 				fromUser = Cryptocat.OMEMO.jidHasUsername(
 					res.message.$.from
