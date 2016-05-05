@@ -78,13 +78,11 @@ Cryptocat.Storage = {};
 			if (doc) {
 				db.update({_id: '*common*'},
 					{$set: newObj}, function(err, newDoc) {
-						db.persistence.compactDatafile();
 						callback(err);
 					}
 				);
 			} else {
 				db.insert(newObj, function(err, newDoc) {
-					db.persistence.compactDatafile();
 					callback(err);
 				});
 			}
@@ -132,13 +130,11 @@ Cryptocat.Storage = {};
 			if (doc) {
 				db.update({_id: username},
 					{$set: newObj}, function(err, newDoc) {
-						db.persistence.compactDatafile();
 						callback(err);
 					}
 				);
 			} else {
 				db.insert(newObj, function(err, newDoc) {
-					db.persistence.compactDatafile();
 					callback(err);
 				});
 			}
@@ -175,7 +171,6 @@ Cryptocat.Storage = {};
 		}}
 		db.update({_id: username},
 			{$set: bundleObj}, function(err, newDoc) {
-				db.persistence.compactDatafile();
 				callback(err);
 			}
 		);
@@ -184,7 +179,9 @@ Cryptocat.Storage = {};
 	Cryptocat.Storage.deleteUser = function(username, callback) {
 		db.remove({_id: username}, {}, function(err) {
 			db.persistence.compactDatafile();
-			callback(err);
+			setTimeout(function() {
+				callback(err);
+			}, 1000);
 		});
 	};
 
