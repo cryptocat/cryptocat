@@ -5,4 +5,5 @@
 	"requireTrailingComma": false,
 	"disallowMultipleSpaces": true,
 	"requireSpaceAfterComma": true,
+	"requireSemicolons": true
 }
