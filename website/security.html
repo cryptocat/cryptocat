@@ -58,7 +58,7 @@
 				Every Cryptocat device owns a long-term <span class="code">identityKeyPair</span> which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
 			</p>
 			<p>
-				Suppose Alice wanted to start a new session with Bob. Alice would then fetch Bob's current `signedPreKey` and his list of 100 `preKey`s from the Cryptocat network. Alice would then select a random `preKey` from the list. Alice then generates her own `initKey` pair, which is a keypair used only for the purposes of initializing a new session. Alice then performs the following computation in order to obtain the initial session secret <span class="code">S</span>:
+				Suppose Alice wanted to start a new session with Bob. Alice would then fetch Bob's current <span class="code">signedPreKey</span> and his list of 100 <span class="code">preKey</span>s from the Cryptocat network. Alice would then select a random <span class="code">preKey</span> from the list. Alice then generates her own <span class="code">initKey</span> pair, which is a keypair used only for the purposes of initializing a new session. Alice then performs the following computation in order to obtain the initial session secret <span class="code">S</span>:
 
 <code>S = SHA256(
 	X25519(AliceIdentityKey, BobSignedPreKey) ||
