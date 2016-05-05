@@ -16,12 +16,15 @@ a:hover {
 }
 
 code {
+	white-space: pre;
 	background: #F0F8FF;
-	padding: 5px;
-	margin: 10px auto 10px auto;
+	padding: 8px 15px;
+	margin: 20px auto;
 	width: 800px;
 	font-family: 'Inconsolata', monospace;
 	display: block;
+	border: 1px solid #96A5B2;
+	border-radius: 2px;
 }
 
 hr {
@@ -41,7 +44,10 @@ span.octicon {
 span.code {
 	font-family: 'Inconsolata', monospace;
 	background: #F0F8FF;
-	padding: 2px;
+	padding: 2px 3px;
+	margin: 0 1px;
+	border: 1px solid #96A5B2;
+	border-radius: 2px;
 }
 
 input[type=text], input[type=password] {

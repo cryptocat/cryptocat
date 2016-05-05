@@ -188,26 +188,26 @@
 				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg2</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg2 --import</span>):
 			</p>
 			<p>
-				<code>
-					-----BEGIN PGP PUBLIC KEY BLOCK-----<br />
-					Version: GnuPG v2<br /><br />
 
-					mDMEVvFWRRYJKwYBBAHaRw8BAQdAhXI9s+Ru4GOKfOw8sP5dI5frhVxcpaGCp9yt<br />
-					uK0JPyG0RE5hZGltIEtvYmVpc3NpIChDcnlwdG9jYXQgQ2xpZW50IFNpZ25pbmcg<br />
-					S2V5KSA8bmFkaW1AbmFkaW0uY29tcHV0ZXI+iH8EExYIACcFAlbxVkUCGwMFCQHh<br />
-					M4AFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQxybHXV2Tw8sKJAEAkjfWGOEU<br />
-					Zb/A62kk5KFw/R4IiI6msapTfoKinodVAHoBAIVivmJxsdvmIdXpmIE1CBg15vo2<br />
-					bO5MCZ3QFFd86WQA<br />
-					=r1T0<br />
-					-----END PGP PUBLIC KEY BLOCK-----
-				</code>
+<code>-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v2
+
+mDMEVvFWRRYJKwYBBAHaRw8BAQdAhXI9s+Ru4GOKfOw8sP5dI5frhVxcpaGCp9yt
+uK0JPyG0RE5hZGltIEtvYmVpc3NpIChDcnlwdG9jYXQgQ2xpZW50IFNpZ25pbmcg
+S2V5KSA8bmFkaW1AbmFkaW0uY29tcHV0ZXI+iH8EExYIACcFAlbxVkUCGwMFCQHh
+M4AFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQxybHXV2Tw8sKJAEAkjfWGOEU
+Zb/A62kk5KFw/R4IiI6msapTfoKinodVAHoBAIVivmJxsdvmIdXpmIE1CBg15vo2
+bO5MCZ3QFFd86WQA
+=r1T0
+-----END PGP PUBLIC KEY BLOCK-----</code>
+
 			</p>
 			<p>
 				After unzipping your download, you can verify its authenticity by running <span class="code">gpg2 --verify Cryptocat.zip.asc Cryptocat.zip</span> in your command line. This should give you a result resembling the following:
-				<code>
-					gpg: Signature made Sat 10 Apr 2016 12:34:56 PM CET using EDDSA key ID 5D93C3CB<br />
-					gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) &lt;nadim@nadim.computer&gt;"
-				</code>
+
+<code>gpg: Signature made Sat 10 Apr 2016 12:34:56 PM CET using EDDSA key ID 5D93C3CB
+gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) &lt;nadim@nadim.computer&gt;"</code>
+
 			</p>
 			<h3>Verifying Cryptocat for Mac</h3>
 			<p>

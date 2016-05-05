@@ -58,7 +58,37 @@
 				Every Cryptocat device owns a long-term <span class="code">identityKeyPair</span> which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
 			</p>
 			<p>
-				Between messages, Cryptocat maintains a forward-secure ratcheting chain that derives new ephemeral key pairs that keep their chain of authenticity by mixing in with the authenticated key exchanged via a Hash-Based Key Derivation Function (HKDF).
+				Suppose Alice wanted to start a new session with Bob. Alice would then fetch Bob's current `signedPreKey` and his list of 100 `preKey`s from the Cryptocat network. Alice would then select a random `preKey` from the list. Alice then generates her own `initKey` pair, which is a keypair used only for the purposes of initializing a new session. Alice then performs the following computation in order to obtain the initial session secret <span class="code">S</span>:
+
+<code>S = SHA256(
+	X25519(AliceIdentityKey, BobSignedPreKey) ||
+	X25519(AliceInitKey, BobIdentityKey)      ||
+	X25519(AliceInitKey, BobSignedPreKey)     ||
+	X25519(AliceInitKey, BobPreKey)
+)
+(AliceReceivingRootKey, AliceReceivingChainKey) = HKDF(S, Constant1, Constant2)</code>
+
+			</p>
+			</li>
+			<p>
+				Between messages, Cryptocat maintains a forward-secure ratcheting chain that creates a new ephemeral key pair for each message, and derives their chain of authenticity by mixing in a chain going back to <span class="code">S</span> via a Hash-Based Key Derivation Function (HKDF). Here is an example occuring later in the conversation, after Bob had also derived a <span class="code">BobMessageEphemeralKey</span> and other session state elements:
+				
+<code>AliceMessageEphemeralKey = X25519_NewKeyPair()
+AliceSharedKey = X25519(AliceMessageEphemeralKey, BobMessageEphemeralKey)
+(AliceSendingRootKey, AliceSendingChainKey) = HKDF(S, AliceReceivingRootKey, Constant2)
+AliceMessageEncryptionKey = HKDF(HMAC(AliceSendingChainKey, Constant3), Constant1, Constant4)
+(AliceEncryptedMessage, AliceEncryptedMessageTag) = AESGCM256(
+	Key:AliceMessageEncryptionKey,
+	Plaintext:AliceMessagePlaintext,
+	AddedData:(
+		AliceMessageEphemeralKeyPublic ||
+		BobMessageEphemeralKeyPublic   ||
+		AliceIdentityKeyPublic         ||
+		BobIdentityKeyPublic
+	)
+)</code>
+				Alice then sends <span class="code">(AliceMessageEphemeralKeyPublic, AliceEncryptedMessage, AliceEncryptedMessageTag)</span>.
+				<span class="code">Constant1</span>, <span class="code">Constant2</span> and <span class="code">Constant3</span> are some publicly known constant strings coded into the protocol implementation.
 			</p>
 			<h3>File Sharing</h3>
 			<p>
