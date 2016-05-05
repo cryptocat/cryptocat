@@ -403,7 +403,7 @@ window.addEventListener('load', function(e) {
 			}
 		},
 		onAuthFailed: function() {
-			Cryptocat.Diag.error.loginInvalid();
+			Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
 			this.setState({
 				disabled: false,
 				display: 'block',
@@ -414,6 +414,7 @@ window.addEventListener('load', function(e) {
 				document.getElementById('renderB')
 			);
 			delete Cryptocat.Win.main.roster;
+			Cryptocat.Diag.error.loginInvalid();
 		},
 		onDisconnect: function() {
 			var _t = this;
