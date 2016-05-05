@@ -1,6 +1,6 @@
 /* jshint quotmark: false */
 'use strict';
-var VERSION = '3.1.19';
+var VERSION = '3.1.20';
 
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-electron');
