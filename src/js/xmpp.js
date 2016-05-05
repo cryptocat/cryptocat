@@ -390,7 +390,7 @@ Cryptocat.XMPP = {};
 			client.connect();
 		});
 	};
-	
+
 	Cryptocat.XMPP.sendMessage = function(to, items) {
 		client.sendMessage({
 			type: 'chat',
