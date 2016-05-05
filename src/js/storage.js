@@ -150,7 +150,7 @@ Cryptocat.Storage = {};
 	) {
 		var bundleObj = {};
 		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
-			var bundle = 'userBundles.' + user  + '.' + deviceId;
+			var bundle = 'userBundles.' + user + '.' + deviceId;
 			var dBundle = userBundles[deviceId];
 			bundleObj[
 				bundle + '.identityKey'

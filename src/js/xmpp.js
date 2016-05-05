@@ -3,8 +3,8 @@
 Cryptocat.XMPP = {};
 
 (function() {
-	var client    = {};
-	var handler   = {};
+	var client = {};
+	var handler = {};
 	var callbacks = {
 		disconnected: {
 			armed: false,
@@ -20,18 +20,18 @@ Cryptocat.XMPP = {};
 
 	handler.raw = function(raw) {
 		XML2JS.parseString(raw, function(err, res) {
-			var fromUser  = Cryptocat.Me.username;
-			var data      = [];
+			var fromUser = Cryptocat.Me.username;
+			var data = [];
 			var deviceIds = [];
-			var deviceId  = '';
+			var deviceId = '';
 			if (err) { return false; }
 			if (
-				hasProperty(res,        'message') &&
-				hasProperty(res.message,  'event')
+				hasProperty(res, 'message') &&
+				hasProperty(res.message, 'event')
 			) {
 				data = res.message.event;
 				if (
-					hasProperty(res.message,      '$') &&
+					hasProperty(res.message, '$') &&
 					hasProperty(res.message.$, 'from') &&
 					Cryptocat.OMEMO.jidHasUsername(
 						res.message.$.from
@@ -42,12 +42,12 @@ Cryptocat.XMPP = {};
 					).username;
 				}
 			} else if (
-				hasProperty(res,        'iq') &&
+				hasProperty(res, 'iq') &&
 				hasProperty(res.iq, 'pubsub')
 			) {
 				data = res.iq.pubsub;
 				if (
-					hasProperty(res.iq,      '$') &&
+					hasProperty(res.iq, '$') &&
 					hasProperty(res.iq.$, 'from') &&
 					Cryptocat.OMEMO.jidHasUsername(res.iq.$.from).valid
 				) {
@@ -56,12 +56,12 @@ Cryptocat.XMPP = {};
 					).username;
 				}
 			} else if (
-				hasProperty(res,        'iq') &&
+				hasProperty(res, 'iq') &&
 				hasProperty(res.iq.$, 'type') &&
 				(res.iq.$.type === 'error')
 			) {
 				deviceIds = Cryptocat.Me.settings.deviceIds;
-				deviceId  = Cryptocat.Me.settings.deviceId;
+				deviceId = Cryptocat.Me.settings.deviceId;
 				if (deviceIds.indexOf(deviceId) < 0) {
 					Cryptocat.XMPP.sendDeviceList(
 						deviceIds.concat([deviceId])
@@ -71,10 +71,10 @@ Cryptocat.XMPP = {};
 				return false;
 			}
 			if (
-				hasProperty(data,                  '0') &&
-				hasProperty(data[0],           'items') &&
-				hasProperty(data[0].items,         '0') &&
-				hasProperty(data[0].items[0],      '$') &&
+				hasProperty(data, '0') &&
+				hasProperty(data[0], 'items') &&
+				hasProperty(data[0].items, '0') &&
+				hasProperty(data[0].items[0], '$') &&
 				hasProperty(data[0].items[0].$, 'node')
 			) {
 				data = data[0].items[0];
@@ -90,10 +90,10 @@ Cryptocat.XMPP = {};
 	handler.devicelist = function(fromUser, data) {
 		var deviceIds = [];
 		if (
-			hasProperty(data,                   'item') &&
-			hasProperty(data.item,                 '0') &&
-			hasProperty(data.item[0],           'list') &&
-			hasProperty(data.item[0].list,         '0')
+			hasProperty(data, 'item') &&
+			hasProperty(data.item, '0') &&
+			hasProperty(data.item[0], 'list') &&
+			hasProperty(data.item[0].list, '0')
 		) {
 			if (!Array.isArray(data.item[0].list[0].device)) {
 				Cryptocat.OMEMO.onGetDeviceList(fromUser, []);
@@ -102,7 +102,7 @@ Cryptocat.XMPP = {};
 			data = data.item[0].list[0].device;
 			for (var i = 0; i < data.length; i += 1) {
 				if (
-					hasProperty(data[i],    '$') &&
+					hasProperty(data[i], '$') &&
 					hasProperty(data[i].$, 'id') &&
 					Cryptocat.Patterns.hex32.test(data[i].$.id)
 				) {
@@ -121,7 +121,7 @@ Cryptocat.XMPP = {};
 	};
 
 	handler.bundle = function(fromUser, data) {
-		var preKeys   = [];
+		var preKeys = [];
 		var deviceId = Cryptocat.OMEMO.nodeHasDeviceId(
 			data.$.node
 		).deviceId;
@@ -133,13 +133,13 @@ Cryptocat.XMPP = {};
 			data.prekeys[0].preKeyPublic
 		);
 		Cryptocat.OMEMO.onGetBundle(fromUser, deviceId, {
-			identityKey:           data.identityKey[0]._,
-			deviceName:            data.identityKey[0].$.deviceName,
-			deviceIcon:            data.identityKey[0].$.deviceIcon,
-			signedPreKey:          data.signedPreKeyPublic[0]._,
-			signedPreKeyId:        data.signedPreKeyPublic[0].$.signedPreKeyId,
+			identityKey: data.identityKey[0]._,
+			deviceName: data.identityKey[0].$.deviceName,
+			deviceIcon: data.identityKey[0].$.deviceIcon,
+			signedPreKey: data.signedPreKeyPublic[0]._,
+			signedPreKeyId: data.signedPreKeyPublic[0].$.signedPreKeyId,
 			signedPreKeySignature: data.signedPreKeySignature[0],
-			preKeys:               preKeys
+			preKeys: preKeys
 		});
 	};
 
@@ -230,7 +230,7 @@ Cryptocat.XMPP = {};
 		var local = Cryptocat.OMEMO.jidHasUsername(data.from.bare);
 		var s = 2;
 		if (
-			!local.valid                               ||
+			!local.valid ||
 			(local.username === Cryptocat.Me.username)
 		) {
 			return false;
@@ -342,7 +342,7 @@ Cryptocat.XMPP = {};
 		});
 		client.on('raw:outgoing', function(raw) {
 		});
-		client.on('session:error',  function(error) {
+		client.on('session:error', function(error) {
 			handler.error(
 				error, username, password, callback
 			);

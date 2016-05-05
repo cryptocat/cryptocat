@@ -1,18 +1,18 @@
 'use strict';
 Cryptocat.Update = {
 	clientURIs: {
-		win32:  'https://download.crypto.cat/client/Cryptocat-win32-x64.zip',
-		linux:  'https://download.crypto.cat/client/Cryptocat-linux-x64.zip',
+		win32: 'https://download.crypto.cat/client/Cryptocat-win32-x64.zip',
+		linux: 'https://download.crypto.cat/client/Cryptocat-linux-x64.zip',
 		darwin: 'https://download.crypto.cat/client/Cryptocat-darwin-x64.zip'
 	},
 	verURIs: {
-		win32:  'https://download.crypto.cat/ver/Cryptocat-win32-x64.txt',
-		linux:  'https://download.crypto.cat/ver/Cryptocat-linux-x64.txt',
+		win32: 'https://download.crypto.cat/ver/Cryptocat-win32-x64.txt',
+		linux: 'https://download.crypto.cat/ver/Cryptocat-linux-x64.txt',
 		darwin: 'https://download.crypto.cat/ver/Cryptocat-darwin-x64.txt'
 	},
 	sigURIs: {
-		win32:  'https://download.crypto.cat/sig/Cryptocat-win32-x64.txt',
-		linux:  'https://download.crypto.cat/sig/Cryptocat-linux-x64.txt',
+		win32: 'https://download.crypto.cat/sig/Cryptocat-win32-x64.txt',
+		linux: 'https://download.crypto.cat/sig/Cryptocat-linux-x64.txt',
 		darwin: 'https://download.crypto.cat/sig/Cryptocat-darwin-x64.txt'
 	},
 	signingKey: [

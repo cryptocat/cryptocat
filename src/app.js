@@ -1,11 +1,11 @@
 'use strict';
-const Electron      = require('electron');
+const Electron = require('electron');
 const BrowserWindow = require('browser-window');
-const FS            = require('fs');
-const Path          = require('path');
+const FS = require('fs');
+const Path = require('path');
 
-var Windows      = {main: null, last: null};
-var TrayIcon     = {};
+var Windows = {main: null, last: null};
+var TrayIcon = {};
 var MenuSettings = {notify: false, sounds: false, typing: false};
 var IntentToQuit = false;
 
@@ -34,16 +34,16 @@ var handleStartupEvent = {
 	},
 	linux: function() {
 		var shortcut = '[Desktop Entry]\n';
-		var path     = Path.join(process.env.HOME, '.local');
-		var exePath  = Electron.app.getPath('exe');
-		var icoPath  = exePath.slice(0, -9) + 'logo.png';
-		shortcut    += 'Name=Cryptocat\n';
-		shortcut    += 'Exec=' + exePath + '\n';
-		shortcut    += 'Icon=' + icoPath + '\n';
-		shortcut    += 'Terminal=false\n';
-		shortcut    += 'Type=Application\n';
-		shortcut    += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
-		shortcut    += 'Comment=Easy, secure chat for your computer.';
+		var path = Path.join(process.env.HOME, '.local');
+		var exePath = Electron.app.getPath('exe');
+		var icoPath = exePath.slice(0, -9) + 'logo.png';
+		shortcut += 'Name=Cryptocat\n';
+		shortcut += 'Exec=' + exePath + '\n';
+		shortcut += 'Icon=' + icoPath + '\n';
+		shortcut += 'Terminal=false\n';
+		shortcut += 'Type=Application\n';
+		shortcut += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
+		shortcut += 'Comment=Easy, secure chat for your computer.';
 		FS.stat(path, function(err, stats) {
 			if (!stats.isDirectory()) {
 				FS.mkdirSync(path, '0o700');

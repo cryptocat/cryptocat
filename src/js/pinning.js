@@ -6,10 +6,10 @@ Cryptocat.Pinning = {};
 		'9C:DC:80:19:8E:E1:32:A6:7E:B3:' +
 		'D4:EE:9E:CB:C5:BF:4E:50:BB:68'
 	);
-	var issuerCn    = 'Gandi Standard SSL CA 2';
-	var subjectCn   = 'crypto.cat';
-	var exponent    = '0x10001';
-	var modulus     = (
+	var issuerCn = 'Gandi Standard SSL CA 2';
+	var subjectCn = 'crypto.cat';
+	var exponent = '0x10001';
+	var modulus = (
 		'C4B6B422A47FB1902A7436FA90AC7B17B4D88DB595CCBA5C3EF8FAE09D0EBB4D' +
 		'44326F15A1DF9D45AF371560D805C3A16182E1133BFEB1E8943190A1161AD1D6' +
 		'DBD1029513A6241CA8D964CB47A4EF502DE360683864387FADCB6A16CBD7D536' +
@@ -25,10 +25,10 @@ Cryptocat.Pinning = {};
 			var cert = res.socket.getPeerCertificate();
 			if (
 				(cert.fingerprint === fingerprint) &&
-				(cert.issuer.CN   ===    issuerCn) &&
-				(cert.subject.CN  ===   subjectCn) &&
-				(cert.exponent    ===    exponent) &&
-				(cert.modulus     ===     modulus)
+				(cert.issuer.CN === issuerCn) &&
+				(cert.subject.CN === subjectCn) &&
+				(cert.exponent === exponent) &&
+				(cert.modulus === modulus)
 			) {
 				callback(true);
 			} else {

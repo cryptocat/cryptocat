@@ -156,13 +156,13 @@ window.addEventListener('load', function(e) {
 			var sticker = message.substr(17);
 			if (stickers.indexOf(sticker) >= 0) {
 				return {
-					sticker:   sticker,
+					sticker: sticker,
 					isSticker: true
 				};
 			}
 		}
 		return {
-			sticker:   '',
+			sticker: '',
 			isSticker: false
 		};
 	};
@@ -339,8 +339,8 @@ window.addEventListener('load', function(e) {
 		},
 		render: function() {
 			var className = 'chatMedia';
-			var renderer  = 'img';
-			var blobType  = 'image/*';
+			var renderer = 'img';
+			var blobType = 'image/*';
 			var loadingExt = 'gif';
 			if (this.props.file.type === 'recording') {
 				renderer = 'video';
@@ -455,21 +455,21 @@ window.addEventListener('load', function(e) {
 		displayName: 'chatWindow',
 		getInitialState: function() {
 			return {
-				recordVisible:   false,
-				connected:       true,
-				status:          -1,
-				key:             0,
-				unread:          0,
-				recordTime:      0,
+				recordVisible: false,
+				connected: true,
+				status: -1,
+				key: 0,
+				unread: 0,
+				recordTime: 0,
 				recordCountdown: 3,
-				fontSize:        12,
-				chatInputText:   '',
-				myChatState:     'paused',
-				theirChatState:  'paused',
-				to:              '',
-				recordSrc:       '',
-				conversation:    [],
-				recordTimer:     {}
+				fontSize: 12,
+				chatInputText: '',
+				myChatState: 'paused',
+				theirChatState: 'paused',
+				to: '',
+				recordSrc: '',
+				conversation: [],
+				recordTimer: {}
 			};
 		},
 		componentDidMount: function() {
@@ -542,7 +542,7 @@ window.addEventListener('load', function(e) {
 			})();
 			var res = {};
 			var sticker = checkIfSticker(info.plaintext);
-			var file    = checkIfFile(info.plaintext);
+			var file = checkIfFile(info.plaintext);
 			if (sticker.isSticker) {
 				res = React.createElement(chatSticker, {
 					key: this.state.key,
@@ -963,7 +963,7 @@ window.addEventListener('load', function(e) {
 		myComposingTimer: {},
 		sendQueue: {
 			messages: [],
-			monitor:  {},
+			monitor: {},
 			isOn: false,
 			lastRecv: 0,
 			turnOn: function() {

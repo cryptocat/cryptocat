@@ -89,7 +89,7 @@ window.addEventListener('load', function(e) {
 			return false;
 		}
 		var file = FS.createWriteStream(path);
-		var cur  = 0;
+		var cur = 0;
 		var hash = NodeCrypto.createHash('sha256');
 		HTTPS.get(Cryptocat.Update.clientURIs[process.platform], function(res) {
 			var len = parseInt(res.headers['content-length'], 10);

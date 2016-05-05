@@ -39,7 +39,7 @@ window.addEventListener('load', function(e) {
 			);
 		},
 		deviceIconSelect: function(e) {
-			var icon  = e.target;
+			var icon = e.target;
 			var icons = document.getElementsByClassName('deviceIcon');
 			this.setState({
 				icon: parseInt(e.target.getAttribute('data-icon'))

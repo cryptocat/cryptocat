@@ -1,11 +1,11 @@
 'use strict';
 Cryptocat.Notify = {
 	sounds: {
-		loggingIn:    (new Audio('../snd/loggingIn.ogg')),
-		loggedIn:     (new Audio('../snd/loggedIn.ogg')),
-		buddyOnline:  (new Audio('../snd/buddyOnline.ogg')),
+		loggingIn: (new Audio('../snd/loggingIn.ogg')),
+		loggedIn: (new Audio('../snd/loggedIn.ogg')),
+		buddyOnline: (new Audio('../snd/buddyOnline.ogg')),
 		buddyOffline: (new Audio('../snd/buddyOffline.ogg')),
-		message:      (new Audio('../snd/message.ogg'))
+		message: (new Audio('../snd/message.ogg'))
 	}
 };
 

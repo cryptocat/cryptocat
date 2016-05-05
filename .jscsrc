@@ -2,5 +2,7 @@
 	"preset": "node-style-guide",
 	"validateIndentation": "\t",
 	"disallowTrailingComma": true,
-	"requireTrailingComma": false
+	"requireTrailingComma": false,
+	"disallowMultipleSpaces": true,
+	"requireSpaceAfterComma": true,
 }

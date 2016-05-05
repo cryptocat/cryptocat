@@ -3,8 +3,8 @@ Cryptocat.Recording = {};
 
 (function() {
 	var mediaRecorder = {};
-	var mediaSource   = {};
-	var sourceBuffer  = {};
+	var mediaSource = {};
+	var sourceBuffer = {};
 	var recordedBlobs = [];
 
 	Cryptocat.Recording.createStream = function(callback) {

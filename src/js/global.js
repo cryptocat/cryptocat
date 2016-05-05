@@ -1,12 +1,12 @@
 (function() {
 'use strict';
-var NodeCrypto    = require('crypto');
-var IPCRenderer   = require('ipc-renderer');
-var HTTPS         = require('https');
-var Remote        = require('remote');
-var FS            = require('fs');
-var Dialog        = Remote.require('dialog');
-var Path          = (function() {
+var NodeCrypto = require('crypto');
+var IPCRenderer = require('ipc-renderer');
+var HTTPS = require('https');
+var Remote = require('remote');
+var FS = require('fs');
+var Dialog = Remote.require('dialog');
+var Path = (function() {
 	if (process.platform === 'win32') {
 		return (require('path')).win32;
 	}

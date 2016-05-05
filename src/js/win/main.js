@@ -1,11 +1,11 @@
 'use strict';
 
 Cryptocat.Win = {
-	main:          {},
-	chat:          {},
-	chatRetainer:  [],
+	main: {},
+	chat: {},
+	chatRetainer: [],
 	deviceManager: {},
-	create:        {}
+	create: {}
 };
 window.addEventListener('load', function(e) {
 	var renderWindowHeight = function(h) {
@@ -128,10 +128,10 @@ window.addEventListener('load', function(e) {
 					status = 1;
 				}
 				var buddy = React.createElement(mainRosterBuddy, {
-					key:          item.jid.local,
-					username:     item.jid.local,
+					key: item.jid.local,
+					username: item.jid.local,
 					subscription: item.subscription,
-					status:       status,
+					status: status,
 					ref: function(b) {
 						_t.renderedBuddies[item.jid.local] = b;
 					}
@@ -152,10 +152,10 @@ window.addEventListener('load', function(e) {
 				return false;
 			}
 			newBuddies[username] = React.createElement(mainRosterBuddy, {
-				key:          username,
-				username:     username,
+				key: username,
+				username: username,
 				subscription: '',
-				status:       status,
+				status: status,
 				ref: function(b) {
 					_t.renderedBuddies[username] = b;
 				}
@@ -199,7 +199,7 @@ window.addEventListener('load', function(e) {
 		},
 		onChangeFilter: function(e) {
 			var _t = this;
-			var f  = e.target.value.toLowerCase();
+			var f = e.target.value.toLowerCase();
 			_t.setState({filter: f}, function() {
 				for (var b in _t.renderedBuddies) {
 					if (hasProperty(_t.renderedBuddies, b)) {
@@ -301,7 +301,7 @@ window.addEventListener('load', function(e) {
 				}
 				if (
 					common &&
-					(screenRes.width  > common.mainWindowBounds.x) &&
+					(screenRes.width > common.mainWindowBounds.x) &&
 					(screenRes.height > common.mainWindowBounds.y)
 				) {
 					Remote.getCurrentWindow().setPosition(
@@ -787,12 +787,12 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.main.beforeQuit = function() {
 		var position = Remote.getCurrentWindow().getPosition();
-		var size     = Remote.getCurrentWindow().getSize();
+		var size = Remote.getCurrentWindow().getSize();
 		Cryptocat.Storage.updateCommon({
 			mainWindowBounds: {
-				x:      position[0],
-				y:      position[1],
-				width:  size[0],
+				x: position[0],
+				y: position[1],
+				width: size[0],
 				height: size[1]
 			}
 		}, function() {
