@@ -75,7 +75,6 @@
 ) = HKDF(S, Constant1, Constant2)</code>
 
 			</p>
-			</li>
 			<p>
 				Between messages, Cryptocat maintains a forward-secure ratcheting chain that creates a new ephemeral key pair for each message, and derives their chain of authenticity by mixing in a chain going back to <span class="code">S</span> via a Hash-Based Key Derivation Function (HKDF). Here is an example occuring later in the conversation, after Bob had also derived a <span class="code">BobMessageEphemeralKey</span> and other session state elements:
 				

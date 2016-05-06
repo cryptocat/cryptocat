@@ -50,6 +50,10 @@ span.code {
 	border-radius: 2px;
 }
 
+span.strike {
+	text-decoration: line-through;
+}
+
 input[type=text], input[type=password] {
 	padding: 4px;
 	background: #FAFCFF;
