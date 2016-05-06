@@ -145,30 +145,32 @@ Cryptocat.Storage = {};
 		username, user, userBundles, overwriteDr, callback
 	) {
 		var bundleObj = {};
-		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
-			var bundle = 'userBundles.' + user + '.' + deviceId;
-			var dBundle = userBundles[deviceId];
-			bundleObj[
-				bundle + '.identityKey'
-			] = dBundle.identityKey;
-			bundleObj[
-				bundle + '.signedPreKey'
-			] = dBundle.signedPreKey;
-			bundleObj[
-				bundle + '.signedPreKeyId'
-			] = dBundle.signedPreKeyId;
-			bundleObj[
-				bundle + '.signedPreKeySignature'
-			] = dBundle.signedPreKeySignature;
-			bundleObj[
-				bundle + '.preKeys'
-			] = dBundle.preKeys;
-			if (overwriteDr) {
+		for (var deviceId in userBundles) {
+			if (hasProperty(userBundles, deviceId)) {
+				var bundle = 'userBundles.' + user + '.' + deviceId;
+				var dBundle = userBundles[deviceId];
 				bundleObj[
-					bundle + '.dr'
-				] = dBundle.dr;
+					bundle + '.identityKey'
+				] = dBundle.identityKey;
+				bundleObj[
+					bundle + '.signedPreKey'
+				] = dBundle.signedPreKey;
+				bundleObj[
+					bundle + '.signedPreKeyId'
+				] = dBundle.signedPreKeyId;
+				bundleObj[
+					bundle + '.signedPreKeySignature'
+				] = dBundle.signedPreKeySignature;
+				bundleObj[
+					bundle + '.preKeys'
+				] = dBundle.preKeys;
+				if (overwriteDr) {
+					bundleObj[
+						bundle + '.dr'
+					] = dBundle.dr;
+				}
 			}
-		}}
+		}
 		db.update({_id: username},
 			{$set: bundleObj}, function(err, newDoc) {
 				callback(err);

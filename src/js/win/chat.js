@@ -357,7 +357,7 @@ window.addEventListener('load', function(e) {
 				renderer = 'audio';
 				blobType = 'audio/*';
 			}
-			var src = '../img/icons/loading.' + loadingExt;
+			var src = '../img/animations/loading.' + loadingExt;
 			if (this.state.binary.length) {
 				src = URL.createObjectURL(
 					new Blob([this.state.binary], {
@@ -1040,7 +1040,7 @@ window.addEventListener('load', function(e) {
 		if (chatState === 'composing') {
 			thisChat.theirComposingTimer = setTimeout(function() {
 				thisChat.window.setState({theirChatState: 'paused'});
-			}, 30000);
+			}, 20000);
 		}
 	});
 

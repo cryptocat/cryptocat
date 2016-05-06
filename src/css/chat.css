@@ -84,6 +84,7 @@ div#chatWindow {
 }
 
 div#chatTop {
+	opacity: 0.9;
 }
 
 div.chatTopStatus {
@@ -117,7 +118,7 @@ div.chatTopStatus[data-theirchatstate='composing'] {
 
 div#chatContents {
 	border-bottom: none;
-	background: #FFF;
+	background-color: #FFF;
 	height: 330px;
 	width: 100%;
 	margin: 0;
@@ -130,13 +131,14 @@ div#chatContents {
 
 div.chatMessage, div.chatSticker, div.chatFile, div.chatMedia {
 	background: #F0F8FF;
-	padding: 0px 10px 5px 5px;
+	padding: 0px 5px 5px 5px;
 	word-wrap: break-word;
 	word-break: break-word;
 	display: table;
 	min-width: 25%;
 	max-width: 70%;
 	margin: 4px 10px;
+	border-radius: 2px;
 }
 
 div.chatMessage, div.chatMessage * {
@@ -192,7 +194,7 @@ div.chatMedia[data-offline="true"] {
 }
 
 span.chatMessageInfo, span.chatMediaInfo {
-	padding: 0 5px 0 10px;
+	padding: 0 0px 0 10px;
 	margin: 0 0 8px -5px;
 	display: block;
 	width: 100%;
@@ -216,6 +218,7 @@ span.chatMediaInfo span.chatMediaTimestamp {
 	float: right;
 	text-align: right;
 	opacity: 0.7;
+	margin-right: 5px;
 }
 
 div.chatMedia {
@@ -366,7 +369,7 @@ div.chatToolbar input[data-sticker="crying"] {
 }
 
 div.chatToolbar input.recordButton {
-	position: fixed;
+	position: absolute;
 	z-index: 0;
 	right: 42px;
 	background-image: url('../img/icons/record.png');
@@ -497,7 +500,7 @@ div.chatToolbar div.recordModalDurationIndicator[data-blinking="true"] {
 }
 
 div.chatToolbar input.sendFileButton {
-	position: fixed;
+	position: absolute;
 	z-index: 0;
 	right: 2px;
 	background-image: url('../img/files/image.png');
@@ -511,7 +514,7 @@ form#chatInput {
 
 textarea#chatInputText {
 	width: 100%;
-	height: 60px;
+	height: 65px;
 	resize: none;
 	box-sizing: border-box;
 	outline: none;
