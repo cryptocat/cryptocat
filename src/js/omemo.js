@@ -9,6 +9,7 @@ Cryptocat.OMEMO = {};
 			payload: function() {}
 		}
 	};
+	var deviceUpdateTimeout = [];
 
 	Cryptocat.OMEMO.jidHasUsername = function(jid) {
 		var username = '';
@@ -546,9 +547,16 @@ Cryptocat.OMEMO = {};
 		thisBundle.preKeys = userBundle.preKeys;
 		Cryptocat.Win.updateDeviceManager(username);
 		if (
+			(deviceUpdateTimeout.indexOf(username) < 0) &&
 			!hasProperty(Cryptocat.Win.deviceManager, username) &&
 			(!isNewUser && isNewBundle)
 		) {
+			deviceUpdateTimeout.push(username);
+			setTimeout(function() {
+				deviceUpdateTimeout.splice(
+					deviceUpdateTimeout.indexOf(username), 1
+				);
+			}, 5000);
 			var diag = Cryptocat.Diag.message.updatedDevices;
 			if (username === Cryptocat.Me.username) {
 				diag = Cryptocat.Diag.message.updatedMyDevices;
