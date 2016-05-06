@@ -57,7 +57,8 @@
 				Cryptocat uses a Double Ratchet-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging. In terms of the transport layer, Cryptocat uses XMPP over a long-standing, TLS-encrypted WebSockets connection.
 			</p>
 			<p>
-				Every Cryptocat device owns a long-term <span class="code">identityKeyPair</span> which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
+				Every Cryptocat device owns a long-term <span
+				class="code">identityKey</span> pair which helps with the establishment of the initial authenticated key exchange. This key pair also serves to sign the device's <span class="code">signedPreKey</span>, an ephemeral public key that also is mixed into the authenticated key exchange. The <span class="code">signedPreKey</span> is also shipped with 100, unsigned, one-time-use <span class="code">preKey</span>s, and is regenerated and re-signed every week. 
 			</p>
 			<p>
 				Suppose Alice wanted to start a new session with Bob. Alice would then fetch Bob's current <span class="code">signedPreKey</span> and his list of 100 <span class="code">preKey</span>s from the Cryptocat network. Alice would then select a random <span class="code">preKey</span> from the list. Alice then generates her own <span class="code">initKey</span> pair, which is a keypair used only for the purposes of initializing a new session. Alice then performs the following computation in order to obtain the initial session secret <span class="code">S</span>:
@@ -110,16 +111,19 @@ AliceMessageEncryptionKey = HKDF(
 			</p>
 			<h3>Primitives</h3>
 			<ul>
-				<li><em>AES</em> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
-				<li><em>X25519</em> is used for all Elliptic-Curve Diffie-Hellman (ECDH) operations. A four-way ECDH handshake is used for the initial authenticated key exchange and further ECDH operations are routinely performed for <span class="code">preKey</span> generation and message ratcheting.</li>
-				<li><em>ED25519</em> is used for generating <span class="code">identityKeyPair</span> and for signing and verifying the <span class="code">signedPreKey</span>, but is otherwise unused throughout the protocol.</li>
-				<li><em>SHA256</em> is used as the standard hashing function and as the underlying hash function for the HKDF.</li>
+				<li><span class="code">AES</span> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
+				<li><span class="code">X25519</span> is used for all Elliptic-Curve Diffie-Hellman (ECDH) operations. A four-way ECDH handshake is used for the initial authenticated key exchange and further ECDH operations are routinely performed for <span class="code">preKey</span> generation and message ratcheting.</li>
+				<li><span class="code">ED25519</span> is used for generating the
+				<span class="code">identityKey</span> pair and for signing and verifying the <span class="code">signedPreKey</span>, but is otherwise unused throughout the protocol.</li>
+				<li><span class="code">SHA256</span> is used as the standard hashing function and as the underlying hash function for the HKDF.</li>
 			</ul>
 			<h3>Threat Model</h3>
 			<p>Cryptocat makes the following assumptions:</p>
 			<ul>
 				<li><em>Untrusted network</em>: We assume that an attacker controls the network and so can intercept, tamper with and inject network messages.</li>
-				<li><em>Long-term key compromise</em>: We assume that an attacker may at some point compromise the long-term <span class="code">identityKeyPair</span> of a participant.</li>
+				<li><em>Long-term key compromise</em>: We assume that an
+				attacker may at some point compromise the long-term <span
+				class="code">identityKey</span> pair of a participant.</li>
 			</ul>
 			<h3>Security Goals</h3>
 			<p>Given our threat model, Cryptocat aims to accomplish the following security goals:</p>
@@ -142,22 +146,22 @@ AliceMessageEncryptionKey = HKDF(
 			</p>
 
 <code>DeviceFingerprint = SHA256(
-	DeviceId                ||
+	deviceId                ||
 	SHA256(
-		Username   ||
-		DeviceName ||
-		DeviceIcon
+		username   ||
+		deviceName ||
+		deviceIcon
 	)                       ||
-	DeviceIdentityKeyPublic
+	deviceIdentityKeyPublic
 ).HexString().First32Characters()</code>
 
 			<p>
-				In the above example, <span class="code">DeviceId</span> is a
+				In the above example, <span class="code">deviceId</span> is a
 				random 32-byte device identifier that is generated upon device
 				registration and that never changes. <span
-				class="code">DeviceName</span> is a name that the user assigns
+				class="code">deviceName</span> is a name that the user assigns
 				to the device that also cannot be later modified. <span
-				class="code">DeviceIcon</span> is one of three icons (<span
+				class="code">deviceIcon</span> is one of three icons (<span
 				class="code">0</span>, representing a laptop, <span
 				class="code">1</span>, representing an all-in-one desktop and
 				<span class="code">2</span>, representing a PC) and also cannot
