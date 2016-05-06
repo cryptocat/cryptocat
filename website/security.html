@@ -40,7 +40,9 @@
 			<div class="tableOfContents">
 				<ul>
 					<li><a href="#beta">Beta Software Notice</a></li>
-					<li><a href="#overview">Encryption Overview</a></li>
+					<li><a href="#encryption">Encryption Overview</a></li>
+					<li><a href="#authentication">Authentication Overview</a></li>
+					<li><a href="#filesharing">File Sharing</a></li>
 					<li><a href="#misc">Miscellaneous Security Features</a></li>
 					<li><a href="#fulldisclosure">Reporting Security Issues</a></li>
 				</ul>
@@ -50,7 +52,7 @@
 				Cryptocat is currently Beta software. The Security page is currently incomplete and will be elaborated once the software is considered stable. For more information on the Beta software process, please review <a href="help.html#beta">this section</a> of the Help page.
 			</p>
 			<hr />
-			<h2 id="overview">Encryption Overview</h2>
+			<h2 id="encryption">Encryption Overview</h2>
 			<p>
 				Cryptocat uses a Double Ratchet-based encryption protocol that combines a forward-secure ratchet with a zero round-trip authenticated key exchange. As a transport layer for encrypted messages, Cryptocat adopts the <a href="https://conversations.im/xeps/multi-end.html" target="_blank">OMEMO Multi-End Message and Object Encryption</a> standard, which also gives Cryptocat multi-device support and allows for offline messaging. In terms of the transport layer, Cryptocat uses XMPP over a long-standing, TLS-encrypted WebSockets connection.
 			</p>
@@ -106,18 +108,6 @@ AliceMessageEncryptionKey = HKDF(
 				Alice then sends <span class="code">(AliceMessageEphemeralKeyPublic, AliceEncryptedMessage, AliceEncryptedMessageTag)</span>.
 				<span class="code">Constant1</span>, <span class="code">Constant2</span> and <span class="code">Constant3</span> are some publicly known constant strings coded into the protocol implementation.
 			</p>
-			<h3>File Sharing</h3>
-			<p>
-				Cryptocat software provides users with the ability to share documents, video recordings, photos and other such media. These are all threated as the same type of plaintext (a "file") and are all handled as follows:
-			</p>
-			<ul>
-				<li>A 256-bit <span class="code">AES-GCM</span> <span class="code">fileKey</span> is randomly chosen and used to symmetrically encrypt the file.</li>
-				<li>The encrypted file is then uploaded to a Cryptocat server where it is stored for 30 days. The Cryptocat server obtains the encrypted file and is able to determine its size, but is nevertheless not able to determine anything else about the file, including its type or file name.</li>
-				<li>The sender then sends the <span class="code">fileKey</span> and its corresponding <span class="code">AES-GCM</span> <span class="code">fileNonce</span>, <span class="code">fileTag</span> to the recipient along with a <span class="code">fileUrl</span> pointer to where the encrypted file can be fetched from the Cryptocat network and a <span class="code">fileName</span> value indicating the name of the file. This information is communicated a specially formatted, but nevertheless regularly encrypted Cryptocat chat message.</li>
-				<li>The recipient's client parses the chat message as one that is pointing to a file, downloads the ciphertext from <span class="code">fileUrl</span>, decrypts it with <span class="code">fileKey</span> and <span class="code">fileNonce</span> and authenticates it with <span class="code">fileTag</span>.</li>
-				<li>If decryption and authentication are successful, the file is presented to the recipient for viewing or download, depending on what is appropriate for the file type.</li>
-			</ul>
-			<p>Note that <span class="code">fileUrl</span> cannot be just any HTTP URI but is specially restricted for the purposes of Cryptocat file sharing.</p>
 			<h3>Primitives</h3>
 			<ul>
 				<li><em>AES</em> is used in Galois Counter Mode (GCM) for authenticated symmetric encryption with added data.</li>
@@ -140,6 +130,54 @@ AliceMessageEncryptionKey = HKDF(
 				<li><em>Forward secrecy</em>: If Alice sends a message to Bob and Alice's key state at the time of this message is subsequently compromised, all previous messages retain their Secrecy property.</li>
 				<li><em>Future secrecy</em>: If Alice sends a first message to Bob, receives a reply from Bob, and then sends a second message to Bob, Alice's second message remains secret even if her key state for the first message is compromised.</li>
 			</ul>
+			<hr />
+			<h2 id="authentication">Authentication Overview</h2>
+			<p>
+				Cryptocat offers users the ability to <a
+				href="help.html#fingerprints">verify the authenticity of
+				their buddies' devices</a>. In that way, they can ensure that a
+				malicious party (including, potentially, the Cryptocat network
+				itself) is not masquerading as the device of another individual.
+				Device fingeprints are calculated thus:
+			</p>
+
+<code>DeviceFingerprint = SHA256(
+	DeviceId                ||
+	SHA256(
+		Username   ||
+		DeviceName ||
+		DeviceIcon
+	)                       ||
+	DeviceIdentityKeyPublic
+).HexString().First32Characters()</code>
+
+			<p>
+				In the above example, <span class="code">DeviceId</span> is a
+				random 32-byte device identifier that is generated upon device
+				registration and that never changes. <span
+				class="code">DeviceName</span> is a name that the user assigns
+				to the device that also cannot be later modified. <span
+				class="code">DeviceIcon</span> is one of three icons (<span
+				class="code">0</span>, representing a laptop, <span
+				class="code">1</span>, representing an all-in-one desktop and
+				<span class="code">2</span>, representing a PC) and also cannot
+				be modified.
+			</p>
+			<hr />
+			<h2 id="filesharing">File Sharing</h2>
+			<p>
+				Cryptocat software provides users with the ability to <a
+				href="help.html#files">share documents, video recordings, photos
+				and other such media</a>. These are all threated as the same type of plaintext (a "file") and are all handled as follows:
+			</p>
+			<ul>
+				<li>A 256-bit <span class="code">AES-GCM</span> <span class="code">fileKey</span> is randomly chosen and used to symmetrically encrypt the file.</li>
+				<li>The encrypted file is then uploaded to a Cryptocat server where it is stored for 30 days. The Cryptocat server obtains the encrypted file and is able to determine its size, but is nevertheless not able to determine anything else about the file, including its type or file name.</li>
+				<li>The sender then sends the <span class="code">fileKey</span> and its corresponding <span class="code">AES-GCM</span> <span class="code">fileNonce</span>, <span class="code">fileTag</span> to the recipient along with a <span class="code">fileUrl</span> pointer to where the encrypted file can be fetched from the Cryptocat network and a <span class="code">fileName</span> value indicating the name of the file. This information is communicated a specially formatted, but nevertheless regularly encrypted Cryptocat chat message.</li>
+				<li>The recipient's client parses the chat message as one that is pointing to a file, downloads the ciphertext from <span class="code">fileUrl</span>, decrypts it with <span class="code">fileKey</span> and <span class="code">fileNonce</span> and authenticates it with <span class="code">fileTag</span>.</li>
+				<li>If decryption and authentication are successful, the file is presented to the recipient for viewing or download, depending on what is appropriate for the file type.</li>
+			</ul>
+			<p>Note that <span class="code">fileUrl</span> cannot be just any HTTP URI but is specially restricted for the purposes of Cryptocat file sharing.</p>
 			<hr />
 			<h2 id="misc">Miscellaneous Security Features</h2>
 			<p>Aside of the message encryption protocol, Cryptocat adopts the following security features in order to provide a generally more robust experience across the client:</p>
