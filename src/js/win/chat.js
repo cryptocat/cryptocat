@@ -599,12 +599,17 @@ window.addEventListener('load', function(e) {
 				]),
 				key: this.state.key + 1
 			}, function() {
-				thisChat.contents().scrollTop =
-						thisChat.contents().scrollHeight;
-				setTimeout(function() {
-					thisChat.contents().scrollTop =
-						thisChat.contents().scrollHeight;
-				}, 100);
+				var tCc = thisChat.contents;
+				if (
+					fromMe || ((
+						tCc().scrollHeight - tCc().scrollTop
+					) < 1000)
+				) {
+					tCc().scrollTop = tCc().scrollHeight;
+					setTimeout(function() {
+						tCc().scrollTop = tCc().scrollHeight;
+					}, 100);
+				}
 			});
 		},
 		sendSticker: function(e) {
