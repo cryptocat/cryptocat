@@ -20,7 +20,8 @@ Cryptocat.OMEMO = {};
 				(Cryptocat.Patterns.username.test(username)) && (
 					(username === Cryptocat.Me.username) ||
 					(hasProperty(
-						Cryptocat.Win.main.roster.state.buddies, username
+						Cryptocat.Win.main.roster.state.buddies,
+						username
 					))
 				)
 			) {

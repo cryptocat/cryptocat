@@ -761,16 +761,16 @@ window.addEventListener('load', function(e) {
 		var userBundles = Cryptocat.Me.settings.userBundles[username];
 		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
 			devices.push({
-					deviceId: deviceId,
-					deviceName: userBundles[deviceId].deviceName,
-					deviceIcon: userBundles[deviceId].deviceIcon,
-					deviceFingerprint: Cryptocat.OMEMO.deviceFingerprint(
-						username, deviceId,
-						userBundles[deviceId].deviceName,
-						userBundles[deviceId].deviceIcon,
-						userBundles[deviceId].identityKey
-					)
-				});
+				deviceId: deviceId,
+				deviceName: userBundles[deviceId].deviceName,
+				deviceIcon: userBundles[deviceId].deviceIcon,
+				deviceFingerprint: Cryptocat.OMEMO.deviceFingerprint(
+					username, deviceId,
+					userBundles[deviceId].deviceName,
+					userBundles[deviceId].deviceIcon,
+					userBundles[deviceId].identityKey
+				)
+			});
 		}}
 		Cryptocat.Win.deviceManager[username].webContents.send(
 			'deviceManager.update', {
