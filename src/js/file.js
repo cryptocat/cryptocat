@@ -127,7 +127,7 @@ Cryptocat.File = {};
 			}
 		};
 		put.flushHeaders();
-		put.setTimeout(3000, function() {
+		put.setTimeout(5000, function() {
 			put.abort();
 			putFile(file, onProgress, onEnd);
 		});
