@@ -219,6 +219,12 @@ span.chatMediaInfo span.chatMediaDeviceName {
 	margin-left: 5px;
 }
 
+span.chatMessageInfo span.chatMessageDeviceName[data-visible="false"],
+span.chatFileInfo span.chatFileDeviceName[data-visible="false"],
+span.chatMediaInfo span.chatMediaDeviceName[data-visible="false"] {
+	display: none;
+}
+
 span.chatMessageInfo span.chatMessageTimestamp,
 span.chatFileInfo span.chatFileTimestamp,
 span.chatMediaInfo span.chatMediaTimestamp {
