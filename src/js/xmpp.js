@@ -171,7 +171,6 @@ Cryptocat.XMPP = {};
 				callbacks.disconnected.payload();
 			} else { callback(false); }
 		};
-		console.log(Cryptocat.Me.username);
 		if (Cryptocat.Me.username.length) {
 			Cryptocat.Storage.updateUser(
 				Cryptocat.Me.username,
