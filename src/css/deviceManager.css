@@ -46,7 +46,7 @@ div.device div.deviceIcon {
 	background-size: 40px;
 	background-position: center;
 	background-repeat: no-repeat;
-	margin: 0 10px 10px 10px;
+	margin: 0 10px 10px 20px;
 	border: 1px solid #FFF;
 	float: left;
 }
@@ -75,9 +75,9 @@ div.device p.deviceFingerprint {
 	user-select: text;
 	cursor: text;
 	position: relative;
-	bottom: 10px;
+	bottom: 15px;
 	font-size: 14px;
-	margin-left: 62px;
+	margin-left: 20px;
 }
 
 div.device label.deviceTrusted {
@@ -87,9 +87,8 @@ div.device label.deviceTrusted {
 	bottom: 24px;
 	left: 40px;
 	background-color: #F0F8FF;
+	border-radius: 3px;
 	padding: 10px;
-	border-right: 1px solid #96A5B2;
-	border-bottom: 1px solid #96A5B2;
 }
 
 div.device label.deviceTrusted[data-visible="false"] {
@@ -109,7 +108,8 @@ div.device input.removeDevice {
 	float: right;
 	position: relative;
 	bottom: 24px;
-	right: 8px;
+	right: 30px;
+	margin-bottom: 10px;
 }
 
 div.device input.removeDevice[data-visible='false'] {
