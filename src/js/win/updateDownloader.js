@@ -1,6 +1,19 @@
 'use strict';
 
 window.addEventListener('load', function(e) {
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate(
+		[{
+			label: 'Window',
+			submenu: [{
+				label: 'Close',
+				accelerator: 'CmdOrCtrl+W',
+				click: function() {
+					Remote.getCurrentWindow().close();
+				}
+			}]
+		}]
+	));
+
 	var updateDownloader = React.createClass({
 		displayName: 'updateDownloader',
 		getInitialState: function() {

@@ -32,6 +32,7 @@ var Cryptocat = {
 			signedPreKeySignature: '',
 			preKeys: [],
 			userBundles: {},
+			trustedOnly: [],
 			sounds: true,
 			notify: true,
 			typing: true,

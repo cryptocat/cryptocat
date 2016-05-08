@@ -2,8 +2,8 @@
 'use strict';
 
 window.addEventListener('load', function(e) {
-	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate([
-		{
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate(
+		[{
 			label: 'Chat',
 			submenu: [{
 				label: 'View Devices',
@@ -116,8 +116,8 @@ window.addEventListener('load', function(e) {
 					Cryptocat.Diag.message.about();
 				}
 			}]
-		}
-	]));
+		}]
+	));
 
 	var getTimestamp = function(stamp) {
 			var date = new Date(stamp);
@@ -239,24 +239,29 @@ window.addEventListener('load', function(e) {
 				'data-offline': this.props.offline,
 				key: 0
 			}, React.createElement('span', {
-				className: 'chatMediaInfo',
+				className: 'chatFileInfo',
 				key: 1
 			}, React.createElement('span', {
-				className: 'chatMediaSender',
+				className: 'chatFileSender',
 				key: 2
 			}, this.props.sender),
 			React.createElement('span', {
-				className: 'chatMediaTimestamp',
+				className: 'chatFileDeviceName',
+				'data-visible': !!this.props.deviceName.length,
 				key: 3
+			}, '(' + this.props.deviceName + ')'),
+			React.createElement('span', {
+				className: 'chatFileTimestamp',
+				key: 4
 			}, this.props.timestamp)),
 			React.createElement('img', {
 				className: 'chatFileIcon',
 				src: '../img/files/' + this.props.file.type + '.png',
 				onClick: this.onClick,
-				key: 4
+				key: 5
 			}), React.createElement('div', {
 				className: 'chatFileProgressBar',
-				key: 5,
+				key: 6,
 				'data-valid': this.state.valid,
 				'data-complete': (
 					this.state.ready &&
@@ -267,7 +272,7 @@ window.addEventListener('load', function(e) {
 				style: {
 					width: this.state.progress + '%'
 				},
-				key: 6
+				key: 7
 			})));
 		}
 	});
@@ -296,8 +301,13 @@ window.addEventListener('load', function(e) {
 				key: 2
 			}, this.props.sender),
 			React.createElement('span', {
-				className: 'chatMessageTimestamp',
+				className: 'chatMessageDeviceName',
+				'data-visible': !!this.props.deviceName.length,
 				key: 3
+			}, '(' + this.props.deviceName + ')'),
+			React.createElement('span', {
+				className: 'chatMessageTimestamp',
+				key: 4
 			}, this.props.timestamp)),
 			this.props.message);
 		}
@@ -378,8 +388,13 @@ window.addEventListener('load', function(e) {
 				key: 2
 			}, this.props.sender),
 			React.createElement('span', {
-				className: 'chatMediaTimestamp',
+				className: 'chatMediaDeviceName',
+				'data-visible': !!this.props.deviceName.length,
 				key: 3
+			}, '(' + this.props.deviceName + ')'),
+			React.createElement('span', {
+				className: 'chatMediaTimestamp',
+				key: 4
 			}, this.props.timestamp)),
 			React.createElement(renderer, {
 				className: 'chatMediaRenderer',
@@ -389,7 +404,7 @@ window.addEventListener('load', function(e) {
 				controls: this.state.ready,
 				loop: !this.state.ready,
 				onContextMenu: this.onContextMenu,
-				key: 4
+				key: 5
 			}));
 		}
 	});
@@ -468,6 +483,7 @@ window.addEventListener('load', function(e) {
 				theirChatState: 'paused',
 				to: '',
 				recordSrc: '',
+				myDeviceName: '',
 				conversation: [],
 				recordTimer: {}
 			};
@@ -492,7 +508,8 @@ window.addEventListener('load', function(e) {
 				plaintext: message,
 				valid: true,
 				stamp: (new Date()).toString(),
-				offline: (this.state.status !== 2)
+				offline: (this.state.status !== 2),
+				deviceName: this.state.myDeviceName
 			});
 			return false;
 		},
@@ -560,6 +577,7 @@ window.addEventListener('load', function(e) {
 					timestamp: getTimestamp(info.stamp),
 					file: file.file,
 					offline: info.offline,
+					deviceName: info.deviceName,
 					ref: function(f) {
 						_t.files[file.file.url] = f;
 						if (!fromMe) {
@@ -575,6 +593,7 @@ window.addEventListener('load', function(e) {
 					timestamp: getTimestamp(info.stamp),
 					file: file.file,
 					offline: info.offline,
+					deviceName: info.deviceName,
 					ref: function(f) {
 						_t.files[file.file.url] = f;
 						if (!fromMe) {
@@ -590,7 +609,8 @@ window.addEventListener('load', function(e) {
 					message: info.plaintext,
 					timestamp: getTimestamp(info.stamp),
 					valid: info.valid,
-					offline: info.offline
+					offline: info.offline,
+					deviceName: info.deviceName
 				});
 			}
 			this.setState({
@@ -625,7 +645,8 @@ window.addEventListener('load', function(e) {
 				plaintext: sticker,
 				valid: true,
 				stamp: (new Date()).toString(),
-				offline: (this.state.status !== 2)
+				offline: (this.state.status !== 2),
+				deviceName: this.state.myDeviceName
 			});
 		},
 		record: function(e) {
@@ -721,7 +742,8 @@ window.addEventListener('load', function(e) {
 					plaintext: sendInfo,
 					valid: true,
 					stamp: (new Date()).toString(),
-					offline: (_t.state.status !== 2)
+					offline: (_t.state.status !== 2),
+					deviceName: _t.state.myDeviceName
 				});
 			}, function(url, p) {
 				_t.files[url].setState({progress: p});
@@ -996,30 +1018,27 @@ window.addEventListener('load', function(e) {
 		}
 	};
 
+	IPCRenderer.on('chat.connected', function(e, connected) {
+		thisChat.window.setState({connected: connected});
+	});
+
+	IPCRenderer.on('chat.decreaseFontSize', function(e) {
+		thisChat.window.decreaseFontSize();
+	});
+
+	IPCRenderer.on('chat.increaseFontSize', function(e) {
+		thisChat.window.increaseFontSize();
+	});
+
 	IPCRenderer.once('chat.init', function(e, data) {
 		Cryptocat.Me.username = data.myUsername;
 		thisChat.window.setState({
 			status: data.status,
 			to: data.theirUsername,
-			connected: data.connected
+			connected: data.connected,
+			myDeviceName: data.myDeviceName
 		});
 		document.getElementById('chatInputText').focus();
-	});
-
-	IPCRenderer.on('chat.status', function(e, status) {
-		thisChat.window.setState({status: status});
-	});
-
-	IPCRenderer.on('chat.sendFile', function(e) {
-		thisChat.window.sendFileDialog();
-	});
-
-	IPCRenderer.on('chat.saveDialog', function(e, path, url) {
-		FS.writeFile(
-			path,
-			thisChat.window.files[url].state.binary,
-			function() {}
-		);
 	});
 
 	IPCRenderer.on('chat.openDialog', function(e, paths) {
@@ -1035,20 +1054,6 @@ window.addEventListener('load', function(e) {
 		}}
 	});
 
-	IPCRenderer.on('chat.connected', function(e, connected) {
-		thisChat.window.setState({connected: connected});
-	});
-
-	IPCRenderer.on('chat.theirChatState', function(e, chatState) {
-		thisChat.window.setState({theirChatState: chatState});
-		clearTimeout(thisChat.theirComposingTimer);
-		if (chatState === 'composing') {
-			thisChat.theirComposingTimer = setTimeout(function() {
-				thisChat.window.setState({theirChatState: 'paused'});
-			}, 20000);
-		}
-	});
-
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(false, info);
 		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
@@ -1062,27 +1067,45 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	IPCRenderer.on('chat.record', function(e) {
+		thisChat.window.record();
+	});
+
+	IPCRenderer.on('chat.resetFontSize', function(e) {
+		thisChat.window.resetFontSize();
+	});
+
+	IPCRenderer.on('chat.saveDialog', function(e, path, url) {
+		FS.writeFile(
+			path,
+			thisChat.window.files[url].state.binary,
+			function() {}
+		);
+	});
+
+	IPCRenderer.on('chat.sendFile', function(e) {
+		thisChat.window.sendFileDialog();
+	});
+
+	IPCRenderer.on('chat.status', function(e, status) {
+		thisChat.window.setState({status: status});
+	});
+
+	IPCRenderer.on('chat.theirChatState', function(e, chatState) {
+		thisChat.window.setState({theirChatState: chatState});
+		clearTimeout(thisChat.theirComposingTimer);
+		if (chatState === 'composing') {
+			thisChat.theirComposingTimer = setTimeout(function() {
+				thisChat.window.setState({theirChatState: 'paused'});
+			}, 20000);
+		}
+	});
+
 	IPCRenderer.on('chat.viewDevices', function(e) {
 		IPCRenderer.send(
 			'deviceManager.create',
 			thisChat.window.state.to
 		);
-	});
-
-	IPCRenderer.on('chat.record', function(e) {
-		thisChat.window.record();
-	});
-
-	IPCRenderer.on('chat.increaseFontSize', function(e) {
-		thisChat.window.increaseFontSize();
-	});
-
-	IPCRenderer.on('chat.decreaseFontSize', function(e) {
-		thisChat.window.decreaseFontSize();
-	});
-
-	IPCRenderer.on('chat.resetFontSize', function(e) {
-		thisChat.window.resetFontSize();
 	});
 
 	Mousetrap(

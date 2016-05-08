@@ -195,16 +195,21 @@ Cryptocat.XMPP = {};
 							'You may want to ask your buddy to send it again.'),
 						valid: message.valid,
 						stamp: encrypted.stamp,
-						offline: encrypted.offline
+						offline: encrypted.offline,
+						deviceName: ''
 					}
 				);
 			} else {
+				var deviceName = Cryptocat.Me.settings.userBundles[
+					encrypted.from][encrypted.sid
+				].deviceName;
 				Cryptocat.XMPP.deliverMessage(
 					encrypted.from, {
 						plaintext: message.plaintext,
 						valid: message.valid,
 						stamp: encrypted.stamp,
-						offline: encrypted.offline
+						offline: encrypted.offline,
+						deviceName: deviceName
 					}
 				);
 			}

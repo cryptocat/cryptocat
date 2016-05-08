@@ -97,7 +97,7 @@ window.addEventListener('load', function(e) {
 					value: this.state.name,
 					onChange: this.onChangeName,
 					autoFocus: true,
-					maxLength: 24
+					maxLength: 12
 				}),
 				React.createElement('input', {
 					key: 7,

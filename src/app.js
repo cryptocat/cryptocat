@@ -476,25 +476,22 @@ Electron.app.on('ready', function() {
 	}
 });
 
-Electron.ipcMain.on('main.checkForUpdates', function(e, to, message) {
-	Windows.main.webContents.send('main.checkForUpdates');
+Electron.app.on('activate', function(e) {
+	Windows.last.show();
 });
 
-Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
-	Windows.main.webContents.send('chat.sendMessage', to, message);
-	e.returnValue = 'true';
+Electron.app.on('before-quit', function(e) {
+	if (!IntentToQuit) {
+		e.preventDefault();
+	}
+	Windows.main.webContents.send('main.beforeQuit');
 });
 
-Electron.ipcMain.on('chat.saveDialog', function(e, to, name, url) {
-	Windows.main.webContents.send('chat.saveDialog', to, name, url);
-});
-
-Electron.ipcMain.on('chat.openDialog', function(e, to) {
-	Windows.main.webContents.send('chat.openDialog', to);
-});
-
-Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
-	Windows.main.webContents.send('chat.myChatState', to, chatState);
+Electron.app.on('browser-window-focus', function(e, w) {
+	Windows.last = w;
+	if (process.platform === 'darwin') {
+		Electron.Menu.setApplicationMenu(buildMacMenu(MenuSettings));
+	}
 });
 
 Electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
@@ -502,27 +499,8 @@ Electron.ipcMain.on('addBuddy.sendRequest', function(e, username) {
 	e.returnValue = 'true';
 });
 
-Electron.ipcMain.on('changePassword.changePassword', function(e, password) {
-	Windows.main.webContents.send('changePassword.changePassword', password);
-	e.returnValue = 'true';
-});
-
 Electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 	Windows.main.webContents.send('addDevice.addDevice', name, icon);
-	e.returnValue = 'true';
-});
-
-Electron.ipcMain.on('deviceManager.create', function(e, username) {
-	Windows.main.webContents.send('deviceManager.create', username);
-});
-
-Electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {
-	Windows.main.webContents.send('deviceManager.removeDevice', deviceId);
-	e.returnValue = 'true';
-});
-
-Electron.ipcMain.on('main.beforeQuit', function(e) {
-	Windows.main.webContents.send('main.beforeQuit');
 	e.returnValue = 'true';
 });
 
@@ -544,22 +522,62 @@ Electron.ipcMain.on('app.quit', function(e) {
 	e.returnValue = 'true';
 });
 
-Electron.app.on('browser-window-focus', function(e, w) {
-	Windows.last = w;
-	if (process.platform === 'darwin') {
-		Electron.Menu.setApplicationMenu(buildMacMenu(MenuSettings));
-	}
+Electron.ipcMain.on('chat.openDialog', function(e, to) {
+	Windows.main.webContents.send('chat.openDialog', to);
 });
 
-Electron.app.on('activate', function(e) {
-	Windows.last.show();
+Electron.ipcMain.on('chat.myChatState', function(e, to, chatState) {
+	Windows.main.webContents.send('chat.myChatState', to, chatState);
 });
 
-Electron.app.on('before-quit', function(e) {
-	if (!IntentToQuit) {
-		e.preventDefault();
-	}
+Electron.ipcMain.on('chat.saveDialog', function(e, to, name, url) {
+	Windows.main.webContents.send('chat.saveDialog', to, name, url);
+});
+
+Electron.ipcMain.on('chat.sendMessage', function(e, to, message) {
+	Windows.main.webContents.send('chat.sendMessage', to, message);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('changePassword.changePassword', function(e, password) {
+	Windows.main.webContents.send('changePassword.changePassword', password);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('deviceManager.create', function(e, username) {
+	Windows.main.webContents.send('deviceManager.create', username);
+});
+
+Electron.ipcMain.on('deviceManager.removeDevice', function(e, deviceId) {
+	Windows.main.webContents.send('deviceManager.removeDevice', deviceId);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('deviceManager.setTrusted', function(
+	e, username, deviceId, trusted
+) {
+	Windows.main.webContents.send(
+		'deviceManager.setTrusted', username, deviceId, trusted
+	);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('deviceManager.setTrustedOnly', function(
+	e, username, trusted
+) {
+	Windows.main.webContents.send(
+		'deviceManager.setTrustedOnly', username, trusted
+	);
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('main.beforeQuit', function(e) {
 	Windows.main.webContents.send('main.beforeQuit');
+	e.returnValue = 'true';
+});
+
+Electron.ipcMain.on('main.checkForUpdates', function(e, to, message) {
+	Windows.main.webContents.send('main.checkForUpdates');
 });
 
 process.on('uncaughtException', function(err) {

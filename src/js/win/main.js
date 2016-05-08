@@ -9,11 +9,11 @@ Cryptocat.Win = {
 };
 window.addEventListener('load', function(e) {
 	var renderWindowHeight = function(h) {
-			if (process.platform === 'win32') {
-				return h + 40;
-			}
-			return h;
-		};
+		if (process.platform === 'win32') {
+			return h + 40;
+		}
+		return h;
+	};
 
 	var spawnChatWindow = function() {
 		var chatWindow = new Remote.BrowserWindow({
@@ -22,6 +22,7 @@ window.addEventListener('load', function(e) {
 			height: renderWindowHeight(450),
 			minHeight: renderWindowHeight(150),
 			show: false,
+			autoHideMenuBar: false,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: Path.join(
@@ -589,6 +590,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: true,
 				preload: Path.join(
@@ -624,7 +626,8 @@ window.addEventListener('load', function(e) {
 			myUsername: Cryptocat.Me.username,
 			theirUsername: username,
 			status: Cryptocat.Win.main.roster.getBuddyStatus(username),
-			connected: Cryptocat.Me.connected
+			connected: Cryptocat.Me.connected,
+			myDeviceName: Cryptocat.Me.settings.deviceName
 		});
 		Cryptocat.Win.chat[username].setTitle('Chat with ' + username);
 		if (typeof (callback) === 'function') { callback(); }
@@ -644,6 +647,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: Path.join(
@@ -671,6 +675,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: Path.join(
@@ -698,6 +703,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: Path.join(
@@ -729,6 +735,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: Path.join(
@@ -759,24 +766,37 @@ window.addEventListener('load', function(e) {
 		}
 		var devices = [];
 		var userBundles = Cryptocat.Me.settings.userBundles[username];
-		for (var deviceId in userBundles) { if (hasProperty(userBundles, deviceId)) {
-			devices.push({
-				deviceId: deviceId,
-				deviceName: userBundles[deviceId].deviceName,
-				deviceIcon: userBundles[deviceId].deviceIcon,
-				deviceFingerprint: Cryptocat.OMEMO.deviceFingerprint(
-					username, deviceId,
-					userBundles[deviceId].deviceName,
-					userBundles[deviceId].deviceIcon,
-					userBundles[deviceId].identityKey
-				)
-			});
-		}}
+		for (var deviceId in userBundles) {
+			if (hasProperty(userBundles, deviceId)) {
+				var trusted = false;
+				if (
+					hasProperty(userBundles[deviceId], 'trusted') &&
+					userBundles[deviceId].trusted
+				) {
+					trusted = true;
+				}
+				devices.push({
+					deviceId: deviceId,
+					deviceName: userBundles[deviceId].deviceName,
+					deviceIcon: userBundles[deviceId].deviceIcon,
+					deviceFingerprint: Cryptocat.OMEMO.deviceFingerprint(
+						username, deviceId,
+						userBundles[deviceId].deviceName,
+						userBundles[deviceId].deviceIcon,
+						userBundles[deviceId].identityKey
+					),
+					trusted: trusted
+				});
+			}
+		}
 		Cryptocat.Win.deviceManager[username].webContents.send(
 			'deviceManager.update', {
 				username: username,
 				devices: devices,
-				mine: (username === Cryptocat.Me.username)
+				mine: (username === Cryptocat.Me.username),
+				trustedOnly: (
+					Cryptocat.Me.settings.trustedOnly.indexOf(username) >= 0
+				)
 			}
 		);
 	};
@@ -823,68 +843,17 @@ window.addEventListener('load', function(e) {
 		});
 	};
 
-	IPCRenderer.on('chat.sendMessage', function(e, to, message) {
-		Cryptocat.OMEMO.sendMessage(to, message);
+	IPCRenderer.on('aboutBox.create', function(e) {
+		Cryptocat.Diag.message.about();
 	});
 
-	IPCRenderer.on('chat.saveDialog', function(e, to, name, url) {
-		Cryptocat.Directories.saveDialog(
-			Cryptocat.Win.chat[to],
-			Cryptocat.Me.settings.directories.fileSave,
-			name, function(path) {
-				if (!path) { return false; }
-				Cryptocat.Me.settings.directories.fileSave =
-					Path.dirname(path) + Path.sep;
-				Cryptocat.Win.chat[to].webContents.send(
-					'chat.saveDialog', path, url
-				);
-			}
-		);
-	});
-
-	IPCRenderer.on('chat.openDialog', function(e, to) {
-		Cryptocat.Directories.openDialog(
-			Cryptocat.Win.chat[to],
-			Cryptocat.Me.settings.directories.fileSelect,
-			function(paths) {
-				if (!paths || !paths.length) { return false; }
-				Cryptocat.Me.settings.directories.fileSelect =
-					Path.dirname(paths[0]) + Path.sep;
-				Cryptocat.Win.chat[to].webContents.send(
-					'chat.openDialog', paths
-				);
-			}
-		);
-	});
-
-	IPCRenderer.on('chat.myChatState', function(e, to, chatState) {
-		if (Cryptocat.Me.settings.typing) {
-			Cryptocat.XMPP.sendChatState(to, chatState);
-		}
+	IPCRenderer.on('addDevice.addDevice', function(e, name, icon) {
+		Cryptocat.OMEMO.onAddDevice(name, icon);
 	});
 
 	IPCRenderer.on('addBuddy.create', function(e) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Win.create.addBuddy();
-		} else {
-			Cryptocat.Diag.error.offline();
-		}
-	});
-
-	IPCRenderer.on('deviceManager.create', function(e, username) {
-		if (Cryptocat.Me.connected) {
-			if (!username || !username.length) {
-				username = Cryptocat.Me.username;
-			}
-			Cryptocat.Win.create.deviceManager(username);
-		} else {
-			Cryptocat.Diag.error.offline();
-		}
-	});
-
-	IPCRenderer.on('changePassword.create', function(e) {
-		if (Cryptocat.Me.connected) {
-			Cryptocat.Win.create.changePassword();
 		} else {
 			Cryptocat.Diag.error.offline();
 		}
@@ -922,23 +891,114 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
-	IPCRenderer.on('addDevice.addDevice', function(e, name, icon) {
-		Cryptocat.OMEMO.onAddDevice(name, icon);
+	IPCRenderer.on('changePassword.create', function(e) {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.Win.create.changePassword();
+		} else {
+			Cryptocat.Diag.error.offline();
+		}
+	});
+
+	IPCRenderer.on('chat.myChatState', function(e, to, chatState) {
+		if (Cryptocat.Me.settings.typing) {
+			Cryptocat.XMPP.sendChatState(to, chatState);
+		}
+	});
+
+	IPCRenderer.on('chat.openDialog', function(e, to) {
+		Cryptocat.Directories.openDialog(
+			Cryptocat.Win.chat[to],
+			Cryptocat.Me.settings.directories.fileSelect,
+			function(paths) {
+				if (!paths || !paths.length) { return false; }
+				Cryptocat.Me.settings.directories.fileSelect =
+					Path.dirname(paths[0]) + Path.sep;
+				Cryptocat.Win.chat[to].webContents.send(
+					'chat.openDialog', paths
+				);
+			}
+		);
+	});
+
+	IPCRenderer.on('chat.saveDialog', function(e, to, name, url) {
+		Cryptocat.Directories.saveDialog(
+			Cryptocat.Win.chat[to],
+			Cryptocat.Me.settings.directories.fileSave,
+			name, function(path) {
+				if (!path) { return false; }
+				Cryptocat.Me.settings.directories.fileSave =
+					Path.dirname(path) + Path.sep;
+				Cryptocat.Win.chat[to].webContents.send(
+					'chat.saveDialog', path, url
+				);
+			}
+		);
+	});
+
+	IPCRenderer.on('chat.sendMessage', function(e, to, message) {
+		Cryptocat.OMEMO.sendMessage(to, message);
+	});
+
+	IPCRenderer.on('deviceManager.create', function(e, username) {
+		if (Cryptocat.Me.connected) {
+			if (!username || !username.length) {
+				username = Cryptocat.Me.username;
+			}
+			Cryptocat.Win.create.deviceManager(username);
+		} else {
+			Cryptocat.Diag.error.offline();
+		}
 	});
 
 	IPCRenderer.on('deviceManager.removeDevice', function(e, deviceId) {
-		if (deviceId === Cryptocat.Me.settings.deviceId) {
-			Cryptocat.Diag.message.removeThisDevice(function(response) {
-				if (response === 0) {
-					var index = Cryptocat.Me.settings.deviceIds.indexOf(
-						deviceId
+		Cryptocat.OMEMO.removeDevice(deviceId);
+	});
+
+	IPCRenderer.on('deviceManager.setTrusted', function(
+		e, username, deviceId, trusted
+	) {
+		Cryptocat.Me.settings.userBundles[username][deviceId].trusted = trusted;
+	});
+
+	IPCRenderer.on('deviceManager.setTrustedOnly', function(e, username, trusted) {
+		var trustedOnly = Cryptocat.Me.settings.trustedOnly;
+		var indexOf = trustedOnly.indexOf(username);
+		if (trusted) {
+			if (indexOf < 0) {
+				trustedOnly.push(username);
+			}
+		} else {
+			if (indexOf >= 0) {
+				trustedOnly.splice(indexOf, 1);
+			}
+		}
+	});
+
+	IPCRenderer.on('main.beforeQuit', function(e) {
+		Cryptocat.Win.main.beforeQuit();
+	});
+
+	IPCRenderer.on('main.checkForUpdates', function(e) {
+		Cryptocat.Update.check(function() {
+			Cryptocat.Diag.message.isLatest(
+				Cryptocat.Version
+			);
+		});
+	});
+
+	IPCRenderer.on('main.deleteAccount', function(e) {
+		if (!Cryptocat.Me.connected) {
+			Cryptocat.Diag.error.offline();
+			return false;
+		}
+		Cryptocat.Diag.message.deleteAccount(
+			Cryptocat.Me.username, function(response) {
+				if (response === 1) {
+					Remote.shell.openExternal(
+						'https://crypto.cat/help.html#deleteAccount'
 					);
-					if (index >= 0) {
-						Cryptocat.Me.settings.deviceIds.splice(index, 1);
-					}
-					Cryptocat.XMPP.sendDeviceList(
-						Cryptocat.Me.settings.deviceIds
-					);
+				}
+				if (response === 2) {
 					if (Cryptocat.Win.main.login.state.rememberIsChecked) {
 						Cryptocat.Storage.updateCommon({
 							rememberedLogin: {
@@ -947,45 +1007,22 @@ window.addEventListener('load', function(e) {
 							}
 						}, function() {});
 					}
-					setTimeout(function() {
-						Cryptocat.XMPP.disconnect(function() {
-							Cryptocat.Storage.deleteUser(
-								Cryptocat.Me.username,
-								function() {
-									Cryptocat.Win.main.beforeQuit();
-								}
-							);
-						});
-					}, 3000);
-				}
-			});
-		} else {
-			Cryptocat.Diag.message.removeDevice(function(response) {
-				if (response === 0) {
-					var index = Cryptocat.Me.settings.deviceIds.indexOf(
-						deviceId
+					Cryptocat.XMPP.deleteAccount(
+						Cryptocat.Me.username
 					);
-					if (index >= 0) {
-						Cryptocat.Me.settings.deviceIds.splice(index, 1);
-					}
-					Cryptocat.XMPP.sendDeviceList(
-						Cryptocat.Me.settings.deviceIds
-					);
-					Cryptocat.Storage.updateUser(Cryptocat.Me.username, {
-						deviceIds: Cryptocat.Me.settings.deviceIds
-					}, function() {});
-					setTimeout(function() {
-						Cryptocat.XMPP.getDeviceList(
-							Cryptocat.Me.username
-						);
-					}, 3000);
 				}
-			});
-		}
+			}
+		);
 	});
 
-	IPCRenderer.on('aboutBox.create', function(e) {
-		Cryptocat.Diag.message.about();
+	IPCRenderer.on('main.logOut', function(e) {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.XMPP.disconnect(function() {
+				Cryptocat.Win.main.login.onLogOut();
+			});
+		} else {
+			Cryptocat.Diag.error.offline();
+		}
 	});
 
 	IPCRenderer.on('main.updateNotifySetting', function(e, notify) {
@@ -1025,57 +1062,6 @@ window.addEventListener('load', function(e) {
 		} else {
 			Cryptocat.Diag.error.offline();
 		}
-	});
-
-	IPCRenderer.on('main.logOut', function(e) {
-		if (Cryptocat.Me.connected) {
-			Cryptocat.XMPP.disconnect(function() {
-				Cryptocat.Win.main.login.onLogOut();
-			});
-		} else {
-			Cryptocat.Diag.error.offline();
-		}
-	});
-
-	IPCRenderer.on('main.deleteAccount', function(e) {
-		if (Cryptocat.Me.connected) {
-			Cryptocat.Diag.message.deleteAccount(
-				Cryptocat.Me.username, function(response) {
-					if (response === 1) {
-						Remote.shell.openExternal(
-							'https://crypto.cat/help.html#deleteAccount'
-						);
-					}
-					if (response === 2) {
-						if (Cryptocat.Win.main.login.state.rememberIsChecked) {
-							Cryptocat.Storage.updateCommon({
-								rememberedLogin: {
-									username: '',
-									password: ''
-								}
-							}, function() {});
-						}
-						Cryptocat.XMPP.deleteAccount(
-							Cryptocat.Me.username
-						);
-					}
-				}
-			);
-		} else {
-			Cryptocat.Diag.error.offline();
-		}
-	});
-
-	IPCRenderer.on('main.checkForUpdates', function(e) {
-		Cryptocat.Update.check(function() {
-			Cryptocat.Diag.message.isLatest(
-				Cryptocat.Version
-			);
-		});
-	});
-
-	IPCRenderer.on('main.beforeQuit', function(e) {
-		Cryptocat.Win.main.beforeQuit();
 	});
 });
 

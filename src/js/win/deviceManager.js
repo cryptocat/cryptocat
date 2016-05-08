@@ -1,10 +1,26 @@
 'use strict';
 
 window.addEventListener('load', function(e) {
+	Remote.getCurrentWindow().setMenu(Remote.Menu.buildFromTemplate(
+		[{
+			label: 'Window',
+			submenu: [{
+				label: 'Close',
+				accelerator: 'CmdOrCtrl+W',
+				click: function() {
+					Remote.getCurrentWindow().close();
+				}
+			}]
+		}]
+	));
+
 	var device = React.createClass({
 		displayName: 'device',
 		getInitialState: function() {
-			return {};
+			var _t = this;
+			return {
+				trusted: _t.props.trusted
+			};
 		},
 		componentDidMount: function() {
 			return true;
@@ -14,6 +30,19 @@ window.addEventListener('load', function(e) {
 				'deviceManager.removeDevice',
 				this.props.deviceId
 			);
+		},
+		onChangeTrustedCheckbox: function(e) {
+			var checked = e.target.checked;
+			this.setState({
+				trusted: checked
+			}, function() {
+				IPCRenderer.sendSync(
+					'deviceManager.setTrusted',
+					this.props.username,
+					this.props.deviceId,
+					checked
+				);
+			});
 		},
 		render: function() {
 			return React.createElement('div', {
@@ -35,8 +64,24 @@ window.addEventListener('load', function(e) {
 				'data-visible': this.props.mine,
 				onClick: this.onRemoveDevice
 			}),
-			React.createElement('p', {
+			React.createElement('label', {
 				key: 4,
+				className: 'deviceTrusted',
+				'data-visible': !this.props.mine
+			},
+			React.createElement('input', {
+				key: 5,
+				className: 'deviceTrustedCheckbox',
+				type: 'checkbox',
+				checked: this.state.trusted,
+				onChange: this.onChangeTrustedCheckbox
+			}),
+			React.createElement('span', {
+				key: 6,
+				className: 'deviceTrustedText'
+			}, 'Trusted Device')),
+			React.createElement('p', {
+				key: 7,
 				className: 'deviceFingerprint'
 			}, this.props.deviceFingerprint));
 		}
@@ -48,13 +93,26 @@ window.addEventListener('load', function(e) {
 			return {
 				devices: [],
 				username: '',
-				mine: false
+				mine: false,
+				trustedOnly: false
 			};
 		},
 		componentDidMount: function() {
 			return true;
 		},
 		componentDidUpdate: function() {
+		},
+		onChangeTrustedOnlyCheckbox: function(e) {
+			var checked = e.target.checked;
+			this.setState({
+				trustedOnly: checked
+			}, function() {
+				IPCRenderer.sendSync(
+					'deviceManager.setTrustedOnly',
+					this.state.username,
+					checked
+				);
+			});
 		},
 		render: function() {
 			return React.createElement('div', {
@@ -63,9 +121,26 @@ window.addEventListener('load', function(e) {
 				React.createElement('div', {
 					key: 0,
 					id: 'deviceManagerTop'
-				}, React.createElement('h2', {
+				},
+				React.createElement('h2', {
 					key: 1
-				}, this.state.username + '\'s Devices')),
+				}, this.state.username + '\'s Devices'),
+				React.createElement('label', {
+					key: 2,
+					className: 'deviceManagerTrustedOnly',
+					'data-visible': !this.state.mine
+				},
+				React.createElement('input', {
+					key: 3,
+					className: 'deviceManagerTrustedOnlyCheckbox',
+					type: 'checkbox',
+					checked: this.state.trustedOnly,
+					onChange: this.onChangeTrustedOnlyCheckbox
+				}),
+				React.createElement('span', {
+					key: 4,
+					className: 'deviceManagerTrustedOnlyText'
+				}, 'send my messages to this contact only to trusted devices.'))),
 				React.createElement('div', {
 					key: 2,
 					id: 'deviceManagerContents'
@@ -95,13 +170,15 @@ window.addEventListener('load', function(e) {
 				deviceIcon: d.deviceIcon,
 				deviceFingerprint: d.deviceFingerprint,
 				key: d.deviceFingerprint,
-				mine: data.mine
+				mine: data.mine,
+				trusted: d.trusted
 			}));
 		});
 		thisDeviceManager.window.setState({
 			username: data.username,
 			devices: devices,
-			mine: data.mine
+			mine: data.mine,
+			trustedOnly: data.trustedOnly
 		});
 	});
 });

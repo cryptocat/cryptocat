@@ -9,25 +9,41 @@ div#deviceManagerTop {
 }
 
 div#deviceManagerTop h2 {
-	margin: 10px 25px;
+	margin: 10px 25px 5px 25px;
 	font-size: 14px;
 }
 
-div#deviceManagerContents{
+div#deviceManagerTop label.deviceManagerTrustedOnly {
+	padding: 0 0 0 20px;
+	display: block;
+}
+
+div#deviceManagerTop label.deviceManagerTrustedOnly[data-visible="false"] {
+	display: none;
+}
+
+span.deviceManagerTrustedOnlyText {
+	position: relative;
+	bottom: 2px;
+	font-variant: small-caps;
+	font-size: 14px;
+}
+
+div#deviceManagerContents {
 
 }
 
 div.device {
 	background-color: #FFF;
-	height: 67px;
-	padding: 5px;
+	height: 65px;
+	padding: 10px 5px;
 	border-bottom: 1px solid #96A5B2;
 }
 
 div.device div.deviceIcon {
-	width: 64px;
-	height: 64px;
-	background-size: 48px;
+	width: 40px;
+	height: 40px;
+	background-size: 40px;
 	background-position: center;
 	background-repeat: no-repeat;
 	margin: 0 10px 10px 10px;
@@ -48,20 +64,9 @@ div.device div.deviceIcon[data-icon='2'] {
 }
 
 div.device h2.deviceName {
-	margin: 13px 0 0 0;
+	margin: 3px 0 0 0;
 	-webkit-user-select: text;
 	user-select: text;
-}
-
-div.device input.removeDevice {
-	float: right;
-	position: relative;
-	bottom: 28px;
-	right: 20px;
-}
-
-div.device input.removeDevice[data-visible='false'] {
-	visibility: hidden;
 }
 
 div.device p.deviceFingerprint {
@@ -71,6 +76,44 @@ div.device p.deviceFingerprint {
 	cursor: text;
 	position: relative;
 	bottom: 10px;
+	font-size: 14px;
+	margin-left: 62px;
+}
+
+div.device label.deviceTrusted {
+	display: block;
+	float: right;
+	position: relative;
+	bottom: 24px;
+	left: 40px;
+	background-color: #F0F8FF;
+	padding: 10px;
+	border-right: 1px solid #96A5B2;
+	border-bottom: 1px solid #96A5B2;
+}
+
+div.device label.deviceTrusted[data-visible="false"] {
+	display: none;
+}
+
+div.device label.deviceTrusted input.deviceTrustedCheckbox {
+	margin: 0 8px 0 0;
+}
+
+div.device label.deviceTrusted span.deviceTrustedText {
+	position: relative;
+	bottom: 2px;
+}
+
+div.device input.removeDevice {
+	float: right;
+	position: relative;
+	bottom: 24px;
+	right: 8px;
+}
+
+div.device input.removeDevice[data-visible='false'] {
+	visibility: hidden;
 }
 
 div#deviceManagerBottom {

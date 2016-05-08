@@ -541,6 +541,7 @@ Cryptocat.OMEMO = {};
 			thisBundle.identityKey = userBundle.identityKey;
 			thisBundle.deviceName = userBundle.deviceName;
 			thisBundle.deviceIcon = userBundle.deviceIcon;
+			thisBundle.trusted = false;
 		}
 		thisBundle.signedPreKey = userBundle.signedPreKey;
 		thisBundle.signedPreKeyId = userBundle.signedPreKeyId;
@@ -619,6 +620,16 @@ Cryptocat.OMEMO = {};
 		res.payload.ciphertext = messageEnc.ciphertext;
 		res.payload.tag = messageEnc.tag;
 		for (var deviceId in bundles) { if (hasProperty(bundles, deviceId)) {
+			var isTrustedOnly = (
+				Cryptocat.Me.settings.trustedOnly.indexOf(username) >= 0
+			);
+			var isTrusted = (
+				hasProperty(bundles[deviceId], 'trusted') &&
+				bundles[deviceId].trusted
+			);
+			if (isTrustedOnly && !isTrusted) {
+				continue;
+			}
 			if (
 				!hasProperty(bundles[deviceId], 'dr') ||
 				!hasProperty(bundles[deviceId].dr, 'myEphemeralKeyP4')
@@ -738,5 +749,65 @@ Cryptocat.OMEMO = {};
 			valid: false
 		});
 		return false;
+	};
+
+	Cryptocat.OMEMO.removeDevice = function(deviceId) {
+		if (deviceId === Cryptocat.Me.settings.deviceId) {
+			Cryptocat.Diag.message.removeThisDevice(function(response) {
+				if (response !== 0) {
+					return false;
+				}
+				var index = Cryptocat.Me.settings.deviceIds.indexOf(
+					deviceId
+				);
+				if (index >= 0) {
+					Cryptocat.Me.settings.deviceIds.splice(index, 1);
+				}
+				Cryptocat.XMPP.sendDeviceList(
+					Cryptocat.Me.settings.deviceIds
+				);
+				if (Cryptocat.Win.main.login.state.rememberIsChecked) {
+					Cryptocat.Storage.updateCommon({
+						rememberedLogin: {
+							username: '',
+							password: ''
+						}
+					}, function() {});
+				}
+				setTimeout(function() {
+					Cryptocat.XMPP.disconnect(function() {
+						Cryptocat.Storage.deleteUser(
+							Cryptocat.Me.username,
+							function() {
+								Cryptocat.Win.main.beforeQuit();
+							}
+						);
+					});
+				}, 3000);
+			});
+		} else {
+			Cryptocat.Diag.message.removeDevice(function(response) {
+				if (response !== 0) {
+					return false;
+				}
+				var index = Cryptocat.Me.settings.deviceIds.indexOf(
+					deviceId
+				);
+				if (index >= 0) {
+					Cryptocat.Me.settings.deviceIds.splice(index, 1);
+				}
+				Cryptocat.XMPP.sendDeviceList(
+					Cryptocat.Me.settings.deviceIds
+				);
+				Cryptocat.Storage.updateUser(Cryptocat.Me.username, {
+					deviceIds: Cryptocat.Me.settings.deviceIds
+				}, function() {});
+				setTimeout(function() {
+					Cryptocat.XMPP.getDeviceList(
+						Cryptocat.Me.username
+					);
+				}, 3000);
+			});
+		}
 	};
 })();

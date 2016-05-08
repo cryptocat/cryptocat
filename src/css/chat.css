@@ -135,7 +135,7 @@ div.chatMessage, div.chatSticker, div.chatFile, div.chatMedia {
 	word-wrap: break-word;
 	word-break: break-word;
 	display: table;
-	min-width: 25%;
+	min-width: 60%;
 	max-width: 70%;
 	margin: 4px 10px;
 	border-radius: 2px;
@@ -193,7 +193,7 @@ div.chatMedia[data-offline="true"] {
 	border-color: #CFA8A6;
 }
 
-span.chatMessageInfo, span.chatMediaInfo {
+span.chatMessageInfo, span.chatFileInfo, span.chatMediaInfo {
 	padding: 0 0px 0 10px;
 	margin: 0 0 8px -5px;
 	display: block;
@@ -204,6 +204,7 @@ span.chatMessageInfo, span.chatMediaInfo {
 }
 
 span.chatMessageInfo span.chatMessageSender,
+span.chatFileInfo span.chatFileSender,
 span.chatMediaInfo span.chatMediaSender {
 	font-weight: bold;
 	font-size: 0.9em;
@@ -211,7 +212,15 @@ span.chatMediaInfo span.chatMediaSender {
 	margin-left: -4px;
 }
 
+span.chatMessageInfo span.chatMessageDeviceName,
+span.chatFileInfo span.chatFileDeviceName,
+span.chatMediaInfo span.chatMediaDeviceName {
+	font-size: 0.8em;
+	margin-left: 5px;
+}
+
 span.chatMessageInfo span.chatMessageTimestamp,
+span.chatFileInfo span.chatFileTimestamp,
 span.chatMediaInfo span.chatMediaTimestamp {
 	font-style: italic;
 	font-size: 0.8em;
@@ -275,7 +284,7 @@ div.chatFile img.chatFileIcon {
 div.chatFile div.chatFileProgressBar {
 	border: 1px solid #96A5B2;
 	float: left;
-	width: 120px;
+	width: 67%;
 	height: 18px;
 	margin: 18px 0 0 8px;
 	padding: 1px;
@@ -526,3 +535,4 @@ textarea#chatInputText {
 textarea#chatInputText[data-enabled='false'] {
 	cursor: not-allowed !important;
 }
+
