@@ -135,8 +135,8 @@ div.chatMessage, div.chatSticker, div.chatFile, div.chatMedia {
 	word-wrap: break-word;
 	word-break: break-word;
 	display: table;
-	min-width: 60%;
-	max-width: 70%;
+	min-width: 55%;
+	max-width: 65%;
 	margin: 4px 10px;
 	border-radius: 2px;
 }
@@ -250,6 +250,9 @@ div.chatMedia video.chatMediaRenderer {
 div.chatSticker {
 	padding-bottom: 0;
 	background: #FFF;
+	width: 130px;
+	min-width: 130px;
+	max-width: 130px;
 }
 
 div.chatSticker img {
@@ -541,4 +544,3 @@ textarea#chatInputText {
 textarea#chatInputText[data-enabled='false'] {
 	cursor: not-allowed !important;
 }
-
