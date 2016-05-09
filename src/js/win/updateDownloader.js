@@ -72,28 +72,6 @@ window.addEventListener('load', function(e) {
 		document.getElementById('renderA')
 	);
 
-	var verifySignature = function(path, hash, callback) {
-		var signature = '';
-		HTTPS.get(Cryptocat.Update.sigURIs[process.platform], function(res) {
-			res.on('data', function(chunk) {
-				signature += chunk;
-			});
-			res.on('end', function() {
-				signature = signature.replace(/(\r\n)|\n|\r/gm, '');
-				var valid = ProScript.crypto.ED25519.checkValid(
-					signature, hash, Cryptocat.Update.signingKey
-				);
-				callback(valid);
-			});
-		}).on('error', function(err) {
-			Cryptocat.Diag.error.updateDownloader();
-			FS.unlink(path);
-			setInterval(function() {
-				Remote.getCurrentWindow().close();
-			}, 250);
-		});
-	};
-
 	Cryptocat.Update.saveDialog(Remote.getCurrentWindow(), function(path) {
 		if (!path) {
 			setInterval(function() {
@@ -118,7 +96,7 @@ window.addEventListener('load', function(e) {
 				thisUpdateDownloader.setState({
 					statusMessage: 'Verifying signature...'
 				});
-				verifySignature(path, hash.digest('hex'), function(valid) {
+				Cryptocat.Update.verifySignature(hash.digest('hex'), function(valid) {
 					if (valid) {
 						Cryptocat.Diag.message.updateDownloaded(function() {
 							IPCRenderer.sendSync('main.beforeQuit');

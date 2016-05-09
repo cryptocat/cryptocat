@@ -100,6 +100,24 @@ Cryptocat.Update = {
 		});
 	};
 
+	Cryptocat.Update.verifySignature = function(hash, callback) {
+		var signature = '';
+		HTTPS.get(Cryptocat.Update.sigURIs[process.platform], function(res) {
+			res.on('data', function(chunk) {
+				signature += chunk;
+			});
+			res.on('end', function() {
+				signature = signature.replace(/(\r\n)|\n|\r/gm, '');
+				var valid = ProScript.crypto.ED25519.checkValid(
+					signature, hash, Cryptocat.Update.signingKey
+				);
+				callback(valid);
+			});
+		}).on('error', function(err) {
+			callback(false);
+		});
+	};
+
 	// Run on application start
 	Cryptocat.Update.check(function() {
 	});
