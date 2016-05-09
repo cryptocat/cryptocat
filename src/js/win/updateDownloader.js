@@ -82,43 +82,51 @@ window.addEventListener('load', function(e) {
 		var file = FS.createWriteStream(path);
 		var cur = 0;
 		var hash = NodeCrypto.createHash('sha256');
-		HTTPS.get(Cryptocat.Update.clientURIs[process.platform], function(res) {
-			var len = parseInt(res.headers['content-length'], 10);
-			res.pipe(file);
-			res.on('data', function(chunk) {
-				cur += chunk.length;
-				hash.update(chunk, 'binary');
-				thisUpdateDownloader.onProgress(cur, len);
-			});
-			file.on('finish', function() {
-				file.close();
-				Remote.getCurrentWindow().setProgressBar(-1);
-				thisUpdateDownloader.setState({
-					statusMessage: 'Verifying signature...'
-				});
-				Cryptocat.Update.verifySignature(hash.digest('hex'), function(valid) {
-					if (valid) {
-						Cryptocat.Diag.message.updateDownloaded(function() {
-							IPCRenderer.sendSync('main.beforeQuit');
-							setInterval(function() {
-								Remote.getCurrentWindow().close();
-							}, 250);
-						});
-					} else {
-						Cryptocat.Diag.error.updateDownloader();
-						FS.unlink(path);
-						setInterval(function() {
-							Remote.getCurrentWindow().close();
-						}, 250);
-					}
-				});
-			});
-		}).on('error', function(err) {
+		var onError = function() {
 			Cryptocat.Diag.error.updateDownloader();
 			FS.unlink(path);
 			setInterval(function() {
 				Remote.getCurrentWindow().close();
 			}, 250);
-		});
+			return false;
+		};
+		Cryptocat.Pinning.get(
+			Cryptocat.Update.clientURIs[process.platform],
+			function(res, valid) {
+				if (!valid) {
+					return onError();
+				}
+				var len = parseInt(res.headers['content-length'], 10);
+				res.pipe(file);
+				res.on('data', function(chunk) {
+					cur += chunk.length;
+					hash.update(chunk, 'binary');
+					thisUpdateDownloader.onProgress(cur, len);
+				});
+				file.on('finish', function() {
+					file.close();
+					Remote.getCurrentWindow().setProgressBar(-1);
+					thisUpdateDownloader.setState({
+						statusMessage: 'Verifying signature...'
+					});
+					Cryptocat.Update.verifySignature(hash.digest('hex'), function(valid) {
+						if (valid) {
+							Cryptocat.Diag.message.updateDownloaded(function() {
+								IPCRenderer.sendSync('main.beforeQuit');
+								setInterval(function() {
+									Remote.getCurrentWindow().close();
+								}, 250);
+							});
+						} else {
+							Cryptocat.Diag.error.updateDownloader();
+							FS.unlink(path);
+							setInterval(function() {
+								Remote.getCurrentWindow().close();
+							}, 250);
+						}
+					});
+				});
+			}
+		);
 	});
 });

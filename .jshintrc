@@ -26,6 +26,7 @@
 		"DR": true,
 		"NodeCrypto": true,
 		"HTTPS": true,
+		"NodeUrl": true,
 		"Remote": true,
 		"FS": true,
 		"Dialog": true,

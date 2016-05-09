@@ -93,6 +93,7 @@ Cryptocat.File = {};
 		var put = HTTPS.request({
 			hostname: 'cryptocat.blob.core.windows.net',
 			port: 443,
+			protocol: 'https:',
 			method: 'PUT',
 			path: '/files/' + file.sas,
 			headers: {
@@ -266,7 +267,19 @@ Cryptocat.File = {};
 			});
 			return false;
 		}
-		HTTPS.get('https://crypto.cat/sas', function(res) {
+		Cryptocat.Pinning.get('https://crypto.cat/sas', function(res, valid) {
+			if (!valid) {
+				Cryptocat.Diag.error.fileGeneral(name);
+				onBegin({
+					name: name,
+					url: '',
+					key: '',
+					iv: '',
+					tag: '',
+					valid: false
+				});
+				return false;
+			}
 			var sas = '';
 			res.on('data', function(chunk) {
 				sas += chunk;

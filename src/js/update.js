@@ -74,48 +74,58 @@ Cryptocat.Update = {
 	};
 
 	Cryptocat.Update.check = function(ifLatest) {
-		HTTPS.get(Cryptocat.Update.verURIs[process.platform], function(res) {
-			var latest = '';
-			res.on('data', function(chunk) {
-				latest += chunk;
-			});
-			res.on('end', function() {
-				latest = latest.replace(/(\r\n|\n|\r)/gm, '');
-				if (!Cryptocat.Patterns.version.test(latest)) {
+		Cryptocat.Pinning.get(
+			Cryptocat.Update.verURIs[process.platform],
+			function(res, valid) {
+				if (!valid) {
 					Cryptocat.Diag.error.updateCheck();
 					return false;
 				}
-				if (compareVersionStrings(Cryptocat.Version, latest)) {
-					Cryptocat.Update.updateAvailable(latest);
-				} else {
-					console.info(
-						'Cryptocat.Update:',
-						'No updates available (' + latest + ').'
-					);
-					ifLatest();
-				}
-			});
-		}).on('error', function(err) {
-			Cryptocat.Diag.error.updateCheck();
-		});
+				var latest = '';
+				res.on('data', function(chunk) {
+					latest += chunk;
+				});
+				res.on('end', function() {
+					latest = latest.replace(/(\r\n|\n|\r)/gm, '');
+					if (!Cryptocat.Patterns.version.test(latest)) {
+						Cryptocat.Diag.error.updateCheck();
+						return false;
+					}
+					if (compareVersionStrings(Cryptocat.Version, latest)) {
+						Cryptocat.Update.updateAvailable(latest);
+					} else {
+						console.info(
+							'Cryptocat.Update:',
+							`No updates available (${latest}).`
+						);
+						ifLatest();
+					}
+				});
+			}
+		);
 	};
 
 	Cryptocat.Update.verifySignature = function(hash, callback) {
 		var signature = '';
-		HTTPS.get(Cryptocat.Update.sigURIs[process.platform], function(res) {
-			res.on('data', function(chunk) {
-				signature += chunk;
-			});
-			res.on('end', function() {
-				signature = signature.replace(/(\r\n)|\n|\r/gm, '');
-				var valid = ProScript.crypto.ED25519.checkValid(
-					signature, hash, Cryptocat.Update.signingKey
-				);
-				callback(valid);
-			});
-		}).on('error', function(err) {
-			callback(false);
-		});
+		Cryptocat.Pinning.get(
+			Cryptocat.Update.sigURIs[process.platform],
+			function(res, valid) {
+				if (!valid) {
+					callback(false);
+					return false;
+				}
+				res.on('data', function(chunk) {
+					signature += chunk;
+				});
+				res.on('end', function() {
+					signature = signature.replace(/(\r\n)|\n|\r/gm, '');
+					var valid = ProScript.crypto.ED25519.checkValid(
+						signature, hash, Cryptocat.Update.signingKey
+					);
+					callback(valid);
+				});
+			}
+		);
 	};
 
 	// Run on application start

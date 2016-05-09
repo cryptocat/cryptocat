@@ -24,6 +24,14 @@ Cryptocat.Diag = {
 		);
 	};
 
+	Cryptocat.Diag.error.createAccount = function() {
+		Dialog.showErrorBox(
+			'Cryptocat: Cannot Create Account',
+			'You must be connected to the Internet in order to create ' +
+			'a Cryptocat account.'
+		);
+	};
+
 	Cryptocat.Diag.error.loginDisconnect = function() {
 		Dialog.showErrorBox(
 			'Cryptocat: Connection Error',

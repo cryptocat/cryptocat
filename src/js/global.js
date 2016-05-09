@@ -3,6 +3,7 @@
 var NodeCrypto = require('crypto');
 var IPCRenderer = require('ipc-renderer');
 var HTTPS = require('https');
+var NodeUrl = require('url');
 var Remote = require('remote');
 var FS = require('fs');
 var Dialog = Remote.require('dialog');
@@ -66,6 +67,7 @@ process.once('loaded', function() {
 	global.NodeCrypto = NodeCrypto;
 	global.IPCRenderer = IPCRenderer;
 	global.HTTPS = HTTPS;
+	global.NodeUrl = NodeUrl;
 	global.FS = FS;
 	global.Dialog = Dialog;
 	global.Path = Path;

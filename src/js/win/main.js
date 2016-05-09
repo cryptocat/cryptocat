@@ -569,7 +569,18 @@ window.addEventListener('load', function(e) {
 					type: 'button',
 					value: 'Create Account',
 					onClick: function() {
-						Remote.shell.openExternal('https://crypto.cat/create');
+						Cryptocat.Pinning.get(
+							'https://crypto.cat/create',
+							function(res, valid) {
+								if (valid) {
+									Remote.shell.openExternal(
+										'https://crypto.cat/create'
+									);
+								} else {
+									Cryptocat.Diag.error.createAccount();
+								}
+							}
+						);
 					}
 				}),
 				React.createElement('span', {
