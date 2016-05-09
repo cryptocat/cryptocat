@@ -2,10 +2,6 @@
 Cryptocat.Pinning = {};
 
 (function() {
-	var fingerprint = (
-		'9C:DC:80:19:8E:E1:32:A6:7E:B3:' +
-		'D4:EE:9E:CB:C5:BF:4E:50:BB:68'
-	);
 	var issuerCn = 'Gandi Standard SSL CA 2';
 	var subjectCn = 'crypto.cat';
 	var exponent = '0x10001';
@@ -24,7 +20,6 @@ Cryptocat.Pinning = {};
 		HTTPS.get('https://crypto.cat/socket', function(res) {
 			var cert = res.socket.getPeerCertificate();
 			if (
-				(cert.fingerprint === fingerprint) &&
 				(cert.issuer.CN === issuerCn) &&
 				(cert.subject.CN === subjectCn) &&
 				(cert.exponent === exponent) &&
