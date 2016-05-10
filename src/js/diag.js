@@ -412,5 +412,4 @@ Cryptocat.Diag = {
 				`it is recommended that you view your device list and verify it.`
 		}, callback);
 	};
-
 })();
