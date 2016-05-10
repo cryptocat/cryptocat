@@ -5,5 +5,14 @@
 	"requireTrailingComma": false,
 	"disallowMultipleSpaces": true,
 	"requireSpaceAfterComma": true,
-	"requireSemicolons": true
+	"requireSemicolons": true,
+	"disallowMultipleLineStrings": true,
+	"disallowSpacesInsideTemplateStringPlaceholders": true,
+	"requireSpread": true,
+	"requireObjectKeysOnNewLine": true,
+	"requireSpaceBeforeObjectValues": true,
+	"requireSpaceBeforeObjectValues": true,
+
+	"requireArrowFunctions": false,
+
 }

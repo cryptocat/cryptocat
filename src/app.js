@@ -1,27 +1,38 @@
 'use strict';
+(require('v8')).setFlagsFromString('--harmony');
 const Electron = require('electron');
 const BrowserWindow = require('browser-window');
 const FS = require('fs');
 const Path = require('path');
 
-var Windows = {main: null, last: null};
-var TrayIcon = {};
-var MenuSettings = {notify: false, sounds: false, typing: false};
-var IntentToQuit = false;
+const Windows = {
+	main: null,
+	last: null
+};
+const MenuSettings = {
+	notify: false,
+	sounds: false,
+	typing: false
+};
 
-var handleStartupEvent = {
+let IntentToQuit = false;
+let TrayIcon = {};
+
+const handleStartupEvent = {
 	win32: function() {
 		const childProc = require('child_process');
 		const AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
 		if (process.argv[1] === '--squirrel-install') {
 			childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
-				cwd: AppDataDir, timeout: 10000
+				cwd: AppDataDir,
+				timeout: 10000
 			});
 			Electron.app.quit();
 		}
 		if (process.argv[1] === '--squirrel-updated') {
 			childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
-				cwd: AppDataDir, timeout: 10000
+				cwd: AppDataDir,
+				timeout: 10000
 			});
 			Electron.app.quit();
 		}
@@ -33,10 +44,10 @@ var handleStartupEvent = {
 		}
 	},
 	linux: function() {
-		var shortcut = '[Desktop Entry]\n';
-		var path = Path.join(process.env.HOME, '.local');
-		var exePath = Electron.app.getPath('exe');
-		var icoPath = exePath.slice(0, -9) + 'logo.png';
+		let shortcut = '[Desktop Entry]\n';
+		let path = Path.join(process.env.HOME, '.local');
+		let exePath = Electron.app.getPath('exe');
+		let icoPath = exePath.slice(0, -9) + 'logo.png';
 		shortcut += 'Name=Cryptocat\n';
 		shortcut += 'Exec=' + exePath + '\n';
 		shortcut += 'Icon=' + icoPath + '\n';
@@ -74,8 +85,8 @@ if (handleStartupEvent[process.platform]()) {
 	return false;
 }
 
-var buildTrayMenu = function(settings) {
-	var menu = Electron.Menu.buildFromTemplate([
+const buildTrayMenu = function(settings) {
+	let menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Buddy List',
 			click: function() {
@@ -166,8 +177,8 @@ var buildTrayMenu = function(settings) {
 	return menu;
 };
 
-var buildMainMenu = function(settings) {
-	var menu = Electron.Menu.buildFromTemplate([
+const buildMainMenu = function(settings) {
+	let menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
 			id: '0',
@@ -332,7 +343,7 @@ var buildMainMenu = function(settings) {
 			}
 		]
 	);
-	if (false) {
+	if (1) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
@@ -358,9 +369,9 @@ var buildMainMenu = function(settings) {
 	return menu;
 };
 
-var buildMacMenu = function(settings) {
-	var isChatWindow = (/chat\.html$/).test(Windows.last.getURL());
-	var chat = Electron.Menu.buildFromTemplate([{
+const buildMacMenu = function(settings) {
+	let isChatWindow = (/chat\.html$/).test(Windows.last.getURL());
+	let chat = Electron.Menu.buildFromTemplate([{
 		label: 'Chat',
 		id: '1',
 		submenu: [{
@@ -382,7 +393,7 @@ var buildMacMenu = function(settings) {
 			}
 		}]
 	}]);
-	var view = Electron.Menu.buildFromTemplate([{
+	let view = Electron.Menu.buildFromTemplate([{
 		label: 'View',
 		submenu: [{
 			label: 'Increase Font Size',
@@ -404,7 +415,7 @@ var buildMacMenu = function(settings) {
 			}
 		}]
 	}]);
-	var menu = buildMainMenu(settings);
+	let menu = buildMainMenu(settings);
 	if (isChatWindow) {
 		menu.insert(1, chat.items[0]);
 		menu.insert(3, view.items[0]);
@@ -505,7 +516,9 @@ Electron.ipcMain.on('addDevice.addDevice', function(e, name, icon) {
 });
 
 Electron.ipcMain.on('app.updateMenuSettings', function(e, settings) {
-	MenuSettings = settings;
+	MenuSettings.notify = settings.notify;
+	MenuSettings.sounds = settings.sounds;
+	MenuSettings.typing = settings.typing;
 	if (process.platform === 'darwin') {
 		Electron.Menu.setApplicationMenu(buildMacMenu(settings));
 		Electron.app.dock.setMenu(buildTrayMenu(settings));

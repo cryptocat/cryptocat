@@ -22,13 +22,19 @@ var Cryptocat = {
 		username: '',
 		connected: false,
 		settings: {
-			identityKey: {priv: [], pub: []},
+			identityKey: {
+				priv: [],
+				pub: []
+			},
 			identityDHKey: [],
 			deviceId: '',
 			deviceName: '',
 			deviceIcon: 0,
 			deviceIds: [],
-			signedPreKey: {priv: [], pub: []},
+			signedPreKey: {
+				priv: [],
+				pub: []
+			},
 			signedPreKeyId: 0,
 			signedPreKeySignature: '',
 			preKeys: [],
