@@ -304,7 +304,7 @@ Cryptocat.OMEMO = {};
 		sT(pElement, payload.ciphertext);
 		hElement.appendChild(iElement);
 		hElement.appendChild(tElement);
-		for (var deviceId in devices) { if (hasProperty(devices, deviceId)) {
+		Object.keys(devices).forEach((deviceId) => {
 			var kElement = cE('', 'key', '');
 			var _cElement = cE('', 'ciphertext', '');
 			var _eKElement = cE('', 'ephemeralKey', '');
@@ -326,7 +326,7 @@ Cryptocat.OMEMO = {};
 			kElement.appendChild(_tElement);
 			kElement.appendChild(_pKIElement);
 			hElement.appendChild(kElement);
-		}}
+		});
 		return {
 			h: hElement,
 			p: pElement
@@ -510,15 +510,14 @@ Cryptocat.OMEMO = {};
 			}
 		}
 		if (hasProperty(userBundles, username)) {
-			for (var userBundle in userBundles[username]) {
+			Object.keys(userBundles[username]).forEach((userBundle) => {
 				if (
-					hasProperty(userBundles[username], userBundle) &&
 					(userBundle !== Cryptocat.Me.settings.deviceId) &&
 					(deviceIds.indexOf(userBundle) < 0)
 				) {
 					delete userBundles[username][userBundle];
 				}
-			}
+			});
 		}
 		for (var i = 0; i < deviceIds.length; i += 1) {
 			Cryptocat.XMPP.getBundle(username, deviceIds[i]);
@@ -619,7 +618,7 @@ Cryptocat.OMEMO = {};
 		res.payload.iv = ProScript.encoding.byteArrayToHexString(messageIv);
 		res.payload.ciphertext = messageEnc.ciphertext;
 		res.payload.tag = messageEnc.tag;
-		for (var deviceId in bundles) { if (hasProperty(bundles, deviceId)) {
+		Object.keys(bundles).forEach((deviceId) => {
 			var isTrustedOnly = (
 				Cryptocat.Me.settings.trustedOnly.indexOf(username) >= 0
 			);
@@ -628,7 +627,7 @@ Cryptocat.OMEMO = {};
 				bundles[deviceId].trusted
 			);
 			if (isTrustedOnly && !isTrusted) {
-				continue;
+				return false;
 			}
 			if (
 				!hasProperty(bundles[deviceId], 'dr') ||
@@ -658,7 +657,7 @@ Cryptocat.OMEMO = {};
 				res.devices[deviceId] = next.output;
 				bundles[deviceId].dr = next.them;
 			}
-		}}
+		});
 		Cryptocat.XMPP.sendMessage(username, res);
 		return true;
 	};

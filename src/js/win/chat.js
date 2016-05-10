@@ -434,14 +434,12 @@ window.addEventListener('load', function(e) {
 				var files = e.dataTransfer.files;
 				var paths = [];
 				var i = '';
-				for (i in files) {
-					if (hasProperty(files, i)) {
-						paths.push(files[i].path);
-					}
-				}
-				for (i in paths) { if (hasProperty(paths, i)) {
+				Object.keys(files).forEach((i) => {
+					paths.push(files[i].path);
+				});
+				Object.keys(paths).forEach((i) => {
 					readFile(paths[i]);
-				}}
+				});
 			}
 			return false;
 		},
@@ -1049,9 +1047,9 @@ window.addEventListener('load', function(e) {
 				thisChat.window.sendFile(name, file);
 			});
 		};
-		for (var i in paths) { if (hasProperty(paths, i)) {
+		Object.keys(paths).forEach((i) => {
 			readFile(paths[i]);
-		}}
+		});
 	});
 
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
@@ -1062,7 +1060,7 @@ window.addEventListener('load', function(e) {
 				unread: thisChat.window.state.unread + 1
 			});
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
-			if (isNaN(badgeCount)) { badgeCount = 0; }
+			if (Number.isNaN(badgeCount)) { badgeCount = 0; }
 			Remote.app.dock.setBadge((badgeCount + 1).toString());
 		}
 	});
@@ -1167,7 +1165,7 @@ window.addEventListener('load', function(e) {
 		document.getElementById('chatInputText').focus();
 		if (proc.platform === 'darwin') {
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
-			if (isNaN(badgeCount)) { badgeCount = 0; }
+			if (Number.isNaN(badgeCount)) { badgeCount = 0; }
 			badgeCount = badgeCount - unread;
 			if (badgeCount <= 0) { badgeCount = ''; }
 			Remote.app.dock.setBadge(badgeCount.toString());
@@ -1201,20 +1199,21 @@ window.addEventListener('load', function(e) {
 		thisChat.window.state.unread = 0;
 		if (proc.platform === 'darwin') {
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
-			if (isNaN(badgeCount)) { badgeCount = 0; }
+			if (Number.isNaN(badgeCount)) { badgeCount = 0; }
 			badgeCount = badgeCount - unread;
 			if (badgeCount <= 0) { badgeCount = ''; }
 			Remote.app.dock.setBadge(badgeCount.toString());
 		}
-		for (var file in thisChat.window.files) {
+		Object.keys(thisChat.window.files).forEach((file) => {
+			if (e.returnValue === 'false') {
+				return false;
+			}
 			if (
-				hasProperty(thisChat.window.files, file) &&
 				(thisChat.window.files[file].props.sender !== Cryptocat.Me.username) &&
 				!thisChat.window.files[file].state.saved
 			) {
 				e.returnValue = 'false';
 				unsavedFilesDiag();
-				break;
 			} else if (
 				hasProperty(thisChat.window.files, file) &&
 				(thisChat.window.files[file].props.sender === Cryptocat.Me.username) &&
@@ -1222,9 +1221,8 @@ window.addEventListener('load', function(e) {
 			) {
 				e.returnValue = 'false';
 				unsentFilesDiag();
-				break;
 			}
-		}
+		});
 		if (thisChat.sendQueue.messages.length) {
 			Cryptocat.Diag.error.messagesQueued(
 				thisChat.sendQueue.messages.length

@@ -145,18 +145,15 @@ Cryptocat.File = {};
 			};
 		}
 		var ext = lName.match(/\.\w{1,5}$/)[0].substr(1);
-		for (var type in Cryptocat.File.types) {
-			if (
-				(hasProperty(Cryptocat.File.types, type)) &&
-				(Cryptocat.File.types[type].indexOf(ext) >= 0)
-			) {
+		Object.keys(Cryptocat.File.types).forEach((type) => {
+			if ((Cryptocat.File.types[type].indexOf(ext) >= 0)) {
 				return {
 					allowed: true,
 					type: type,
 					ext: ext
 				};
 			}
-		}
+		});
 		return {
 			allowed: false,
 			type: '',

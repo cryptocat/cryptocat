@@ -10,12 +10,10 @@ Cryptocat.Notify = {
 };
 
 (function() {
-	for (var sound in Cryptocat.Notify.sounds) {
-		if (hasProperty(Cryptocat.Notify.sounds, sound)) {
-			Cryptocat.Notify.sounds[sound].load();
-			Cryptocat.Notify.sounds[sound].volume = 0.5;
-		}
-	}
+	Object.keys(Cryptocat.Notify.sounds).forEach((sound) => {
+		Cryptocat.Notify.sounds[sound].load();
+		Cryptocat.Notify.sounds[sound].volume = 0.5;
+	});
 
 	Cryptocat.Notify.playSound = function(sound) {
 		if (Cryptocat.Me.settings.sounds) {
