@@ -4,6 +4,7 @@
 	"curly": true,
 	"eqeqeq": true,
 	"latedef": true,
+	"forin": true,
 	"freeze": true,
 	"noarg": true,
 	"nonew": true,
