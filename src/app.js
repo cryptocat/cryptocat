@@ -1,7 +1,7 @@
 'use strict';
 (require('v8')).setFlagsFromString('--harmony');
 const Electron = require('electron');
-const BrowserWindow = require('browser-window');
+const BrowserWindow = Electron.BrowserWindow;
 const FS = require('fs');
 const Path = require('path');
 

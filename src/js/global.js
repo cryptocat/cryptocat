@@ -1,12 +1,13 @@
 (function() {
 'use strict';
+var Electron = require('electron');
 var NodeCrypto = require('crypto');
-var IPCRenderer = require('ipc-renderer');
+var IPCRenderer = Electron.ipcRenderer;
 var HTTPS = require('https');
 var NodeUrl = require('url');
-var Remote = require('remote');
+var Remote = Electron.remote;
 var FS = require('fs');
-var Dialog = Remote.require('dialog');
+var Dialog = Remote.dialog;
 var Path = (function() {
 	if (process.platform === 'win32') {
 		return (require('path')).win32;
