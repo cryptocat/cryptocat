@@ -137,27 +137,28 @@ Cryptocat.File = {};
 
 	Cryptocat.File.getType = function(name) {
 		var lName = name.toLowerCase();
+		var allowed = false;
+		var type = '';
+		var ext = '';
 		if (!(/\.\w{1,5}$/).test(lName)) {
 			return {
-				allowed: false,
-				type: '',
-				ext: ''
+				allowed: allowed,
+				type: type,
+				ext: ext
 			};
 		}
-		var ext = lName.match(/\.\w{1,5}$/)[0].substr(1);
-		Object.keys(Cryptocat.File.types).forEach((type) => {
-			if ((Cryptocat.File.types[type].indexOf(ext) >= 0)) {
-				return {
-					allowed: true,
-					type: type,
-					ext: ext
-				};
+		var e = lName.match(/\.\w{1,5}$/)[0].substr(1);
+		Object.keys(Cryptocat.File.types).forEach((t) => {
+			if ((Cryptocat.File.types[t].indexOf(e) >= 0)) {
+				allowed = true;
+				type = t;
+				ext = e;
 			}
 		});
 		return {
-			allowed: false,
-			type: '',
-			ext: ''
+			allowed: allowed,
+			type: type,
+			ext: ext
 		};
 	};
 
