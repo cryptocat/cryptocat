@@ -1,27 +1,27 @@
 'use strict';
 (require('v8')).setFlagsFromString('--harmony');
-const Electron = require('electron');
-const BrowserWindow = require('browser-window');
-const FS = require('fs');
-const Path = require('path');
+var Electron = require('electron');
+var BrowserWindow = require('browser-window');
+var FS = require('fs');
+var Path = require('path');
 
-const Windows = {
+var Windows = {
 	main: null,
 	last: null
 };
-const MenuSettings = {
+var MenuSettings = {
 	notify: false,
 	sounds: false,
 	typing: false
 };
 
-let IntentToQuit = false;
-let TrayIcon = {};
+var IntentToQuit = false;
+var TrayIcon = {};
 
-const handleStartupEvent = {
+var handleStartupEvent = {
 	win32: function() {
-		const childProc = require('child_process');
-		const AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
+		var childProc = require('child_process');
+		var AppDataDir = Path.join(process.env.LOCALAPPDATA, 'Cryptocat');
 		if (process.argv[1] === '--squirrel-install') {
 			childProc.execSync('Update.exe --createShortcut=Cryptocat.exe', {
 				cwd: AppDataDir,
@@ -44,10 +44,10 @@ const handleStartupEvent = {
 		}
 	},
 	linux: function() {
-		let shortcut = '[Desktop Entry]\n';
-		let path = Path.join(process.env.HOME, '.local');
-		let exePath = Electron.app.getPath('exe');
-		let icoPath = exePath.slice(0, -9) + 'logo.png';
+		var shortcut = '[Desktop Entry]\n';
+		var path = Path.join(process.env.HOME, '.local');
+		var exePath = Electron.app.getPath('exe');
+		var icoPath = exePath.slice(0, -9) + 'logo.png';
 		shortcut += 'Name=Cryptocat\n';
 		shortcut += 'Exec=' + exePath + '\n';
 		shortcut += 'Icon=' + icoPath + '\n';
@@ -85,8 +85,8 @@ if (handleStartupEvent[process.platform]()) {
 	return false;
 }
 
-const buildTrayMenu = function(settings) {
-	let menu = Electron.Menu.buildFromTemplate([
+var buildTrayMenu = function(settings) {
+	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Buddy List',
 			click: function() {
@@ -177,8 +177,8 @@ const buildTrayMenu = function(settings) {
 	return menu;
 };
 
-const buildMainMenu = function(settings) {
-	let menu = Electron.Menu.buildFromTemplate([
+var buildMainMenu = function(settings) {
+	var menu = Electron.Menu.buildFromTemplate([
 		{
 			label: 'Account',
 			id: '0',
@@ -369,9 +369,9 @@ const buildMainMenu = function(settings) {
 	return menu;
 };
 
-const buildMacMenu = function(settings) {
-	let isChatWindow = (/chat\.html$/).test(Windows.last.getURL());
-	let chat = Electron.Menu.buildFromTemplate([{
+var buildMacMenu = function(settings) {
+	var isChatWindow = (/chat\.html$/).test(Windows.last.getURL());
+	var chat = Electron.Menu.buildFromTemplate([{
 		label: 'Chat',
 		id: '1',
 		submenu: [{
@@ -393,7 +393,7 @@ const buildMacMenu = function(settings) {
 			}
 		}]
 	}]);
-	let view = Electron.Menu.buildFromTemplate([{
+	var view = Electron.Menu.buildFromTemplate([{
 		label: 'View',
 		submenu: [{
 			label: 'Increase Font Size',
@@ -415,7 +415,7 @@ const buildMacMenu = function(settings) {
 			}
 		}]
 	}]);
-	let menu = buildMainMenu(settings);
+	var menu = buildMainMenu(settings);
 	if (isChatWindow) {
 		menu.insert(1, chat.items[0]);
 		menu.insert(3, view.items[0]);
