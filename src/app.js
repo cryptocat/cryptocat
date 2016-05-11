@@ -241,8 +241,8 @@ const buildMainMenu = function(settings) {
 					click: function(e) {
 						Windows.main.webContents.send('main.deleteAccount');
 					}
-				}
-			]}, {
+				}]
+			}, {
 				label: 'Log Out',
 				click: function(e) {
 					Windows.main.webContents.send('main.logOut');
