@@ -130,6 +130,11 @@ div#main div.mainLeft {
 	float: left;
 }
 
+div#main div.mainLeft img.mainLeftSplash {
+	width: 500px;
+	height: auto;
+}
+
 div#main div.mainRight {
 	float: left;
 	width: 560px;
