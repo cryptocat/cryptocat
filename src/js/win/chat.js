@@ -147,11 +147,9 @@ window.addEventListener('load', function(e) {
 	var checkIfSticker = function(message) {
 		if (Cryptocat.Patterns.sticker.test(message)) {
 			var stickers = [
-				'angry', 'blushing', 'challengeAccepted',
-				'confused', 'crying', 'embarrassed',
-				'grinning', 'hurt',	'inLove',
-				'nerdy', 'sarcastic', 'sick',
-				'sleepy', 'smiling', 'winking'
+				'angry', 'challengeAccepted', 'confused',
+				'content', 'crying', 'grinning',
+				'inLove', 'smiling'
 			];
 			var sticker = message.substr(17);
 			if (stickers.indexOf(sticker) >= 0) {
@@ -861,9 +859,9 @@ window.addEventListener('load', function(e) {
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
-					'data-sticker': 'winking',
+					'data-sticker': 'content',
 					onClick: this.sendSticker,
-					title: 'Winking',
+					title: 'Content',
 					key: 8
 				}), React.createElement('input', {
 					type: 'button',
@@ -875,32 +873,39 @@ window.addEventListener('load', function(e) {
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
-					'data-sticker': 'embarrassed',
+					'data-sticker': 'challengeAccepted',
 					onClick: this.sendSticker,
-					title: 'Embarrassed',
+					title: 'Challenge Accepted!',
 					key: 10
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
-					'data-sticker': 'nerdy',
+					'data-sticker': 'angry',
 					onClick: this.sendSticker,
-					title: 'Nerdy',
+					title: 'Angry',
 					key: 11
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
-					'data-sticker': 'challengeAccepted',
+					'data-sticker': 'confused',
 					onClick: this.sendSticker,
-					title: 'Challenge Accepted!',
+					title: 'Confused',
 					key: 12
+				}), React.createElement('input', {
+					type: 'button',
+					className: 'chatToolbarButton',
+					'data-sticker': 'crying',
+					onClick: this.sendSticker,
+					title: 'Crying',
+					key: 13
 				}), React.createElement('div', {
 					className: 'recordModal',
 					'data-visible': this.state.recordVisible,
-					key: 13
+					key: 14
 				}, React.createElement('div', {
 					className: 'recordModalCountdown',
 					'data-visible': !!this.state.recordCountdown,
-					key: 14
+					key: 15
 				}, this.state.recordCountdown),
 				React.createElement('video', {
 					className: 'recordModalVideo',
@@ -908,45 +913,44 @@ window.addEventListener('load', function(e) {
 					src: this.state.recordSrc,
 					autoPlay: true,
 					muted: true,
-					key: 15
+					key: 16
 				}), React.createElement('div', {
 					className: 'recordModalControls',
-					key: 16
+					key: 17
 				}, React.createElement('input', {
 					type: 'button',
 					className: 'recordModalSend',
 					onClick: this.sendRecording,
-					key: 17
+					key: 18
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'recordModalCancel',
 					onClick: this.record,
-					key: 18
+					key: 19
 				}), React.createElement('div', {
 					className: 'recordModalDuration',
-					key: 19
+					key: 20
 				}, React.createElement('div', {
 					className: 'recordModalDurationIndicator',
 					'data-blinking': (this.state.recordTime >= 50),
 					style: {
 						width: ((this.state.recordTime * 100) / 60) + '%'
 					},
-					key: 20
+					key: 21
 				})))), React.createElement('input', {
 					type: 'button',
 					className: 'recordButton',
 					onClick: this.record,
 					title: 'Record Audio/Video',
 					'data-active': this.state.recordVisible,
-					key: 21
+					key: 22
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'sendFileButton',
 					onClick: this.sendFileDialog,
 					title: 'Send File',
-					key: 22
+					key: 23
 				})), React.createElement('textarea', {
-					key: 23,
 					id: 'chatInputText',
 					style: {
 						fontSize: this.state.fontSize + 'px'
@@ -964,7 +968,8 @@ window.addEventListener('load', function(e) {
 						this.state.status &&
 						this.state.connected
 					),
-					value: this.state.chatInputText
+					value: this.state.chatInputText,
+					key: 24
 				})))
 			]);
 		}

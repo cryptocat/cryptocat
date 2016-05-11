@@ -17,9 +17,9 @@ window.addEventListener('load', function(e) {
 
 	var spawnChatWindow = function() {
 		var chatWindow = new Remote.BrowserWindow({
-			width: 450,
-			minWidth: 450,
-			height: renderWindowHeight(450),
+			width: 470,
+			minWidth: 470,
+			height: renderWindowHeight(470),
 			minHeight: renderWindowHeight(150),
 			show: false,
 			autoHideMenuBar: false,

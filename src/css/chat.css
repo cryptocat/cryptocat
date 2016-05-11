@@ -1,24 +1,24 @@
 @keyframes chatMessageStickerSpinLeft {
 	0% {
-		transform: rotate(-14deg)
+		transform: rotate(-10deg)
 	}
 	50% {
-		transform: rotate(14deg)
+		transform: rotate(10deg)
 	}
 	100% {
-		transform: rotate(-14deg)
+		transform: rotate(-10deg)
 	}
 }
 
 @keyframes chatMessageStickerSpinRight {
 	0% {
-		transform: rotate(14deg)
+		transform: rotate(10deg)
 	}
 	50% {
-		transform: rotate(-14deg)
+		transform: rotate(-10deg)
 	}
 	100% {
-		transform: rotate(14deg)
+		transform: rotate(10deg)
 	}
 }
 
@@ -256,10 +256,10 @@ div.chatSticker {
 }
 
 div.chatSticker img {
-	width: 128px;
-	height: 128px;
-	margin: -20px auto;
+	width: 96px;
+	height: auto;
 	display: block;
+	margin: 10px auto;
 	-webkit-user-select: none !important;
 	user-select: none !important;
 	animation-duration: 0.5s;
@@ -268,12 +268,12 @@ div.chatSticker img {
 }
 
 div.chatSticker[data-alignment='left'] img {
-	transform: rotate(-14deg);
+	transform: rotate(-10deg);
 	animation-name: chatMessageStickerSpinLeft;
 }
 
 div.chatSticker[data-alignment='right'] img {
-	transform: rotate(14deg);
+	transform: rotate(10deg);
 	animation-name: chatMessageStickerSpinRight;
 }
 
@@ -341,7 +341,7 @@ div.chatToolbar input[type=button] {
 	height: 32px;
 	background-position: center;
 	background-repeat: no-repeat;
-	background-size: 36px;
+	background-size: 26px;
 	border-radius: 3px;
 	box-shadow: 1px 1px rgba(150, 165, 178, 0.5);
 }
@@ -354,28 +354,20 @@ div.chatToolbar input[data-sticker="grinning"] {
 	background-image: url('../img/stickers/grinning.png');
 }
 
-div.chatToolbar input[data-sticker="winking"] {
-	background-image: url('../img/stickers/winking.png');
+div.chatToolbar input[data-sticker="content"] {
+	background-image: url('../img/stickers/content.png');
 }
 
 div.chatToolbar input[data-sticker="inLove"] {
 	background-image: url('../img/stickers/inLove.png');
 }
 
-div.chatToolbar input[data-sticker="embarrassed"] {
-	background-image: url('../img/stickers/embarrassed.png');
-}
-
-div.chatToolbar input[data-sticker="nerdy"] {
-	background-image: url('../img/stickers/nerdy.png');
+div.chatToolbar input[data-sticker="challengeAccepted"] {
+	background-image: url('../img/stickers/challengeAccepted.png');
 }
 
 div.chatToolbar input[data-sticker="angry"] {
 	background-image: url('../img/stickers/angry.png');
-}
-
-div.chatToolbar input[data-sticker="challengeAccepted"] {
-	background-image: url('../img/stickers/challengeAccepted.png');
 }
 
 div.chatToolbar input[data-sticker="confused"] {
