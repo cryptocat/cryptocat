@@ -247,6 +247,12 @@ div.chatMedia video.chatMediaRenderer {
 	border-radius: 2px;
 }
 
+
+div.chatMedia img.chatMediaRenderer[data-ready="false"],
+div.chatMedia video.chatMediaRenderer[data-ready="false"] {
+	width: 96px;
+}
+
 div.chatSticker {
 	padding-bottom: 0;
 	background: #FFF;

@@ -355,6 +355,7 @@ window.addEventListener('load', function(e) {
 				blobType = 'video/*';
 				loadingExt = 'webm';
 			}
+			var src = `../img/animations/loading.${loadingExt}`;
 			if (
 				(this.props.file.type === 'recording') &&
 				(
@@ -365,7 +366,6 @@ window.addEventListener('load', function(e) {
 				renderer = 'audio';
 				blobType = 'audio/*';
 			}
-			var src = '../img/animations/loading.' + loadingExt;
 			if (this.state.binary.length) {
 				src = URL.createObjectURL(
 					new Blob([this.state.binary], {
@@ -398,6 +398,7 @@ window.addEventListener('load', function(e) {
 				className: 'chatMediaRenderer',
 				src: src,
 				alt: '',
+				'data-ready': this.state.ready,
 				autoPlay: !this.state.ready,
 				controls: this.state.ready,
 				loop: !this.state.ready,
