@@ -90,6 +90,7 @@ button:active, input[type=button]:active, input[type=submit]:active {
 }
 
 div#top {
+	max-height: 70px;
 }
 
 div#top img.logo {
@@ -119,7 +120,6 @@ div#top div.nav a.current {
 }
 
 div#main {
-	min-height: 480px;
 }
 
 div#main:after {
@@ -224,7 +224,7 @@ div#bottom {
 	border-radius: 5px;
 	padding: 5px;
 	height: 42px;
-	margin: 50px auto 30px auto;
+	margin: 0px auto 0px auto;
 }
 
 div#bottom div.bottomLeft {
