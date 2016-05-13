@@ -2,7 +2,7 @@ body {
 	background-color: #FFF;
 	font-family: 'Open Sans', sans-serif;
 	margin: 10px auto;
-	width: 1100px;
+	width: 1000px;
 	color: #222;
 	line-height: 28px;
 }
@@ -16,11 +16,14 @@ a:hover {
 }
 
 code {
+	tab-size: 2;
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
 	white-space: pre;
 	background: #F0F8FF;
 	padding: 8px 15px;
 	margin: 20px auto;
-	width: 800px;
+	width: 84%;
 	font-family: 'Inconsolata', monospace;
 	display: block;
 	border: 1px solid #96A5B2;
@@ -101,7 +104,7 @@ div#top div.nav {
 	display: inline-block;
 	position: relative;
 	bottom: 16px;
-	width: 1000px;
+	width: 900px;
 	border-left: 2px solid #96A5B2;
 	cursor: default;
 }
@@ -128,20 +131,26 @@ div#main:after {
 
 div#main div.mainLeft {
 	float: left;
+	width: 450px;
 }
 
 div#main div.mainLeft img.mainLeftSplash {
-	width: 470px;
+	width: 100%;
 	height: auto;
 }
 
 div#main div.mainRight {
 	float: left;
-	width: 560px;
+	width: 500px;
 	margin-left: 20px;
 }
 
+div#main div.mainRight h1 {
+	font-size: 1.8em;
+}
+
 div#main div.mainRight ul.mainFeatureList {
+	padding-left: 20px;
 }
 
 div#main div.mainRight ul.mainFeatureList li {
@@ -160,7 +169,7 @@ div#main div.mainRight button#downloadButton span.octicon {
 }
 
 div#main div.mainCenter {
-	width: 1045px;
+	padding: 0 40px 0 20px;
 	margin: 0 auto;
 }
 
@@ -188,12 +197,13 @@ div#main ul#acknowledgments, div#main ul#shuffledAcknowledgments {
 }
 
 div#main div.tableOfContents {
-	margin: 0 auto 40px auto;
+	margin: 0 0 40px 0;
 	box-shadow: 2px 2px #F0F8FF;
 	padding-bottom: 5px;
 	border: 1px solid #F0F8FF;
-	max-height: 200px;
+	max-height: 270px;
 	overflow: auto;
+	width: 100%;
 }
 
 div#main div.tableOfContents ul {
@@ -224,4 +234,45 @@ div#bottom div.bottomLeft {
 div#bottom div.bottomRight {
 	float: right;
 	text-align: right;
+}
+
+@media only screen and (max-device-width: 480px) {
+	body {
+		font-size: 22px;
+		line-height: 36px;
+		width: 100%;
+	}
+	code {
+		font-size: 14px;
+		line-height: 20px;
+	}
+	div#top div.nav {
+		width: 85%;
+	}
+	div#top div.nav a {
+		margin: 5px;
+	}
+	div#main {
+		width: 100%;
+	}
+	div#main div.mainLeft {
+		float: none;
+		margin: 0 auto;
+	}
+	div#main div.mainRight {
+		float: none;
+		margin: 0 auto;
+	}
+	div#bottom {
+		font-size: 16px;
+		line-height: 25px;
+	}
+	div#bottom div.bottomLeft {
+		float: none;
+	}
+	div#bottom div.bottomRight {
+		float: none;
+		text-align: left;
+		margin-top: 10px;
+	}
 }

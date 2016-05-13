@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="UTF-8" />
-	<!--
 	<meta name="viewport" content="
 		user-scalable=no, initial-scale=0.6,
 		maximum-scale=0.6, minimum-scale=0.6,
 		width=device-width, height=device-height,
 		target-densitydpi=device-dpi"
 	/>
-	-->
 	<meta name="keywords" content="cryptocat, private chat, private im, secure im, secure chat,
 		encrypted chat, encrypted im, open source encrypted chat, crypto cat" />
 	<meta name="description" content="Chat easily and securely with your buddies using Cryptocat." />
@@ -85,7 +83,16 @@
 				For example, you may view Bob's devices by right clicking him in your buddy list and selecting <em>View Devices</em>. You may then see that your buddy Bob has a device called "Bob's laptop". But how do you know that this is indeed Bob's laptop, and not some fake device added by a thief? Here is how: you can call Bob on the phone or meet him in real life, and ask him to read you his fingerprints for his devices. If they match the ones you see in your <em>View Devices</em> screen, then you have successfully <em>authenticated</em> Bob's devices. From now on, when you message Bob, you can be assured that your messages are indeed being received by the devices that Bob is claiming are linked to his account.
 			</p>
 			<p>
-				When any of your buddies adds a new device, Cryptocat will inform you of this. You are encouraged to verify devices with your buddies. It's something you will only need to do once per device and it helps protect your chats against impersonation.
+				When any of your buddies adds a new device, Cryptocat will
+				inform you of this. You are encouraged to verify devices with
+				your buddies. It's something you will only need to do once per
+				device and it helps protect your chats against impersonation.
+			</p>
+			<p>
+				After verifying devices, you can mark them as trusted. You can
+				also choose to only send messages to devices you have marked as
+				trusted. When receiving messages, Cryptocat will always show you
+				which device your buddy used to send that message.
 			</p>
 			<hr />
 			<h2 id="managingDevices">Managing Devices Safely</h2>
@@ -145,7 +152,12 @@
 			<hr />
 			<h2 id="files">Sending a File</h2>
 			<p>
-				Sending a file to a buddy over Cryptocat is easy, and only you and your buddy will be able to access any files sent, thanks to Cryptocat's strong encryption. Simply open a chat with your desired buddy. Then either click the blue floppy disk icon at the right of your chat window, or press <span class="code">Alt+F</span>. You may then select the file you wish to send.
+				Sending a file to a buddy over Cryptocat is easy, and only you
+				and your buddy will be able to access any files sent, thanks to
+				Cryptocat's strong encryption. Simply open a chat with your
+				desired buddy. Then either drag and drop the file into the chat
+				window, or click the file icon at the right of your chat window, 
+				or press <span class="code">Alt+F</span>.
 			</p>
 			<p>
 				If you get an error saying that your file type is unsupported, that's okay: simply add your file to a <span class="code">.zip</span> archive first and try again. If your buddy is offline, that's okay too: so long as they log back in within the next thirty days, they will still be able to receive and download your file.
@@ -206,7 +218,7 @@ bO5MCZ3QFFd86WQA
 				After unzipping your download, you can verify its authenticity by running <span class="code">gpg2 --verify Cryptocat.zip.asc Cryptocat.zip</span> in your command line. This should give you a result resembling the following:
 
 <code>gpg: Signature made Sat 10 Apr 2016 12:34:56 PM CET using EDDSA key ID 5D93C3CB
-gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) &lt;nadim@nadim.computer&gt;"</code>
+gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) [...]"</code>
 
 			</p>
 			<h3>Verifying Cryptocat for Mac</h3>
