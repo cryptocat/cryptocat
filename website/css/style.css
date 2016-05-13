@@ -23,7 +23,7 @@ code {
 	background: #F0F8FF;
 	padding: 8px 15px;
 	margin: 20px auto;
-	width: 84%;
+	width: 90%;
 	font-family: 'Inconsolata', monospace;
 	display: block;
 	border: 1px solid #96A5B2;
@@ -147,6 +147,7 @@ div#main div.mainRight {
 
 div#main div.mainRight h1 {
 	font-size: 1.8em;
+	line-height: 34px;
 }
 
 div#main div.mainRight ul.mainFeatureList {
@@ -238,33 +239,45 @@ div#bottom div.bottomRight {
 
 @media only screen and (max-device-width: 480px) {
 	body {
-		font-size: 22px;
-		line-height: 36px;
 		width: 100%;
 	}
 	code {
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 10px;
+	}
+	img {
+		max-width: 60%;
+	}
+	div#top img.logo {
 	}
 	div#top div.nav {
-		width: 85%;
+		width: 70%;
 	}
 	div#top div.nav a {
-		margin: 5px;
+		margin: 8px;
 	}
 	div#main {
 		width: 100%;
 	}
+	div#main div.tableOfContents {
+		font-size: 12px;
+		line-height: 20px;
+	}
 	div#main div.mainLeft {
 		float: none;
 		margin: 0 auto;
+		max-width: 90%;
+	}
+	div#main div.mainLeft img.mainLeftSplash {
+		max-width: 100%;
 	}
 	div#main div.mainRight {
 		float: none;
 		margin: 0 auto;
+		max-width: 90%;
 	}
 	div#bottom {
-		font-size: 16px;
+		height: 120px;
+		margin-bottom: 0;
 		line-height: 25px;
 	}
 	div#bottom div.bottomLeft {
