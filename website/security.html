@@ -15,8 +15,12 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<link rel="icon" type="image/gif" href="img/favicon.gif" />
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/smooth-scroll.js"></script>
 	<script type="application/javascript" src="js/util.js"></script>
 	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			smoothScroll.init();
+		});
 	</script>
 </head>
 <body>
@@ -37,12 +41,12 @@
 			<h1>Security</h1>
 			<div class="tableOfContents">
 				<ul>
-					<li><a href="#beta">Beta Software Notice</a></li>
-					<li><a href="#encryption">Encryption Overview</a></li>
-					<li><a href="#authentication">Authentication Overview</a></li>
-					<li><a href="#filesharing">File Sharing</a></li>
-					<li><a href="#misc">Miscellaneous Security Features</a></li>
-					<li><a href="#fulldisclosure">Reporting Security Issues</a></li>
+					<li><a data-scroll href="#beta">Beta Software Notice</a></li>
+					<li><a data-scroll href="#encryption">Encryption Overview</a></li>
+					<li><a data-scroll href="#authentication">Authentication Overview</a></li>
+					<li><a data-scroll href="#filesharing">File Sharing</a></li>
+					<li><a data-scroll href="#misc">Miscellaneous Security Features</a></li>
+					<li><a data-scroll href="#fulldisclosure">Reporting Security Issues</a></li>
 				</ul>
 			</div>
 			<h2 id="beta">Beta Software Notice</h2>

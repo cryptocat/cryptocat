@@ -15,7 +15,13 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<link rel="icon" type="image/gif" href="img/favicon.gif" />
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/smooth-scroll.js"></script>
 	<script type="application/javascript" src="js/util.js"></script>
+	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			smoothScroll.init();
+		});
+	</script>
 </head>
 <body>
 	<div id="top">
@@ -35,18 +41,18 @@
 			<h1>Help</h1>
 			<div class="tableOfContents">
 				<ul>
-					<li><a href="#beta">Understanding Beta Releases</a></li>
-					<li><a href="#creatingAccount">Creating an Account</a></li>
-					<li><a href="#addDevice">Adding and Removing Devices</a></li>
-					<li><a href="#fingerprints">Verifying your Buddy's Fingerprints</a></li>
-					<li><a href="#managingDevices">Managing Devices Safely</a></li>
-					<li><a href="#notify">Enabling or Disabling Sounds and Notifications</a></li>
-					<li><a href="#fontSize">Increase or Decrease Chat Font Size</a></li>
-					<li><a href="#typing">Let Buddies See When You Are Typing</a></li>
-					<li><a href="#files">Sending a File</a></li>
-					<li><a href="#recordings">Sending an Audio/Video Recording</a></li>
-					<li><a href="#signatures">Verifying Cryptocat Downloads</a></li>
-					<li><a href="#deleteAccount">Deleting Your Account</a></li>
+					<li><a data-scroll href="#beta">Understanding Beta Releases</a></li>
+					<li><a data-scroll href="#creatingAccount">Creating an Account</a></li>
+					<li><a data-scroll href="#addDevice">Adding and Removing Devices</a></li>
+					<li><a data-scroll href="#fingerprints">Verifying your Buddy's Fingerprints</a></li>
+					<li><a data-scroll href="#managingDevices">Managing Devices Safely</a></li>
+					<li><a data-scroll href="#notify">Enabling or Disabling Sounds and Notifications</a></li>
+					<li><a data-scroll href="#fontSize">Increase or Decrease Chat Font Size</a></li>
+					<li><a data-scroll href="#typing">Let Buddies See When You Are Typing</a></li>
+					<li><a data-scroll href="#files">Sending a File</a></li>
+					<li><a data-scroll href="#recordings">Sending an Audio/Video Recording</a></li>
+					<li><a data-scroll href="#signatures">Verifying Cryptocat Downloads</a></li>
+					<li><a data-scroll href="#deleteAccount">Deleting Your Account</a></li>
 				</ul>
 			</div>
 			<h2 id="beta">Understanding Beta Releases</h2>
@@ -65,14 +71,24 @@
 			<hr />
 			<h2 id="addDevice">Adding and Removing Devices</h2>
 			<p>
-				When you first log into your Cryptocat account from a new device, you will be required to set up this device and link it to your account. Note that doing so will generate and store sensitive encryption keys on your device; see <a href="#managingDevices">Managing Devices Safely</a> for more information on managing this sensitive data.
+				When you first log into your Cryptocat account from a new
+				device, you will be required to set up this device and link it
+				to your account. Note that doing so will generate and store
+				sensitive encryption keys on your device; see 
+				<a data-scroll href="#managingDevices">Managing Devices Safely</a> 
+				for more information on managing this sensitive data.
 			</p>
 			<p>
 				Once you add a new device, you will not be able to change its name and icon in the future. To view your devices at any time, simply open the <em>Account</em> menu and click on <em>Manage Devices</em>, or press <span class="code">Alt+D</span>. In the Device Manager, you will also be able to remove devices attached to your Cryptocat account. There are two things that can happen when you remove a device:
 			</p>
 			<ul>
 				<li><em>If you remove the device you are currently logged in from</em>: You will be logged out and your sensitive device information will be deleted on this device.</li>
-				<li><em>If you remove another device from the one you are currently using</em>: The device will be unlinked from your account, but sensitive identity information will remain on it. If you like, you can remove this data by <a href="#managingDevices">manually deleting</a> it on the device.</li>
+				<li><em>If you remove another device from the one you are
+				currently using</em>: The device will be unlinked from your
+				account, but sensitive identity information will remain on it.
+				If you like, you can remove this data by 
+				<a data-scroll href="#managingDevices">manually deleting</a> 
+				it on the device.</li>
 			</ul>
 			<hr />
 			<h2 id="fingerprints">Verifying your Buddy's Fingerprints</h2>
@@ -238,7 +254,9 @@ gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) [...]"</
 				While deleting your Cryptocat account is simple, please make sure you understand the implications:
 			</p>
 			<ul>
-				<li>Your device keys will not be automatically deleted. We recommend you first <a href="#addDevice">manually remove your device keys</a> on every device before deleting your account.</li>
+				<li>Your device keys will not be automatically deleted. We
+				recommend you first <a data-scroll href="#addDevice">manually remove your device keys</a> 
+				on every device before deleting your account.</li>
 				<li>Your username will immediately become available again for others to register in the future.</li>
 				<li>Your buddy list and other user information will be deleted forever and cannot be recovered.</li>
 			</ul>

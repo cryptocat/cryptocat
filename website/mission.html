@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 	<link rel="icon" type="image/gif" href="img/favicon.gif" />
 	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/smooth-scroll.js"></script>
 	<script type="application/javascript" src="js/util.js"></script>
 	<script type="application/javascript">
 		window.addEventListener('load', function() {
@@ -26,6 +27,7 @@
 				]);
 			}
 			a.parentNode.removeChild(a);
+			smoothScroll.init();
 		});
 	</script>
 </head>
@@ -47,8 +49,8 @@
 			<h1>Mission</h1>
 			<div class="tableOfContents">
 				<ul>
-					<li><a href="#statement">Commitments to the Cryptocat User</a></li>
-					<li><a href="#about">About Cryptocat</a></li>
+					<li><a data-scroll href="#statement">Commitments to the Cryptocat User</a></li>
+					<li><a data-scroll href="#about">About Cryptocat</a></li>
 				</ul>
 			</div>
 			<h2 id="statement">Commitments to the Cryptocat User</h2>
