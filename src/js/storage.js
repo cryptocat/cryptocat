@@ -27,16 +27,22 @@ Cryptocat.Storage = {};
 
 	(function() {
 		var path = '';
+		var loadDb = (p) => {
+			db = new NeDB({
+				filename: p,
+				autoload: true
+			});
+			db.persistence.setAutocompactionInterval(
+				300000
+			);
+		};
 		if (process.platform === 'win32') {
 			path = Path.join(
 				process.env.APPDATA,
 				'Cryptocat',
 				'users.db'
 			);
-			db = new NeDB({
-				filename: path,
-				autoload: true
-			});
+			loadDb(path);
 		} else {
 			path = Path.join(process.env.HOME, '.config');
 			FS.stat(path, function(err, stats) {
@@ -52,10 +58,8 @@ Cryptocat.Storage = {};
 					} else {
 						FS.chmodSync(path, 0o700);
 					}
-					db = new NeDB({
-						filename: Path.join(path, 'users.db'),
-						autoload: true
-					});
+					path = Path.join(path, 'users.db');
+					loadDb(path);
 				});
 			});
 		}
