@@ -309,6 +309,78 @@ Cryptocat.XMPP = {};
 		}
 	};
 
+	var initConnectionAndHandlers = function(username, password, callback) {
+		client = XMPP.createClient({
+			jid: username + '@crypto.cat',
+			server: 'crypto.cat',
+			credentials: {
+				username: username,
+				password: password,
+				host: 'crypto.cat',
+				serviceType: 'XMPP',
+				serviceName: 'crypto.cat',
+				realm: 'crypto.cat'
+			},
+			transport: 'websocket',
+			timeout: 10000,
+			wsURL: 'wss://crypto.cat:443/socket',
+			useStreamManagement: false
+		});
+		client.use(Cryptocat.OMEMO.plugins.deviceList);
+		client.use(Cryptocat.OMEMO.plugins.bundle);
+		client.use(Cryptocat.OMEMO.plugins.encrypted);
+		client.on('raw:incoming', function(raw) {
+			handler.raw(raw);
+		});
+		client.on('raw:outgoing', function(raw) {
+		});
+		client.on('session:error', function(error) {
+			handler.error(
+				error, username, password, callback
+			);
+		});
+		client.on('session:started', function(data) {
+			handler.connected(username, data, callback);
+		});
+		client.on('auth:failed', function(data) {
+			handler.authFailed();
+		});
+		client.on('disconnected', function() {
+			handler.disconnected(callback);
+		});
+		client.on('message', function(message) {
+		});
+		client.on('chat:state', function(message) {
+			handler.chatState(message);
+		});
+		client.on('encrypted', function(encrypted) {
+			handler.encrypted(encrypted);
+		});
+		client.on('available', function(data) {
+			handler.availability(data);
+		});
+		client.on('unavailable', function(data) {
+			handler.availability(data);
+		});
+		client.on('roster:update', function(stanza) {
+		});
+		client.on('subscribe', function(data) {
+			handler.subscribe(data);
+		});
+		client.on('unsubscribed', function(data) {
+			handler.unsubscribed(data);
+		});
+		client.on('stanza', function(stanza) {
+			if (
+				(stanza.type === 'result') &&
+				(hasProperty(stanza, 'roster'))
+			) {
+				handler.roster(stanza.roster);
+			}
+		});
+		client.connect();
+	};
+
 	Cryptocat.XMPP.connect = function(username, password, callback) {
 		console.info('Cryptocat.XMPP', 'Connecting as ' + username);
 		if (
@@ -326,78 +398,13 @@ Cryptocat.XMPP = {};
 				handler.authFailed();
 				return false;
 			}
-			Cryptocat.OMEMO.setup(function() {
-				client = XMPP.createClient({
-					jid: username + '@crypto.cat',
-					server: 'crypto.cat',
-					credentials: {
-						username: username,
-						password: password,
-						host: 'crypto.cat',
-						serviceType: 'XMPP',
-						serviceName: 'crypto.cat',
-						realm: 'crypto.cat'
-					},
-					transport: 'websocket',
-					timeout: 10000,
-					wsURL: 'wss://crypto.cat:443/socket',
-					useStreamManagement: false
+			if (Cryptocat.Me.username === username) {
+				initConnectionAndHandlers(username, password, callback);
+			} else {
+				Cryptocat.OMEMO.setup(function() {
+					initConnectionAndHandlers(username, password, callback);
 				});
-				client.use(Cryptocat.OMEMO.plugins.deviceList);
-				client.use(Cryptocat.OMEMO.plugins.bundle);
-				client.use(Cryptocat.OMEMO.plugins.encrypted);
-				client.on('raw:incoming', function(raw) {
-					handler.raw(raw);
-				});
-				client.on('raw:outgoing', function(raw) {
-				});
-				client.on('session:error', function(error) {
-					handler.error(
-						error, username, password, callback
-					);
-				});
-				client.on('session:started', function(data) {
-					handler.connected(username, data, callback);
-				});
-				client.on('auth:failed', function(data) {
-					handler.authFailed();
-				});
-				client.on('disconnected', function() {
-					handler.disconnected(callback);
-				});
-				client.on('message', function(message) {
-					// Handler.message(message);
-				});
-				client.on('chat:state', function(message) {
-					handler.chatState(message);
-				});
-				client.on('encrypted', function(encrypted) {
-					handler.encrypted(encrypted);
-				});
-				client.on('available', function(data) {
-					handler.availability(data);
-				});
-				client.on('unavailable', function(data) {
-					handler.availability(data);
-				});
-				client.on('roster:update', function(stanza) {
-				});
-				client.on('subscribe', function(data) {
-					handler.subscribe(data);
-				});
-				client.on('unsubscribed', function(data) {
-					handler.unsubscribed(data);
-				});
-				client.on('stanza', function(stanza) {
-					if (
-						(stanza.type === 'result') &&
-						(hasProperty(stanza, 'roster'))
-					) {
-						handler.roster(stanza.roster);
-					}
-				});
-				client.connect();
-			});
+			}
 		});
 	};
 
