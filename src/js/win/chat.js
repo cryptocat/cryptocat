@@ -1061,13 +1061,16 @@ window.addEventListener('load', function(e) {
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(false, info);
 		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
-		if (!thisChat.focused && (proc.platform === 'darwin')) {
-			thisChat.window.setState({
-				unread: thisChat.window.state.unread + 1
-			});
-			var badgeCount = parseInt(Remote.app.dock.getBadge());
-			if (Number.isNaN(badgeCount)) { badgeCount = 0; }
-			Remote.app.dock.setBadge((badgeCount + 1).toString());
+		if (!thisChat.focused) {
+			Remote.getCurrentWindow().flashFrame(true);
+			if (proc.platform === 'darwin') {
+				thisChat.window.setState({
+					unread: thisChat.window.state.unread + 1
+				});
+				var badgeCount = parseInt(Remote.app.dock.getBadge());
+				if (Number.isNaN(badgeCount)) { badgeCount = 0; }
+				Remote.app.dock.setBadge((badgeCount + 1).toString());
+			}
 		}
 	});
 
@@ -1168,6 +1171,7 @@ window.addEventListener('load', function(e) {
 		var unread = thisChat.window.state.unread;
 		thisChat.window.state.unread = 0;
 		thisChat.focused = true;
+		Remote.getCurrentWindow().flashFrame(false);
 		document.getElementById('chatInputText').focus();
 		if (proc.platform === 'darwin') {
 			var badgeCount = parseInt(Remote.app.dock.getBadge());
