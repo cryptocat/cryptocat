@@ -18,5 +18,7 @@
   },
   "homepage": "https://crypto.cat",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "devtron": "^1.1.0"
+  }
 }
