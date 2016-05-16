@@ -1036,6 +1036,13 @@ window.addEventListener('load', function(e) {
 		}
 	});
 
+	IPCRenderer.on('main.onSuspend', function(e) {
+		Cryptocat.Diag.error.offline();
+		if (Cryptocat.Me.connected) {
+			Cryptocat.XMPP.disconnect();
+		}
+	});
+
 	IPCRenderer.on('main.updateNotifySetting', function(e, notify) {
 		if (Cryptocat.Me.connected) {
 			Cryptocat.Me.settings.notify = notify;

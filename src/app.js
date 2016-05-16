@@ -1,7 +1,6 @@
 'use strict';
 (require('v8')).setFlagsFromString('--harmony');
 const Electron = require('electron');
-const BrowserWindow = Electron.BrowserWindow;
 const FS = require('fs');
 const Path = require('path');
 
@@ -429,7 +428,7 @@ Electron.app.on('ready', function() {
 			Path.join(__dirname, 'img/logo/logo.png')
 		);
 	}
-	Windows.main = new BrowserWindow({
+	Windows.main = new Electron.BrowserWindow({
 		minWidth: 260,
 		width: 260,
 		maxWidth: 400,
@@ -485,6 +484,9 @@ Electron.app.on('ready', function() {
 			typing: false
 		}));
 	}
+	Electron.powerMonitor.on('suspend', () => {
+		Windows.main.webContents.send('main.onSuspend');
+	});
 });
 
 Electron.app.on('activate', function(e) {
