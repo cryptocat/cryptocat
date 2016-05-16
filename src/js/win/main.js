@@ -1037,7 +1037,6 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('main.onSuspend', function(e) {
-		Cryptocat.Diag.error.offline();
 		if (Cryptocat.Me.connected) {
 			Cryptocat.XMPP.disconnect();
 		}
