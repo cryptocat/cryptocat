@@ -392,7 +392,6 @@ Cryptocat.XMPP = {};
 			client.connect();
 			return false;
 		}
-		Cryptocat.Me.username = username;
 		Cryptocat.Pinning.get('https://crypto.cat/socket', function(res, valid) {
 			if (!valid) {
 				handler.authFailed();
@@ -401,6 +400,7 @@ Cryptocat.XMPP = {};
 			if (Cryptocat.Me.username === username) {
 				initConnectionAndHandlers(username, password, callback);
 			} else {
+				Cryptocat.Me.username = username;
 				Cryptocat.OMEMO.setup(function() {
 					initConnectionAndHandlers(username, password, callback);
 				});
