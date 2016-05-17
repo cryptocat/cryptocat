@@ -73,12 +73,14 @@ Cryptocat.Update = {
 		});
 	};
 
-	Cryptocat.Update.check = function(ifLatest) {
+	Cryptocat.Update.check = function(verbose, ifLatest) {
 		Cryptocat.Pinning.get(
 			Cryptocat.Update.verURIs[process.platform],
 			function(res, valid) {
 				if (!valid) {
-					Cryptocat.Diag.error.updateCheck();
+					if (verbose) {
+						Cryptocat.Diag.error.updateCheck();
+					}
 					return false;
 				}
 				var latest = '';
@@ -88,7 +90,9 @@ Cryptocat.Update = {
 				res.on('end', function() {
 					latest = latest.replace(/(\r\n|\n|\r)/gm, '');
 					if (!Cryptocat.Patterns.version.test(latest)) {
-						Cryptocat.Diag.error.updateCheck();
+						if (verbose) {
+							Cryptocat.Diag.error.updateCheck();
+						}
 						return false;
 					}
 					if (compareVersionStrings(Cryptocat.Version, latest)) {
@@ -128,7 +132,11 @@ Cryptocat.Update = {
 		);
 	};
 
-	// Run on application start
-	Cryptocat.Update.check(function() {
-	});
+	// Check on application start.
+	Cryptocat.Update.check(true, () => {});
+
+	// Check every 8 hours.
+	setInterval(() => {
+		Cryptocat.Update.check(false, () => {});
+	}, (1000 * 3600 * 8));
 })();

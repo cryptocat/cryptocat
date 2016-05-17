@@ -990,7 +990,7 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('main.checkForUpdates', function(e) {
-		Cryptocat.Update.check(function() {
+		Cryptocat.Update.check(true, function() {
 			Cryptocat.Diag.message.isLatest(
 				Cryptocat.Version
 			);
