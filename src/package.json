@@ -1,6 +1,6 @@
 {
   "name": "Cryptocat",
-  "version": "3.1.24",
+  "version": "3.1.25",
   "description": "Easy and secure instant messaging.",
   "main": "app.js",
   "repository": {
@@ -19,6 +19,5 @@
   "homepage": "https://crypto.cat",
   "dependencies": {},
   "devDependencies": {
-    "devtron": "^1.1.0"
   }
 }
