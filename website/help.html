@@ -216,19 +216,48 @@
 				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg2</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg2 --import</span>):
 			</p>
 			<p>
-
 <code>-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2
 
-mDMEVvFWRRYJKwYBBAHaRw8BAQdAhXI9s+Ru4GOKfOw8sP5dI5frhVxcpaGCp9yt
-uK0JPyG0RE5hZGltIEtvYmVpc3NpIChDcnlwdG9jYXQgQ2xpZW50IFNpZ25pbmcg
-S2V5KSA8bmFkaW1AbmFkaW0uY29tcHV0ZXI+iH8EExYIACcFAlbxVkUCGwMFCQHh
-M4AFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQxybHXV2Tw8sKJAEAkjfWGOEU
-Zb/A62kk5KFw/R4IiI6msapTfoKinodVAHoBAIVivmJxsdvmIdXpmIE1CBg15vo2
-bO5MCZ3QFFd86WQA
-=r1T0
+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
+cBvUc+EhG7qkUL9yzXMBxZDtCIMF
+=3vzK
 -----END PGP PUBLIC KEY BLOCK-----</code>
-
 			</p>
 			<p>
 				After unzipping your download, you can verify its authenticity by running <span class="code">gpg2 --verify Cryptocat.zip.asc Cryptocat.zip</span> in your command line. This should give you a result resembling the following:
