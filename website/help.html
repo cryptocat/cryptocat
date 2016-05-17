@@ -213,7 +213,7 @@
 			</ul>
 			<h3>Verifying Cryptocat for Linux</h3>
 			<p>
-				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg2</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg2 --import</span>):
+				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg --import</span>):
 			</p>
 			<p>
 <code>-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -260,7 +260,7 @@ cBvUc+EhG7qkUL9yzXMBxZDtCIMF
 -----END PGP PUBLIC KEY BLOCK-----</code>
 			</p>
 			<p>
-				After unzipping your download, you can verify its authenticity by running <span class="code">gpg2 --verify Cryptocat.zip.asc Cryptocat.zip</span> in your command line. This should give you a result resembling the following:
+				After unzipping your download, you can verify its authenticity by running <span class="code">gpg --verify Cryptocat.zip.asc Cryptocat.zip</span> in your command line. This should give you a result resembling the following:
 <code>gpg: Signature made Tue 17 May 2016 02:12:31 PM CEST using RSA key ID 4692719D
 gpg: Good signature from "Nadim Kobeissi <nadim@nadim.computer>" [ultimate]</code>
 			</p>
