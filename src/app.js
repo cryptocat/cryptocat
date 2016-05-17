@@ -1,5 +1,4 @@
 'use strict';
-(require('v8')).setFlagsFromString('--harmony');
 const Electron = require('electron');
 const FS = require('fs');
 const Path = require('path');
