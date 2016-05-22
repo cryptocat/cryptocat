@@ -196,6 +196,7 @@ window.addEventListener('load', function(e) {
 				key: 0
 			}, React.createElement('img', {
 				src: '../img/stickers/' + this.props.sticker + '.png',
+				draggable: false,
 				key: 1
 			}));
 		}
