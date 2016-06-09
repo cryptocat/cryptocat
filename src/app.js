@@ -78,10 +78,7 @@ const handleStartupEvent = {
 	darwin: function() {
 		return false;
 	}
-};
-if (handleStartupEvent[process.platform]()) {
-	return false;
-}
+}; handleStartupEvent[process.platform]();
 
 const buildTrayMenu = function(settings) {
 	let menu = Electron.Menu.buildFromTemplate([
