@@ -94,7 +94,6 @@ div#top {
 }
 
 div#top img.logo {
-	image-rendering: optimizeSpeed;
 	width: 64px;
 	height: auto;
 }
