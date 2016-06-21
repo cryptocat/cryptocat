@@ -127,8 +127,7 @@ window.addEventListener('load', function(e) {
 					Object.keys(userBundles[item.jid.local]).length
 				) {
 					status = 1;
-				}
-				else {
+				} else {
 					Cryptocat.XMPP.getDeviceList(item.jid.local);
 				}
 				var buddy = React.createElement(mainRosterBuddy, {
