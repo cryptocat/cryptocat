@@ -243,6 +243,8 @@ div.chatMedia img.chatMediaRenderer,
 div.chatMedia video.chatMediaRenderer {
 	width: 100%;
 	height: auto;
+	max-height: 480px;
+	object-fit: contain;
 	margin-left: 2px;
 	border-radius: 2px;
 }
