@@ -163,8 +163,7 @@ Cryptocat.Diag.message = {
 			message: `Cryptocat ${Cryptocat.Version}, Beta release.\n` +
 				`Authored by Nadim Kobeissi.\n\n` +
 				`Distributed as free software under the GNU General ` +
-				`Public License (version 3).\n\n` +
-				`N. L.`
+				`Public License (version 3).`
 		}, (response) => {
 			if (response === 1) {
 				Remote.shell.openExternal(`https://crypto.cat`);
