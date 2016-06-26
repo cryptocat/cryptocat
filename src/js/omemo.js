@@ -381,7 +381,7 @@ Cryptocat.OMEMO = {};
 				}
 				if (response === 1) {
 					Remote.shell.openExternal(
-						'https://crypto.cat/help.html#managingDevices'
+						`https://${Cryptocat.Hostname}/help.html#managingDevices`
 					);
 					deviceSetup();
 				}

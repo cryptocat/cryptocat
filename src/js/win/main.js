@@ -572,11 +572,11 @@ window.addEventListener('load', function(e) {
 					value: 'Create Account',
 					onClick: function() {
 						Cryptocat.Pinning.get(
-							'https://crypto.cat/create',
+							`https://${Cryptocat.Hostname}/create`,
 							function(res, valid) {
 								if (valid) {
 									Remote.shell.openExternal(
-										'https://crypto.cat/create'
+										`https://${Cryptocat.Hostname}/create`
 									);
 								} else {
 									Cryptocat.Diag.error.createAccount();
@@ -1008,7 +1008,7 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Me.username, function(response) {
 				if (response === 1) {
 					Remote.shell.openExternal(
-						'https://crypto.cat/help.html#deleteAccount'
+						`https://${Cryptocat.Hostname}/help.html#deleteAccount`
 					);
 				}
 				if (response === 2) {

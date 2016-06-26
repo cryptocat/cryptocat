@@ -265,25 +265,10 @@ Cryptocat.File = {};
 			});
 			return false;
 		}
-		Cryptocat.Pinning.get('https://crypto.cat/sas', function(res, valid) {
-			if (!valid) {
-				Cryptocat.Diag.error.fileGeneral(name);
-				onBegin({
-					name: name,
-					url: '',
-					key: '',
-					iv: '',
-					tag: '',
-					valid: false
-				});
-				return false;
-			}
-			var sas = '';
-			res.on('data', function(chunk) {
-				sas += chunk;
-			});
-			res.on('end', function() {
-				if (!Cryptocat.Patterns.fileSas.test(sas)) {
+		Cryptocat.Pinning.get(
+			`https://${Cryptocat.Hostname}/sas`,
+			function(res, valid) {
+				if (!valid) {
 					Cryptocat.Diag.error.fileGeneral(name);
 					onBegin({
 						name: name,
@@ -295,30 +280,48 @@ Cryptocat.File = {};
 					});
 					return false;
 				}
-				var key = new Uint8Array(32);
-				var iv = new Uint8Array(12);
-				window.crypto.getRandomValues(key);
-				window.crypto.getRandomValues(iv);
-				var encrypted = fileCrypto.encrypt(
-					key, iv, file
-				);
-				putFile({
-					name: name,
-					sas: sas,
-					file: file,
-					key: key,
-					iv: iv,
-					encrypted: encrypted
-				}, onProgress, onEnd);
-				onBegin({
-					name: name,
-					url: sas.substring(0, 128),
-					key: (new Buffer(key)).toString('hex'),
-					iv: (new Buffer(iv)).toString('hex'),
-					tag: encrypted.tag,
-					valid: true
+				var sas = '';
+				res.on('data', function(chunk) {
+					sas += chunk;
 				});
-			});
-		});
+				res.on('end', function() {
+					if (!Cryptocat.Patterns.fileSas.test(sas)) {
+						Cryptocat.Diag.error.fileGeneral(name);
+						onBegin({
+							name: name,
+							url: '',
+							key: '',
+							iv: '',
+							tag: '',
+							valid: false
+						});
+						return false;
+					}
+					var key = new Uint8Array(32);
+					var iv = new Uint8Array(12);
+					window.crypto.getRandomValues(key);
+					window.crypto.getRandomValues(iv);
+					var encrypted = fileCrypto.encrypt(
+						key, iv, file
+					);
+					putFile({
+						name: name,
+						sas: sas,
+						file: file,
+						key: key,
+						iv: iv,
+						encrypted: encrypted
+					}, onProgress, onEnd);
+					onBegin({
+						name: name,
+						url: sas.substring(0, 128),
+						key: (new Buffer(key)).toString('hex'),
+						iv: (new Buffer(iv)).toString('hex'),
+						tag: encrypted.tag,
+						valid: true
+					});
+				});
+			}
+		);
 	};
 })();

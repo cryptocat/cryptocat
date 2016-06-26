@@ -18,40 +18,6 @@ var Path = (function() {
 var Cryptocat = {
 	Win: {},
 	XMPP: {},
-	TextSecure: {},
-	EmptyMe: {
-		username: '',
-		connected: false,
-		settings: {
-			identityKey: {
-				priv: [],
-				pub: []
-			},
-			identityDHKey: [],
-			deviceId: '',
-			deviceName: '',
-			deviceIcon: 0,
-			deviceIds: [],
-			signedPreKey: {
-				priv: [],
-				pub: []
-			},
-			signedPreKeyId: 0,
-			signedPreKeySignature: '',
-			preKeys: [],
-			userBundles: {},
-			trustedOnly: [],
-			sounds: true,
-			notify: true,
-			typing: true,
-			status: 0,
-			refresh: 0,
-			directories: {
-				fileSelect: '',
-				fileSave: ''
-			}
-		}
-	},
 	Diag: {},
 	Storage: {},
 	OMEMO: {},
@@ -65,11 +31,51 @@ var Cryptocat = {
 	Directories: {}
 };
 
+var EmptyMe = {
+	username: '',
+	connected: false,
+	settings: {
+		identityKey: {
+			priv: [],
+			pub: []
+		},
+		identityDHKey: [],
+		deviceId: '',
+		deviceName: '',
+		deviceIcon: 0,
+		deviceIds: [],
+		signedPreKey: {
+			priv: [],
+			pub: []
+		},
+		signedPreKeyId: 0,
+		signedPreKeySignature: '',
+		preKeys: [],
+		userBundles: {},
+		trustedOnly: [],
+		sounds: true,
+		notify: true,
+		typing: true,
+		status: 0,
+		refresh: 0,
+		directories: {
+			fileSelect: '',
+			fileSave: ''
+		}
+	}
+};
+
 var _setImmediate = setImmediate;
 var _clearImmediate = clearImmediate;
 
 process.once('loaded', function() {
 	global.Cryptocat = Cryptocat;
+	global.Cryptocat.EmptyMe = Object.assign(
+		{}, EmptyMe
+	);
+	global.Cryptocat.Me = Object.assign(
+		{}, EmptyMe
+	);
 	Object.freeze(global.Cryptocat.EmptyMe);
 	global.NodeCrypto = NodeCrypto;
 	global.IPCRenderer = IPCRenderer;
@@ -85,11 +91,9 @@ process.once('loaded', function() {
 	global.setImmediate = _setImmediate;
 	global.clearImmediate = _clearImmediate;
 	global.__gdirname = __dirname;
-	global.Cryptocat.Me = Object.assign(
-		{}, global.Cryptocat.EmptyMe
-	);
 	global.hasProperty = function(o, p) {
 		return ({}).hasOwnProperty.call(o, p);
 	};
 });
+
 })();

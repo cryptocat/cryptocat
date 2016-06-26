@@ -249,7 +249,8 @@ Cryptocat.XMPP = {};
 		}
 		if (s !== Cryptocat.Win.main.roster.getBuddyStatus(local.username)) {
 			client.subscribeToNode(
-				local.username + '@crypto.cat', 'urn:xmpp:omemo:0:devicelist'
+				`${local.username}@${Cryptocat.Hostname}`,
+				'urn:xmpp:omemo:0:devicelist'
 			);
 			Cryptocat.XMPP.getDeviceList(local.username);
 			Cryptocat.Win.main.roster.updateBuddyStatus(
@@ -311,19 +312,19 @@ Cryptocat.XMPP = {};
 
 	var initConnectionAndHandlers = function(username, password, callback) {
 		client = XMPP.createClient({
-			jid: username + '@crypto.cat',
-			server: 'crypto.cat',
+			jid: `username@${Cryptocat.Hostname}`,
+			server: Cryptocat.Hostname,
 			credentials: {
 				username: username,
 				password: password,
-				host: 'crypto.cat',
+				host: Cryptocat.Hostname,
 				serviceType: 'XMPP',
-				serviceName: 'crypto.cat',
-				realm: 'crypto.cat'
+				serviceName: Cryptocat.Hostname,
+				realm: Cryptocat.Hostname
 			},
 			transport: 'websocket',
 			timeout: 10000,
-			wsURL: 'wss://crypto.cat:443/socket',
+			wsURL: `wss://${Cryptocat.Hostname}:443/socket`,
 			useStreamManagement: false
 		});
 		client.use(Cryptocat.OMEMO.plugins.deviceList);
@@ -392,26 +393,29 @@ Cryptocat.XMPP = {};
 			client.connect();
 			return false;
 		}
-		Cryptocat.Pinning.get('https://crypto.cat/socket', function(res, valid) {
-			if (!valid) {
-				handler.authFailed();
-				return false;
-			}
-			if (Cryptocat.Me.username === username) {
-				initConnectionAndHandlers(username, password, callback);
-			} else {
-				Cryptocat.Me.username = username;
-				Cryptocat.OMEMO.setup(function() {
+		Cryptocat.Pinning.get(
+			`https://${Cryptocat.Hostname}/socket`,
+			function(res, valid) {
+				if (!valid) {
+					handler.authFailed();
+					return false;
+				}
+				if (Cryptocat.Me.username === username) {
 					initConnectionAndHandlers(username, password, callback);
-				});
+				} else {
+					Cryptocat.Me.username = username;
+					Cryptocat.OMEMO.setup(function() {
+						initConnectionAndHandlers(username, password, callback);
+					});
+				}
 			}
-		});
+		);
 	};
 
 	Cryptocat.XMPP.sendMessage = function(to, items) {
 		client.sendMessage({
 			type: 'chat',
-			to: to + '@crypto.cat',
+			to: `${to}@${Cryptocat.Hostname}`,
 			encrypted: { encryptedItems: items },
 			body: ''
 		});
@@ -420,7 +424,7 @@ Cryptocat.XMPP = {};
 	Cryptocat.XMPP.sendChatState = function(to, chatState) {
 		client.sendMessage({
 			type: 'chat',
-			to: to + '@crypto.cat',
+			to: `${to}@${Cryptocat.Hostname}`,
 			chatState: chatState
 		});
 	};
@@ -429,12 +433,12 @@ Cryptocat.XMPP = {};
 		Cryptocat.Win.main.roster.updateBuddyStatus(
 			username, 0, false
 		);
-		client.subscribe(username + '@crypto.cat');
+		client.subscribe(`${username}@${Cryptocat.Hostname}`);
 	};
 
 	Cryptocat.XMPP.removeBuddy = function(username) {
 		client.removeRosterItem(
-			username + '@crypto.cat', function() {
+			`${username}@${Cryptocat.Hostname}`, function() {
 				Cryptocat.Win.main.roster.removeBuddy(username);
 			}
 		);
@@ -442,7 +446,7 @@ Cryptocat.XMPP = {};
 
 	Cryptocat.XMPP.sendDeviceList = function(deviceIds) {
 		client.publish(
-			Cryptocat.Me.username + '@crypto.cat',
+			`${Cryptocat.Me.username}@${Cryptocat.Hostname}`,
 			'urn:xmpp:omemo:0:devicelist',
 			{ devicelist: { deviceIds: deviceIds } }
 		);
@@ -450,7 +454,7 @@ Cryptocat.XMPP = {};
 
 	Cryptocat.XMPP.changePassword = function(username, password) {
 		client.sendIq({
-			to: 'crypto.cat',
+			to: Cryptocat.Hostname,
 			type: 'set',
 			register: {
 				username: username,
@@ -460,13 +464,13 @@ Cryptocat.XMPP = {};
 	};
 
 	Cryptocat.XMPP.deleteAccount = function(username) {
-		client.deleteAccount(username + '@crypto.cat', function() {
+		client.deleteAccount(`${username}@${Cryptocat.Hostname}`, function() {
 		});
 	};
 
 	Cryptocat.XMPP.sendBundle = function() {
 		client.publish(
-			Cryptocat.Me.username + '@crypto.cat',
+			`${Cryptocat.Me.username}@${Cryptocat.Hostname}`,
 			'urn:xmpp:omemo:0:bundles:' + Cryptocat.Me.settings.deviceId,
 			{ bundle: { bundleItems: {
 				identityKey: Cryptocat.Me.settings.identityKey.pub,
@@ -483,18 +487,18 @@ Cryptocat.XMPP = {};
 
 	Cryptocat.XMPP.getDeviceList = function(username) {
 		client.getItems(
-			username + '@crypto.cat',
+			`${username}@${Cryptocat.Hostname}`,
 			'urn:xmpp:omemo:0:devicelist'
 		);
 	};
 
 	Cryptocat.XMPP.getBundle = function(username, deviceId) {
 		client.subscribeToNode(
-			username + '@crypto.cat',
+			`${username}@${Cryptocat.Hostname}`,
 			'urn:xmpp:omemo:0:bundles:' + deviceId,
 			function(err) {
 				client.getItems(
-					username + '@crypto.cat',
+					`${username}@${Cryptocat.Hostname}`,
 					'urn:xmpp:omemo:0:bundles:' + deviceId
 				);
 			}

@@ -1,27 +1,31 @@
 'use strict';
-Cryptocat.Update = {
-	clientURIs: {
-		win32: 'https://download.crypto.cat/client/Cryptocat-win32-x64.zip',
-		linux: 'https://download.crypto.cat/client/Cryptocat-linux-x64.zip',
-		darwin: 'https://download.crypto.cat/client/Cryptocat-darwin-x64.zip'
-	},
-	verURIs: {
-		win32: 'https://download.crypto.cat/ver/Cryptocat-win32-x64.txt',
-		linux: 'https://download.crypto.cat/ver/Cryptocat-linux-x64.txt',
-		darwin: 'https://download.crypto.cat/ver/Cryptocat-darwin-x64.txt'
-	},
-	sigURIs: {
-		win32: 'https://download.crypto.cat/sig/Cryptocat-win32-x64.txt',
-		linux: 'https://download.crypto.cat/sig/Cryptocat-linux-x64.txt',
-		darwin: 'https://download.crypto.cat/sig/Cryptocat-darwin-x64.txt'
-	},
-	signingKey: [
-		0x36, 0x91, 0xcc, 0x5e, 0xd9, 0x1a, 0x83, 0x70,
-		0x60, 0xd3, 0x1f, 0x20, 0x04, 0xa7, 0x87, 0x09,
-		0x88, 0x6a, 0x93, 0xeb, 0xa8, 0xb0, 0x2d, 0xa3,
-		0x55, 0xa2, 0x59, 0x30, 0xe4, 0x49, 0xa0, 0x80
-	]
-};
+
+(function() {
+	var downloadServer = `https://download.${Cryptocat.Hostname}/`;
+	Cryptocat.Update = {
+		clientURIs: {
+			win32: `${downloadServer}client/Cryptocat-win32-x64.zip`,
+			linux: `${downloadServer}client/Cryptocat-linux-x64.zip`,
+			darwin: `${downloadServer}client/Cryptocat-darwin-x64.zip`
+		},
+		verURIs: {
+			win32: `${downloadServer}ver/Cryptocat-win32-x64.txt`,
+			linux: `${downloadServer}ver/Cryptocat-linux-x64.txt`,
+			darwin: `${downloadServer}ver/Cryptocat-darwin-x64.txt`
+		},
+		sigURIs: {
+			win32: `${downloadServer}sig/Cryptocat-win32-x64.txt`,
+			linux: `${downloadServer}sig/Cryptocat-linux-x64.txt`,
+			darwin: `${downloadServer}sig/Cryptocat-darwin-x64.txt`
+		},
+		signingKey: [
+			0x36, 0x91, 0xcc, 0x5e, 0xd9, 0x1a, 0x83, 0x70,
+			0x60, 0xd3, 0x1f, 0x20, 0x04, 0xa7, 0x87, 0x09,
+			0x88, 0x6a, 0x93, 0xeb, 0xa8, 0xb0, 0x2d, 0xa3,
+			0x55, 0xa2, 0x59, 0x30, 0xe4, 0x49, 0xa0, 0x80
+		]
+	};
+})();
 
 (function() {
 	var compareVersionStrings = function(local, remote) {
@@ -66,7 +70,7 @@ Cryptocat.Update = {
 			}
 			if (response === 1) {
 				Remote.shell.openExternal(
-					'https://crypto.cat/news.html#' + latest
+					`https://${Cryptocat.Hostname}/news.html#${latest}`
 				);
 				Cryptocat.Update.updateAvailable(latest);
 			}

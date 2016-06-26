@@ -166,7 +166,7 @@ Cryptocat.Diag.message = {
 				`Public License (version 3).`
 		}, (response) => {
 			if (response === 1) {
-				Remote.shell.openExternal(`https://crypto.cat`);
+				Remote.shell.openExternal(`https://${Cryptocat.Hostname}`);
 			}
 			if (response === 2) {
 				Remote.shell.openExternal(
@@ -236,7 +236,7 @@ Cryptocat.Diag.message = {
 		}, (response) => {
 			if (response === 1) {
 				Remote.shell.openExternal(
-					`https://crypto.cat/help.html#deleteAccount`
+					`https://${Cryptocat.Hostname}/help.html#deleteAccount`
 				);
 			}
 			if (response === 2) {

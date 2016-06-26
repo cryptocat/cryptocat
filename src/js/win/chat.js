@@ -91,7 +91,7 @@ window.addEventListener('load', function(e) {
 				label: 'Getting Started',
 				click: function() {
 					Remote.shell.openExternal(
-						'https://crypto.cat/help.html'
+						`https://${Cryptocat.Hostname}/help.html`
 					);
 				}
 			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
