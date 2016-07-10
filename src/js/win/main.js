@@ -588,7 +588,7 @@ window.addEventListener('load', function(e) {
 				React.createElement('span', {
 					key: 9,
 					className: 'version'
-				}, Cryptocat.Version + ', Beta software.')
+				}, Cryptocat.Version)
 			]);
 		}
 	});

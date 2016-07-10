@@ -160,7 +160,7 @@ Cryptocat.Diag.message = {
 			buttons: [`OK`, `Learn more`, `License`],
 			defaultId: 0,
 			title: `About Cryptocat`,
-			message: `Cryptocat ${Cryptocat.Version}, Beta release.\n` +
+			message: `Cryptocat ${Cryptocat.Version}\n` +
 				`Authored by Nadim Kobeissi.\n\n` +
 				`Distributed as free software under the GNU General ` +
 				`Public License (version 3).`
