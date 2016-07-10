@@ -425,6 +425,7 @@ window.addEventListener('load', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			this.setState({visible: false});
+			thisChat.chatFileDragOverlayCounter = 0;
 			var readFile = function(path) {
 				var name = Path.basename(path);
 				FS.readFile(path, function(err, file) {
