@@ -4,6 +4,8 @@ Cryptocat.File = {};
 (function() {
 	Cryptocat.File.maxSize = 101000000;
 	Cryptocat.File.chunkSize = 25000;
+	Cryptocat.File.chunkTimeout = 10000;
+
 	Cryptocat.File.types = {
 		archive: [
 			'7z', '7zx', 'bin',
@@ -128,7 +130,7 @@ Cryptocat.File = {};
 			}
 		};
 		put.flushHeaders();
-		put.setTimeout(5000, function() {
+		put.setTimeout(Cryptocat.File.chunkTimeout, function() {
 			put.abort();
 			putFile(file, onProgress, onEnd);
 		});
