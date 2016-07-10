@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 				dir: 'src',
 				out: 'dist',
 				platform: 'win32',
-				arch: 'x64',
+				arch: 'ia32',
 				icon: 'src/img/logo/logo',
 				overwrite: true,
 				prune: true,
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 				dir: 'src',
 				out: 'dist',
 				platform: 'linux',
-				arch: 'x64',
+				arch: 'ia32',
 				icon: 'src/img/logo/logo',
 				overwrite: true,
 				prune: true,
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
 				dir: 'src',
 				out: 'dist',
 				platform: 'darwin',
-				arch: 'x64',
+				arch: 'ia32',
 				icon: 'src/img/logo/logo',
 				overwrite: true,
 				prune: true,
@@ -64,9 +64,9 @@ module.exports = function(grunt) {
 			} }
 		},
 		'create-windows-installer': {
-			x64: {
-				appDirectory: 'dist/Cryptocat-win32-x64',
-				outputDirectory: 'dist/Cryptocat-win32-x64-installer',
+			ia32: {
+				appDirectory: 'dist/Cryptocat-win32-ia32',
+				outputDirectory: 'dist/Cryptocat-win32-ia32-installer',
 				noMsi: true,
 				iconUrl: 'file://' + __dirname + '/src/img/logo/logo.ico',
 				setupIcon: 'src/img/logo/logo.ico',
@@ -94,18 +94,18 @@ module.exports = function(grunt) {
 		},
 		shell: {
 			cleanDist: 'rm -rf dist/Cryptocat*',
-			winClean: 'echo "GPLv3" > dist/Cryptocat-win32-x64/LICENSE',
-			linuxLogo: 'cp src/img/logo/logo.png dist/Cryptocat-linux-x64/logo.png',
-			linuxClean: 'rm -f dist/Cryptocat-linux-x64/LICENSE',
-			macClean: 'rm -r dist/Cryptocat-darwin-x64',
-			winZip: 'zip -jqr9 dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer/Setup.exe',
-			linuxZip: 'cd dist && zip -qr9 Cryptocat-linux-x64.zip Cryptocat-linux-x64',
-			macMv: 'mv dist/Cryptocat-darwin-x64/Cryptocat.app dist/Cryptocat.app',
-			macZip: 'cd dist && zip -qr9 Cryptocat-darwin-x64.zip Cryptocat.app',
-			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
-			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
+			winClean: 'echo "GPLv3" > dist/Cryptocat-win32-ia32/LICENSE',
+			linuxLogo: 'cp src/img/logo/logo.png dist/Cryptocat-linux-ia32/logo.png',
+			linuxClean: 'rm -f dist/Cryptocat-linux-ia32/LICENSE',
+			macClean: 'rm -r dist/Cryptocat-darwin-ia32',
+			winZip: 'zip -jqr9 dist/Cryptocat-win32 dist/Cryptocat-win32-ia32-installer/Setup.exe',
+			linuxZip: 'cd dist && zip -qr9 Cryptocat-linux.zip Cryptocat-linux-ia32/*',
+			macMv: 'mv dist/Cryptocat-darwin-ia32/Cryptocat.app dist/Cryptocat.app',
+			macZip: 'cd dist && zip -qr9 Cryptocat-darwin.zip Cryptocat.app',
+			winRmDir: 'rm -r dist/Cryptocat-win32-ia32 dist/Cryptocat-win32-ia32-installer',
+			linuxRmDir: 'rm -r dist/Cryptocat-linux-ia32',
 			macRmDir: 'rm -r dist/Cryptocat.app',
-			winWriteVer: 'awk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
+			winWriteVer: 'gawk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
 			writeVer: 'echo ' + VERSION + ' > dist/version.txt'
 		},
 		jshint: {
@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 		'string-replace:dist',
 		'electron:windows',
 		'shell:winClean',
-		'create-windows-installer:x64',
+		'create-windows-installer:ia32',
 		'shell:winWriteVer'
 	]);
 	grunt.registerTask('linux', 'Create Linux Package', [
