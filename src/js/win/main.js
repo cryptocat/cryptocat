@@ -449,7 +449,7 @@ window.addEventListener('load', function(e) {
 						}
 						return 0;
 					})();
-					Cryptocat.XMPP.disconnect(function() {
+					Cryptocat.XMPP.disconnect(false, function() {
 						_t.onSubmit();
 					});
 					_t.setState({
@@ -837,7 +837,7 @@ window.addEventListener('load', function(e) {
 				}
 			}
 			if (Cryptocat.Me.connected) {
-				Cryptocat.XMPP.disconnect(function() {
+				Cryptocat.XMPP.disconnect(false, function() {
 					IPCRenderer.sendSync('app.quit');
 				});
 				setTimeout(function() {
@@ -1030,7 +1030,7 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('main.logOut', function(e) {
 		if (Cryptocat.Me.connected) {
-			Cryptocat.XMPP.disconnect(function() {
+			Cryptocat.XMPP.disconnect(false, function() {
 				Cryptocat.Win.main.login.onLogOut();
 			});
 		} else {
@@ -1040,7 +1040,7 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('main.onSuspend', function(e) {
 		if (Cryptocat.Me.connected) {
-			Cryptocat.XMPP.disconnect();
+			Cryptocat.XMPP.disconnect(true);
 		}
 	});
 

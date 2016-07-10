@@ -774,7 +774,7 @@ Cryptocat.OMEMO = {};
 					}, function() {});
 				}
 				setTimeout(function() {
-					Cryptocat.XMPP.disconnect(function() {
+					Cryptocat.XMPP.disconnect(false, function() {
 						Cryptocat.Storage.deleteUser(
 							Cryptocat.Me.username,
 							function() {

@@ -538,7 +538,7 @@ Cryptocat.XMPP = {};
 		}
 	};
 
-	Cryptocat.XMPP.disconnect = function(callback) {
+	Cryptocat.XMPP.disconnect = function(forceReconn, callback) {
 		if (Cryptocat.Me.connected) {
 			client.sendPresence({
 				type: 'unavailable'
@@ -550,7 +550,9 @@ Cryptocat.XMPP = {};
 				payload: callback
 			};
 		}
-		Cryptocat.Me.connected = false;
+		if (!forceReconn) {
+			Cryptocat.Me.connected = false;
+		}
 		client.disconnect();
 	};
 })();
