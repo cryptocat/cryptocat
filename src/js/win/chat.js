@@ -120,29 +120,31 @@ window.addEventListener('load', function(e) {
 	));
 
 	var getTimestamp = function(stamp) {
-			var date = new Date(stamp);
-			var h = date.getHours();
-			var m = date.getMinutes();
-			var d = date.getDate();
-			var a = [
-				'Jan', 'Feb', 'Mar',
-				'Apr', 'May', 'Jun',
-				'Jul', 'Aug', 'Sep',
-				'Oct', 'Nov', 'Dec'
-			][date.getMonth()];
-			var s = ' am';
-			if (h > 12) {
-				h = h - 12;
-				s = ' pm';
-			}
-			if (m < 10) {
-				m = '0' + m;
-			}
-			return (
-				d + ' ' + a + '., ' +
-				h + ':' + m + s
-			);
-		};
+		var date = new Date(stamp);
+		var h = date.getHours();
+		var m = date.getMinutes();
+		var d = date.getDate();
+		var a = [
+			'Jan', 'Feb', 'Mar',
+			'Apr', 'May', 'Jun',
+			'Jul', 'Aug', 'Sep',
+			'Oct', 'Nov', 'Dec'
+		][date.getMonth()];
+		var s = ' am';
+		if (h > 11) {
+			s = ' pm';
+		}
+		if (h > 12) {
+			h = h - 12;
+		}
+		if (m < 10) {
+			m = '0' + m;
+		}
+		return (
+			d + ' ' + a + '., ' +
+			h + ':' + m + s
+		);
+	};
 
 	var checkIfSticker = function(message) {
 		if (Cryptocat.Patterns.sticker.test(message)) {
