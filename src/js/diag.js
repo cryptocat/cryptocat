@@ -98,8 +98,16 @@ Cryptocat.Diag.error = {
 	messagesQueued(count) {
 		Dialog.showErrorBox(
 			`Cryptocat: ${count} Messages Queued`,
-			`Cryptocat is still sending ${count} messages` +
+			`Cryptocat is still sending ${count} messages. ` +
 			`Please try closing this chat window again in a few seconds.`
+		);
+	},
+
+	messageSending() {
+		Dialog.showErrorBox(
+			`Cryptocat: Message Cannot Be Sent`,
+			`Your message could not be sent due to an error. ` +
+			`Please try again later.`
 		);
 	},
 

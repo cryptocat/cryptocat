@@ -609,6 +609,7 @@ Cryptocat.OMEMO = {};
 				message += String.fromCharCode(0);
 			}
 		}
+		var allValid = true;
 		var bundles = Cryptocat.Me.settings.userBundles[username];
 		var messageKey = ProScript.crypto.random32Bytes('o2');
 		var messageIv = ProScript.crypto.random12Bytes('o3');
@@ -657,8 +658,16 @@ Cryptocat.OMEMO = {};
 				res.devices[deviceId] = next.output;
 				bundles[deviceId].dr = next.them;
 			}
+			else {
+				allValid = false;
+			}
 		});
-		Cryptocat.XMPP.sendMessage(username, res);
+		if (allValid) {
+			Cryptocat.XMPP.sendMessage(username, res);
+		}
+		else {
+			Cryptocat.Diag.error.messageSending();
+		}
 		return true;
 	};
 
