@@ -657,15 +657,13 @@ Cryptocat.OMEMO = {};
 			if (next.output.valid) {
 				res.devices[deviceId] = next.output;
 				bundles[deviceId].dr = next.them;
-			}
-			else {
+			} else {
 				allValid = false;
 			}
 		});
 		if (allValid) {
 			Cryptocat.XMPP.sendMessage(username, res);
-		}
-		else {
+		} else {
 			Cryptocat.Diag.error.messageSending();
 		}
 		return true;

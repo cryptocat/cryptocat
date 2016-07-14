@@ -1,9 +1,9 @@
 /* jshint maxcomplexity: 12 */
 'use strict';
 Cryptocat.XMPP = {};
+var client = {};
 
 (function() {
-	var client = {};
 	var handler = {};
 	var callbacks = {
 		disconnected: {
