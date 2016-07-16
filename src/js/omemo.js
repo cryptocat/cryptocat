@@ -485,7 +485,6 @@ Cryptocat.OMEMO = {};
 		deviceIds = deviceIds.filter(function(item, pos) {
 			return deviceIds.indexOf(item) === pos;
 		});
-		console.info(deviceIds);
 		if (username === Cryptocat.Me.username) {
 			Cryptocat.XMPP.sendBundle();
 			if (deviceIds.indexOf(Cryptocat.Me.settings.deviceId) < 0) {
@@ -604,9 +603,9 @@ Cryptocat.OMEMO = {};
 			payload: {},
 			sid: Cryptocat.Me.settings.deviceId
 		};
-		if (message.length) {
-			while (message.length % 32) {
-				message += String.fromCharCode(0);
+		if (message.message.length) {
+			while (message.message.length % 32) {
+				message.message += String.fromCharCode(0);
 			}
 		}
 		var allValid = true;
@@ -614,7 +613,7 @@ Cryptocat.OMEMO = {};
 		var messageKey = ProScript.crypto.random32Bytes('o2');
 		var messageIv = ProScript.crypto.random12Bytes('o3');
 		var messageEnc = ProScript.crypto.AESGCMEncrypt(
-			messageKey, messageIv, message, ''
+			messageKey, messageIv, message.message, ''
 		);
 		res.payload.iv = ProScript.encoding.byteArrayToHexString(messageIv);
 		res.payload.ciphertext = messageEnc.ciphertext;
@@ -663,8 +662,13 @@ Cryptocat.OMEMO = {};
 		});
 		if (allValid) {
 			Cryptocat.XMPP.sendMessage(username, res);
+			Cryptocat.Win.chat[username].webContents.send(
+				'chat.messageSent', message.internalId
+			);
 		} else {
-			Cryptocat.Diag.error.messageSending();
+			Cryptocat.Win.chat[username].webContents.send(
+				'chat.messageError', message.internalId
+			);
 		}
 		return true;
 	};

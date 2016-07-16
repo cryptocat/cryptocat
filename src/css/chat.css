@@ -139,6 +139,12 @@ div.chatMessage, div.chatSticker, div.chatFile, div.chatMedia {
 	max-width: 65%;
 	margin: 4px 10px;
 	border-radius: 2px;
+	transition: opacity 0.5s;
+	opacity: 1;
+}
+
+div.chatMessage[data-sending='true'] {
+	opacity: 0.5;
 }
 
 div.chatMessage, div.chatMessage * {

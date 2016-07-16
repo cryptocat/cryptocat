@@ -94,7 +94,13 @@ window.addEventListener('load', function(e) {
 						`https://${Cryptocat.Hostname}/help.html`
 					);
 				}
-			},/*{label:'Developer',click:function(i,f){f.toggleDevTools();}},*/{
+			},/*
+			{
+				label: 'Developer',
+				click: function(i,f) {
+					f.toggleDevTools();
+				}
+			},*/{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
@@ -281,7 +287,11 @@ window.addEventListener('load', function(e) {
 	var chatMessage = React.createClass({
 		displayName: 'chatMessage',
 		getInitialState: function() {
-			return {};
+			return {
+				sending: (
+					this.props.sender === Cryptocat.Me.username
+				)
+			};
 		},
 		componentDidMount: function() {
 			return true;
@@ -293,6 +303,7 @@ window.addEventListener('load', function(e) {
 				'data-alignment': this.props.alignment,
 				'data-offline': this.props.offline,
 				'data-valid': this.props.valid,
+				'data-sending': this.state.sending,
 				key: 0
 			}, React.createElement('span', {
 				className: 'chatMessageInfo',
@@ -499,18 +510,23 @@ window.addEventListener('load', function(e) {
 		},
 		onSubmit: function() {
 			var message = this.state.chatInputText;
+			var stamp = Date.now();
+			var deviceName = this.state.myDeviceName;
 			if (!message.length) { return false; }
 			this.setState({chatInputText: ''});
-			thisChat.sendQueue.messages.push(message);
+			thisChat.sendQueue.messages.push({
+				message: message,
+				internalId: `${deviceName}_${stamp}`
+			});
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
 			}
 			this.updateConversation(true, {
 				plaintext: message,
 				valid: true,
-				stamp: (new Date()).toString(),
+				stamp: stamp,
 				offline: (this.state.status !== 2),
-				deviceName: this.state.myDeviceName
+				deviceName: deviceName
 			});
 			return false;
 		},
@@ -547,6 +563,7 @@ window.addEventListener('load', function(e) {
 			])).popup(Remote.getCurrentWindow());
 			return true;
 		},
+		messages: {},
 		files: {},
 		updateConversation: function(fromMe, info) {
 			var _t = this;
@@ -611,7 +628,12 @@ window.addEventListener('load', function(e) {
 					timestamp: getTimestamp(info.stamp),
 					valid: info.valid,
 					offline: info.offline,
-					deviceName: info.deviceName
+					deviceName: info.deviceName,
+					ref: function(m) {
+						_t.messages[
+							`${info.deviceName}_${info.stamp}`
+						] = m;
+					}
 				});
 			}
 			this.setState({
@@ -638,14 +660,17 @@ window.addEventListener('load', function(e) {
 				e.target.getAttribute('data-sticker');
 			e.target.blur();
 			document.getElementById('chatInputText').focus();
-			thisChat.sendQueue.messages.push(sticker);
+			thisChat.sendQueue.messages.push({
+				message: sticker,
+				internalId: ''
+			});
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
 			}
 			this.updateConversation(true, {
 				plaintext: sticker,
 				valid: true,
-				stamp: (new Date()).toString(),
+				stamp: Date.now(),
 				offline: (this.state.status !== 2),
 				deviceName: this.state.myDeviceName
 			});
@@ -742,7 +767,7 @@ window.addEventListener('load', function(e) {
 				_t.updateConversation(true, {
 					plaintext: sendInfo,
 					valid: true,
-					stamp: (new Date()).toString(),
+					stamp: Date.now(),
 					offline: (_t.state.status !== 2),
 					deviceName: _t.state.myDeviceName
 				});
@@ -753,7 +778,10 @@ window.addEventListener('load', function(e) {
 				var sendInfo = 'CryptocatFile:' + JSON.stringify(info);
 				Remote.getCurrentWindow().setProgressBar(-1);
 				if (info.valid) {
-					thisChat.sendQueue.messages.push(sendInfo);
+					thisChat.sendQueue.messages.push({
+						message: sendInfo,
+						internalId: ''
+					});
 					if (!thisChat.sendQueue.isOn) {
 						thisChat.sendQueue.turnOn();
 					}
@@ -1010,10 +1038,11 @@ window.addEventListener('load', function(e) {
 					if ((Date.now() - thisChat.sendQueue.lastRecv) < 100) {
 						return false;
 					}
+					var message = thisChat.sendQueue.messages[0];
 					IPCRenderer.sendSync(
 						'chat.sendMessage',
 						thisChat.window.state.to,
-						thisChat.sendQueue.messages[0]
+						message
 					);
 					thisChat.sendQueue.messages.splice(0, 1);
 				}, 100);
@@ -1049,6 +1078,23 @@ window.addEventListener('load', function(e) {
 		document.getElementById('chatInputText').focus();
 	});
 
+	IPCRenderer.on('chat.messageError', function(e, internalId) {
+		if (internalId.length) {
+			thisChat.window.messages[internalId].setState({
+				valid: false
+			});
+			Cryptocat.Diag.error.messageSending();
+		}
+	});
+
+	IPCRenderer.on('chat.messageSent', function(e, internalId) {
+		if (internalId.length) {
+			thisChat.window.messages[internalId].setState({
+				sending: false
+			});
+		}
+	});
+
 	IPCRenderer.on('chat.openDialog', function(e, paths) {
 		var readFile = function(path) {
 			var name = Path.basename(path);
@@ -1064,7 +1110,7 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('chat.receiveMessage', function(e, info) {
 		thisChat.window.updateConversation(false, info);
-		thisChat.sendQueue.lastRecv = (new Date(info.stamp)).getTime();
+		thisChat.sendQueue.lastRecv = info.stamp;
 		if (!thisChat.focused) {
 			Remote.getCurrentWindow().flashFrame(true);
 			if (proc.platform === 'darwin') {
