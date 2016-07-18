@@ -642,7 +642,7 @@ window.addEventListener('load', function(e) {
 			connected: Cryptocat.Me.connected,
 			myDeviceName: Cryptocat.Me.settings.deviceName
 		});
-		Cryptocat.Win.chat[username].setTitle('Chat with ' + username);
+		Cryptocat.Win.chat[username].setTitle(username);
 		if (typeof (callback) === 'function') { callback(); }
 		Cryptocat.Win.chat[username].show();
 		if (Cryptocat.Win.chatRetainer.length < 2) {
