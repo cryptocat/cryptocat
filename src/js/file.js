@@ -2,9 +2,8 @@
 Cryptocat.File = {};
 
 (function() {
-	Cryptocat.File.maxSize = 101000000;
-	Cryptocat.File.chunkSize = 25000;
-	Cryptocat.File.chunkTimeout = 10000;
+	Cryptocat.File.maxSize = 105906176;
+	Cryptocat.File.blockSize = 262144;
 
 	Cryptocat.File.types = {
 		archive: [
@@ -92,49 +91,80 @@ Cryptocat.File = {};
 	};
 
 	var putFile = function(file, onProgress, onEnd) {
-		var put = HTTPS.request({
-			hostname: 'cryptocat.blob.core.windows.net',
-			port: 443,
-			protocol: 'https:',
-			method: 'PUT',
-			path: '/files/' + file.sas,
-			headers: {
-				'X-Ms-Blob-Type': 'BlockBlob',
-				'Content-Type': 'application/octet-stream',
-				'Content-Length': file.encrypted.ciphertext.length
-			},
-			agent: false
-		}, function(res) {
-			console.info(res.statusCode);
-			onEnd({
-				name: file.name,
-				url: file.sas.substring(0, 128),
-				key: (new Buffer(file.key)).toString('hex'),
-				iv: (new Buffer(file.iv)).toString('hex'),
-				tag: file.encrypted.tag,
-				valid: (res.statusCode === 201)
-			}, file.file);
-		});
-		var putChunk = function(offset) {
-			var nOffset = offset + Cryptocat.File.chunkSize;
-			var chunk = file.encrypted.ciphertext.slice(offset, nOffset);
-			if (nOffset < file.encrypted.ciphertext.length) {
-				put.write(chunk, function() {
-					onProgress(file.sas.substring(0, 128), Math.ceil(
-						(nOffset * 100) / file.encrypted.ciphertext.length
-					));
-					putChunk(nOffset);
-				});
-			} else {
-				put.end(chunk);
-			}
+		var encLength = file.encrypted.ciphertext.length;
+		var blockSize = Cryptocat.File.blockSize;
+		var blockIds = [];
+		var putList = function() {
+			var body = '<?xml version="1.0" encoding="utf-8"?><BlockList>';
+			blockIds.forEach(function(blockId64) {
+				body += `<Latest>${blockId64}</Latest>`;
+			});
+			body += '</BlockList>';
+			var put = HTTPS.request({
+				hostname: 'cryptocat.blob.core.windows.net',
+				port: 443,
+				protocol: 'https:',
+				method: 'PUT',
+				path: `/files/${file.sas}&comp=blocklist&timeout=60`,
+				headers: {
+					'Content-Type': 'application/octet-stream',
+					'Content-Length': body.length
+				},
+				agent: false
+			}, function(res) {
+				console.info('Cryptocat.File: Azure BlockList', blockIds);
+				onEnd({
+					name: file.name,
+					url: file.sas.substring(0, 128),
+					key: (new Buffer(file.key)).toString('hex'),
+					iv: (new Buffer(file.iv)).toString('hex'),
+					tag: file.encrypted.tag,
+					valid: (res.statusCode === 201)
+				}, file.file);
+			});
+			put.write(body);
+			put.end();
 		};
-		put.flushHeaders();
-		put.setTimeout(Cryptocat.File.chunkTimeout, function() {
-			put.abort();
-			putFile(file, onProgress, onEnd);
-		});
-		putChunk(0);
+		var putBlock = function(offset, blockId) {
+			var blockId64 = (function() {
+				var b = blockId.toString();
+				while (b.length < 8) {
+					b = `0${b}`;
+				}
+				return (new Buffer(
+					b, 'utf8'
+				)).toString('base64');
+			})();
+			var nOffset = offset + blockSize;
+			var block = file.encrypted.ciphertext.slice(offset, nOffset);
+			if (offset >= encLength) {
+				putList();
+				return false;
+			}
+			var put = HTTPS.request({
+				hostname: 'cryptocat.blob.core.windows.net',
+				port: 443,
+				protocol: 'https:',
+				method: 'PUT',
+				path: `/files/${file.sas}&comp=block&timeout=120&blockid=${blockId64}`,
+				headers: {
+					'Content-Type': 'application/octet-stream',
+					'Content-Length': block.length
+				},
+				agent: false
+			}, function(res) {
+				console.info(`Cryptocat.File: Azure Block ${blockId64}`, res.statusCode);
+				onProgress(file.sas.substring(0, 128), Math.ceil(
+					(nOffset * 100) / file.encrypted.ciphertext.length
+				));
+				blockIds.push(blockId64);
+				blockId = blockId + 1;
+				putBlock(nOffset, blockId);
+			});
+			put.write(block);
+			put.end();
+		};
+		putBlock(0, 0);
 	};
 
 	Cryptocat.File.getType = function(name) {
