@@ -45,6 +45,8 @@
 					<li><a data-scroll href="#addDevice">Adding and Removing Devices</a></li>
 					<li><a data-scroll href="#fingerprints">Verifying your Buddy's Fingerprints</a></li>
 					<li><a data-scroll href="#managingDevices">Managing Devices Safely</a></li>
+					<li><a data-scroll href="#addBuddy">Adding New Buddies</a></li>
+					<li><a data-scroll href="#messages">Sending and Receiving Messages</a></li>
 					<li><a data-scroll href="#notify">Enabling or Disabling Sounds and Notifications</a></li>
 					<li><a data-scroll href="#fontSize">Increase or Decrease Chat Font Size</a></li>
 					<li><a data-scroll href="#typing">Let Buddies See When You Are Typing</a></li>
@@ -130,6 +132,31 @@
 				Use full-disk encryption. Under Windows, you can enable <a href="http://windows.microsoft.com/en-us/windows-10/turn-on-device-encryption" target="_blank">device encryption</a>. On Linux, you can use <a href="https://wiki.archlinux.org/index.php/disk_encryption">LUKS, dm-crypt or eCryptfs</a>. On Mac, you can use <a href="https://support.apple.com/en-us/HT204837">FileVault</a>. This would ensure that all files on your computer are more protected. Your Cryptocat device information will be more difficult to recover so long as your device is turned off when stolen.
 			</p>
 			<hr />
+			<h2 id="addBuddy">Adding New Buddies</h2>
+			<p>
+				Before you can chat with a friend on Cryptocat, you must first send them a buddy request, or accept a buddy request that they send you. This confirms that you both wish to communicate with each other, and adds each of you to the other user's buddy list, where they can see if you are online. In order to send a buddy request:
+			</p>
+			<ul>
+				<li><em>Windows and Linux</em>: Either right click on the Cryptocat icon in your system tray and select <em>Add Buddy</em>, or open the <em>Account</em> menu from your buddy list window and select <em>Add Buddy</em>. You can also use the <span class="code">Alt+A</span> keyboard shortcut from the buddy list window.</li>
+				<li><em>Mac</em>: Either right click on the Cryptocat icon in your dock and select <em>Add Buddy</em>, or open the <em>Account</em> menu and select <em>Add Buddy</em>. You can also use the <span class="code">Alt+A</span> keyboard shortcut from the buddy list window.</li>
+			</ul>
+			<p>
+				Remember that your buddy will need to accept your request before you can chat with each other.
+			</p>
+			<hr />
+			<h2 id ="messages">Sending and Receiving Messages</h2>
+			<p>
+				Simply click on a buddy in your buddy list to open a chat window, from where you can send them a message, a file, an audio/video recording or even a cute cat sticker. The colored square next to your buddy indicates their current ability to receive and send messages:
+			</p>
+			<ul>
+				<li><em>Green</em>: Your buddy is online and will likely immediately receive your message and will be able to respond.</li>
+				<li><em>Orange</em>: Your buddy is offline but messages you send now will be automatically delivered to them the next time they log into Cryptocat.</li>
+				<li><em>Red</em>: Your buddy is offline and currently cannot receive messages. This can be due to problems with their linked devices or a caching issue on the Cryptocat network. Ask your buddy to log into Cryptocat again to automatically refresh their device list.</li>
+			</ul>
+			<p>
+				When you send a message, your message will be half-transparent and fade into fully opaque once it's actually sent to the server. Messages that remain transparent or turn red may have not been sent.
+			</p>
+			<hr />
 			<h2 id="notify">Enabling or Disabling Sounds and Notifications</h2>
 			<p>
 				By default, desktop notifications and notification sounds are enabled in Cryptocat, in order to minimize the chance of you missing an important message. Some users may find these settings bothersome and wish to disable them. Here is how you may do so:
@@ -207,47 +234,35 @@
 				Since Linux comes with no built-in standard for code signatures (aside from package managers, which are distribution-specific), each Cryptocat for Linux release comes with a PGP signature that can be verified using <span class="code">gpg</span>. First, import the Cryptocat for Linux verification key (using <span class="code">gpg --import</span>):
 			</p>
 			<p>
-<code>-----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2
+<code>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-cBvUc+EhG7qkUL9yzXMBxZDtCIMF
-=3vzK
+mQENBFd8znMBCADcH+fc0vS2UEkjpEwdVbTPjLSir3nWsg/1wMtU17sHWkAXJfGJ
+IK+1BGsSKev0NZZeXqnaM1Kq5QVO+Gkar4kOp5XTlHQMLd5MrzOEkVmL/fchpEMf
+D8309Vvd+O5Hnx/W8NoKIZ3+xHjCNbhoe/c7Sn5nC1vohXIjhQI5EgNiqPCR+EOA
++0ccAuRLuTu9kYn1cozlquajh3kNTYqjr1bjAe/CaIWmO6IRXeA2jk+Ofr2JEHcR
++KTcIF+Ls44wOKnkjSaY1Kg9WdP5QrXT3wjUqf+wI2/VLO2kdBC33YJ66J3h+yBm
+YayWI4ORcdoogithJTluTW4/exy1FDZ4/DXhABEBAAG0JU5hZGltIEtvYmVpc3Np
+IDxuYWRpbUBuYWRpbS5jb21wdXRlcj6JATkEEwEIACMFAld8znMCGwMHCwkIBwMC
+AQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCEV/YjhFP4X9W4B/93cfufgVGVbJlOFHAK
+uLsvZ0pjagtZ+cizIIjpvZwARDb+JhVrmX/BxcHXCja6nIlHVBJrvVPE60DZhuw/
+nWChFbuc773EqGxBCOfW3/H83D/IwRgLdguITOO1fLDecKZ95R763gDO5X3HEj+n
+8V7y/+DEVVW9qEIfR3XdU2IsPLQfrvS654c9LD1lK+3zJFSah9yvAQO4u7HugM0c
+XI2SY85NxXyqtA3z0MOdu9TtFuLrV5WZ2PVl0Mt9K299EropsH359GTVXdbXd4iC
+2Guiy8nHZ+nK7a24wEBgVQyBZadUs2SyQQK9cQaB21qpvtyxO97OxKrtIc80Iv5h
+eEvauQENBFd8znMBCADK0THtk46sF+nWAMrNPAy6hh+7CJOyj/qmpOrbdzRuInEa
+ZMXgy32ksB83i5mPm/FlQZKV9DdqimZceifEqnLwDMvg2GTV1xvgdZ0pmlxRhkgi
+ITebNegujMIwanD1du5yS8nZhXZRXUTc/kCuz3sQbM3kMOV5Yz9viR2qF8N1IuG9
+R6ylpHC6AGxSJfhYyLfDc6d89texGBrhdn6jeMgfZShpBrgvOky6r6ievSncihyy
+rGpr9KHVfqQbTYrN9J67v6JevHaIXimEnuIHVlZfJjGpFTex0xeF5m3zCAAfzmQm
+8yftbGjHSIc24YKMh0N/gev19AuAQepzyQ1cmVT7ABEBAAGJAR8EGAEIAAkFAld8
+znMCGwwACgkQhFf2I4RT+F++tggAiikQXr7Lo4/gAzD7g6Cd7/WU3G0YlrtjNcyx
+NaJ9hwsccpj1dmRcZV4RtLR4+dbFvrSY3xR8mxThJj6sFzYsK4Iph0yyln9E4RDW
+kwuDmEzIsliufApRq+7IqNVfSpmmi9fJ+W120KGaE8qBiLPT3A10X8EghET7nwPW
+BDaXAZBY5y0f154R5zP2Ic1TxooTyBOsWJtyzvp+Vt3eMUBSQALuqdpBzUnm2KWQ
+VhOLITFAp4rjHwrzOSs8HbkpwLNZ1D0kGaSXVXHPxkHLKeSsOcCuVfTu2rnIl6HY
+BaQ8JGPU9fGkl9V0PblebrEEgUVQK3/d9ULNA/yfRfxdzcvKYA==
+=wC0M
 -----END PGP PUBLIC KEY BLOCK-----</code>
 			</p>
 			<p>

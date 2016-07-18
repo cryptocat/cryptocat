@@ -41,6 +41,7 @@
 			<h1>News</h1>
 			<div class="tableOfContents">
 				<ul>
+					<li><a data-scroll href="#3.2.00">Cryptocat 3.2.00 Release Notes</a>         &mdash; <em>July 18, 2016</em></li>
 					<li><a data-scroll href="#3.1.26">Cryptocat 3.1.26 Release Notes</a>   &mdash; <em>June 21, 2016</em></li>
 					<li><a data-scroll href="#3.1.25">Cryptocat 3.1.25 Release Notes</a>   &mdash; <em>May 17, 2016</em></li>
 					<li><a data-scroll href="#3.1.24">Cryptocat 3.1.24 Release Notes</a>   &mdash; <em>May 11, 2016</em></li>
@@ -84,6 +85,24 @@
 					<li><a data-scroll href="#3.0.16">Cryptocat: Beta Release</a>          &mdash; <em>March 29, 2016</em></li>
 				</ul>
 			</div>
+			<div class="newsEntry" id="3.2.00">
+				<h2>Cryptocat 3.2 Release Notes</h2>
+				<p class="newsDate">July 18, 2016</p>
+				Cryptocat 3.2.00 is now available and brings the following improvements:
+				<ul>
+					<li><strong>Out of Beta!</strong> Cryptocat is no longer beta software. Bugs will certainly still occur in the upcoming history of the project, but we are reasonably confident in the reliability of the current client. Thanks to everyone who contributed to our more than 150 reports with bugs, feedback and enhancements!</li>
+					<li><a href="help.html#signatures">A new PGP key</a> is now being used in order to sign source code commits and Linux releases. Its fingerprint is:<br /><span class="code">94B8 4193 A00C FA50 F4DC  7475 8457 F623 8453 F85F</span></li>
+					<li>Message sending has been improved: sent messages will appear as semi-transparent until they are properly encrypted and sent. Messages that cannot be sent to all of a recipient's linked (and, if applicable, selected) devices will not be sent at all.</li>
+					<li>Improved file sharing reliability on unreliable Internet connections.</li>
+					<li>Fixed a bug that prevented files larger than 64MB from being sent.</li>
+					<li>Fixed a bug that would sometimes show message time as sent during the AM instead of PM.</li>
+					<li>Fixed a bug that would make the file sharing drag and drop overlay sometimes get stuck.</li>
+					<li>Fixed a bug that would incorrectly handle session reconnection in Cryptocat for Windows.</li>
+					<li>Cryptocat for Mac is no longer requires administrator privileges for installation.</li>
+				</ul>
+				In order to obtain the update, open the <em>Help</em> menu and click on <em>Check for Updates</em>.
+			</div>
+			<hr />
 			<div class="newsEntry" id="3.1.26">
 				<h2>Cryptocat 3.1.26 Release Notes</h2>
 				<p class="newsDate">June 21, 2016</p>
