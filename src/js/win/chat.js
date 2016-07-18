@@ -94,13 +94,13 @@ window.addEventListener('load', function(e) {
 						`https://${Cryptocat.Hostname}/help.html`
 					);
 				}
-			},/*
+			}, /*
 			{
 				label: 'Developer',
-				click: function(i,f) {
+				click: function(i, f) {
 					f.toggleDevTools();
 				}
-			},*/{
+			}, */{
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
