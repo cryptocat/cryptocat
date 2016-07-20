@@ -139,8 +139,8 @@
 	// Check on application start.
 	Cryptocat.Update.check(true, () => {});
 
-	// Check every 8 hours.
+	// Check every 24 hours.
 	setInterval(() => {
 		Cryptocat.Update.check(false, () => {});
-	}, (1000 * 3600 * 8));
+	}, (1000 * 3600 * 24));
 })();
