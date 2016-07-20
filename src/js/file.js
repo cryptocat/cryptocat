@@ -38,14 +38,13 @@ Cryptocat.File = {};
 		],
 		recording: [
 			'aac', 'gifv', 'm4a',
-			'mp3', 'mp4', 'ogg',
-			'wav', 'webm'
+			'mp3', 'mov', 'mp4',
+			'ogg', 'wav', 'webm'
 		],
 		video: [
 			'3gp', 'avi', 'flv',
-			'm4v', 'mkv', 'mov',
-			'mpeg', 'mpg', 'mpg',
-			'wmv'
+			'm4v', 'mkv', 'mpeg',
+			'mpg', 'wmv'
 		]
 	};
 
