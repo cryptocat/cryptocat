@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 				appDirectory: 'dist/Cryptocat-win32-x64',
 				outputDirectory: 'dist/Cryptocat-win32-x64-installer',
 				noMsi: true,
-				iconUrl: 'file://' + __dirname + '/src/img/logo/logo.ico',
+				iconUrl: `file://${__dirname}/src/img/logo/logo.ico`,
 				setupIcon: 'src/img/logo/logo.ico',
 				loadingGif: 'src/img/logo/logo.gif'
 			}
@@ -82,11 +82,11 @@ module.exports = function(grunt) {
 					replacements: [
 						{
 							pattern: /"version": "(\d|\.){5,8}"/,
-							replacement: '"version": "' + VERSION + '"'
+							replacement: `"version": "${VERSION}"`
 						},
 						{
 							pattern: /Cryptocat\.Version = '(\d|\.){5,8}';/,
-							replacement: 'Cryptocat.Version = ' + '\'' + VERSION + '\';'
+							replacement: `Cryptocat.Version = '${VERSION}';`
 						}
 					]
 				}
@@ -105,8 +105,8 @@ module.exports = function(grunt) {
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
 			macRmDir: 'rm -r dist/Cryptocat.app',
-			writeVer: 'gawk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
-			macWriteVer: 'echo ' + VERSION + ' > dist/version.txt'
+			writeVer: `gawk -vORS= 'BEGIN { print "${VERSION}" }' > dist/version.txt`,
+			macWriteVer: `echo ${VERSION} > dist/version.txt`
 		},
 		jshint: {
 			options: {
