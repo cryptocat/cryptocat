@@ -828,9 +828,9 @@ window.addEventListener('load', function(e) {
 			});
 		},
 		statusMessages: [
-			' is offline and cannot receive messages.',
-			' is offline and can receive messages.',
-			' is online.'
+			' is offline and cannot currently receive messages.',
+			' is offline and will receive your messages later.',
+			' is currently online.'
 		],
 		render: function() {
 			var _t = this;
