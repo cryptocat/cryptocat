@@ -69,6 +69,8 @@ var client = {};
 					Cryptocat.XMPP.sendBundle();
 				}
 				return false;
+			} else {
+				return false;
 			}
 			if (
 				hasProperty(data, '0') &&
