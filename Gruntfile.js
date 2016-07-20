@@ -105,8 +105,8 @@ module.exports = function(grunt) {
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
 			macRmDir: 'rm -r dist/Cryptocat.app',
-			winWriteVer: 'gawk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
-			writeVer: 'echo ' + VERSION + ' > dist/version.txt'
+			writeVer: 'gawk -vORS= \' BEGIN { print "' + VERSION + '" } \' > dist/version.txt',
+			macWriteVer: 'echo ' + VERSION + ' > dist/version.txt'
 		},
 		jshint: {
 			options: {
@@ -115,7 +115,8 @@ module.exports = function(grunt) {
 			files: [
 				'src/app.js',
 				'src/js/*.js',
-				'src/js/win/*.js'
+				'src/js/win/*.js',
+				'Gruntfile.js'
 			]
 		},
 		jscs: {
@@ -135,7 +136,7 @@ module.exports = function(grunt) {
 		'electron:windows',
 		'shell:winClean',
 		'create-windows-installer:x64',
-		'shell:winWriteVer'
+		'shell:writeVer'
 	]);
 	grunt.registerTask('linux', 'Create Linux Package', [
 		'string-replace:dist',
@@ -151,17 +152,8 @@ module.exports = function(grunt) {
 		'electron:mac',
 		'shell:macMv',
 		'shell:macClean',
-		'shell:writeVer'
+		'shell:macWriteVer'
 	]);
-	grunt.registerTask('winZip', 'Archive Windows Package',
-		['shell:winZip', 'shell:winRmDir']
-	);
-	grunt.registerTask('macZip', 'Archive Mac Package',
-		['shell:macZip', 'shell:macRmDir']
-	);
-	grunt.registerTask('writeVersion', 'Write Version Number',
-		['shell:writeVersion']
-	);
 	grunt.registerTask('clean', 'Clean',
 		['shell:cleanDist']
 	);
