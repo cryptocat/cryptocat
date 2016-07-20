@@ -1,6 +1,6 @@
 /* jshint quotmark: false */
 'use strict';
-var VERSION = '3.2.00';
+var VERSION = '3.2.01';
 
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-electron');
@@ -105,8 +105,7 @@ module.exports = function(grunt) {
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
 			macRmDir: 'rm -r dist/Cryptocat.app',
-			writeVer: `gawk -vORS= 'BEGIN { print "${VERSION}" }' > dist/version.txt`,
-			macWriteVer: `echo ${VERSION} > dist/version.txt`
+			writeVer: `gawk -vORS= 'BEGIN { print "${VERSION}" }' > dist/version.txt`
 		},
 		jshint: {
 			options: {
@@ -152,8 +151,14 @@ module.exports = function(grunt) {
 		'electron:mac',
 		'shell:macMv',
 		'shell:macClean',
-		'shell:macWriteVer'
+		'shell:writeVer'
 	]);
+	grunt.registerTask('winZip', 'Archive Windows Package',
+		['shell:winZip', 'shell:winRmDir']
+	);
+	grunt.registerTask('macZip', 'Archive Mac Package',
+		['shell:macZip', 'shell:macRmDir']
+	);
 	grunt.registerTask('clean', 'Clean',
 		['shell:cleanDist']
 	);
