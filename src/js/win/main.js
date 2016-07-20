@@ -644,7 +644,7 @@ window.addEventListener('load', function(e) {
 		});
 		Cryptocat.Win.chat[username].setTitle(username);
 		if (typeof (callback) === 'function') { callback(); }
-		Cryptocat.Win.chat[username].show();
+		Cryptocat.Win.chat[username].showInactive();
 		if (Cryptocat.Win.chatRetainer.length < 2) {
 			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
