@@ -1,6 +1,6 @@
 ![Cryptocat](https://raw.githubusercontent.com/cryptocat/cryptocat/master/src/img/logo/logo64.png)
 
-[![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat) *Currently Beta Software.*
+[![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat)
 
 [Documentation](https://crypto.cat/help.html) | [Security](https://crypto.cat/security.html) | [License](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
