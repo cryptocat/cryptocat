@@ -50,7 +50,7 @@ window.addEventListener('load', function(e) {
 		onClick: function() {
 			if (Cryptocat.Me.connected) {
 				Cryptocat.Win.create.chat(
-					this.props.username
+					this.props.username, true, function() {}
 				);
 			}
 		},
@@ -169,7 +169,7 @@ window.addEventListener('load', function(e) {
 					username + ' is online.',
 					'Click here to chat with them.',
 					function() {
-						Cryptocat.Win.create.chat(username);
+						Cryptocat.Win.create.chat(username, true, function() {});
 					}
 				);
 				Cryptocat.Notify.playSound('buddyOnline');
@@ -621,7 +621,7 @@ window.addEventListener('load', function(e) {
 		);
 	};
 
-	Cryptocat.Win.create.chat = function(username, callback) {
+	Cryptocat.Win.create.chat = function(username, autoFocus, callback) {
 		if (hasProperty(Cryptocat.Win.chat, username)) {
 			Cryptocat.Win.chat[username].focus();
 			return false;
@@ -643,11 +643,15 @@ window.addEventListener('load', function(e) {
 			myDeviceName: Cryptocat.Me.settings.deviceName
 		});
 		Cryptocat.Win.chat[username].setTitle(username);
-		if (typeof (callback) === 'function') { callback(); }
-		Cryptocat.Win.chat[username].showInactive();
+		if (autoFocus) {
+			Cryptocat.Win.chat[username].show();
+		} else {
+			Cryptocat.Win.chat[username].showInactive();
+		}
 		if (Cryptocat.Win.chatRetainer.length < 2) {
 			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
+		callback();
 	};
 
 	Cryptocat.Win.create.addBuddy = function() {

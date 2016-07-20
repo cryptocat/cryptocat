@@ -536,7 +536,7 @@ var client = {};
 				}, 500);
 			} else { sendToWindow(); }
 		} else {
-			Cryptocat.Win.create.chat(username, sendToWindow);
+			Cryptocat.Win.create.chat(username, false, sendToWindow);
 		}
 	};
 

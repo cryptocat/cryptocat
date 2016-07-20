@@ -1021,7 +1021,7 @@ window.addEventListener('load', function(e) {
 			return document.getElementById('chatContents');
 		},
 		chatFileDragOverlayCounter: 0,
-		focused: true,
+		focused: false,
 		theirComposingTimer: {},
 		myComposingTimer: {},
 		sendQueue: {
