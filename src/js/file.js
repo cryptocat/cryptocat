@@ -160,6 +160,9 @@ Cryptocat.File = {};
 				blockId = blockId + 1;
 				putBlock(nOffset, blockId);
 			});
+			put.on('error', function(e) {
+				putBlock(offset, blockId);
+			});
 			put.write(block);
 			put.end();
 		};
