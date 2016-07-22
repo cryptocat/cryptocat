@@ -320,7 +320,7 @@ window.addEventListener('load', function(e) {
 					Remote.getCurrentWindow().show();
 				}
 			});
-			while (Cryptocat.Win.chatRetainer.length < 2) {
+			if (Cryptocat.Win.chatRetainer.length === 0) {
 				Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 			}
 			return true;
@@ -626,7 +626,7 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Win.chat[username].focus();
 			return false;
 		}
-		if (!Cryptocat.Win.chatRetainer.length) {
+		if (Cryptocat.Win.chatRetainer.length === 0) {
 			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
 		Cryptocat.XMPP.getDeviceList(username);
@@ -648,7 +648,7 @@ window.addEventListener('load', function(e) {
 		} else {
 			Cryptocat.Win.chat[username].showInactive();
 		}
-		if (Cryptocat.Win.chatRetainer.length < 2) {
+		if (Cryptocat.Win.chatRetainer.length === 0) {
 			Cryptocat.Win.chatRetainer.push(spawnChatWindow());
 		}
 		callback();
