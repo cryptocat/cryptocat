@@ -643,11 +643,9 @@ window.addEventListener('load', function(e) {
 				key: this.state.key + 1
 			}, function() {
 				var tCc = thisChat.contents;
-				if (
-					fromMe || ((
-						tCc().scrollHeight - tCc().scrollTop
-					) < 1000)
-				) {
+				if ((
+					tCc().scrollHeight - tCc().scrollTop
+				) < 1000) {
 					tCc().scrollTop = tCc().scrollHeight;
 					setTimeout(function() {
 						tCc().scrollTop = tCc().scrollHeight;
