@@ -284,8 +284,19 @@ window.addEventListener('load', function(e) {
 		},
 		componentDidMount: function() {
 			var _t = this;
+			var screenRes = (function() {
+				var res = {
+					width: 0,
+					height: 0
+				};
+				var displays = Remote.screen.getAllDisplays();
+				displays.forEach(function(display) {
+					res.width += display.size.width;
+					res.height += display.size.height;
+				});
+				return res;
+			})();
 			Cryptocat.Storage.getCommon(function(err, common) {
-				var screenRes = Remote.screen.getPrimaryDisplay().size;
 				if (
 					common &&
 					common.rememberedLogin.username.length &&
