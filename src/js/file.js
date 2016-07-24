@@ -161,7 +161,9 @@ Cryptocat.File = {};
 				putBlock(nOffset, blockId);
 			});
 			put.on('error', function(e) {
-				putBlock(offset, blockId);
+				setTimeout(function() {
+					putBlock(offset, blockId);
+				}, 5000);
 			});
 			put.write(block);
 			put.end();
