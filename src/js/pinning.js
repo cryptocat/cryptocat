@@ -17,6 +17,20 @@ Cryptocat.Pinning = {};
 				'3756D65ED0C7B1B8F1BEED47E77C184B061FD9F86A2C5925199E495CED7C955C' +
 				'608C0BDCAB23185704B97892FBE19910C88CCCD510E13150648B6174BF309FD5'
 			)
+		}, {
+			issuer: 'Gandi Standard SSL CA 2',
+			subject: 'crypto.cat',
+			exponent: '0x10001',
+			modulus: (
+				'C4B6B422A47FB1902A7436FA90AC7B17B4D88DB595CCBA5C3EF8FAE09D0EBB4D' +
+				'44326F15A1DF9D45AF371560D805C3A16182E1133BFEB1E8943190A1161AD1D6' +
+				'DBD1029513A6241CA8D964CB47A4EF502DE360683864387FADCB6A16CBD7D536' +
+				'AD9B19CE109CB4C7CC54C94AFA142B652820824516CA88CEC215B44CC3EE37CE' +
+				'84FE9849B4B8BFAF9406F4E79F45F932275481506A9FB31054ABE188C967C780' +
+				'7AF099A97B3CE87F748EA0FA2A7305A99BE892EE1C2679816C4690AF75785702' +
+				'3756D65ED0C7B1B8F1BEED47E77C184B061FD9F86A2C5925199E495CED7C955C' +
+				'608C0BDCAB23185704B97892FBE19910C88CCCD510E13150648B6174BF309FD5'
+			)
 		}],
 		'download.crypto.cat': [{
 			issuer: 'Gandi Standard SSL CA 2',
@@ -53,33 +67,38 @@ Cryptocat.Pinning = {};
 		}]
 	};
 
-	Cryptocat.Pinning.get = function(url, cert, callback) {
+	var checkCert = function(c, d) {
+		if (
+			(c.issuer.CN === d.issuer) &&
+			(c.subject.CN === d.subject) &&
+			(c.exponent === d.exponent) &&
+			(c.modulus === d.modulus)
+		) {
+			return true;
+		}
+		return false;
+	};
+
+	Cryptocat.Pinning.get = function(url, callback) {
 		var domain = domains['crypto.cat'];
 		if (url.startsWith('https://download.crypto.cat/')) {
 			domain = domains['download.crypto.cat'];
 		}
 		var candidate = {};
 		var get = HTTPS.request({
-			hostname: domain[cert].subject,
+			hostname: domain[0].subject,
 			port: 443,
 			protocol: 'https:',
 			path: NodeUrl.parse(url).pathname,
 			agent: false
 		}, function(res) {
 			if (
-				(candidate.issuer.CN === domain[cert].issuer) &&
-				(candidate.subject.CN === domain[cert].subject) &&
-				(candidate.exponent === domain[cert].exponent) &&
-				(candidate.modulus === domain[cert].modulus)
+				(checkCert(candidate, domain[0])) ||
+				(checkCert(candidate, domain[1]))
 			) {
 				callback(res, true);
 			} else {
-				if (cert >= (domain.length - 1)) {
-					callback({}, false);
-				} else {
-					var nextCert = cert + 1;
-					Cryptocat.Pinning.get(url, nextCert, callback);
-				}
+				callback({}, false);
 			}
 		});
 		get.on('socket', (socket) => {

@@ -396,7 +396,7 @@ var client = {};
 			return false;
 		}
 		Cryptocat.Pinning.get(
-			`https://${Cryptocat.Hostname}/socket`, 0,
+			`https://${Cryptocat.Hostname}/socket`,
 			function(res, valid) {
 				if (!valid) {
 					handler.authFailed();
