@@ -91,7 +91,7 @@ window.addEventListener('load', function(e) {
 			return false;
 		};
 		Cryptocat.Pinning.get(
-			Cryptocat.Update.clientURIs[process.platform],
+			Cryptocat.Update.clientURIs[process.platform], 0,
 			function(res, valid) {
 				if (!valid) {
 					return onError();

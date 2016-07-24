@@ -79,7 +79,7 @@
 
 	Cryptocat.Update.check = function(verbose, ifLatest) {
 		Cryptocat.Pinning.get(
-			Cryptocat.Update.verURIs[process.platform],
+			Cryptocat.Update.verURIs[process.platform], 0,
 			function(res, valid) {
 				if (!valid) {
 					if (verbose) {
@@ -116,7 +116,7 @@
 	Cryptocat.Update.verifySignature = function(hash, callback) {
 		var signature = '';
 		Cryptocat.Pinning.get(
-			Cryptocat.Update.sigURIs[process.platform],
+			Cryptocat.Update.sigURIs[process.platform], 0,
 			function(res, valid) {
 				if (!valid) {
 					callback(false);

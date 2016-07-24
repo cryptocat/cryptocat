@@ -583,7 +583,7 @@ window.addEventListener('load', function(e) {
 					value: 'Create Account',
 					onClick: function() {
 						Cryptocat.Pinning.get(
-							`https://${Cryptocat.Hostname}/create`,
+							`https://${Cryptocat.Hostname}/create`, 0,
 							function(res, valid) {
 								if (valid) {
 									Remote.shell.openExternal(

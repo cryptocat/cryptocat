@@ -3,7 +3,7 @@ Cryptocat.Pinning = {};
 
 (function() {
 	var domains = {
-		'crypto.cat': {
+		'crypto.cat': [{
 			issuer: 'Gandi Standard SSL CA 2',
 			subject: 'crypto.cat',
 			exponent: '0x10001',
@@ -17,8 +17,26 @@ Cryptocat.Pinning = {};
 				'3756D65ED0C7B1B8F1BEED47E77C184B061FD9F86A2C5925199E495CED7C955C' +
 				'608C0BDCAB23185704B97892FBE19910C88CCCD510E13150648B6174BF309FD5'
 			)
-		},
-		'download.crypto.cat': {
+		}],
+		'download.crypto.cat': [{
+			issuer: 'Gandi Standard SSL CA 2',
+			subject: 'download.crypto.cat',
+			exponent: '0x10001',
+			modulus: (
+				'BC279AA8BE72EB431611494DE722C5AC267F7027D5750DD2A60CA4F50E74830B' +
+				'59B1D843FFF6C62A18BD3610877888AA86553D8AA1812AC130CC56712F0E69B9' +
+				'E3237F12F2E8A145401BAACCA75A692C7872CB3EC6F3EDCC836518C15C1D1867' +
+				'6F0151BB348D7E174B5BFEBB744722F47D3512D2F9F819C6796EEEF828BD4D19' +
+				'0C4217808C43FA7003630CD1E56C9CA8E0CA1AF45B1177BDAA6C6BEB7302296C' +
+				'AF95FC1D55143EEEC3D19B9D16A4D0E81DAE231F196FFEE90676EA25175316DD' +
+				'C18359B9F99F29A734FD4F1516F4A3FE5D61FA2D4658DD9B58D4765805CF25E6' +
+				'2CB233DAFAC7744F5592AEEFB45B94D9A31BE17A041C7D1EEEE1462DFB950EB8' +
+				'536A331493ECFB646C12EF9A746821BF8936E144E6729431EE7792B74AE47149' +
+				'6A22867A897F706BE083FBC644669369DA98B5815FB94DD144B7B3BC5C2C154B' +
+				'4E74B0005684A3B30621F2A7F1DF45775EE6BA28FF761FC4312BF139E8EC39BD' +
+				'E1D733B56BB8CD0F10B3D30186F5B2EC8A80006392DBC7839976C4C0B67E65E9'
+			)
+		}, {
 			issuer: 'Let\'s Encrypt Authority X3',
 			subject: 'download.crypto.cat',
 			exponent: '0x10001',
@@ -32,36 +50,41 @@ Cryptocat.Pinning = {};
 				'A321627B415AF0A9740B516FC0F9AD919A2A9F8F0DAAB3E04FAC98E2994FCB36' +
 				'058F8B48FF02670171D0F965760B2277C5A72B672C75038066C89A4F3628E657'
 			)
-		}
+		}]
 	};
 
-	Cryptocat.Pinning.get = function(url, callback) {
+	Cryptocat.Pinning.get = function(url, cert, callback) {
 		var domain = domains['crypto.cat'];
 		if (url.startsWith('https://download.crypto.cat/')) {
 			domain = domains['download.crypto.cat'];
 		}
-		var cert = {};
+		var candidate = {};
 		var get = HTTPS.request({
-			hostname: domain.subject,
+			hostname: domain[cert].subject,
 			port: 443,
 			protocol: 'https:',
 			path: NodeUrl.parse(url).pathname,
 			agent: false
 		}, function(res) {
 			if (
-				(cert.issuer.CN === domain.issuer) &&
-				(cert.subject.CN === domain.subject) &&
-				(cert.exponent === domain.exponent) &&
-				(cert.modulus === domain.modulus)
+				(candidate.issuer.CN === domain[cert].issuer) &&
+				(candidate.subject.CN === domain[cert].subject) &&
+				(candidate.exponent === domain[cert].exponent) &&
+				(candidate.modulus === domain[cert].modulus)
 			) {
 				callback(res, true);
 			} else {
-				callback({}, false);
+				if (cert >= (domain.length - 1)) {
+					callback({}, false);
+				} else {
+					var nextCert = cert + 1;
+					Cryptocat.Pinning.get(url, nextCert, callback);
+				}
 			}
 		});
 		get.on('socket', (socket) => {
 			socket.on('secureConnect', function() {
-				cert = socket.getPeerCertificate();
+				candidate = socket.getPeerCertificate();
 			});
 		});
 		get.on('error', (e) => {

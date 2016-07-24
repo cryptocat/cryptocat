@@ -300,7 +300,7 @@ Cryptocat.File = {};
 			return false;
 		}
 		Cryptocat.Pinning.get(
-			`https://${Cryptocat.Hostname}/sas`,
+			`https://${Cryptocat.Hostname}/sas`, 0,
 			function(res, valid) {
 				if (!valid) {
 					Cryptocat.Diag.error.fileGeneral(name);
