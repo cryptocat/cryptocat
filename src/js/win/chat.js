@@ -121,6 +121,13 @@ window.addEventListener('load', function(e) {
 				click: function() {
 					Cryptocat.Diag.message.about();
 				}
+			}, {
+				label: 'Get Stickers',
+				click: function() {
+					Remote.shell.openExternal(
+						'https://crypto.cat/stickers'
+					);
+				}
 			}]
 		}]
 	));

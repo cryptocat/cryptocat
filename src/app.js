@@ -334,6 +334,13 @@ const buildMainMenu = function(settings) {
 					click: function() {
 						Windows.main.webContents.send('aboutBox.create');
 					}
+				}, {
+					label: 'Get Stickers',
+					click: function() {
+						Electron.shell.openExternal(
+							'https://crypto.cat/stickers'
+						);
+					}
 				}]
 			}
 		]
