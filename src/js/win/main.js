@@ -1097,5 +1097,15 @@ window.addEventListener('load', function(e) {
 			Cryptocat.Diag.error.offline();
 		}
 	});
+
+	(function() {
+		// Check for updates on application start.
+		Cryptocat.Update.check(true, () => {});
+		// Check for updates every 24 hours.
+		setInterval(() => {
+			Cryptocat.Update.check(false, () => {});
+		}, (1000 * 3600 * 24));
+	})();
+
 });
 
