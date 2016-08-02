@@ -140,7 +140,7 @@ window.addEventListener('load', function(e) {
 				React.createElement('span', {
 					key: 4,
 					className: 'deviceManagerTrustedOnlyText'
-				}, 'send my messages to this contact only to trusted devices.'))),
+				}, 'send my messages only to trusted devices.'))),
 				React.createElement('div', {
 					key: 2,
 					id: 'deviceManagerContents'
