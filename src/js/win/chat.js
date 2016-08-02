@@ -143,20 +143,10 @@ window.addEventListener('load', function(e) {
 			'Jul', 'Aug', 'Sep',
 			'Oct', 'Nov', 'Dec'
 		][date.getMonth()];
-		var s = ' am';
-		if (h > 11) {
-			s = ' pm';
-		}
-		if (h > 12) {
-			h = h - 12;
-		}
-		if (m < 10) {
-			m = '0' + m;
-		}
-		return (
-			d + ' ' + a + '., ' +
-			h + ':' + m + s
-		);
+		var t = (h > 11)? 'pm' : 'am';
+		h = (h > 12)? (h - 12) : h;
+		m = (m < 10)? (`0${m}`) : m;
+		return `${d} ${a}., ${h}:${m}${t}`;
 	};
 
 	var checkIfSticker = function(message) {
