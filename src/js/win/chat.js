@@ -117,16 +117,16 @@ window.addEventListener('load', function(e) {
 			}, {
 				type: 'separator'
 			}, {
-				label: 'About Cryptocat',
-				click: function() {
-					Cryptocat.Diag.message.about();
-				}
-			}, {
 				label: 'Get Stickers',
 				click: function() {
 					Remote.shell.openExternal(
 						'https://crypto.cat/stickers'
 					);
+				}
+			}, {
+				label: 'About Cryptocat',
+				click: function() {
+					Cryptocat.Diag.message.about();
 				}
 			}]
 		}]
@@ -565,16 +565,14 @@ window.addEventListener('load', function(e) {
 		updateConversation: function(fromMe, info) {
 			var _t = this;
 			var sender = this.state.to;
-			var alignment = (function() {
-				if (fromMe) {
-					sender = Cryptocat.Me.username;
-					return 'right';
-				}
-				return 'left';
-			})();
-			var res = {};
 			var sticker = checkIfSticker(info.plaintext);
 			var file = checkIfFile(info.plaintext);
+			var res = {};
+			var alignment = 'left';
+			if (fromMe) {
+				sender = Cryptocat.Me.username;
+				alignment = 'right';
+			}
 			if (sticker.isSticker) {
 				res = React.createElement(chatSticker, {
 					key: this.state.key,
