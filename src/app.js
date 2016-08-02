@@ -330,16 +330,16 @@ const buildMainMenu = function(settings) {
 				}, {
 					type: 'separator'
 				}, {
-					label: 'About Cryptocat',
-					click: function() {
-						Windows.main.webContents.send('aboutBox.create');
-					}
-				}, {
 					label: 'Get Stickers',
 					click: function() {
 						Electron.shell.openExternal(
 							'https://crypto.cat/stickers'
 						);
+					}
+				}, {
+					label: 'About Cryptocat',
+					click: function() {
+						Windows.main.webContents.send('aboutBox.create');
 					}
 				}]
 			}
