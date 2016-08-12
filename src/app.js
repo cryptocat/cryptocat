@@ -15,6 +15,7 @@ const MenuSettings = {
 
 let IntentToQuit = false;
 let TrayIcon = {};
+let TrayIconFirstMinimized = true;
 
 const handleStartupEvent = {
 	win32: function() {
@@ -451,11 +452,14 @@ Electron.app.on('ready', function() {
 			e.preventDefault();
 			Windows.main.hide();
 			if (process.platform !== 'darwin') {
-				TrayIcon.displayBalloon({
-					icon: Path.join(__dirname, 'img/logo/logo.png'),
-					title: 'Cryptocat is still running',
-					content: 'It awaits you snugly in your desktop tray.'
-				});
+				if (TrayIconFirstMinimized) {
+					TrayIconFirstMinimized = false;
+					TrayIcon.displayBalloon({
+						icon: Path.join(__dirname, 'img/logo/logo.png'),
+						title: 'Cryptocat is still running',
+						content: 'It awaits you snugly in your desktop tray.'
+					});
+				}
 			}
 		}
 	});
