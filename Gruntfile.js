@@ -1,6 +1,7 @@
 /* jshint quotmark: false */
 'use strict';
 var VERSION = '3.2.03';
+var ELECTVR = '1.3.3';
 
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-electron');
@@ -16,6 +17,7 @@ module.exports = function(grunt) {
 			windows: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
+				version: ELECTVR,
 				out: 'dist',
 				platform: 'win32',
 				arch: 'x64',
@@ -37,6 +39,7 @@ module.exports = function(grunt) {
 			linux: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
+				version: ELECTVR,
 				out: 'dist',
 				platform: 'linux',
 				arch: 'x64',
@@ -50,6 +53,7 @@ module.exports = function(grunt) {
 			mac: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
+				version: ELECTVR,
 				out: 'dist',
 				platform: 'darwin',
 				arch: 'x64',
@@ -161,6 +165,9 @@ module.exports = function(grunt) {
 	);
 	grunt.registerTask('clean', 'Clean',
 		['shell:cleanDist']
+	);
+	grunt.registerTask('writeVer', 'Write version (internal use)',
+		['shell:writeVer']
 	);
 	grunt.registerTask('ci', 'Verify Continuous Integration',
 		['jshint', 'jscs']
