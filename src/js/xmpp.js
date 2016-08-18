@@ -26,6 +26,29 @@ var client = {};
 			var deviceId = '';
 			if (err) { return false; }
 			if (
+				hasProperty(res, 'iq') &&
+				hasProperty(res.iq, 'query') &&
+				hasProperty(res.iq, '$') &&
+				hasProperty(res.iq.$, 'from') &&
+				hasProperty(res.iq.query, '0') &&
+				hasProperty(res.iq.query[0], '$') &&
+				hasProperty(res.iq.query[0].$, 'seconds') &&
+				((typeof res.iq.query[0].$.seconds) === 'string') &&
+				(/^[0-9]{1,14}$/).test(res.iq.query[0].$.seconds) &&
+				Cryptocat.OMEMO.jidHasUsername(
+					res.iq.$.from
+				).valid
+			) {
+				var seconds = parseInt(
+					res.iq.query[0].$.seconds, 10
+				);
+				fromUser = Cryptocat.OMEMO.jidHasUsername(
+					res.iq.$.from
+				).username;
+				handler.last(fromUser, seconds);
+				return false;
+			}
+			if (
 				hasProperty(res, 'message') &&
 				hasProperty(res.message, 'event')
 			) {
@@ -85,8 +108,15 @@ var client = {};
 				} else if (Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).valid) {
 					handler.bundle(fromUser, data);
 				}
+				return false;
 			}
 		});
+	};
+
+	handler.last = function(fromUser, seconds) {
+		Cryptocat.Win.main.roster.updateBuddyStatusText(
+			fromUser, seconds
+		);
 	};
 
 	handler.devicelist = function(fromUser, data) {
@@ -331,6 +361,7 @@ var client = {};
 		});
 		client.use(Cryptocat.OMEMO.plugins.deviceList);
 		client.use(Cryptocat.OMEMO.plugins.bundle);
+		client.use(Cryptocat.OMEMO.plugins.last);
 		client.use(Cryptocat.OMEMO.plugins.encrypted);
 		client.on('raw:incoming', function(raw) {
 			handler.raw(raw);
@@ -452,6 +483,14 @@ var client = {};
 			'urn:xmpp:omemo:0:devicelist',
 			{ devicelist: { deviceIds: deviceIds } }
 		);
+	};
+
+	Cryptocat.XMPP.queryLastSeen = function(username) {
+		client.sendIq({
+			to: `${username}@${Cryptocat.Hostname}`,
+			type: 'get',
+			last: {}
+		});
 	};
 
 	Cryptocat.XMPP.changePassword = function(username, password) {

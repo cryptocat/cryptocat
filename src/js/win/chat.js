@@ -132,23 +132,6 @@ window.addEventListener('load', function(e) {
 		}]
 	));
 
-	var getTimestamp = function(stamp) {
-		var date = new Date(stamp);
-		var h = date.getHours();
-		var m = date.getMinutes();
-		var d = date.getDate();
-		var a = [
-			'Jan', 'Feb', 'Mar',
-			'Apr', 'May', 'Jun',
-			'Jul', 'Aug', 'Sep',
-			'Oct', 'Nov', 'Dec'
-		][date.getMonth()];
-		var t = (h > 11)? 'pm' : 'am';
-		h = (h > 12)? (h - 12) : h;
-		m = (m < 10)? (`0${m}`) : m;
-		return `${d} ${a}., ${h}:${m}${t}`;
-	};
-
 	var checkIfSticker = function(message) {
 		if (Cryptocat.Patterns.sticker.test(message)) {
 			var stickers = [
@@ -587,7 +570,7 @@ window.addEventListener('load', function(e) {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
-					timestamp: getTimestamp(info.stamp),
+					timestamp: Cryptocat.Time.getTimestamp(info.stamp),
 					file: file.file,
 					offline: info.offline,
 					deviceName: info.deviceName,
@@ -603,7 +586,7 @@ window.addEventListener('load', function(e) {
 					key: this.state.key,
 					sender: sender,
 					alignment: alignment,
-					timestamp: getTimestamp(info.stamp),
+					timestamp: Cryptocat.Time.getTimestamp(info.stamp),
 					file: file.file,
 					offline: info.offline,
 					deviceName: info.deviceName,
@@ -620,7 +603,7 @@ window.addEventListener('load', function(e) {
 					sender: sender,
 					alignment: alignment,
 					message: info.plaintext,
-					timestamp: getTimestamp(info.stamp),
+					timestamp: Cryptocat.Time.getTimestamp(info.stamp),
 					valid: info.valid,
 					offline: info.offline,
 					deviceName: info.deviceName,

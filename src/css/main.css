@@ -112,7 +112,7 @@ input.mainRosterFilter {
 
 div.mainRosterBuddy {
 	margin: 5px 2px 0 2px;
-	padding: 11px 10px;
+	padding: 8px 10px 8px 10px;
 	font-size: 14px;
 	border-bottom: 1px solid #EEE;
 	background-color: #FFF;
@@ -136,6 +136,17 @@ span.mainRosterBuddyStatus {
 	margin-right: 5px;
 	position: relative;
 	top: 1px;
+}
+
+span.mainRosterBuddyUsername {
+	font-variant: small-caps;
+}
+
+span.mainRosterBuddyStatusText {
+	display: block;
+	opacity: 0.7;
+	font-size: 0.8em;
+	padding: 0px 0 0 15px;
 }
 
 div.mainRosterBuddy[data-visible="false"] {

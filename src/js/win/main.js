@@ -41,11 +41,26 @@ window.addEventListener('load', function(e) {
 		displayName: 'mainRosterBuddy',
 		getInitialState: function() {
 			return {
-				visible: true
+				visible: true,
+				statusText: 'Offline'
 			};
 		},
 		componentDidMount: function() {
 			return true;
+		},
+		updateStatusText: function(seconds) {
+			var statusText = 'Offline';
+			if (this.props.status === 2) {
+				statusText = 'Online';
+			} else if (seconds > 0) {
+				var ts = Cryptocat.Time.getTimestamp(
+					Date.now() - (seconds * 1000)
+				);
+				statusText = `Last online on ${ts}`;
+			}
+			this.setState({
+				statusText: statusText
+			});
 		},
 		onClick: function() {
 			if (Cryptocat.Me.connected) {
@@ -94,7 +109,14 @@ window.addEventListener('load', function(e) {
 					key: 1,
 					className: 'mainRosterBuddyStatus'
 				}),
-				this.props.username
+				React.createElement('span', {
+					key: 2,
+					className: 'mainRosterBuddyUsername'
+				}, this.props.username),
+				React.createElement('span', {
+					key: 3,
+					className: 'mainRosterBuddyStatusText'
+				}, this.state.statusText)
 			]);
 		}
 	});
@@ -140,6 +162,7 @@ window.addEventListener('load', function(e) {
 					}
 				});
 				newBuddies[item.jid.local] = buddy;
+				Cryptocat.XMPP.queryLastSeen(item.jid.local);
 			});
 			this.setState({buddies: newBuddies});
 		},
@@ -164,6 +187,10 @@ window.addEventListener('load', function(e) {
 				}
 			}, null);
 			this.setState({buddies: newBuddies});
+			this.renderedBuddies[username].updateStatusText(0);
+			setTimeout(function() {
+				Cryptocat.XMPP.queryLastSeen(username);
+			}, 3000);
 			if (notify && (status === 2)) {
 				Cryptocat.Notify.showNotification(
 					username + ' is online.',
@@ -178,6 +205,12 @@ window.addEventListener('load', function(e) {
 				Cryptocat.Win.chat[username].webContents.send(
 					'chat.status', status
 				);
+			}
+		},
+		updateBuddyStatusText: function(username, seconds) {
+			var _t = this;
+			if (hasProperty(_t.renderedBuddies, username)) {
+				_t.renderedBuddies[username].updateStatusText(seconds);
 			}
 		},
 		getBuddyStatus: function(username) {

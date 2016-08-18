@@ -130,6 +130,17 @@ Cryptocat.OMEMO = {};
 				stanza.extend(pubSub, bundle);
 			});
 		},
+		last: function(client, stanza) {
+			var last = stanza.define({
+				name: 'last',
+				namespace: 'jabber:iq:last',
+				element: 'query',
+				fields: {}
+			});
+			stanza.withIq(function(iq) {
+				stanza.extend(iq, last);
+			});
+		},
 		encrypted: function(client, stanza) {
 			var encryptedGetSet = {
 				get: function() {
