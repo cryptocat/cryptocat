@@ -306,7 +306,7 @@ window.addEventListener('load', function(e) {
 					key: 1,
 					className: 'mainRosterIsReconn',
 					'data-visible': this.state.isReconn
-				}, 'Disconnected. Reconnecting...'),
+				}, 'disconnected. reconnecting...'),
 				React.createElement('input', {
 					key: 2,
 					type: 'text',

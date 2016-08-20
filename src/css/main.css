@@ -94,6 +94,7 @@ div.mainRosterIsReconn {
 	background-color: #F1375A;
 	color: #FFF;
 	font-weight: bold;
+	font-variant: small-caps;
 }
 
 div.mainRosterIsReconn[data-visible="true"] {
