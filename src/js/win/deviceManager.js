@@ -124,7 +124,7 @@ window.addEventListener('load', function(e) {
 				},
 				React.createElement('h2', {
 					key: 1
-				}, this.state.username + '\'s Devices'),
+				}, this.state.username + '\'s devices'),
 				React.createElement('label', {
 					key: 2,
 					className: 'deviceManagerTrustedOnly',
@@ -140,7 +140,7 @@ window.addEventListener('load', function(e) {
 				React.createElement('span', {
 					key: 4,
 					className: 'deviceManagerTrustedOnlyText'
-				}, 'send my messages only to trusted devices.'))),
+				}, 'Send my messages only to trusted devices.'))),
 				React.createElement('div', {
 					key: 2,
 					id: 'deviceManagerContents'

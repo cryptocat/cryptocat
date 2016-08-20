@@ -14,6 +14,7 @@ Cryptocat.Time = {
 		][date.getMonth()];
 		var t = (h > 11)? 'pm' : 'am';
 		h = (h > 12)? (h - 12) : h;
+		h = (h === 0)? 12 : h;
 		m = (m < 10)? (`0${m}`) : m;
 		return `${d} ${a}., ${h}:${m}${t}`;
 	}

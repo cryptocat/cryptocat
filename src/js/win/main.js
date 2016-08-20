@@ -5,8 +5,10 @@ Cryptocat.Win = {
 	chat: {},
 	chatRetainer: [],
 	deviceManager: {},
+	setAvatar: {},
 	create: {}
 };
+
 window.addEventListener('load', function(e) {
 	var renderWindowHeight = function(h) {
 		if (process.platform === 'win32') {
@@ -42,7 +44,8 @@ window.addEventListener('load', function(e) {
 		getInitialState: function() {
 			return {
 				visible: true,
-				statusText: 'Offline'
+				statusText: 'Offline',
+				avatar: 'xx'
 			};
 		},
 		componentDidMount: function() {
@@ -56,10 +59,15 @@ window.addEventListener('load', function(e) {
 				var ts = Cryptocat.Time.getTimestamp(
 					Date.now() - (seconds * 1000)
 				);
-				statusText = `Last online on ${ts}`;
+				statusText = `Last online: ${ts}`;
 			}
 			this.setState({
 				statusText: statusText
+			});
+		},
+		updateAvatar: function(avatar) {
+			this.setState({
+				avatar: avatar
 			});
 		},
 		onClick: function() {
@@ -105,16 +113,19 @@ window.addEventListener('load', function(e) {
 				onClick: this.onClick,
 				onContextMenu: this.onContextMenu
 			}, [
-				React.createElement('span', {
-					key: 1,
-					className: 'mainRosterBuddyStatus'
+				React.createElement('img', {
+					key: 2,
+					className: 'mainRosterBuddyAvatar',
+					src: `../img/avatars/${this.state.avatar}.png`,
+					draggable: false,
+					alt: ''
 				}),
 				React.createElement('span', {
-					key: 2,
+					key: 3,
 					className: 'mainRosterBuddyUsername'
 				}, this.props.username),
 				React.createElement('span', {
-					key: 3,
+					key: 4,
 					className: 'mainRosterBuddyStatusText'
 				}, this.state.statusText)
 			]);
@@ -162,6 +173,7 @@ window.addEventListener('load', function(e) {
 					}
 				});
 				newBuddies[item.jid.local] = buddy;
+				Cryptocat.XMPP.getAvatar(item.jid.local);
 				Cryptocat.XMPP.queryLastSeen(item.jid.local);
 			});
 			this.setState({buddies: newBuddies});
@@ -190,11 +202,12 @@ window.addEventListener('load', function(e) {
 			this.renderedBuddies[username].updateStatusText(0);
 			setTimeout(function() {
 				Cryptocat.XMPP.queryLastSeen(username);
+				Cryptocat.XMPP.getAvatar(username);
 			}, 3000);
 			if (notify && (status === 2)) {
 				Cryptocat.Notify.showNotification(
-					username + ' is online.',
-					'Click here to chat with them.',
+					`${username} is online`,
+					`Click here to chat with them.`,
 					function() {
 						Cryptocat.Win.create.chat(username, true, function() {});
 					}
@@ -207,6 +220,17 @@ window.addEventListener('load', function(e) {
 				);
 			}
 		},
+		updateBuddyAvatar: function(username, avatar) {
+			var _t = this;
+			if (hasProperty(_t.renderedBuddies, username)) {
+				_t.renderedBuddies[username].updateAvatar(avatar);
+			}
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.avatar', avatar
+				);
+			}
+		},
 		updateBuddyStatusText: function(username, seconds) {
 			var _t = this;
 			if (hasProperty(_t.renderedBuddies, username)) {
@@ -215,6 +239,9 @@ window.addEventListener('load', function(e) {
 		},
 		getBuddyStatus: function(username) {
 			return this.state.buddies[username].props.status;
+		},
+		getBuddyAvatar: function(username) {
+			return this.renderedBuddies[username].state.avatar;
 		},
 		removeBuddy: function(username) {
 			var _t = this;
@@ -448,6 +475,11 @@ window.addEventListener('load', function(e) {
 					);
 				}
 			}
+			setTimeout(function() {
+				if (Cryptocat.Me.avatar === 'xx') {
+					Cryptocat.Win.create.setAvatar();
+				}
+			}, 4000);
 		},
 		onAuthFailed: function() {
 			Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
@@ -683,6 +715,7 @@ window.addEventListener('load', function(e) {
 			myUsername: Cryptocat.Me.username,
 			theirUsername: username,
 			status: Cryptocat.Win.main.roster.getBuddyStatus(username),
+			avatar: Cryptocat.Win.main.roster.getBuddyAvatar(username),
 			connected: Cryptocat.Me.connected,
 			myDeviceName: Cryptocat.Me.settings.deviceName
 		});
@@ -859,6 +892,47 @@ window.addEventListener('load', function(e) {
 					Cryptocat.Me.settings.trustedOnly.indexOf(username) >= 0
 				)
 			}
+		);
+	};
+
+	Cryptocat.Win.create.setAvatar = function() {
+		if (hasProperty(Cryptocat.Win.setAvatar, Cryptocat.Me.username)) {
+			Cryptocat.Win.setAvatar[Cryptocat.Me.username].focus();
+			return false;
+		}
+		Cryptocat.Win.setAvatar[Cryptocat.Me.username] = new Remote.BrowserWindow({
+			width: 470,
+			height: renderWindowHeight(400),
+			title: 'Set Avatar',
+			resizable: false,
+			minimizable: true,
+			maximizable: false,
+			fullscreenable: false,
+			show: false,
+			autoHideMenuBar: true,
+			webPreferences: {
+				nodeIntegration: false,
+				preload: Path.join(
+					Path.resolve(__dirname, '..'),
+					'js/global.js'
+				)
+			}
+		});
+		Cryptocat.Win.setAvatar[
+			Cryptocat.Me.username
+		].webContents.on('did-finish-load', function() {
+			Cryptocat.Win.setAvatar[Cryptocat.Me.username].send('setAvatar.init', {
+				avatar: Cryptocat.Me.avatar,
+				username: Cryptocat.Me.username
+			});
+			Cryptocat.Win.setAvatar[Cryptocat.Me.username].show();
+		});
+		Cryptocat.Win.setAvatar[Cryptocat.Me.username].on('closed', function() {
+			delete Cryptocat.Win.setAvatar[Cryptocat.Me.username];
+		});
+		Cryptocat.Win.setAvatar[Cryptocat.Me.username].setMenu(null);
+		Cryptocat.Win.setAvatar[Cryptocat.Me.username].loadURL(
+			Path.join('file://' + __dirname, 'setAvatar.html')
 		);
 	};
 
@@ -1129,6 +1203,18 @@ window.addEventListener('load', function(e) {
 		} else {
 			Cryptocat.Diag.error.offline();
 		}
+	});
+
+	IPCRenderer.on('setAvatar.create', function() {
+		if (Cryptocat.Me.connected) {
+			Cryptocat.Win.create.setAvatar();
+		} else {
+			Cryptocat.Diag.error.offline();
+		}
+	});
+
+	IPCRenderer.on('setAvatar.setAvatar', function(e, avatar) {
+		Cryptocat.XMPP.setAvatar(avatar);
 	});
 
 	(function() {

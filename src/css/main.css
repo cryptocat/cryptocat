@@ -25,6 +25,10 @@ form.mainLogin input[type=submit] {
 	width: 150px;
 }
 
+form.mainLogin input[type=text] {
+	font-variant: small-caps;
+}
+
 form.mainLogin label.mainLoginRemember {
 	margin: 0 auto 20px auto;
 	display: block;
@@ -112,7 +116,7 @@ input.mainRosterFilter {
 
 div.mainRosterBuddy {
 	margin: 5px 2px 0 2px;
-	padding: 8px 10px 8px 10px;
+	padding: 12px 10px 12px 10px;
 	font-size: 14px;
 	border-bottom: 1px solid #EEE;
 	background-color: #FFF;
@@ -126,16 +130,15 @@ div.mainRosterBuddy:active {
 	color: #333 !important;
 }
 
-span.mainRosterBuddyStatus {
-	border-radius: 3px;
-	width: 10px;
-	height: 10px;
-	border: 2px solid rgba(255, 255, 255, 0.7);
+img.mainRosterBuddyAvatar {
+	width: 32px;
+	height: 32px;
 	display: inline-block;
 	box-sizing: border-box;
-	margin-right: 5px;
-	position: relative;
-	top: 1px;
+	margin-right: 10px;
+	float: left;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	border-radius: 32px;
 }
 
 span.mainRosterBuddyUsername {
@@ -157,24 +160,24 @@ div.mainRosterBuddy[data-status="0"] {
 	opacity: 0.8;
 }
 
-div.mainRosterBuddy[data-status="0"] span.mainRosterBuddyStatus {
-	background: #F1375A;
+div.mainRosterBuddy[data-status="0"] img.mainRosterBuddyAvatar {
+	box-shadow: 0px 0px 1px 1px #F1375A;
 }
 
 div.mainRosterBuddy[data-status="1"] {
 	opacity: 1;
 }
 
-div.mainRosterBuddy[data-status="1"] span.mainRosterBuddyStatus {
-	background: #F1A900;
+div.mainRosterBuddy[data-status="1"] img.mainRosterBuddyAvatar {
+	box-shadow: 0px 0px 1px 1px #F1A900;
 }
 
 div.mainRosterBuddy[data-status="2"] {
 	opacity: 1;
 }
 
-div.mainRosterBuddy[data-status="2"] span.mainRosterBuddyStatus {
-	background: #34B3C2;
+div.mainRosterBuddy[data-status="2"] img.mainRosterBuddyAvatar {
+	box-shadow: 0px 0px 1px 1px #34B3C2;
 }
 
 div.mainRosterBuddy[data-status="0"]:hover {

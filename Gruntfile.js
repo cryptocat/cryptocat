@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 			}
 		},
 		'string-replace': {
-			dist: {
+			src: {
 				files: {
 					'src/': ['src/package.json', 'src/js/version.js']
 				},
@@ -91,6 +91,19 @@ module.exports = function(grunt) {
 						{
 							pattern: /Cryptocat\.Version = '(\d|\.){5,8}';/,
 							replacement: `Cryptocat.Version = '${VERSION}';`
+						}
+					]
+				}
+			},
+			dist: {
+				files: {
+					'dist/': ['dist/version.txt']
+				},
+				options: {
+					replacements: [
+						{
+							pattern: /.+/,
+							replacement: VERSION
 						}
 					]
 				}
@@ -108,8 +121,7 @@ module.exports = function(grunt) {
 			macZip: 'cd dist && zip -qr9 Cryptocat-darwin-x64.zip Cryptocat.app',
 			winRmDir: 'rm -r dist/Cryptocat-win32-x64 dist/Cryptocat-win32-x64-installer',
 			linuxRmDir: 'rm -r dist/Cryptocat-linux-x64',
-			macRmDir: 'rm -r dist/Cryptocat.app',
-			writeVer: `gawk -vORS= 'BEGIN { print "${VERSION}" }' > dist/version.txt`
+			macRmDir: 'rm -r dist/Cryptocat.app'
 		},
 		jshint: {
 			options: {
@@ -135,27 +147,27 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('win', 'Create Windows Package', [
+		'string-replace:src',
 		'string-replace:dist',
 		'electron:windows',
 		'shell:winClean',
-		'create-windows-installer:x64',
-		'shell:writeVer'
+		'create-windows-installer:x64'
 	]);
 	grunt.registerTask('linux', 'Create Linux Package', [
+		'string-replace:src',
 		'string-replace:dist',
 		'electron:linux',
 		'shell:linuxLogo',
 		'shell:linuxClean',
 		'shell:linuxZip',
-		'shell:linuxRmDir',
-		'shell:writeVer'
+		'shell:linuxRmDir'
 	]);
 	grunt.registerTask('mac', 'Create Mac Package', [
+		'string-replace:src',
 		'string-replace:dist',
 		'electron:mac',
 		'shell:macMv',
-		'shell:macClean',
-		'shell:writeVer'
+		'shell:macClean'
 	]);
 	grunt.registerTask('winZip', 'Archive Windows Package',
 		['shell:winZip', 'shell:winRmDir']
@@ -165,9 +177,6 @@ module.exports = function(grunt) {
 	);
 	grunt.registerTask('clean', 'Clean',
 		['shell:cleanDist']
-	);
-	grunt.registerTask('writeVer', 'Write version (internal use)',
-		['shell:writeVer']
 	);
 	grunt.registerTask('ci', 'Verify Continuous Integration',
 		['jshint', 'jscs']

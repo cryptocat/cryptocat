@@ -10,7 +10,8 @@ div#deviceManagerTop {
 
 div#deviceManagerTop h2 {
 	margin: 10px 25px 5px 25px;
-	font-size: 14px;
+	font-size: 16px;
+	font-variant: small-caps;
 }
 
 div#deviceManagerTop label.deviceManagerTrustedOnly {
@@ -25,8 +26,7 @@ div#deviceManagerTop label.deviceManagerTrustedOnly[data-visible="false"] {
 span.deviceManagerTrustedOnlyText {
 	position: relative;
 	bottom: 2px;
-	font-variant: small-caps;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 div#deviceManagerContents {

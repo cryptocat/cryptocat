@@ -34,7 +34,7 @@ var client = {};
 				hasProperty(res.iq.query[0], '$') &&
 				hasProperty(res.iq.query[0].$, 'seconds') &&
 				((typeof res.iq.query[0].$.seconds) === 'string') &&
-				(/^[0-9]{1,14}$/).test(res.iq.query[0].$.seconds) &&
+				(/^[0-9]{1,10}$/).test(res.iq.query[0].$.seconds) &&
 				Cryptocat.OMEMO.jidHasUsername(
 					res.iq.$.from
 				).valid
@@ -64,6 +64,7 @@ var client = {};
 						res.message.$.from
 					).username;
 				}
+				handler.pubsub(fromUser, data);
 			} else if (
 				hasProperty(res, 'iq') &&
 				hasProperty(res.iq, 'pubsub')
@@ -78,6 +79,7 @@ var client = {};
 						res.iq.$.from
 					).username;
 				}
+				handler.pubsub(fromUser, data);
 			} else if (
 				hasProperty(res, 'iq') &&
 				hasProperty(res.iq.$, 'type') &&
@@ -92,25 +94,47 @@ var client = {};
 					Cryptocat.XMPP.sendBundle();
 				}
 				return false;
-			} else {
-				return false;
-			}
-			if (
-				hasProperty(data, '0') &&
-				hasProperty(data[0], 'items') &&
-				hasProperty(data[0].items, '0') &&
-				hasProperty(data[0].items[0], '$') &&
-				hasProperty(data[0].items[0].$, 'node')
-			) {
-				data = data[0].items[0];
-				if ((/^urn:xmpp:omemo:0:devicelist$/).test(data.$.node)) {
-					handler.devicelist(fromUser, data);
-				} else if (Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).valid) {
-					handler.bundle(fromUser, data);
-				}
-				return false;
 			}
 		});
+	};
+
+	handler.pubsub = function(fromUser, data) {
+		if (
+			hasProperty(data, '0') &&
+			hasProperty(data[0], 'items') &&
+			hasProperty(data[0].items, '0') &&
+			hasProperty(data[0].items[0], '$') &&
+			hasProperty(data[0].items[0].$, 'node')
+		) {
+			data = data[0].items[0];
+			if ((/^urn:xmpp:avatar:data$/).test(data.$.node)) {
+				handler.avatar(fromUser, data);
+			} else if ((/^urn:xmpp:omemo:0:devicelist$/).test(data.$.node)) {
+				handler.devicelist(fromUser, data);
+			} else if (Cryptocat.OMEMO.nodeHasDeviceId(data.$.node).valid) {
+				handler.bundle(fromUser, data);
+			}
+			return false;
+		}
+	};
+
+	handler.avatar = function(fromUser, data) {
+		if (
+			hasProperty(data, 'item') &&
+			hasProperty(data.item, '0') &&
+			hasProperty(data.item[0], '$') &&
+			hasProperty(data.item[0].$, 'id') &&
+			Cryptocat.Patterns.avatar.test(data.item[0].$.id)
+		) {
+			console.log(fromUser, data.item[0].$.id);
+			if (fromUser === Cryptocat.Me.username) {
+				Cryptocat.Me.avatar = data.item[0].$.id;
+			} else {
+				Cryptocat.Win.main.roster.updateBuddyAvatar(
+					fromUser, data.item[0].$.id
+				);
+			}
+		}
 	};
 
 	handler.last = function(fromUser, seconds) {
@@ -185,6 +209,7 @@ var client = {};
 		console.info('Cryptocat.XMPP CONNECTED', data.local);
 		Cryptocat.Me.connected = true;
 		Cryptocat.XMPP.getDeviceList(username);
+		Cryptocat.XMPP.getAvatar(username);
 		client.enableKeepAlive();
 		client.getRoster();
 		client.sendPresence();
@@ -502,6 +527,21 @@ var client = {};
 				password: password
 			}
 		});
+	};
+
+	Cryptocat.XMPP.setAvatar = function(avatar) {
+		Cryptocat.Me.avatar = avatar;
+		client.publishAvatar(avatar);
+	};
+
+	Cryptocat.XMPP.getAvatar = function(username) {
+		client.subscribeToNode(
+			`${username}@${Cryptocat.Hostname}`,
+			'urn:xmpp:avatar:data'
+		);
+		client.getAvatar(
+			`${username}@${Cryptocat.Hostname}`
+		);
 	};
 
 	Cryptocat.XMPP.deleteAccount = function(username) {

@@ -87,13 +87,26 @@ div#chatTop {
 	opacity: 0.9;
 }
 
+img.chatTopAvatar {
+	width: 42px;
+	height: 42px;
+	position: fixed;
+	top: 5px;
+	left: 5px;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	box-shadow: 0px 0px 1px 1px #EEE;
+	border-radius: 36px;
+}
+
 div.chatTopStatus {
 	padding: 7px 0 6px 7px;
 	color: #FFF;
 	font-weight: bold;
+	font-variant: small-caps;
 	height: 13px;
 	font-size: 12px;
 	transition: background-color 0.5s;
+	padding-left: 55px;
 }
 
 div.chatTopStatus[data-status='-1'] {
@@ -213,6 +226,7 @@ span.chatMessageInfo span.chatMessageSender,
 span.chatFileInfo span.chatFileSender,
 span.chatMediaInfo span.chatMediaSender {
 	font-weight: bold;
+	font-variant: small-caps;
 	font-size: 0.9em;
 	opacity: 0.7;
 	margin-left: -4px;

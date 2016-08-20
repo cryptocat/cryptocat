@@ -1,0 +1,60 @@
+form.setAvatar {
+	padding: 10px;
+}
+
+div.setAvatarUserInfo {
+	background-color: #FFF;
+	padding: 10px;
+	border-bottom: 1px solid #EEE;
+	height: 75px;
+}
+
+div.setAvatarUserInfo img.setAvatarUserInfoCurrentAvatar {
+	width: 70px;
+	height: 70px;
+	box-shadow: 0px 0px 1px 1px #34B3C2;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	border-radius: 64px;
+	float: left;
+	margin-right: 20px;
+}
+
+div.setAvatarUserInfo span.setAvatarUserInfoUsername {
+	font-variant: small-caps;
+	font-size: 2em;
+	position: relative;
+	top: 13px;
+}
+
+div.setAvatarUserInfo span.setAvatarUserInfoStatusText {
+	display: block;
+	opacity: 0.7;
+	font-size: 1.4em;
+	padding: 0px 0 0 15px;
+	margin-top: 14px;
+}
+
+div.setAvatarAvatarSelection {
+	padding: 10px;
+	background-color: #FFF;
+	height: 200px;
+	overflow-y: auto;
+	margin-top: 10px;
+}
+
+div.setAvatarAvatarSelection img.setAvatarAvatar {
+	width: 58px;
+	height: 58px;
+	margin: 3px 7px;
+	border-radius: 60px;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+div.setAvatarAvatarSelection img.setAvatarAvatar:hover {
+	box-shadow: 0px 0px 1px 1px #34B3C2;
+}
+
+form.setAvatar input[type=submit] {
+	display: block;
+	margin: 10px 0;
+}

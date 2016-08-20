@@ -33,6 +33,7 @@ var Cryptocat = {
 
 var EmptyMe = {
 	username: '',
+	avatar: 'xx',
 	connected: false,
 	settings: {
 		identityKey: {

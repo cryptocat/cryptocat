@@ -142,6 +142,15 @@ const buildTrayMenu = function(settings) {
 			}, {
 				type: 'separator'
 			}, {
+				label: 'Set Avatar',
+				click: function() {
+					Windows.main.webContents.send(
+						'setAvatar.create'
+					);
+				}
+			}, {
+				type: 'separator'
+			}, {
 				label: 'Delete Account',
 				click: function(e) {
 					Windows.main.webContents.send('main.deleteAccount');
@@ -228,6 +237,15 @@ const buildMainMenu = function(settings) {
 						Windows.main.webContents.send(
 							'main.updateTypingSetting',
 							e.checked
+						);
+					}
+				}, {
+					type: 'separator'
+				}, {
+					label: 'Set Avatar',
+					click: function() {
+						Windows.main.webContents.send(
+							'setAvatar.create'
 						);
 					}
 				}, {
@@ -346,7 +364,7 @@ const buildMainMenu = function(settings) {
 			}
 		]
 	);
-	if (0) {
+	if (1) {
 		menu.append(new Electron.MenuItem({
 			label: 'Developer',
 			submenu: [{
@@ -433,8 +451,8 @@ Electron.app.on('ready', function() {
 		);
 	}
 	Windows.main = new Electron.BrowserWindow({
-		minWidth: 260,
-		width: 260,
+		minWidth: 270,
+		width: 270,
 		maxWidth: 400,
 		height: 470,
 		minHeight: 440,
@@ -600,6 +618,11 @@ Electron.ipcMain.on('main.beforeQuit', function(e) {
 
 Electron.ipcMain.on('main.checkForUpdates', function(e, to, message) {
 	Windows.main.webContents.send('main.checkForUpdates');
+});
+
+Electron.ipcMain.on('setAvatar.setAvatar', function(e, avatar) {
+	Windows.main.webContents.send('setAvatar.setAvatar', avatar);
+	e.returnValue = 'true';
 });
 
 process.on('uncaughtException', function(err) {

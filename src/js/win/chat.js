@@ -94,13 +94,12 @@ window.addEventListener('load', function(e) {
 						`https://${Cryptocat.Hostname}/help.html`
 					);
 				}
-			}, /*
-			{
+			}, {
 				label: 'Developer',
 				click: function(i, f) {
 					f.toggleDevTools();
 				}
-			}, */{
+			}, {
 				label: 'Report a Bug',
 				click: function() {
 					Remote.shell.openExternal(
@@ -465,6 +464,7 @@ window.addEventListener('load', function(e) {
 				recordVisible: false,
 				connected: true,
 				status: -1,
+				avatar: 'xx',
 				key: 0,
 				unread: 0,
 				recordTime: 0,
@@ -804,8 +804,8 @@ window.addEventListener('load', function(e) {
 			});
 		},
 		statusMessages: [
-			' is offline and cannot currently receive messages.',
-			' is offline and will receive your messages later.',
+			' is offline and cannot receive messages.',
+			' is offline but you can send them a message.',
 			' is currently online.'
 		],
 		render: function() {
@@ -814,8 +814,14 @@ window.addEventListener('load', function(e) {
 				React.createElement('div', {
 					key: 0,
 					id: 'chatTop'
-				}, React.createElement('div', {
+				}, React.createElement('img', {
 					key: 1,
+					className: 'chatTopAvatar',
+					src: `../img/avatars/${this.state.avatar}.png`,
+					alt: '',
+					draggable: false
+				}), React.createElement('div', {
+					key: 2,
 					className: 'chatTopStatus',
 					'data-status': (function() {
 						if (!_t.state.connected) {
@@ -829,12 +835,12 @@ window.addEventListener('load', function(e) {
 						return _t.state.to + ' is typing...';
 					}
 					if (!_t.state.connected) {
-						return 'You are not currently connected to Cryptocat.';
+						return 'you are currently disconnected.';
 					}
 					return _t.state.to + _t.statusMessages[_t.state.status];
 				})())),
 				React.createElement('div', {
-					key: 2,
+					key: 3,
 					id: 'chatContents',
 					onContextMenu: this.onContextMenu,
 					style: {
@@ -842,79 +848,79 @@ window.addEventListener('load', function(e) {
 					}
 				}, this.state.conversation),
 				React.createElement('div', {
-					key: 3,
+					key: 4,
 					id: 'chatBottom'
 				}, React.createElement('form', {
-					key: 4,
+					key: 5,
 					id: 'chatInput',
 					onSubmit: this.onSubmit
 				}, React.createElement('div', {
 					className: 'chatToolbar',
-					key: 5
+					key: 6
 				},	React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'smiling',
 					title: 'Smiling',
 					onClick: this.sendSticker,
-					key: 6
+					key: 7
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'grinning',
 					onClick: this.sendSticker,
 					title: 'Grinning',
-					key: 7
+					key: 8
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'content',
 					onClick: this.sendSticker,
 					title: 'Content',
-					key: 8
+					key: 9
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'inLove',
 					onClick: this.sendSticker,
 					title: 'In Love',
-					key: 9
+					key: 10
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'challengeAccepted',
 					onClick: this.sendSticker,
 					title: 'Challenge Accepted!',
-					key: 10
+					key: 11
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'angry',
 					onClick: this.sendSticker,
 					title: 'Angry',
-					key: 11
+					key: 12
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'confused',
 					onClick: this.sendSticker,
 					title: 'Confused',
-					key: 12
+					key: 13
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'chatToolbarButton',
 					'data-sticker': 'crying',
 					onClick: this.sendSticker,
 					title: 'Crying',
-					key: 13
+					key: 14
 				}), React.createElement('div', {
 					className: 'recordModal',
 					'data-visible': this.state.recordVisible,
-					key: 14
+					key: 15
 				}, React.createElement('div', {
 					className: 'recordModalCountdown',
 					'data-visible': !!this.state.recordCountdown,
-					key: 15
+					key: 16
 				}, this.state.recordCountdown),
 				React.createElement('video', {
 					className: 'recordModalVideo',
@@ -922,43 +928,43 @@ window.addEventListener('load', function(e) {
 					src: this.state.recordSrc,
 					autoPlay: true,
 					muted: true,
-					key: 16
+					key: 17
 				}), React.createElement('div', {
 					className: 'recordModalControls',
-					key: 17
+					key: 18
 				}, React.createElement('input', {
 					type: 'button',
 					className: 'recordModalSend',
 					onClick: this.sendRecording,
-					key: 18
+					key: 19
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'recordModalCancel',
 					onClick: this.record,
-					key: 19
+					key: 20
 				}), React.createElement('div', {
 					className: 'recordModalDuration',
-					key: 20
+					key: 21
 				}, React.createElement('div', {
 					className: 'recordModalDurationIndicator',
 					'data-blinking': (this.state.recordTime >= 50),
 					style: {
 						width: ((this.state.recordTime * 100) / 60) + '%'
 					},
-					key: 21
+					key: 22
 				})))), React.createElement('input', {
 					type: 'button',
 					className: 'recordButton',
 					onClick: this.record,
 					title: 'Record Audio/Video',
 					'data-active': this.state.recordVisible,
-					key: 22
+					key: 23
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'sendFileButton',
 					onClick: this.sendFileDialog,
 					title: 'Send File',
-					key: 23
+					key: 24
 				})), React.createElement('textarea', {
 					id: 'chatInputText',
 					style: {
@@ -978,7 +984,7 @@ window.addEventListener('load', function(e) {
 						this.state.connected
 					),
 					value: this.state.chatInputText,
-					key: 24
+					key: 25
 				})))
 			]);
 		}
@@ -1047,6 +1053,7 @@ window.addEventListener('load', function(e) {
 		Cryptocat.Me.username = data.myUsername;
 		thisChat.window.setState({
 			status: data.status,
+			avatar: data.avatar,
 			to: data.theirUsername,
 			connected: data.connected,
 			myDeviceName: data.myDeviceName
@@ -1122,6 +1129,10 @@ window.addEventListener('load', function(e) {
 
 	IPCRenderer.on('chat.status', function(e, status) {
 		thisChat.window.setState({status: status});
+	});
+
+	IPCRenderer.on('chat.avatar', function(e, avatar) {
+		thisChat.window.setState({avatar: avatar});
 	});
 
 	IPCRenderer.on('chat.theirChatState', function(e, chatState) {
