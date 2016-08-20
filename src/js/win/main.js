@@ -902,7 +902,7 @@ window.addEventListener('load', function(e) {
 		}
 		Cryptocat.Win.setAvatar[Cryptocat.Me.username] = new Remote.BrowserWindow({
 			width: 470,
-			height: renderWindowHeight(400),
+			height: renderWindowHeight(410),
 			title: 'Set Avatar',
 			resizable: false,
 			minimizable: true,
