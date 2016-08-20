@@ -56,5 +56,5 @@ div.setAvatarAvatarSelection img.setAvatarAvatar:hover {
 
 form.setAvatar input[type=submit] {
 	display: block;
-	margin: 10px 0;
+	margin: 10px 0 0 0;
 }
