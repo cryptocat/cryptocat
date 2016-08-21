@@ -634,11 +634,13 @@ window.addEventListener('load', function(e) {
 		sendSticker: function(e) {
 			var sticker = 'CryptocatSticker:' +
 				e.target.getAttribute('data-sticker');
+			var stamp = Date.now();
+			var deviceName = this.state.myDeviceName;
 			e.target.blur();
 			document.getElementById('chatInputText').focus();
 			thisChat.sendQueue.messages.push({
 				message: sticker,
-				internalId: ''
+				internalId: `${deviceName}_${stamp}`
 			});
 			if (!thisChat.sendQueue.isOn) {
 				thisChat.sendQueue.turnOn();
@@ -646,9 +648,9 @@ window.addEventListener('load', function(e) {
 			this.updateConversation(true, {
 				plaintext: sticker,
 				valid: true,
-				stamp: Date.now(),
+				stamp: stamp,
 				offline: (this.state.status !== 2),
-				deviceName: this.state.myDeviceName
+				deviceName: deviceName
 			});
 		},
 		record: function(e) {
@@ -735,6 +737,8 @@ window.addEventListener('load', function(e) {
 		},
 		sendFile: function(name, file) {
 			var _t = this;
+			var stamp = Date.now();
+			var deviceName = _t.state.myDeviceName;
 			Cryptocat.File.send(name, file, function(info) {
 				if (!info.valid) {
 					return false;
@@ -743,9 +747,9 @@ window.addEventListener('load', function(e) {
 				_t.updateConversation(true, {
 					plaintext: sendInfo,
 					valid: true,
-					stamp: Date.now(),
+					stamp: stamp,
 					offline: (_t.state.status !== 2),
-					deviceName: _t.state.myDeviceName
+					deviceName: deviceName
 				});
 			}, function(url, p) {
 				_t.files[url].setState({progress: p});
@@ -756,7 +760,7 @@ window.addEventListener('load', function(e) {
 				if (info.valid) {
 					thisChat.sendQueue.messages.push({
 						message: sendInfo,
-						internalId: ''
+						internalId: `${deviceName}_${stamp}`
 					});
 					if (!thisChat.sendQueue.isOn) {
 						thisChat.sendQueue.turnOn();
@@ -1062,21 +1066,31 @@ window.addEventListener('load', function(e) {
 	});
 
 	IPCRenderer.on('chat.messageError', function(e, internalId) {
-		if (internalId.length) {
+		if (hasProperty(thisChat.window.messages, internalId)) {
 			thisChat.window.messages[internalId].setState({
 				valid: false
 			});
-			Cryptocat.Diag.error.messageSending();
 		}
+		Cryptocat.Diag.error.messageSending();
 	});
 
 	IPCRenderer.on('chat.messageSent', function(e, internalId) {
-		if (internalId.length) {
+		if (hasProperty(thisChat.window.messages, internalId)) {
 			thisChat.window.messages[internalId].setState({
 				sending: false
 			});
 		}
 	});
+
+	IPCRenderer.on('chat.noDevicesError', function(e, internalId) {
+		if (hasProperty(thisChat.window.messages, internalId)) {
+			thisChat.window.messages[internalId].setState({
+				valid: false
+			});
+		}
+		Cryptocat.Diag.error.noDevices(thisChat.window.state.to);
+	});
+
 
 	IPCRenderer.on('chat.openDialog', function(e, paths) {
 		var readFile = function(path) {

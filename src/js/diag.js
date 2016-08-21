@@ -111,6 +111,18 @@ Cryptocat.Diag.error = {
 		);
 	},
 
+	noDevices(username) {
+		Dialog.showErrorBox(
+			`Cryptocat: No Trusted Devices for ${username}`,
+			`You chose to send messages only to ${username}'s trusted devices, ` +
+			`but you did not select any of their current devices as trusted. ` +
+			`As such, your message could not be sent.\n\n` +
+			`Please open ${username}'s device manager ` +
+			`and either disable sending only to trusted devices, ` +
+			`or mark at least one of their devices as trusted.`
+		);
+	},
+
 	offline() {
 		Dialog.showErrorBox(
 			`Cryptocat: Must be Logged in`,

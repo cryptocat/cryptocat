@@ -620,6 +620,7 @@ Cryptocat.OMEMO = {};
 			}
 		}
 		var allValid = true;
+		var noDevices = true;
 		var bundles = Cryptocat.Me.settings.userBundles[username];
 		var messageKey = ProScript.crypto.random32Bytes('o2');
 		var messageIv = ProScript.crypto.random12Bytes('o3');
@@ -640,6 +641,7 @@ Cryptocat.OMEMO = {};
 			if (isTrustedOnly && !isTrusted) {
 				return false;
 			}
+			noDevices = false;
 			if (
 				!hasProperty(bundles[deviceId], 'dr') ||
 				!hasProperty(bundles[deviceId].dr, 'myEphemeralKeyP4')
@@ -671,14 +673,18 @@ Cryptocat.OMEMO = {};
 				allValid = false;
 			}
 		});
-		if (allValid) {
+		if (!allValid) {
+			Cryptocat.Win.chat[username].webContents.send(
+				'chat.messageError', message.internalId
+			);
+		} else if (noDevices) {
+			Cryptocat.Win.chat[username].webContents.send(
+				'chat.noDevicesError', message.internalId
+			);
+		} else {
 			Cryptocat.XMPP.sendMessage(username, res);
 			Cryptocat.Win.chat[username].webContents.send(
 				'chat.messageSent', message.internalId
-			);
-		} else {
-			Cryptocat.Win.chat[username].webContents.send(
-				'chat.messageError', message.internalId
 			);
 		}
 		return true;
