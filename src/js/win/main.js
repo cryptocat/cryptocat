@@ -201,9 +201,11 @@ window.addEventListener('load', function(e) {
 			this.setState({buddies: newBuddies});
 			this.renderedBuddies[username].updateStatusText(0);
 			setTimeout(function() {
-				Cryptocat.XMPP.queryLastSeen(username);
-				Cryptocat.XMPP.getAvatar(username);
-			}, 3000);
+				if (Cryptocat.Me.connected) {
+					Cryptocat.XMPP.queryLastSeen(username);
+					Cryptocat.XMPP.getAvatar(username);
+				}
+			}, 2000);
 			if (notify && (status === 2)) {
 				Cryptocat.Notify.showNotification(
 					`${username} is online`,
@@ -476,10 +478,13 @@ window.addEventListener('load', function(e) {
 				}
 			}
 			setTimeout(function() {
-				if (Cryptocat.Me.avatar === 'xx') {
+				if (
+					(Cryptocat.Me.connected) &&
+					(Cryptocat.Me.avatar === 'xx')
+				) {
 					Cryptocat.Win.create.setAvatar();
 				}
-			}, 4000);
+			}, 3000);
 		},
 		onAuthFailed: function() {
 			Cryptocat.Me = Object.assign({}, Cryptocat.EmptyMe);
