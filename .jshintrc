@@ -15,7 +15,7 @@
 	"strict": "global",
 	"maxparams": 5,
 	"maxdepth": 3,
-	"maxcomplexity": 8,
+	"maxcomplexity": 12,
 	"asi": false,
 	"supernew": true,
 	"validthis": true,

@@ -1,4 +1,3 @@
-/* jshint maxcomplexity: 12 */
 'use strict';
 Cryptocat.XMPP = {};
 var client = {};
