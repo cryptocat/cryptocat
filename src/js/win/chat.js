@@ -655,6 +655,12 @@ window.addEventListener('load', function(e) {
 		},
 		record: function(e) {
 			var _t = this;
+			if (
+				!_t.state.status ||
+				!_t.state.connected
+			) {
+				return false;
+			}
 			if (!this.state.recordVisible) {
 				Cryptocat.Recording.createStream(function(stream) {
 					thisChat.window.setState({
@@ -729,6 +735,13 @@ window.addEventListener('load', function(e) {
 			});
 		},
 		sendFileDialog: function(e) {
+			var _t = this;
+			if (
+				!_t.state.status ||
+				!_t.state.connected
+			) {
+				return false;
+			}
 			document.getElementById('chatInputText').focus();
 			IPCRenderer.send(
 				'chat.openDialog',
@@ -867,6 +880,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'smiling',
 					title: 'Smiling',
 					onClick: this.sendSticker,
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 7
 				}), React.createElement('input', {
 					type: 'button',
@@ -874,6 +891,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'grinning',
 					onClick: this.sendSticker,
 					title: 'Grinning',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 8
 				}), React.createElement('input', {
 					type: 'button',
@@ -881,6 +902,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'content',
 					onClick: this.sendSticker,
 					title: 'Content',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 9
 				}), React.createElement('input', {
 					type: 'button',
@@ -888,6 +913,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'inLove',
 					onClick: this.sendSticker,
 					title: 'In Love',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 10
 				}), React.createElement('input', {
 					type: 'button',
@@ -895,6 +924,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'challengeAccepted',
 					onClick: this.sendSticker,
 					title: 'Challenge Accepted!',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 11
 				}), React.createElement('input', {
 					type: 'button',
@@ -902,6 +935,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'angry',
 					onClick: this.sendSticker,
 					title: 'Angry',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 12
 				}), React.createElement('input', {
 					type: 'button',
@@ -909,6 +946,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'confused',
 					onClick: this.sendSticker,
 					title: 'Confused',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 13
 				}), React.createElement('input', {
 					type: 'button',
@@ -916,6 +957,10 @@ window.addEventListener('load', function(e) {
 					'data-sticker': 'crying',
 					onClick: this.sendSticker,
 					title: 'Crying',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 14
 				}), React.createElement('div', {
 					className: 'recordModal',
@@ -962,12 +1007,20 @@ window.addEventListener('load', function(e) {
 					onClick: this.record,
 					title: 'Record Audio/Video',
 					'data-active': this.state.recordVisible,
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 23
 				}), React.createElement('input', {
 					type: 'button',
 					className: 'sendFileButton',
 					onClick: this.sendFileDialog,
 					title: 'Send File',
+					disabled: (
+						!this.state.status ||
+						!this.state.connected
+					),
 					key: 24
 				})), React.createElement('textarea', {
 					id: 'chatInputText',
