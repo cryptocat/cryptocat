@@ -247,9 +247,12 @@ div#bottom div.bottomRight {
 		max-width: 60%;
 	}
 	div#top img.logo {
+		padding: 0 4px;
 	}
 	div#top div.nav {
-		width: 70%;
+		padding: 3px;
+		font-size: 12px;
+		width: 75%;
 	}
 	div#top div.nav a {
 		margin: 8px;
