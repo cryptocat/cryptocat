@@ -47,7 +47,7 @@ div#chatFileDragOverlay {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 1;
+	z-index: 3;
 	transition: opacity 0.2s;
 	opacity: 0.9;
 	visibility: visible;
@@ -91,6 +91,7 @@ img.chatTopAvatar {
 	width: 42px;
 	height: 42px;
 	position: fixed;
+	z-index: 1;
 	top: 5px;
 	left: 5px;
 	border: 2px solid rgba(255, 255, 255, 0.7);
@@ -154,6 +155,8 @@ div.chatMessage, div.chatSticker, div.chatFile, div.chatMedia {
 	border-radius: 2px;
 	transition: opacity 0.5s;
 	opacity: 1;
+	position: relative;
+	z-index: 0;
 }
 
 div.chatMessage[data-sending='true'] {
