@@ -1,7 +1,7 @@
 /* jshint quotmark: false */
 'use strict';
 var VERSION = '3.2.06';
-var ELECTVR = '1.3.3';
+var ELECTVR = '1.3.4';
 
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-electron');

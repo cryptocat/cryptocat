@@ -183,6 +183,7 @@ window.addEventListener('load', function(e) {
 				key: 0
 			}, React.createElement('img', {
 				src: '../img/stickers/' + this.props.sticker + '.png',
+				title: this.props.stamp,
 				draggable: false,
 				key: 1
 			}));
@@ -560,6 +561,7 @@ window.addEventListener('load', function(e) {
 				res = React.createElement(chatSticker, {
 					key: this.state.key,
 					alignment: alignment,
+					timestamp: Cryptocat.Time.getTimestamp(info.stamp),
 					sticker: sticker.sticker
 				});
 			} else if (

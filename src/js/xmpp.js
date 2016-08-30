@@ -105,6 +105,8 @@ var client = {};
 			hasProperty(data[0].items[0], '$') &&
 			hasProperty(data[0].items[0].$, 'node')
 		) {
+			console.log(fromUser);
+			console.log(data);
 			data = data[0].items[0];
 			if ((/^urn:xmpp:avatar:data$/).test(data.$.node)) {
 				handler.avatar(fromUser, data);
@@ -125,7 +127,6 @@ var client = {};
 			hasProperty(data.item[0].$, 'id') &&
 			Cryptocat.Patterns.avatar.test(data.item[0].$.id)
 		) {
-			console.log(fromUser, data.item[0].$.id);
 			if (fromUser === Cryptocat.Me.username) {
 				Cryptocat.Me.avatar = data.item[0].$.id;
 			} else {
