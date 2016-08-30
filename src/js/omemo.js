@@ -486,7 +486,10 @@ Cryptocat.OMEMO = {};
 			'Rebuilding DR session with ' + username
 		);
 		delete userBundles[username][deviceId].dr;
-		Cryptocat.OMEMO.sendMessage(username, '');
+		Cryptocat.OMEMO.sendMessage(username, {
+			message: '',
+			internalId: 'rebuild'
+		});
 		return true;
 	};
 
