@@ -1,6 +1,6 @@
 /* jshint quotmark: false */
 'use strict';
-var VERSION = '3.2.06';
+var VERSION = '3.2.07';
 var ELECTVR = '1.3.4';
 
 module.exports = function(grunt) {
