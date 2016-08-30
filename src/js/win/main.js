@@ -268,10 +268,14 @@ window.addEventListener('load', function(e) {
 			_t.setState({filter: f}, function() {
 				for (var b in _t.renderedBuddies) {
 					if (hasProperty(_t.renderedBuddies, b)) {
-						_t.renderedBuddies[b].setState({
-							visible: (_t.renderedBuddies[b].props
-								.username.indexOf(f) === 0)
-						});
+						if (_t.renderedBuddies[b] === null) {
+							delete _t.renderedBuddies[b];
+						} else {
+							_t.renderedBuddies[b].setState({
+								visible: (_t.renderedBuddies[b].props
+									.username.indexOf(f) === 0)
+							});
+						}
 					}
 				}
 			});
