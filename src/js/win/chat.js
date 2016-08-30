@@ -243,7 +243,7 @@ window.addEventListener('load', function(e) {
 			}, this.props.timestamp)),
 			React.createElement('img', {
 				className: 'chatFileIcon',
-				src: '../img/files/' + this.props.file.type + '.png',
+				src: `../img/files/${this.props.file.type}.png`,
 				onClick: this.onClick,
 				key: 5
 			}), React.createElement('div', {
@@ -257,7 +257,7 @@ window.addEventListener('load', function(e) {
 			}, React.createElement('div', {
 				className: 'chatFileProgressBarIndicator',
 				style: {
-					width: this.state.progress + '%'
+					width: `${((this.state.progress > 100)? 100 : this.state.progress)}%`
 				},
 				key: 7
 			})));
