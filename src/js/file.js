@@ -3,7 +3,7 @@ Cryptocat.File = {};
 
 (function() {
 	Cryptocat.File.maxSize = 210763776;
-	Cryptocat.File.blockSize = 262144;
+	Cryptocat.File.blockSize = 131072;
 
 	Cryptocat.File.types = {
 		archive: [
