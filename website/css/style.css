@@ -40,8 +40,27 @@ li {
 	margin-bottom: 10px;
 }
 
+blockquote {
+	font-style: italic;
+	background: #CFE3E8;
+	padding: 8px 15px;
+	margin: 20px auto;
+	width: 90%;
+	display: block;
+	border: 1px solid #9FC1C9;
+	border-radius: 2px;
+}
+
+span.doubleUnderline {
+    border-bottom: 2px solid #222;
+}
+
 span.octicon {
 	font-family: 'Octicons';
+}
+
+p.alignRight {
+	text-align: right;
 }
 
 span.code {
