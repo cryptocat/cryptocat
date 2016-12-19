@@ -223,6 +223,7 @@ div#main div.tableOfContents {
 	max-height: 270px;
 	overflow: auto;
 	width: 100%;
+	font-size: 0.9em;
 }
 
 div#main div.tableOfContents ul {
