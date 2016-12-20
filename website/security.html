@@ -48,6 +48,7 @@
 					<li><a data-scroll href="#filesharing">File Sharing</a></li>
 					<li><a data-scroll href="#misc">Miscellaneous Security Features</a></li>
 					<li><a data-scroll href="#fulldisclosure">Reporting Security Issues</a></li>
+					<li><a data-scroll href="#bugbounty">Bug Bounty Program</a></li>
 				</ul>
 			</div>
 			<h2 id="encryption">Encryption Overview</h2>
@@ -190,15 +191,55 @@ AliceMessageEncryptionKey = HKDF(
 			</ul>
 			<hr />
 			<h2 id="fulldisclosure">Reporting Security Issues</h2>
+			<p><em>Note</em>: a <a data-scroll href="#bugbounty">Bug Bounty Program</a> is currently in effect.</p>
 			<p>
 				Cryptocat is written with security in mind and uses state-of-the-art cryptography engineering to protect your privacy. However, in the event that a security vulnerability is discovered, the project operates under the principle of full disclosure. If you discover a critical security issue with Cryptocat software, <strong>report it</strong>. You will be helping safeguard the privacy of thousands of people. Depending on the severity of the issue, here is how we recommend you report your findings:
 			</p>
 			<ul>
-				<li><em>Critical or High Severity</em>: Send an <a href="mailto:nadim@nadim.computer">e-mail</a> to Cryptocat's author at least one week before publishing your findings. You retain full right (and our explicit support) to publish your findings, but we ask for a window to push a fix to our users beforehand.</li>
+				<li><em>Critical or High Severity</em>: Send a message to <span class="code">nadim</span> on Cryptocat at least one week before publishing your findings. You retain full right (and our explicit support) to publish your findings, but we ask for a window to push a fix to our users beforehand.</li>
 				<li><em>Medium or Low Severity</em>: Open a ticket on the <a href="https://github.com/cryptocat/cryptocat">GitHub issue tracker</a> documenting the issue.</li>
 			</ul>
+			<!--
 			<p>
 				While Cryptocat is unable to provide a "bug bounty" or any sort of reward for disclosing vulnerabilities, we strongly encourage you to follow the spirit of open research: it helps improve the software, it helps make digital privacy stronger for our users, and it might net you something to write about.
+			</p>
+			-->
+			<hr />
+			<h2 id="bugbounty">Bug Bounty Program</h2>
+			<p>
+				From December 20, 2016 and until December 31, 2017, Cryptocat is holding a Bug Bounty Program. The goal of this program is to invite independent analysis of Cryptocat's security, especially since its complete rewrite which was completed in April 2016.
+			</p>
+			<h3>Bug Bountry Program Prize</h3>
+			<ol>
+				<li>$500 USD delivered via PayPal.</li>
+				<li>A good book from Amazon.com chosen by us.</li>
+				<li>Recognition on the Cryptocat website.</li>
+				<li>A personal thank-you note.</li>
+			</ol>
+			<p>
+				Due to Cryptocat's limited funding as volunteer-run software, the bounty is held in a "contest" style: the first person to report a vulnerability will receive the prize, and the Bug Bounty Program will then be closed until further notice. Should we receive more than one bounty report simultaneously, we will award the prize to the report we judge to be more important.
+			</p>
+			<p>
+				<span class="doubleUnderline">However</span>: Should you win the Bug Bounty Program prize but forfeit the $500 USD prize money, the Bug Bounty Program will <span class="doubleUnderline">remain open</span> for a second potential winner, and you will still receive the other three elements of the prize.
+			</p>
+			<h3>Bug Bounty Program Criteria</h3>
+			<h4>Logistics</h4>
+			<ol>
+				<li>Your report must be submitted before December 31, 2017 (anywhere on Earth).</li>
+				<li>Any submitted report must involve a bug that is exploitable in the latest version of Cryptocat at the time of submission.</li>
+				<li>A proof-of-concept must be included.</li>
+				<li>You must be agree with full public disclosure of the bug you have discovered. You may choose to forfeit public credit.</li>
+			</ol>
+			<h4>Bug Eligibility</h4>
+			<p>
+				Your reported vulnerability must be, within reasonable judgement, a high-to-critical severity vulnerability. For example, it must allow remote account compromise, user or device impersonation, message decryption, arbirtrary code execution, or something along these lines. A simple denial of service, to give a counter-example, is not eligible. We promise to be fair regarding the severity of your reported bug.
+			</p>
+			<h3>Bug Bounty Program Report Submission</h3>
+			<p>
+				Simply send a Cryptocat message to <span class="code">nadim</span> on Cryptocat in order to submit your report. It's the personal account of the person responsible for writing the software.
+			</p>
+			<p>
+				Thank you for helping make Cryptocat safer for everyone. Good luck!
 			</p>
 		</div>
 	</div>
