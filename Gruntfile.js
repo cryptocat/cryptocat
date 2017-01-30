@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 				'build-version': VERSION,
 				'version-string': {
 					CompanyName: 'Nadim Kobeissi',
-					LegalCopyright: 'Copyright 2016 Nadim Kobeissi',
+					LegalCopyright: 'Copyright 2017 Nadim Kobeissi',
 					FileDescription: 'Cryptocat',
 					OriginalFilename: 'Cryptocat.exe',
 					ProductName: 'Cryptocat',
