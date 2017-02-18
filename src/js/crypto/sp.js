@@ -356,7 +356,7 @@ var DR = {};
 				kENC: kKeys[0]
 			};
 		},
-		attemptDecrypt: function(myIdentityKey, myEphemeralKey, them, msg) {
+		tryDecrypt: function(myIdentityKey, myEphemeralKey, them, msg) {
 			var keys = RATCHET.deriveRecvKeys(
 				myEphemeralKey.priv, Type_them.assert(them), msg.ephemeralKey
 			);
@@ -496,7 +496,7 @@ var DR = {};
 
 		receiving: function(myIdentityKey, them, msg) {
 			var them = Type_them.assert(them);
-			var dec = RATCHET.attemptDecrypt(
+			var dec = RATCHET.tryDecrypt(
 				myIdentityKey, them.myEphemeralKeyP4, them, msg
 			);
 			if (dec.aes.valid) {
@@ -532,7 +532,7 @@ var DR = {};
 					plaintext: dec.aes.plaintext
 				};
 			} else {
-				dec = RATCHET.attemptDecrypt(
+				dec = RATCHET.tryDecrypt(
 					myIdentityKey, them.myEphemeralKeyP3, them, msg
 				);
 				if (dec.aes.valid) {
@@ -568,7 +568,7 @@ var DR = {};
 						plaintext: dec.aes.plaintext
 					};
 				} else {
-					dec = RATCHET.attemptDecrypt(
+					dec = RATCHET.tryDecrypt(
 						myIdentityKey, them.myEphemeralKeyP2, them, msg
 					);
 					if (dec.aes.valid) {
@@ -604,7 +604,7 @@ var DR = {};
 							plaintext: dec.aes.plaintext
 						};
 					} else {
-						dec = RATCHET.attemptDecrypt(
+						dec = RATCHET.tryDecrypt(
 							myIdentityKey, them.myEphemeralKeyP1, them, msg
 						);
 						if (dec.aes.valid) {
@@ -640,7 +640,7 @@ var DR = {};
 								plaintext: dec.aes.plaintext
 							};
 						} else {
-							dec = RATCHET.attemptDecrypt(
+							dec = RATCHET.tryDecrypt(
 								myIdentityKey, them.myEphemeralKeyP0, them, msg
 							);
 							return {
