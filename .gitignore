@@ -3,3 +3,5 @@ node_modules
 private
 *.swp
 *.swo
+.DS_Store
+.vscode
