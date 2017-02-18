@@ -677,18 +677,24 @@ Cryptocat.OMEMO = {};
 			}
 		});
 		if (!allValid) {
-			Cryptocat.Win.chat[username].webContents.send(
-				'chat.messageError', message.internalId
-			);
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.messageError', message.internalId
+				);
+			}
 		} else if (noDevices) {
-			Cryptocat.Win.chat[username].webContents.send(
-				'chat.noDevicesError', message.internalId
-			);
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.noDevicesError', message.internalId
+				);
+			}
 		} else {
 			Cryptocat.XMPP.sendMessage(username, res);
-			Cryptocat.Win.chat[username].webContents.send(
-				'chat.messageSent', message.internalId
-			);
+			if (hasProperty(Cryptocat.Win.chat, username)) {
+				Cryptocat.Win.chat[username].webContents.send(
+					'chat.messageSent', message.internalId
+				);
+			}
 		}
 		return true;
 	};
