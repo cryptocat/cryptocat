@@ -1,7 +1,6 @@
 /* jshint quotmark: false */
 'use strict';
 var VERSION = '3.2.07';
-var ELECTVR = '1.3.4';
 
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-electron');
@@ -17,7 +16,6 @@ module.exports = function(grunt) {
 			windows: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
-				version: ELECTVR,
 				out: 'dist',
 				platform: 'win32',
 				arch: 'x64',
@@ -39,7 +37,6 @@ module.exports = function(grunt) {
 			linux: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
-				version: ELECTVR,
 				out: 'dist',
 				platform: 'linux',
 				arch: 'x64',
@@ -53,7 +50,6 @@ module.exports = function(grunt) {
 			mac: { options: {
 				name: 'Cryptocat',
 				dir: 'src',
-				version: ELECTVR,
 				out: 'dist',
 				platform: 'darwin',
 				arch: 'x64',
