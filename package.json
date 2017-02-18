@@ -10,7 +10,7 @@
   "license": "GPL-3.0",
   "homepage": "https://crypto.cat",
   "devDependencies": {
-    "electron-prebuilt": "latest",
+    "electron": "latest",
     "grunt": "latest",
     "grunt-contrib-jshint": "latest",
     "grunt-electron": "latest",
