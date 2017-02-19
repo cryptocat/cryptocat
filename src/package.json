@@ -18,6 +18,5 @@
   },
   "homepage": "https://crypto.cat",
   "dependencies": {},
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
