@@ -170,15 +170,6 @@ const buildTrayMenu = function(settings) {
 			}
 		}
 	]);
-	if (process.platform !== 'darwin') {
-		menu.append(new Electron.MenuItem({
-			label: 'Quit',
-			role: 'quit',
-			click: function() {
-				Windows.main.webContents.send('main.beforeQuit');
-			}
-		}));
-	}
 	return menu;
 };
 
@@ -262,68 +253,55 @@ const buildMainMenu = function(settings) {
 					Windows.main.webContents.send('main.logOut');
 				}
 			}, {
-					type: 'separator'
-				}, {
-					label: 'Hide',
-					accelerator: 'CmdOrCtrl+H',
-					role: 'hide',
-					click: function(item, focusedWindow) {
-						if (focusedWindow) { focusedWindow.hide(); }
-					}
-				}, {
-					label: 'Show All',
-					role: 'unhide',
-					visible: (process.platform === 'darwin'),
-					click: function(item, focusedWindow) {
-						if (focusedWindow) { focusedWindow.hide(); }
-					}
-				}, {
-					type: 'separator'
-				}, {
-					label: 'Close',
-					accelerator: 'CmdOrCtrl+W',
-					click: function(item, focusedWindow) {
-						if (focusedWindow) { focusedWindow.close(); }
-					}
-				}, {
-					label: 'Quit',
-					accelerator: 'CmdOrCtrl+Q',
-					click: function() {
-						Windows.main.webContents.send('main.beforeQuit');
-					}
-				}
+				type: 'separator'
+			}, {
+				role: 'services',
+				submenu: []
+			}, {
+				type: 'separator'
+			}, {
+				role: 'hide'
+			}, {
+				role: 'hideothers'
+			}, {
+				role: 'unhide'
+			}, {
+				type: 'separator'
+			}, {
+				role: 'quit'
+			}
 			]}, {
 				label: 'Edit',
 				id: '2',
 				enabled: true,
 				submenu: [{
-					label: 'Undo',
-					accelerator: 'CmdOrCtrl+Z',
 					role: 'undo'
 				}, {
-					label: 'Redo',
-					accelerator: 'Shift+CmdOrCtrl+Z',
 					role: 'redo'
 				}, {
 					type: 'separator'
 				}, {
-					label: 'Cut',
-					accelerator: 'CmdOrCtrl+X',
 					role: 'cut'
 				}, {
-					label: 'Copy',
-					accelerator: 'CmdOrCtrl+C',
 					role: 'copy'
 				}, {
-					label: 'Paste',
-					accelerator: 'CmdOrCtrl+V',
 					role: 'paste'
 				}, {
-					label: 'Select All',
-					accelerator: 'CmdOrCtrl+A',
 					role: 'selectall'
-				}]}, {
-				label: 'Help',
+				}]
+			}, {
+				role: 'window',
+				id: '3',
+				submenu: [{
+					role: 'close'
+				}, {
+					role: 'minimize'
+				}, {
+					type: 'separator'
+				}, {
+					role: 'front'
+				}]
+			}, {
 				role: 'help',
 				id: '4',
 				enabled: true,
@@ -439,7 +417,7 @@ const buildMacMenu = function(settings) {
 	let menu = buildMainMenu(settings);
 	if (isChatWindow) {
 		menu.insert(1, chat.items[0]);
-		menu.insert(3, view.items[0]);
+		menu.insert(4, view.items[0]);
 	}
 	return menu;
 };
