@@ -342,11 +342,11 @@ window.addEventListener('load', function(e) {
 		render: function() {
 			var className = 'chatMedia';
 			var renderer = 'img';
-			var blobType = 'image/*';
+			var blobType = `image/${this.props.file.ext}`;
 			var loadingExt = 'gif';
 			if (this.props.file.type === 'recording') {
 				renderer = 'video';
-				blobType = 'video/*';
+				blobType = `video/${this.props.file.ext}`;
 				loadingExt = 'webm';
 			}
 			var src = `../img/animations/loading.${loadingExt}`;
@@ -358,7 +358,7 @@ window.addEventListener('load', function(e) {
 				this.state.ready
 			) {
 				renderer = 'audio';
-				blobType = 'audio/*';
+				blobType = `audio/${this.props.file.ext}`;
 			}
 			if (this.state.binary.length) {
 				src = URL.createObjectURL(
