@@ -277,7 +277,7 @@ Cryptocat.File = {};
 			});
 		};
 		HTTPS.get(
-			'https://cryptocat.blob.core.windows.net/files/' + info.url,
+			`https://cryptocat.blob.core.windows.net/files/${info.url}`,
 			saveFile
 		);
 	};
