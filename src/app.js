@@ -417,7 +417,7 @@ const buildMacMenu = function(settings) {
 	let menu = buildMainMenu(settings);
 	if (isChatWindow) {
 		menu.insert(1, chat.items[0]);
-		menu.insert(4, view.items[0]);
+		menu.insert(3, view.items[0]);
 	}
 	return menu;
 };
