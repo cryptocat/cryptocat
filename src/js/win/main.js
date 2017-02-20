@@ -24,10 +24,10 @@ window.addEventListener('load', function(e) {
 			height: renderWindowHeight(470),
 			minHeight: renderWindowHeight(150),
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: false,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -689,10 +689,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: true,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -752,10 +752,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -781,10 +781,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -810,10 +810,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -843,10 +843,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -924,10 +924,10 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
-			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
+				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'

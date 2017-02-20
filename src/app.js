@@ -440,9 +440,9 @@ Electron.app.on('ready', function() {
 		maximizable: false,
 		fullscreenable: false,
 		show: false,
-		sandbox: true,
 		title: 'Cryptocat',
 		webPreferences: {
+			sandbox: true,
 			preload: Path.join(__dirname, 'js/global.js')
 		}
 	});
