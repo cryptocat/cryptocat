@@ -1,4 +1,4 @@
-![Cryptocat](https://raw.githubusercontent.com/cryptocat/cryptocat/master/src/img/logo/logo64.png)
+![Cryptocat](https://raw.githubusercontent.com/cryptocat/cryptocat/master/src/img/logo/64x64.png)
 
 [![Build Status](https://travis-ci.org/cryptocat/cryptocat.svg?branch=master)](https://travis-ci.org/cryptocat/cryptocat)
 
@@ -17,7 +17,8 @@ npm run dev
 
 Build for your platform (builds are in `dist`):
 ```
-npm run win
-npm run linux
-npm run mac
+npm install -g electron-builder
+build -w
+build -l
+build -m
 ```

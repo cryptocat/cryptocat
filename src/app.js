@@ -168,6 +168,9 @@ const buildTrayMenu = function(settings) {
 			click: function() {
 				Electron.shell.openExternal('https://crypto.cat/help.html');
 			}
+		}, {
+			role: 'quit',
+			visible: process.platform !== 'darwin'
 		}
 	]);
 	return menu;
@@ -437,6 +440,7 @@ Electron.app.on('ready', function() {
 		maximizable: false,
 		fullscreenable: false,
 		show: false,
+		sandbox: true,
 		title: 'Cryptocat',
 		webPreferences: {
 			preload: Path.join(__dirname, 'js/global.js')

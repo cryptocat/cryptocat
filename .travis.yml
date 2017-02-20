@@ -1,12 +1,11 @@
 language: node_js
 node_js:
-    - "6"
+    - "7"
 
 install: true
 
 before_script:
-  - "npm install -g grunt-cli"
-  - "npm install grunt grunt-contrib-jshint jshint grunt-jscs jscs"
+  - "npm install -g jshint jscs"
 
 script:
-  - "grunt ci"
+  - "jshint src/app.js src/js/*.js src/js/win/*.js; jscs src/app.js src/js/*.js src/js/win/*.js"

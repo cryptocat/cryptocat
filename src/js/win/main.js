@@ -24,6 +24,7 @@ window.addEventListener('load', function(e) {
 			height: renderWindowHeight(470),
 			minHeight: renderWindowHeight(150),
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: false,
 			webPreferences: {
 				nodeIntegration: false,
@@ -688,6 +689,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: true,
@@ -750,6 +752,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
@@ -778,6 +781,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
@@ -806,6 +810,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
@@ -838,6 +843,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
@@ -918,6 +924,7 @@ window.addEventListener('load', function(e) {
 			maximizable: false,
 			fullscreenable: false,
 			show: false,
+			sandbox: true,
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,

@@ -1,6 +1,13 @@
 dist/Cryptocat*
+dist/win*
+dist/linux*
+dist/mac*
+dist/*.exe
+dist/*.AppImage
+dist/*.yml
 node_modules
 private
+release
 *.swp
 *.swo
 .DS_Store

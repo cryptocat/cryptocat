@@ -176,7 +176,7 @@ Cryptocat.Diag.message = {
 	about() {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`, `Learn more`, `License`],
 			defaultId: 0,
 			title: `About Cryptocat`,
@@ -199,7 +199,7 @@ Cryptocat.Diag.message = {
 	addBuddyRequest(username, callback) {
 		Dialog.showMessageBox({
 			type: `question`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Accept`, `Deny`, `Remind me later`],
 			defaultId: 2,
 			title: `Cryptocat: Buddy Request!`,
@@ -211,7 +211,7 @@ Cryptocat.Diag.message = {
 	addBuddySuccess() {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: Success!`,
@@ -222,7 +222,7 @@ Cryptocat.Diag.message = {
 	buddyUnsubscribed(username) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: ${username} Removed You`,
@@ -233,7 +233,7 @@ Cryptocat.Diag.message = {
 	changePasswordSuccess() {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: Password Changed`,
@@ -244,7 +244,7 @@ Cryptocat.Diag.message = {
 	deleteAccount(username, callback) {
 		Dialog.showMessageBox({
 			type: `question`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Cancel`, `Learn more`, `Delete account`],
 			defaultId: 0,
 			title: `Cryptocat: Delete Account?`,
@@ -262,7 +262,7 @@ Cryptocat.Diag.message = {
 			if (response === 2) {
 				Dialog.showMessageBox({
 					type: `question`,
-					icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+					icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 					buttons: [`Cancel`, `Learn more`, `Delete account`],
 					defaultId: 0,
 					title: `Cryptocat: Delete Account, Final Warning`,
@@ -278,7 +278,7 @@ Cryptocat.Diag.message = {
 	deviceSetup(callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Continue`, `Learn more`, `Quit`],
 			defaultId: 0,
 			title: `Cryptocat: Logging in from New Device`,
@@ -293,7 +293,7 @@ Cryptocat.Diag.message = {
 	isLatest(version) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: No Updates Available`,
@@ -305,7 +305,7 @@ Cryptocat.Diag.message = {
 	rememberIsChecked() {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: Remembering Login`,
@@ -318,7 +318,7 @@ Cryptocat.Diag.message = {
 	removeBuddyConfirm(callback) {
 		Dialog.showMessageBox({
 			type: `question`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Remove buddy`, `Cancel`],
 			defaultId: 1,
 			title: `Cryptocat: Remove Buddy?`,
@@ -329,7 +329,7 @@ Cryptocat.Diag.message = {
 	removeDevice(callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Remove device`, `Cancel`],
 			defaultId: 1,
 			title: `Cryptocat: Remove another device?`,
@@ -343,7 +343,7 @@ Cryptocat.Diag.message = {
 	removeThisDevice(callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Remove device`, `Cancel`],
 			defaultId: 1,
 			title: `Cryptocat: Remove this device?`,
@@ -355,7 +355,7 @@ Cryptocat.Diag.message = {
 	unsavedFiles(callback) {
 		Dialog.showMessageBox({
 			type: `question`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Return to Chat`, `Close Anyway`],
 			defaultId: 0,
 			title: `Cryptocat: Unsaved Files`,
@@ -367,7 +367,7 @@ Cryptocat.Diag.message = {
 	unsentFiles(callback) {
 		Dialog.showMessageBox({
 			type: `question`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Return to Chat`, `Close Anyway`],
 			defaultId: 0,
 			title: `Cryptocat: Unsent Files`,
@@ -379,7 +379,7 @@ Cryptocat.Diag.message = {
 	updateAvailable(callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`Download now`, `What's new`, `Remind me later`],
 			defaultId: 0,
 			title: `Cryptocat: Update Available!`,
@@ -392,7 +392,7 @@ Cryptocat.Diag.message = {
 	updatedDevices(username, callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`View devices`, `OK`],
 			defaultId: 0,
 			title: `Cryptocat: Updated devices for ${username}`,
@@ -404,7 +404,7 @@ Cryptocat.Diag.message = {
 	updateDownloaded(callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`OK`],
 			defaultId: 0,
 			title: `Cryptocat: Update Downloaded`,
@@ -416,7 +416,7 @@ Cryptocat.Diag.message = {
 	updatedMyDevices(username, callback) {
 		Dialog.showMessageBox({
 			type: `info`,
-			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `logo64.png`),
+			icon: Path.join(Path.resolve(__gdirname, `..`, `img/logo`), `64x64.png`),
 			buttons: [`View devices`, `OK`],
 			defaultId: 0,
 			title: `Cryptocat: Devices Updated`,

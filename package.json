@@ -1,6 +1,6 @@
 {
   "name": "CryptocatBuilder",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Builds Cryptocat.",
   "repository": {
     "type": "git",
@@ -11,20 +11,47 @@
   "homepage": "https://crypto.cat",
   "devDependencies": {
     "electron": "latest",
-    "grunt": "latest",
-    "grunt-contrib-jshint": "latest",
-    "grunt-electron": "latest",
-    "grunt-electron-installer": "latest",
-    "grunt-jscs": "latest",
-    "grunt-shell": "latest",
-    "grunt-string-replace": "latest",
     "jshint": "latest"
   },
   "scripts": {
     "setup": "npm install",
     "dev": "electron src/app.js",
-    "win": "grunt win",
-    "mac": "grunt mac",
-    "linux": "grunt linux"
+    "win": "build -w",
+    "mac": "build -m",
+    "linux": "build -l"
+  },
+  "build": {
+  	"appId": "com.cryptocat.cryptocat",
+	"copyright": "Copyright 2011-2017 Nadim Kobeissi",
+	"asar": "true",
+	"compression": "maximum",
+	"directories": {
+		"app": "src",
+		"output": "dist"
+	},
+	"mac": {
+		"category": "public.app-category.productivity",
+		"target": "pkg",
+		"icon": "src/img/logo/logo.icns",
+		"type": "distribution"
+	},
+	"nsis": {
+		"oneClick": true,
+		"runAfterFinish": true,
+		"guid": "Cryptocat",
+		"installerIcon": "src/img/logo/logo.ico",
+		"installerHeaderIcon": "src/img/logo/64x64.png",
+		"menuCategory": true
+	},
+	"win": {
+		"target": "nsis",
+		"icon": "src/img/logo/logo.ico",
+		"legalTrademarks": "Cryptocat"
+	},
+	"linux": {
+		"category": "Network",
+		"target": "AppImage",
+		"icon": "src/img/logo"
+	}
   }
 }
