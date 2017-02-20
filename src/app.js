@@ -259,6 +259,7 @@ const buildMainMenu = function(settings) {
 				type: 'separator'
 			}, {
 				role: 'services',
+				visible: process.platform === 'darwin',
 				submenu: []
 			}, {
 				type: 'separator'
