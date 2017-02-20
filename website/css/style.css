@@ -149,7 +149,8 @@ div#main:after {
 
 div#main div.mainLeft {
 	float: left;
-	width: 450px;
+	width: 500px;
+	margin: 0px 0 0 -20px;
 }
 
 div#main div.mainLeft img.mainLeftSplash {
@@ -159,7 +160,7 @@ div#main div.mainLeft img.mainLeftSplash {
 
 div#main div.mainRight {
 	float: left;
-	width: 500px;
+	width: 480px;
 	margin-left: 20px;
 }
 
