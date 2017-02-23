@@ -5,7 +5,7 @@
 1. Opening a duplicate issue will earn you a permanent ban.
 2. Issues may be locked without notice.
 
-Due to Cryptocat's nature as non-profit software developed by a single individual on their own time, strict rules must be applied as to how user feedback is handled and what kind of user feedback is allowed. Please follow the rules below if you want a chance to contribute productively to Cryptocat software development.
+Due to Cryptocat's nature as non-profit software developed by a single individual on his own time, strict rules must be applied as to how user feedback is handled and what kind of user feedback is allowed. Please follow the rules below if you want a chance to contribute productively to Cryptocat software development.
 
 ## Pull Requests
 Please do not submit any pull requests: the only exceptions relate to fixing critical issues.
