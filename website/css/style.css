@@ -51,6 +51,21 @@ blockquote {
 	border-radius: 2px;
 }
 
+table {
+	width: 60%;
+}
+
+th {
+	text-align: left;
+}
+
+td {
+	border: 1px solid #333;
+	border-radius: 2px;
+	padding: 2px 5px;
+	font-size: 0.9em;
+}
+
 span.doubleUnderline {
     border-bottom: 2px solid #222;
 }
@@ -255,6 +270,22 @@ div#bottom div.bottomLeft {
 div#bottom div.bottomRight {
 	float: right;
 	text-align: right;
+}
+
+div.progressBar {
+	border: 1px solid #A3D4FF;
+	padding: 1px;
+	width: 70%;
+	margin: 0 auto;
+}
+
+div.progressBarFill {
+	background-color: #A3D4FF;
+	height: 30px;
+	color: #FFF;
+	text-align: right;
+	font-size: 0.8em;
+	padding-right: 5px;
 }
 
 @media only screen and (max-device-width: 480px) {
