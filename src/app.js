@@ -43,37 +43,6 @@ const handleStartupEvent = {
 		}
 	},
 	linux: function() {
-		let shortcut = '[Desktop Entry]\n';
-		let path = Path.join(process.env.HOME, '.local');
-		let exePath = Electron.app.getPath('exe');
-		let icoPath = exePath.slice(0, -9) + 'logo.png';
-		shortcut += 'Name=Cryptocat\n';
-		shortcut += 'Exec=' + exePath + '\n';
-		shortcut += 'Icon=' + icoPath + '\n';
-		shortcut += 'Terminal=false\n';
-		shortcut += 'Type=Application\n';
-		shortcut += 'Categories=GNOME;GTK;Network;InstantMessaging;\n';
-		shortcut += 'Comment=Easy, secure chat for your computer.';
-		FS.stat(path, function(err, stats) {
-			if (!stats.isDirectory()) {
-				FS.mkdirSync(path, '0o700');
-			}
-			path = Path.join(path, 'share');
-			FS.stat(path, function(err, stats) {
-				if (!stats.isDirectory()) {
-					FS.mkdirSync(path, '0o700');
-				}
-				path = Path.join(path, 'applications');
-				FS.stat(path, function(err, stats) {
-					if (!stats.isDirectory()) {
-						FS.mkdirSync(path, '0o700');
-					}
-					path = Path.join(path, 'Cryptocat.desktop');
-					FS.writeFile(path, shortcut, function(err) {
-					});
-				});
-			});
-		});
 		return false;
 	},
 	darwin: function() {
