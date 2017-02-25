@@ -19,6 +19,10 @@ window.addEventListener('load', function(e) {
 
 	var spawnChatWindow = function() {
 		var chatWindow = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 470,
 			minWidth: 470,
 			height: renderWindowHeight(470),
@@ -603,7 +607,7 @@ window.addEventListener('load', function(e) {
 			}, [
 				React.createElement('img', {
 					key: 0,
-					src: '../img/logo/128x128.png',
+					src: '../img/logo/64x64.png',
 					alt: 'Cryptocat',
 					className: 'logo',
 					draggable: 'false'
@@ -680,6 +684,10 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.create.updateDownloader = function() {
 		var updateDownloader = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 330,
 			height: renderWindowHeight(120),
 			title: 'Downloading Update...',
@@ -742,6 +750,10 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.create.addBuddy = function() {
 		var addBuddyWindow = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 320,
 			height: renderWindowHeight(160),
 			title: 'Add Buddy',
@@ -770,6 +782,10 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.create.changePassword = function() {
 		var changePasswordWindow = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 320,
 			height: renderWindowHeight(190),
 			title: 'Change Password',
@@ -798,6 +814,10 @@ window.addEventListener('load', function(e) {
 
 	Cryptocat.Win.create.addDevice = function() {
 		var addDeviceWindow = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 400,
 			height: renderWindowHeight(250),
 			title: 'Add Device',
@@ -830,6 +850,10 @@ window.addEventListener('load', function(e) {
 			return false;
 		}
 		Cryptocat.Win.deviceManager[username] = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 470,
 			height: renderWindowHeight(250),
 			title: 'Manage Devices',
@@ -910,6 +934,10 @@ window.addEventListener('load', function(e) {
 			return false;
 		}
 		Cryptocat.Win.setAvatar[Cryptocat.Me.username] = new Remote.BrowserWindow({
+			icon: Path.join(
+				Path.resolve(__dirname, '..'),
+				'img/logo/64x64.png'
+			),
 			width: 470,
 			height: renderWindowHeight(410),
 			title: 'Set Avatar',
