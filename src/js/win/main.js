@@ -27,7 +27,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: false,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -604,7 +603,7 @@ window.addEventListener('load', function(e) {
 			}, [
 				React.createElement('img', {
 					key: 0,
-					src: '../img/logo/logo.png',
+					src: '../img/logo/128x128.png',
 					alt: 'Cryptocat',
 					className: 'logo',
 					draggable: 'false'
@@ -692,7 +691,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: true,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -755,7 +753,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -784,7 +781,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -813,7 +809,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -846,7 +841,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'
@@ -927,7 +921,6 @@ window.addEventListener('load', function(e) {
 			autoHideMenuBar: true,
 			webPreferences: {
 				nodeIntegration: false,
-				sandbox: true,
 				preload: Path.join(
 					Path.resolve(__dirname, '..'),
 					'js/global.js'

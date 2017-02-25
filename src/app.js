@@ -398,7 +398,7 @@ const buildMacMenu = function(settings) {
 Electron.app.on('ready', function() {
 	if (process.platform !== 'darwin') {
 		TrayIcon = new Electron.Tray(
-			Path.join(__dirname, 'img/logo/logo.png')
+			Path.join(__dirname, 'img/logo/128x128.png')
 		);
 	}
 	Windows.main = new Electron.BrowserWindow({
@@ -412,7 +412,6 @@ Electron.app.on('ready', function() {
 		show: false,
 		title: 'Cryptocat',
 		webPreferences: {
-			sandbox: true,
 			preload: Path.join(__dirname, 'js/global.js')
 		}
 	});
@@ -425,7 +424,7 @@ Electron.app.on('ready', function() {
 				if (TrayIconFirstMinimized) {
 					TrayIconFirstMinimized = false;
 					TrayIcon.displayBalloon({
-						icon: Path.join(__dirname, 'img/logo/logo.png'),
+						icon: Path.join(__dirname, 'img/logo/128x128.png'),
 						title: 'Cryptocat is still running',
 						content: 'It awaits you snugly in your desktop tray.'
 					});
