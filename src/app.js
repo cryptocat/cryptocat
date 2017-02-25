@@ -425,7 +425,7 @@ Electron.app.on('ready', function() {
 				if (TrayIconFirstMinimized) {
 					TrayIconFirstMinimized = false;
 					TrayIcon.displayBalloon({
-						icon: Path.join(__dirname, 'img/logo/64x64.png'),
+						icon: Path.join(__dirname, 'img/logo/128x128.png'),
 						title: 'Cryptocat is still running',
 						content: 'It awaits you snugly in your desktop tray.'
 					});
