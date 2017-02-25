@@ -23,7 +23,7 @@
   "build": {
   	"appId": "com.cryptocat.cryptocat",
 	"copyright": "Copyright 2011-2017 Nadim Kobeissi",
-	"asar": "true",
+	"asar": true,
 	"compression": "maximum",
 	"directories": {
 		"app": "src",
@@ -31,7 +31,7 @@
 	},
 	"mac": {
 		"category": "public.app-category.productivity",
-		"target": "pkg",
+		"target": ["pkg"],
 		"icon": "src/img/logo/logo.icns",
 		"type": "distribution"
 	},
@@ -44,14 +44,14 @@
 		"menuCategory": true
 	},
 	"win": {
-		"target": "nsis",
+		"target": ["nsis"],
 		"icon": "src/img/logo/logo.ico",
 		"legalTrademarks": "Cryptocat"
 	},
 	"linux": {
 		"category": "Network",
-		"target": "AppImage",
-		"icon": "src/img/logo"
+		"target": ["AppImage"],
+		"icon": "src/img/logo/"
 	}
   }
 }

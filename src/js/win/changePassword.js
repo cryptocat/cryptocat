@@ -60,7 +60,7 @@ window.addEventListener('load', function(e) {
 			}, [
 				React.createElement('img', {
 					key: 0,
-					src: '../img/logo/logo.png',
+					src: '../img/logo/128x128.png',
 					alt: 'Cryptocat',
 					className: 'logo',
 					draggable: 'false'
