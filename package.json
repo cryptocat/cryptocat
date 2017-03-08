@@ -10,8 +10,7 @@
   "license": "GPL-3.0",
   "homepage": "https://crypto.cat",
   "devDependencies": {
-    "electron": "latest",
-    "jshint": "latest"
+    "electron": "latest"
   },
   "scripts": {
     "setup": "npm install",

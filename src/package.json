@@ -1,22 +1,25 @@
 {
-  "name": "Cryptocat",
-  "version": "3.2.08",
-  "description": "Easy and secure instant messaging.",
-  "main": "app.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cryptocat/cryptocat"
-  },
-  "keywords": [
-    "encrypted",
-    "messaging"
-  ],
-  "author": "Nadim Kobeissi",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/cryptocat/cryptocat/issues"
-  },
-  "homepage": "https://crypto.cat",
-  "dependencies": {},
-  "devDependencies": {}
+	"name": "Cryptocat",
+	"version": "3.2.09",
+	"version-min": "3.2.09",
+	"description": "Easy and secure instant messaging.",
+	"homepage": "https://crypto.cat",
+	"author": "Nadim Kobeissi",
+	"license": "GPL-3.0",
+	"main": "app.js",
+	"keywords": ["encrypted", "messaging", "secure chat"],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cryptocat/cryptocat"
+	},
+	"bugs": {
+		"url": "https://github.com/cryptocat/cryptocat/issues"
+	},
+	"announce": {
+		"message": "Help Cryptocat continue giving encrypted chat for everyone! Give today for our 2017 fundraiser to cover our infrastructure costs. Every contribution counts!",
+		"buttonText": "Contribute",
+		"buttonUri": "news.html#fundraiser2017",
+		"prodDate": 1492203600000,
+		"expiDate": 1494795600000
+	}
 }

@@ -105,8 +105,6 @@ var client = {};
 			hasProperty(data[0].items[0], '$') &&
 			hasProperty(data[0].items[0].$, 'node')
 		) {
-			console.log(fromUser);
-			console.log(data);
 			data = data[0].items[0];
 			if ((/^urn:xmpp:avatar:data$/).test(data.$.node)) {
 				handler.avatar(fromUser, data);
