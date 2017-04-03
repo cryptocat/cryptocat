@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8" />
+	<!--
+	<meta name="viewport" content="
+		user-scalable=no, initial-scale=0.6,
+		maximum-scale=0.6, minimum-scale=0.6,
+		width=device-width, height=device-height,
+		target-densitydpi=device-dpi"
+	/>
+	-->
+	<meta name="keywords" content="cryptocat, private chat, private im, secure im, secure chat,
+		encrypted chat, encrypted im, open source encrypted chat, crypto cat" />
+	<meta name="description" content="Discutez facilement et de façon sécurisée avec vos amis grâce à Cryptocat." />
+	<title>Cryptocat - Aide</title>
+	<link rel="stylesheet" href="css/fonts.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="icon" type="image/gif" href="img/favicon.gif" />
+	<link rel="image_src" href="https://crypto.cat/img/logo.png" />
+	<script type="application/javascript" src="js/util.js"></script>
+	<script type="application/javascript">
+		window.addEventListener('load', function() {
+			var a = document.getElementById('acknowledgments');
+			var s = document.getElementById('shuffledAcknowledgments');
+			while (a.children.length) {
+				s.appendChild(a.children[
+					Math.floor(Math.random() * a.children.length)
+				]);
+			}
+			a.parentNode.removeChild(a);
+		});
+	</script>
+</head>
+<body>
+	<div id="top">
+		<img class="logo" src="img/logo.png" alt="" draggable="false" />
+		<div class="nav">
+			<a href="fr.html">Accueil</a>
+			<a href="news.html">Nouvelles</a>
+			<a href="mission.html">Mission</a>
+			<a href="security.html">Sécurité</a>
+			<a href="#" class="current">Aide</a>
+			<a href="https://github.com/cryptocat/cryptocat">Code</a>
+		</div>
+	</div>
+	
+	<div id="main">
+		<div class="mainCenter">
+			<h1>Aide de Cryptocat</h1>
+			<div class="tableOfContents">
+				<ul>
+					<li><a href="#beta">Informations importantes sur les versions bêta</a></li>
+					<li><a href="#creatingAccount">Créer un compte</a></li>
+					<li><a href="#addDevice">Ajouter et supprimer des appareils</a></li>
+					<li><a href="#fingerprints">Vérifier les empreintes de votre interlocuteur</a></li>
+					<li><a href="#managingDevices">Gérer les appareils en toute sécurité</a></li>
+					<li><a href="#notify">Activer/désactiver les alertes sonores et les notifications</a></li>
+					<li><a href="#signatures">Vérifier l'intégrité du téléchargement de Cryptocat</a></li>
+					<li><a href="#credits">Crédits</a></li>
+				</ul>
+			</div>
+			<h2 id="beta">Informations importantes sur les versions bêta</h2>
+			<p>
+				Cryptocat est en ce moment (mars 2016), un logiciel en version bêta. Cela signifie qu'il est en phase de pré-publication : c'est le moment où nous invitons le grand public à tester l'application et à faire remonter des bugs. Pendant cette période, nous vous recommandons vivement de prendre un minimum de précautions quand vous utilisez Cryptocat, car il subit une série de tests avant de passer en version « stable ».
+			</p>
+			<p>
+				Si vous rencontrez un problème avec votre client Cryptocat et que vous souhaitez nous en faire part, veuillez le faire en utilisant notre <a href="https://github.com/cryptocat/cryptocat/issues" target="_blank">suivi de bugs sur GitHub</a>.
+			</p>
+			<h2 id="creatingAccount">Créer un compte</h2>
+			<p>
+				Vous pouvez créer un compte avec la fenêtre d'identification de Cryptocat, en cliquant sur le bouton <em>Créer un compte</em>.<br />
+				Vous pouvez également modifier le mot de passe de votre compte en cliquant sur <em>Compte</em> &gt; <em>Changer le mot de passe</em> dans la barre de menu de Cryptocat.
+			</p>
+			<h2 id="addDevice">Ajouter et supprimer des appareils</h2>
+			<p>
+				Quand vous vous connectez pour la première fois à votre compte Cryptocat avec un nouvel appareil, il vous est demandé de préciser quel est cet appareil et de l'associer à votre compte. Notez que ceci va générer et stocker des clés de chiffrement sensibles sur votre appareil&nbsp;; consultez <a href="#managingDevices">Gérer vos appareils en toute sécurité</a> pour en savoir plus sur la gestion des données sensibles.
+			</p>
+			<p>
+				Une fois que vous avez ajouté un nouvel appareil, vous n'aurez pas la possibilité de changer son nom ni son icône par la suite. Pour afficher vos appareils à tout moment, il vous suffit d'ouvrir le menu <em>Compte</em> et de cliquer sur <em>Gérer les appareils</em>, ou d'appuyer sur <span class="code">Alt+D</span>. dans le gestionnaire d'appareils, vous aurez aussi la possibilité de supprimer des appareils associés à votre compte Cryptocat. Deux choses peuvent se produire quand vous supprimez un appareil&nbsp;:
+			</p>
+			<ul>
+				<li><em>Si vous supprimez l'appareil que vous utilisez justement à ce moment</em>&nbsp;: vous allez être déconnecté et les informations sensibles sur cet appareil seront supprimées sur celui-ci.</li>
+				<li><em>Si vous supprimez un autre appareil que celui que vous utilisez à ce moment</em>&nbsp;: l'appareil sera dissocié de votre compte, mais les informations sensibles sur cet appareil demeureront sur celui-ci. Si vous voulez, vous pouvez supprimer ces données <a href="#managingDevices">manuellement</a> sur l'appareil lui-même.</li>
+			</ul>
+			<h2 id="fingerprints">Vérifier les empreintes de votre interlocuteur</h2>
+			<p>
+				De façon à obtenir un maximum de confiance dans les appareils utilisés par votre correspondant, vous pouvez vérifier ses <em>empreintes numériques</em>. Il s'agit d'un identifiant spécial pour chaque appareil particulier. Cela ressemble à ça&nbsp;: <span class="code">99:37:8c:a1:32:05:c5:97:ac:f9:32:d4:18:1e:3e:df</span>.
+			</p>
+			<p>
+				Par exemple, vous pouvez voir les appareils de Florent en cliquant droit sur votre liste de contacts et en sélectionnant <em>Voir les appareils</em>. Vous pourrez alors voir que votre ami Florent a un appareil appelé «&nbsp;ordi de Florent&nbsp;». Mais comment pouvez-vous avoir la certitude que c'est bien l'ordinateur de Florent et non un appareil frauduleusement ajouté dans une intention malveillante&nbsp;? Voici comment faire&nbsp;: vous pouvez appeler Florent au téléphone ou le rencontrer dans la vraie vie, pour lui demander de vous lire le sempreintes numériques de ses appareils. Si elles coïncident avec ce que vous pouvez voir dans votre fenêtre <em>Voir les appareils</em>, c'est que vous avez pu <em>authentifier</em> avec succès les appareils de Florent. À partir de cet instant, quand vous envoyez un message à Florent, vous pouvez être assuré qu'il sera bien reçu par les appareils dont Florent a déclaré qu'ils étaient les siens sur son compte.
+			</p>
+			<p>
+				Si un de vos amis ajoute un nouvel appareil à son compte, Cryptocat vous en informera. Nous vous recommandons de vérifier les appareils avec vos correspondants. C'est une précaution que vous n'aurez à prendre qu'une seule fois par appareil et cela vous protègera contre les risques d'une imposture dangereuse dans les conversations que vous menez.
+			</p>
+			<h2 id="managingDevices">Gérer les appareils en toute sécurité</h2>
+			<p>
+				Quand vous faites une association d'un nouvel appareil à votre compte Cryptocat, l'application va générer des clés de chiffrement sensibles et les stocker sur ce nouvel appareil. Il est important de bien comprendre que  <span style="font-weight:bold;">ces informations hautement sensibles ne sont pas protégées</span> par quoi que ce soit et qu'un pirate malveillant qui accède à votre appareil peut récolter ces informations.
+			</p>
+			En-dehors d'informations peu sensibles telles que vos paramètres de notification, les informations concernant votre appareil comprennent les détails sensibles suivants&nbsp;:
+			<ul>
+				<li><em>Vos clés d'identité</em>&nbsp;: un voleur qui accède à ces clés peut simuler l'usage de cet appareil par la suite, mais ne <em>pourra pas</em> déchiffrer vos conversations passées sur Cryptocat, grâce à la fonctionnalité avancée de confidentialité de Cryptocat.</li>
+				<li><em>Votre nom d'utilisateur</em>&nbsp;: un voleur pourra apprendre votre nom d'utilisateur pour Cryptocat.</li>
+				<li><em>Votre liste de contacts</em>&nbsp;: un voleur pourra connaître le contenu de votre liste de contacts pour Cryptocat.</li>
+			</ul>
+			Les informations concernant votre appareil sont stockées dans&nbsp;:
+			<ul>
+				<li><em>Windows</em>: <span class="code">C:\Users\(Your Username)\AppData\Roaming\Cryptocat\users.db</span></li>
+				<li><em>Linux</em>: <span class="code">~/.config/Cryptocat/users.db</span></li>
+				<li><em>Mac</em>: <span class="code">~/.config/Cryptocat/users.db</span></li>
+			</ul>
+			<h3>Pourquoi les informations sur l'appareil ne sont-elles pas chiffrées&nbsp;?</h3>
+			<p>
+				Il n'est pas évident qu'il y aurait un gros avantage à ce que Cryptocat lui-même chiffre les informations concernant votre appareil. Et demander aux utilisateurs d'utiliser un autre mot de passe, différent pour chaque appareil en plus de celui du compte Cryptocat peut rapidement s'avérer une impasse en termes d'ergonomie pour la vaste majorité d'utilisateurs. le chiffrement des informations sur l'appareil pourrait apporter davanatge de sécurité, mais nous estimons que cette sécurité supplémentaire est superficielle&nbsp;: tout ce qu'un attaquant qui sait exécuter du code a besoin de faire, c'est d'attendre que vous soyez connecté à Cryptocat et de charger en mémoire vos informations déchiffrées sur l'appareil avant d'attaquer. C'est pourquoi il ne nous semble pas que ce soit une solution viable qui justifierait qu'on demande aux utilisateurs de se souvenir de plusieurs mots de passe pour le même compte.
+			</p>
+			<p>
+				Pour le dire de façon brutale, si vous n'avez pas confiance dans votre appareil, Cryptocat ne peut pas faire grand-chose pour vous sur ce point.
+			</p>
+			<h3>Que puis-je faire pour augmenter la protection des informations sur mon appareil&nbsp;?</h3>
+			<p>
+				Utilisez le chiffrement total de votre disque dur. Sous Windows, vous pouvez activer <a href="http://windows.microsoft.com/en-us/windows-10/turn-on-device-encryption" target="_blank">le chiffrement de l'appareil</a>. Sous Linux, vous pouvez utiliser <a href="https://wiki.archlinux.org/index.php/disk_encryption">LUKS, dm-crypt ou  eCryptfs</a>. Sous Mac, vous pouvez utiliser <a href="https://support.apple.com/en-us/HT204837">FileVault</a>. Ces mesures vous assureront que tous les fichiers de votre ordinateur seront mieux protégés. Les informations sur votre appareil seront plus difficiles à récupérer si votre appareil est éteint au moment où il vous est volé.
+			</p>
+			<h2 id="notify">Activer/désactiver les alertes sonores et les notifications</h2>
+			<p>
+				Par défaut, les notifications sur votre ordinateur et les alertes sonores sont activées dans Cryptocat, de façon à réduire les risques pour vous de rater un message important. Certains utilisateurs peuvent trouver que c'est pénible et choisir de les désactiver. Voici comment faire&nbsp:
+			</p>
+			<ul>
+				<li><em>Windows et Linux</em>&nbsp;: cliquez droit sur l'icône de Cryptocat dans la zone de notification de votre système. Un menu va apparaître, il vous permet de cocher ou décocher les paramètres Alertes sonores et  Notifications.</li>
+				<li><em>Mac</em>&nbsp;: cliquez droit sur l'icône de Cryptocat dans votre dock. Dans le menu contextuel quipparaît vous pouvez cocher ou décocher les options de notifications et alertes sonores.</li>
+			</ul>
+			<h2 id="signatures">Vérifier l'intégrité du téléchargement de Cryptocat</h2>
+			<p>
+				Tous les clients Cryptocat sont <em>signés</em> de sorte que vous pouvez en vérifier l'authenticité. 
+				Cela signifie que quand vous téléchargez un client Cryptocat, vous pouvez vérifier qu'il vient bien du développeur de Cryptocat. Cela contribue à empêcher les gens malintentionnés de vous tromper en vous faisant télécharger une version contrefaite du client.
+			<p>
+			<p>
+				<em>Remarque à propos des mises à jour&nbsp;:</em> si vous téléchargez une mise à jour de Cryptocat en utilisant le gestionnaire intérgré de mises à jour, la vérification de signature numérique est effectuée automatiquement. Vous devrez toutefois effectuer les vérifications dont les étapes sont décrites ci-dessous.
+			</p>
+			<h3>Vérifier Cryptocat pour Windows</h3>
+			<p>
+				Cliquez droit sur <span class="code">Setup.exe</span> et sélectionnez <em>Propriétés</em>. dans la fenêtre des propriétés, cliquez sur <em>Signatures numériques</em>. Il devrait y avoir une signature dont les détails coïncideront avec ce qui suit&nbsp;:
+			</p>
+			<ul>
+				<li><em>Nom</em>: Open Source Developer, Nadim Kobeissi</li>
+				<li><em>Empreinte</em>: <span class="code">17 2b 46 56 59 d0 d2 a2 45 c8 d0 fb 70 ce e3 81 76 2e 21 a5</span></li>
+			</ul>
+			<h3>Vérifier Cryptocat pour Linux</h3>
+			<p>
+				Comme Linux ne propose pas de standard intégré pour la signature de code (sauf pour les gestinnaires de paquets, qui sont propres à chaque distribution), chaque version de Cryptocat pour Linux comprend une signature PGP qui peut être vérifiée en utilisant <span class="code">gpg2</span>. Pour commencer, importez la clé de vérification de Cryptocat pour Linux (avec <span class="code">gpg2 --import</span>):
+			</p>
+			<p>
+				<code>
+					-----BEGIN PGP PUBLIC KEY BLOCK-----<br />
+					Version: GnuPG v2<br /><br />
+
+					mDMEVvFWRRYJKwYBBAHaRw8BAQdAhXI9s+Ru4GOKfOw8sP5dI5frhVxcpaGCp9yt<br />
+					uK0JPyG0RE5hZGltIEtvYmVpc3NpIChDcnlwdG9jYXQgQ2xpZW50IFNpZ25pbmcg<br />
+					S2V5KSA8bmFkaW1AbmFkaW0uY29tcHV0ZXI+iH8EExYIACcFAlbxVkUCGwMFCQHh<br />
+					M4AFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQxybHXV2Tw8sKJAEAkjfWGOEU<br />
+					Zb/A62kk5KFw/R4IiI6msapTfoKinodVAHoBAIVivmJxsdvmIdXpmIE1CBg15vo2<br />
+					bO5MCZ3QFFd86WQA<br />
+					=r1T0<br />
+					-----END PGP PUBLIC KEY BLOCK-----
+				</code>
+			</p>
+			<p>
+				Après avoir décompressé votre téléchargement, vous pouvez vérifier son authenticité en lançant la commande <span class="code">gpg2 --verify Cryptocat.zip.asc Cryptocat.zip</span> dans votre terminal. Le résultat devrait ressembler à ceci&nbsp;:
+				<code>
+					gpg: Signature made Sat 10 Apr 2016 12:34:56 PM CET using EDDSA key ID 5D93C3CB<br />
+					gpg: Good signature from "Nadim Kobeissi (Cryptocat Client Signing Key) &lt;nadim@nadim.computer&gt;"
+				</code>
+			</p>
+			<h3>Vérifier Cryptocat pour Mac</h3>
+			<p>
+				Après l'ouverture de <span class="code">Cryptocat.pkg</span>, cliquez sur l'icône de cadenas dans l'angle supérieur droit de la fenêtre de l'installeur. Vous devriez voir apparaître un certificat conforme à celui-ci&nbsp;:
+			</p>
+			<ul>
+				<li><em>Nom</em>&nbsp;: Developer ID Installer: Nadim Kobeissi (HC689Z8JM4)</li>
+				<li><em>Empreinte (SHA1)</em>: <span class="code">DE 35 C1 E8 0E 36 09 C5 DB E3 CF F9 01 88 BF 9B EB F2 47 1D</span></li>
+			</ul>
+				Vous pouvez aussi vérifier l'installeur sans l'ouvrir d'abord en utilisant cette ligne de commande&nbsp;: <span class="code">pkgutil --check-signature Cryptocat.pkg</span>.
+			<h2 id="credits">Crédits</h2>
+			<p>
+				Depuis 2011, le logiciel Cryptocat a été développé par <a href="https://nadim.computer" target="_blank">Nadim Kobeissi</a>. Je voudrais également adresser mes sincères remerciements aux personnes ci-dessous, mentionnées sans ordre particulier&nbsp;:
+			</p>
+			<ul id="acknowledgments">
+				<li>Dr. Karthikeyan Bhargavan.</li>
+				<li>Dr. Philippe Baumard.</li>
+				<li>Dr. Antoine Delignat-Lavaud.</li>
+				<li>Dr. Graham Steel.</li>
+				<li>Dr. Harry Halpin.</li>
+				<li>Dr. Jeremy Clark.</li>
+				<li>Dr. Matthew D. Green.</li>
+				<li>Frederic Jacobs.</li>
+				<li>Dr. Jean-Philippe Aumasson.</li>
+				<li>Arlo Breault.</li>
+				<li>Dr. Mario Heiderich.</li>
+				<li>Steve Thomas.</li>
+				<li>Nate Cardozo.</li>
+				<li>Dan Meredith.</li>
+				<li>James Vasile.</li>
+			</ul>
+			<ul id="shuffledAcknowledgments">
+			</ul>
+		</div>
+	</div>
+
+	<div id="bottom">
+		<div class="bottomLeft">
+			<a href="https://twitter.com/cryptocatapp">Suivez Cryptocat sur Twitter</a><br />
+			Français - <a href="help.html">English</a> - <a href="ca.html">Català</a>
+		</div>
+		<div class="bottomRight">
+			"Cryptocat" et le logo Cryptocat logo sont des marques déposées.<br />
+			Copyright © 2016 Nadim Kobeissi, tous droits réservés.
+		</div>
+	</div>
+</body>
+</html>
