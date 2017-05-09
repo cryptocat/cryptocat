@@ -25,10 +25,10 @@ npm install -g electron-builder
 build -w
 ```
 #### Linux
-````
+```
 build -l
-````
+```
 #### Mac
-````
+```
 build -m
 ```
