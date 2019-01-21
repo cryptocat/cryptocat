@@ -25,7 +25,8 @@ form.mainLogin input[type=submit] {
 	width: 150px;
 }
 
-form.mainLogin input[type=text] {
+form.mainLogin input[type=text],
+form.mainLogin input[type=password] {
 	font-variant: small-caps;
 }
 
